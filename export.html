@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Export Designs</title>
+		<style>
+			body {
+				text-align:center;
+				padding-bottom:50px;
+			}
+			textarea {
+				width:90%;
+				max-width:1000px;
+				height:500px;
+				min-height:80vh;
+				display:block;
+				margin:20px auto;
+				border:5px solid dodgerblue;
+			}
+			b {
+				font-style:italic;
+				color:red;
+				font-family:Arial;
+			}
+		</style>
+		<script>
+			function loadExportData() {
+				let all_designs = [];
+				for(let key in localStorage) {
+					if (key.indexOf("design") == 0) {
+						let design = {};
+						design.key = key.split("|")[0];
+						design.folder = key.split("|")[1];
+						design.data = localStorage.getItem(key).trim().replaceAll("&quot;", "");
+						console.log(design.data);
+						all_designs.push(design);
+					}
+				}
+				
+				
+				let data = {};
+				data.folders = localStorage.getItem("dezynor_folders");
+				data.fonts = localStorage.getItem("dezynor_fonts");
+				data.designs = all_designs;
+				
+				document.getElementById("exported_data").value = JSON.stringify(data);
+				console.log(JSON.parse(document.getElementById("exported_data").value));
+				
+			}
+		</script>
+	</head>
+	<body onload="loadExportData();">
+		<textarea id="exported_data"></textarea>
+		<p>Press <b>Ctrl+A</b> to select all, <b>Ctrl+C</b> to copy, and then <b>Ctrl+V</b> to paste into a text file on your PC.</p>
+	</body>
+</html>

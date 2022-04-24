@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Settings - Dezynor 1.0</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="20220420/common.css">
+		<script src="20220420/common.js"></script>
+		<script src="20220420/settings.js"></script>
+	</head>
+	<body onload="showStorageSpace();loadSettings();">
+		<script>writeHeader();</script>
+		<main>
+			<div class="padleft50">
+			</div>
+			
+			<div id="settings" class="padleft50 mxw500">
+				<div id="space_usage"></div>
+				<table>
+					<tr>
+						<td class="padright10"><img src="images/icon_caution.png"></td>
+						<td>Dezynor uses browser's local storage for the purpose of saving all designs and settings. If you use some performance
+							and tunning application such as <strong>CCleaner</strong>, please disable "cookies clean-up" feature for this
+							browser because it wipes up local storage of the browser.
+						</td>
+					</tr>
+				</table>
+				<hr>
+				<h1>Settings</h1>
+				<form onsubmit="event.preventDefault();saveSettings();">
+				<table>
+					<tr>
+						<td>Upload URL</td>
+						<td>
+							<input type="url" id="upload_url" placeholder="Imgbb URL"> 
+							<input type="number" id="max_upload_width" value="1000" min="200" title="Max Upload Width" required> 
+							<input type="number" id="max_upload_height" value="1000" min="200" title="Max Upload Height" required>
+						</td>
+					</tr>
+				</table>
+				<p>
+					<input type="submit" value="Save">
+				</p>
+				</form>
+			</div>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Dezynor 1.0</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="20220420/common.css">
+		<link rel="stylesheet" href="20220420/design.css">
+		<link rel="stylesheet" href="20220420/index.css">
+		<script src="20220420/common.js"></script>
+		<script src="20220420/index.js"></script>
+	</head>
+	<body onload="init();loadFolders();">
+
+		<script>writeHeader();</script>
+		
+		<table id="designs_table">
+			<tr>
+				<td>
+					<input type="text" id="new_folder" required><br>
+					<button onclick="addFolder();">New folder</button> 
+					<div id="message"></div>
+					<div id="folders"></div>
+					<div id="storage_space"></div>
+					<div id="flagcounter">
+						<!-- <a href="https://info.flagcounter.com/hS22"><img src="https://s01.flagcounter.com/count/hS22/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_3/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a> -->
+					</div>
+				</td>
+				<td>
+					<div id="disclaimer">
+						<h2><i>An experimental project turned into a useful graphic design application!</i></h2>
+						<p>Dezynor lets you create beautiful graphic web designs such as social media ads, website banners, greeting cards, flyers, and much more.</p>
+						<br>
+						<p><a target="_blank" href="https://www.youtube.com/channel/UCXCkZicMdJrAIDEN0fFlcSA/playlists"></a></p>
+					</div>
+
+					<div id="folder_label"></div>
+					<div  id="designs"></div>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
+

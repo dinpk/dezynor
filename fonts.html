@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Fonts - Dezynor 1.0</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="20220420/common.css">
+		<link rel="stylesheet" href="20220420/fonts.css">
+		<script src="20220420/common.js"></script>
+		<script src="20220420/fonts.js"></script>
+	</head>
+	<body onload="loadFonts();">
+		<script>writeHeader();</script>
+		<main>
+			<div class="pad20">
+				<input type="text" id="font_name" placeholder="Font name" class="mnw200 pad10"> 
+				<select id="font_location" class="mnw200 pad10">
+					<option>Installed</option>
+					<option>Google</option>
+				</select>
+				<input type="button" value="Add new font" class="pad10" onclick="addNewFont();">
+			</div>
+			<h1 class="padleft20">Fonts</h1>
+			<div id="fonts" class="padleft50"></div>
+		</main>
+	</body>
+</html>

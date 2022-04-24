@@ -1,0 +1,1319 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Design</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="20220420/design.css">
+		<script src="20220420/common.js"></script>
+		<script src="20220420/design_layout.js"></script>
+		<script src="20220420/design_formatting.js"></script>
+	</head>
+	<body onload="styleWrapper();setRandomWrapperColor();loadSelectFolders();loadSelectFonts();loadCurrentDesign();showSectionPanel('box_section');">
+
+		<div id="boxes_panel_toggle" onclick="boxesPanelToggle();">◫</div>
+		<div id="boxes_panel">
+			<ul>
+				<li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)" ondragend="dragEnd(event)">hello</li>
+				<li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)" ondragend="dragEnd(event)">hi</li>
+				<li draggable="true" ondragover="dragOver(event)" ondragstart="dragStart(event)" ondragend="dragEnd(event)">hi</li>
+			</ul>
+		</div>
+
+		<div id="container">
+			<div id="wrapper" class="no_selection">
+				<div id="wrapper_bg1"></div>
+				<div id="wrapper_bg2"></div>
+			</div>
+		</div>
+
+		
+		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview">▲</div>
+
+		<div id="dash_panel_wrapper">
+			<div id="dash_panel">
+
+				<header id="menu_icons">
+					<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page (Alt + p)">
+					<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box (Alt + b)"> 
+					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position (Alt + s)">
+					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing (Alt + t)">
+					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and Gradient (Alt + c)">
+					<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image (Alt + i)">
+					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border (Alt + r)">
+					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text Shadow (Alt + x)">
+					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box Shadow (Alt + w)">
+					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform (Alt + m)">
+					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts (Alt + o)">
+					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes (Alt + h)">
+					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="File (Alt + u)"> 
+				</header>
+
+				<div id="box_section">
+					<h4 id="box_heading" onclick="hideSectionPanel('box_section');">Box</h4>
+					<img src="images/icon_box_add.png" onclick="addSection();" title="Add box (Ctrl + Alt + a)"> 
+					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate box (Ctrl + Alt + z)"> 
+					<img src="images/icon_box_copy.png" onclick="copySection();" title="Copy box"> 
+					<img src="images/icon_box_paste.png" onclick="pasteSection();" title="Paste box"> 
+					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box"> 
+				</div>
+
+				<div id="utility_section">
+					<h4 id="utility_heading" onclick="hideSectionPanel('utility_section');">File</h4>
+					<table class="utility_table">
+						<tr>
+							<td>
+								<span onclick="saveDesign();" title="Save design (Ctrl + f1)"><img id="save_design" src="images/icon_save.png"> Save</span> 
+								<select id="select_folders" onchange="saveDesign();"></select> 
+							</td>
+						</tr>
+						<tr>
+							<td><span onclick="duplicateDesign();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</span></td>
+						</tr>
+						<tr>
+							<td><span onclick="deleteDesign();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</span></td>
+						</tr>
+						<tr>
+							<td><span onclick="window.print();" title="Print design"><img src="images/icon_print.png"> Print</span></td>
+						</tr>
+						<tr>
+							<td><a target="_blank" href="index.html" title="Folders"><img src="images/icon_folders.png"> Folders</span></td>
+						</tr>
+					</table>
+				</div>
+
+
+				<!-- page -->
+
+				<div  id="wrapper_section">
+					<h4 id="wrapper_heading" onclick="hideSectionPanel('wrapper_section');">Page</h4>
+					<table class="section_table">
+						<tr>
+							<td>Width</td>
+							<td>
+								<input id="wrapper_width" type="number" onchange="styleWrapper();" value="800" step="50"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Height</td>
+							<td>
+								<input id="wrapper_height" type="number" onchange="styleWrapper();" value="800" step="50"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Background</td>
+							<td>
+								<input id="wrapper_background_color" type="color" onchange="styleWrapper();"> 
+								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setRandomWrapperColor();styleWrapper();">↻</button>
+								<button id="remove_wrapper_background_color" onclick="styleRemoveWrapperBackgroundColor();styleWrapper();">x</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Gradient</td>
+							<td>
+								<select id="wrapper_gradient_type" onchange="setWrapperGradientDirection();styleRemoveWrapperBackgroundColor();styleWrapper();">
+									<option value="linear-gradient">linear</option>
+									<option value="radial-gradient">radial</option>
+								</select> 
+								<select id="wrapper_gradient_direction" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
+									<optgroup label="Linear">
+										<option>to top</option>
+										<option>to bottom</option>
+										<option>to right</option>
+										<option>to left
+										<option>to right top</option>
+										<option>to left top</option>
+										<option>to right bottom</option>
+										<option>to left bottom</option>
+									</optgroup>
+									<optgroup label="Radial">
+										<option>circle</option>
+										<option>ellipse</option>
+									</optgroup>
+								</select><br>
+								<input id="wrapper_gradient_color1" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#F3D9D8"> 
+								<input id="wrapper_gradient_color2" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#F0DAFB"> 
+								<input id="wrapper_gradient_color3" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#CCF0FF"> 
+								<input id="wrapper_gradient_color4" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#E0FAE3"> 
+								<button onclick="styleWrapperSameColor();styleRemoveWrapperBackgroundColor();styleWrapper();">Same</button><br>
+							</td>
+						</tr>
+						<tr>
+							<td>Image URLs</td>
+							<td>
+								<input id="wrapper_bg_image1" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();"> 
+								<button onclick="document.getElementById('browse_background_image1').click();">Browse</button>
+								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove">x</button>
+								<input id="browse_background_image1" type="file" accept="image/*" onchange="styleBrowseImage('wrapper_bg_image1', 'browse_background_image1')" style="display:none;">
+								<br>
+								<select id="wrapper_bg1_position" onchange="styleWrapper();">
+									<option>top</option>
+									<option>bottom</option>
+									<option>left</option>
+									<option>right</option>
+								</select>
+								<br>
+								<input id="wrapper_bg_image2" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
+								<button onclick="document.getElementById('browse_background_image2').click();">Browse</button>
+								<button id="remove_wrapper_bg_image2" onclick="styleRemoveWrapperBackgroundImage2();" title="Remove">x</button>
+								<input id="browse_background_image2" type="file" accept="image/*" onchange="styleBrowseImage('wrapper_bg_image2', 'browse_background_image2')" style="display:none;">
+								<br>
+								<select id="wrapper_bg2_position" onchange="styleWrapper();">
+									<option>top</option>
+									<option>bottom</option>
+									<option>left</option>
+									<option>right</option>
+								</select> 
+							</td>
+						</tr>
+						<tr>
+							<td>Border</td>
+							<td>
+								<input id="wrapper_border_width" type="number" onchange="styleWrapper();" value="0" step="1">
+								<select id="wrapper_border_style" onchange="styleWrapper();">
+									<option>solid</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select>
+								<input id="wrapper_border_color" type="color" onchange="styleWrapper();" value="#000000">
+								<button onclick="setColorableElement('wrapper_border_color', 'wrapper', 'border');showPopupPanel('color_pallette');">🚥</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Radius</td>
+							<td>
+								<input id="wrapper_border_radius1" type="number" onchange="styleWrapper();" title="Top left radius">
+								<input id="wrapper_border_radius2" type="number" onchange="styleWrapper();" title="Top right radius"><br>
+								<input id="wrapper_border_radius3" type="number" onchange="styleWrapper();" title="Bottom left radius">
+								<input id="wrapper_border_radius4" type="number" onchange="styleWrapper();" title="Bottom right radius">
+							</td>
+						</tr>
+					</table>
+				</div>
+
+
+				<!-- boxes -->
+				<div id="size_section">
+					<h4 id="size_heading" onclick="hideSectionPanel('size_section');">Size and Position</h4>
+					<table class="section_table">
+						<tr>
+							<td>Size</td>
+							<td>
+								Width <input id="width" type="number" onchange="styleWidth(this);" step="10.0"> 
+								Height <input id="height" type="number" onchange="styleHeight(this);" step="10.0"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Position</td>
+							<td>
+								Left <input id="left" type="number" onchange="styleLeft(this);" step="10.0"> 
+								Top <input id="top" type="number" onchange="styleTop(this);" step="10.0"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Resize</td>
+							<td>
+								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Full Width"> 
+								<img src="images/resize_full_height.png" id="resize_full_height" onclick="styleResizeFullHeight();" title="Full Height"> 
+								<img src="images/resize_half_width.png" id="resize_half_width" onclick="styleResizeHalfWidth();" title="Half Width"> 
+								<img src="images/resize_half_height.png" id="resize_half_height" onclick="styleResizeHalfHeight();" title="Half Height"> 
+								<img src="images/resize_quarter.png" id="resize_quarter" onclick="styleResizeQuarter();" title="Quarter"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Align</td>
+							<td>
+								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();" title="Top Left">
+								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();" title="Top Right"> 
+								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();" title="Bottom Left">
+								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="styleAlignBottomRight();" title="Bottom Right">
+
+								<img src="images/align_top_center.png" id="align_top_center" onclick="styleAlignTopCenter();" title="Top Center">
+								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="styleAlignBottomCenter();" title="Bottom Center">
+								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();" title="Left Center">
+								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();" title="Right Center">
+
+								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Center Center"><br>
+
+								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Left"> 
+								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Center"> 
+								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Right"> 
+								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Top"> 
+								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Center"> 
+								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Bottom">
+
+							</td>
+						</tr>
+						<tr>
+							<td>Layer order</td>
+							<td>
+								<input id="z_index" type="number" onchange="setZIndex(this);"> 
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="layout_section">
+					<h4 id="layout_heading" onclick="hideSectionPanel('layout_section');">Layouts</h4>
+					<table class="section_table">
+						<tr>
+							<td>Layouts</td>
+							<td>
+								<img src="images/layouts/layout1.png" title="Layout 1" onclick="styleLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|28|28, 36|36|28|28, 68|36|28|28, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
+								<img src="images/layouts/layout34.png" title="Layout 34" onclick="styleLayout('4|4|92|18, 4|26|92|18, 4|48|15|48, 23|48|15|48, 42|48|16|48, 62|48|15|48, 81|48|15|48');">
+								<img src="images/layouts/layout33.png" title="Layout 33" onclick="styleLayout('4|4|92|22, 4|30|15|66, 23|30|15|66, 42|30|16|66, 62|30|15|66, 81|30|15|66');">
+								<img src="images/layouts/layout5.png" title="Layout 5" onclick="styleLayout('4|4|28|44, 36|4|28|44, 68|4|28|44, 4|52|28|44, 36|52|28|44, 68|52|28|44');">
+								<img src="images/layouts/layout16.png" title="Layout 16" onclick="styleLayout('4|4|44|28, 4|36|44|28, 4|68|44|28, 52|4|44|28, 52|36|44|28, 52|68|44|28');">
+								<img src="images/layouts/layout3.png" title="Layout 3" onclick="styleLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|28|60, 36|36|28|60, 68|36|28|60');">
+								<img src="images/layouts/layout4.png" title="Layout 4" onclick="styleLayout('4|4|28|28, 36|4|28|28, 68|4|28|92, 4|36|60|28, 4|68|28|28, 36|68|28|28');">
+								<img src="images/layouts/layout10.png" title="Layout 10" onclick="styleLayout('4|4|28|28, 36|4|60|60, 4|36|28|28, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
+								<img src="images/layouts/layout12.png" title="Layout 12" onclick="styleLayout('4|4|28|28, 36|4|60|28, 4|36|28|28, 36|36|60|28, 4|68|28|28, 36|68|60|28');">
+								<img src="images/layouts/layout13.png" title="Layout 13" onclick="styleLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|60|60, 68|36|28|28, 68|68|28|28');">
+								<img src="images/layouts/layout20.png" title="Layout 20" onclick="styleLayout('4|4|28|28, 36|4|28|60, 68|4|28|28, 4|36|28|28, 68|36|28|28, 4|68|92|28');">
+								<img src="images/layouts/layout24.png" title="Layout 24" onclick="styleLayout('4|4|20|44, 28|4|20|44, 52|4|20|44, 76|4|20|44, 4|52|44|44, 52|52|44|44');">
+								<img src="images/layouts/layout51.png" title="Layout 51" onclick="styleLayout('4|4|15|92, 23|4|15|92, 42|4|16|92, 62|4|15|92, 81|4|15|92');">							
+								<img src="images/layouts/layout52.png" title="Layout 52" onclick="styleLayout('4|4|92|15, 4|23|92|15, 4|42|92|16, 4|62|92|15, 4|81|92|15');">							
+								<img src="images/layouts/layout18.png" title="Layout 18" onclick="styleLayout('4|4|28|44, 36|4|28|44, 68|4|28|92, 4|52|28|44, 36|52|28|44');">
+								<img src="images/layouts/layout14.png" title="Layout 14" onclick="styleLayout('4|4|92|28, 4|36|44|28, 4|68|44|28, 52|36|44|28, 52|68|44|28');">
+								<img src="images/layouts/layout32.png" title="Layout 32" onclick="styleLayout('4|4|92|18, 4|26|28|48, 36|26|28|48, 68|26|28|48, 4|78|92|18');">
+								<img src="images/layouts/layout22.png" title="Layout 22" onclick="styleLayout('4|4|28|60, 36|4|28|92, 68|4|28|60, 4|68|28|28, 68|68|28|28');">
+								<img src="images/layouts/layout23.png" title="Layout 23" onclick="styleLayout('4|4|20|44, 28|4|20|44, 52|4|20|44, 76|4|20|44, 4|52|92|44');">
+
+								<img src="images/layouts/layout53.png" title="Layout 53" onclick="styleLayout('4|4|20|92, 28|4|20|92, 52|4|20|92, 76|4|20|92');">
+								<img src="images/layouts/layout54.png" title="Layout 54" onclick="styleLayout('4|4|92|20, 4|28|92|20, 4|52|92|20, 4|76|92|20');">
+
+								<img src="images/layouts/layout46.png" title="Layout 46" onclick="styleLayout('4|4|44|44, 52|4|44|44, 4|52|44|44, 52|52|44|44');">
+								<img src="images/layouts/layout17.png" title="Layout 17" onclick="styleLayout('4|4|58|44, 66|4|30|44, 4|52|30|44, 38|52|58|44');">
+								<img src="images/layouts/layout6.png" title="Layout 6" onclick="styleLayout('4|4|44|26, 4|35|44|61, 52|4|44|60, 52|69|44|27');">
+								<img src="images/layouts/layout21.png" title="Layout 21" onclick="styleLayout('4|4|60|60, 68|4|28|60, 4|68|60|28, 68|68|28|28');">
+								<img src="images/layouts/layout31.png" title="Layout 31" onclick="styleLayout('4|4|28|60, 36|4|28|60, 68|4|28|60, 4|68|92|28');">
+								<img src="images/layouts/layout36.png" title="Layout 36" onclick="styleLayout('4|36|28|60, 36|36|28|60, 68|36|28|60, 4|4|92|28');">
+								<img src="images/layouts/layout7.png" title="Layout 7" onclick="styleLayout('4|4|28|44, 4|52|28|44, 36|4|28|92, 68|4|28|92');">
+								<img src="images/layouts/layout38.png" title="Layout 38" onclick="styleLayout('4|4|28|92, 36|4|28|44, 36|52|28|44, 68|4|28|92');">
+								<img src="images/layouts/layout39.png" title="Layout 39" onclick="styleLayout('4|4|28|92, 36|4|28|92, 68|4|28|44, 68|52|28|44');">
+								<img src="images/layouts/layout19.png" title="Layout 19" onclick="styleLayout('4|4|28|44, 36|4|28|44, 68|4|28|92, 4|52|60|44');">
+								<img src="images/layouts/layout40.png" title="Layout 40" onclick="styleLayout('4|4|60|44, 4|52|28|44, 36|52|28|44, 68|4|28|92');">
+								<img src="images/layouts/layout41.png" title="Layout 41" onclick="styleLayout('4|4|28|92, 36|4|28|44, 68|4|28|44, 36|52|60|44');">
+								<img src="images/layouts/layout42.png" title="Layout 42" onclick="styleLayout('4|4|28|92, 36|4|60|44, 36|52|28|44, 68|52|28|44');">
+								<img src="images/layouts/layout15.png" title="Layout 15" onclick="styleLayout('4|4|92|28, 4|36|44|28, 4|68|44|28, 52|36|44|60');">
+								<img src="images/layouts/layout44.png" title="Layout 44" onclick="styleLayout('4|4|44|28, 4|36|44|28, 52|4|44|60, 4|68|92|28');">
+								<img src="images/layouts/layout45.png" title="Layout 45" onclick="styleLayout('4|4|44|60, 52|4|44|28, 52|36|44|28, 4|68|92|28');">
+								<img src="images/layouts/layout2.png" title="Layout 2" onclick="styleLayout('4|4|28|28, 4|36|28|28, 4|68|28|28, 36|4|60|92');">
+								<img src="images/layouts/layout8.png" title="Layout 8" onclick="styleLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|92|60');">
+								<img src="images/layouts/layout37.png" title="Layout 37" onclick="styleLayout('4|4|60|92, 68|4|28|28, 68|36|28|28, 68|68|28|28');">
+								<img src="images/layouts/layout9.png" title="Layout 9" onclick="styleLayout('4|4|92|60, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
+
+								<img src="images/layouts/layout49.png" title="Layout 49" onclick="styleLayout('4|4|28|92, 36|4|28|92, 68|4|28|92');">
+								<img src="images/layouts/layout50.png" title="Layout 50" onclick="styleLayout('4|4|92|28, 4|36|92|28, 4|68|92|28');">
+
+								<img src="images/layouts/layout11.png" title="Layout 11" onclick="styleLayout('4|4|30|44, 38|4|58|44, 4|52|92|44');">
+								<img src="images/layouts/layout25.png" title="Layout 25" onclick="styleLayout('4|4|92|28, 4|36|28|60, 36|36|60|60');">
+								<img src="images/layouts/layout47.png" title="Layout 47" onclick="styleLayout('4|4|44|92, 52|4|44|44, 52|52|44|44');">
+								<img src="images/layouts/layout48.png" title="Layout 48" onclick="styleLayout('4|4|44|44, 4|52|44|44, 52|4|44|92');">
+								<img src="images/layouts/layout30.png" title="Layout 30" onclick="styleLayout('4|4|44|92, 52|4|44|92');">
+								<img src="images/layouts/layout35.png" title="Layout 35" onclick="styleLayout('4|4|92|44, 4|52|92|44');">
+								<img src="images/layouts/layout26.png" title="Layout 26" onclick="styleLayout('4|4|92|28, 4|36|92|60');">
+								<img src="images/layouts/layout28.png" title="Layout 28" onclick="styleLayout('4|4|92|60, 4|68|92|28');">
+								<img src="images/layouts/layout27.png" title="Layout 27" onclick="styleLayout('4|4|28|92, 36|4|60|92');">
+								<img src="images/layouts/layout29.png" title="Layout 29" onclick="styleLayout('4|4|60|92, 68|4|28|92');">
+								<img src="images/layouts/layout43.png" title="Layout 43" onclick="styleLayout('4|4|92|92');">
+
+							</td>
+						</tr>
+						<tr>
+							<td>Gap</td>
+							<td>
+								<select id="layout_gutter">
+									<option>no</option>
+									<option selected="selected">min</option>
+									<option>max</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>			
+
+				<div id="shape_section">
+					<h4 id="shape_heading" onclick="hideSectionPanel('shape_section');">Shapes</h4>
+					<table class="section_table">
+						<tr>
+							<td style="display:none;">Shapes</td>
+							<td colspan="2">
+								<span onclick="setShape('');"><img loading="lazy" src="images/shapes/shape0.png"></span> 
+								<span onclick="setShape('polygon(40% 0%, 40% 20%, 100% 20%, 100% 80%, 40% 80%, 40% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape1.png"></span> 
+								<span onclick="setShape('polygon(0% 20%, 60% 20%, 60% 0%, 100% 50%, 60% 100%, 60% 80%, 0% 80%)');"><img loading="lazy" src="images/shapes/shape2.png"></span> 
+								<span onclick="setShape('polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%)');"><img loading="lazy" src="images/shapes/shape3.png"></span> 
+								<span onclick="setShape('polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%)');"><img loading="lazy" src="images/shapes/shape4.png"></span> 
+								<span onclick="setShape('polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)');"><img loading="lazy" src="images/shapes/shape5.png"></span> 
+								<span onclick="setShape('ellipse(98% 50% at 1% 50%)');"><img loading="lazy" src="images/shapes/shape6.png"></span> 
+								<span onclick="setShape('ellipse(98% 50% at 99% 50%)');"><img loading="lazy" src="images/shapes/shape7.png"></span> 
+								<span onclick="setShape('ellipse(50% 99% at 50% 0%)');"><img loading="lazy" src="images/shapes/shape8.png"></span> 
+								<span onclick="setShape('ellipse(50% 99% at 50% 100%)');"><img loading="lazy" src="images/shapes/shape9.png"></span> 
+								<span onclick="setShape('polygon(0px 0px, 0% 20%, 80% 100%, 100% 100%, 100% 80%, 20% 0px)');"><img loading="lazy" src="images/shapes/shape10.png"></span> 
+								<span onclick="setShape('polygon(0px 80%, 0px 100%, 20% 100%, 100% 20%, 100% 0px, 80% 0%)');"><img loading="lazy" src="images/shapes/shape11.png"></span> 
+								<span onclick="setShape('polygon(100% 0px, 35% 75%, 100% 100%, 0px 100%, 0px 0px)');"><img loading="lazy" src="images/shapes/shape12.png"></span> 
+								<span onclick="setShape('polygon(0px 0px, 65% 75%, 0px 100%, 100% 100%, 100% 0px)');"><img loading="lazy" src="images/shapes/shape13.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)');"><img loading="lazy" src="images/shapes/shape14.png"></span> 
+								<span onclick="setShape('polygon(50% 0px, 100% 100%, 0px 100%, 0px 0px)');"><img loading="lazy" src="images/shapes/shape15.png"></span> 
+								<span onclick="setShape('polygon(100% 0px, 100% 100%, 0px 100%, 50% 0px)');"><img loading="lazy" src="images/shapes/shape16.png"></span> 
+								<span onclick="setShape('ellipse(25% 40% at 50% 50%)');"><img loading="lazy" src="images/shapes/shape17.png"></span> 
+								<span onclick="setShape('polygon(0% 0%, 0% 100%, 25% 100%, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 100%, 100% 100%, 100% 0%)');"><img loading="lazy" src="images/shapes/shape18.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)');"><img loading="lazy" src="images/shapes/shape19.png"></span> 
+								<span onclick="setShape('polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape20.png"></span> 
+								<span onclick="setShape('polygon(50% 0%,70% 15%,70% 2%,90% 2%,90% 30%,100% 40%,100% 100%,65% 100%,65% 65%,35% 65%,35% 100%,0% 100%,0% 40%)');"><img loading="lazy" src="images/shapes/shape21.png"></span> 
+								<span onclick="setShape('polygon(25% 0%,70% 0%,40% 35%,95% 35%,20% 100%,40% 55%,0% 55%)');"><img loading="lazy" src="images/shapes/shape22.png"></span> 
+								<span onclick="setShape('polygon(5% 5%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%)');"><img loading="lazy" src="images/shapes/shape23.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%)');"><img loading="lazy" src="images/shapes/shape24.png"></span> 
+								<span onclick="setShape('polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)');"><img loading="lazy" src="images/shapes/shape25.png"></span> 
+								<span onclick="setShape('polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape26.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)');"><img loading="lazy" src="images/shapes/shape27.png"></span> 
+								<span onclick="setShape('polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape28.png"></span> 
+								<span onclick="setShape('polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape29.png"></span> 
+								<span onclick="setShape('polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)');"><img loading="lazy" src="images/shapes/shape30.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape31.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)');"><img loading="lazy" src="images/shapes/shape32.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)');"><img loading="lazy" src="images/shapes/shape33.png"></span> 
+								<span onclick="setShape('polygon(0px 100%, 100% 0px, 0px 0px)');"><img loading="lazy" src="images/shapes/shape34.png"></span> 
+								<span onclick="setShape('polygon(100% 100%, 100% 0px, 0px 0px)');"><img loading="lazy" src="images/shapes/shape35.png"></span> 
+								<span onclick="setShape('polygon(100% 100%, 0px 0px, 0px 100%)');"><img loading="lazy" src="images/shapes/shape36.png"></span> 
+								<span onclick="setShape('polygon(100% 0px, 0px 100%, 100% 100%)');"><img loading="lazy" src="images/shapes/shape37.png"></span> 
+								<span onclick="setShape('polygon(0px 0px, 0px 100%, 100% 50%)');"><img loading="lazy" src="images/shapes/shape38.png"></span> 
+								<span onclick="setShape('polygon(0px 50%, 100% 100%, 100% 0px)');"><img loading="lazy" src="images/shapes/shape39.png"></span> 
+								<span onclick="setShape('polygon(100% 0px, 0px 0px, 50% 100%)');"><img loading="lazy" src="images/shapes/shape40.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 0% 100%, 100% 100%)');"><img loading="lazy" src="images/shapes/shape41.png"></span> 
+								<span onclick="setShape('polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape42.png"></span> 
+								<span onclick="setShape('polygon(0 0, 100% 0, 80% 100%, 20% 100%)');"><img loading="lazy" src="images/shapes/shape43.png"></span> 
+								<span onclick="setShape('polygon(0 0, 100% 50%, 100% 100%, 0 50%)');"><img loading="lazy" src="images/shapes/shape44.png"></span> 
+								<span onclick="setShape('polygon(0 50%, 100% 0, 100% 50%, 0 100%)');"><img loading="lazy" src="images/shapes/shape45.png"></span> 
+								<span onclick="setShape('polygon(50% 100%, 0 0, 50% 0, 100% 100%)');"><img loading="lazy" src="images/shapes/shape46.png"></span> 
+								<span onclick="setShape('polygon(0 100%, 50% 0, 100% 0, 50% 100%)');"><img loading="lazy" src="images/shapes/shape47.png"></span> 
+								<span onclick="setShape('polygon(20% 100%, 4% 0, 0 0, 0 100%, 100% 100%, 100% 0, 32% 0, 48% 100%)');"><img loading="lazy" src="images/shapes/shape48.png"></span> 
+								<span onclick="setShape('polygon(0 20%, 0 45%, 100% 35%, 100% 100%, 50% 100%, 0 100%, 0 0, 100% 0, 100% 10%)');"><img loading="lazy" src="images/shapes/shape49.png"></span> 
+								<span onclick="setShape('polygon(100% 0, 0 0, 80% 100%)');"><img loading="lazy" src="images/shapes/shape50.png"></span> 
+								<span onclick="setShape('polygon(100% 0, 0 0, 20% 100%)');"><img loading="lazy" src="images/shapes/shape51.png"></span> 
+								<span onclick="setShape('polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape52.png"></span> 
+								<span onclick="setShape('polygon(50% 25%, 100% 0, 100% 100%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape53.png"></span> 
+								<span onclick="setShape('polygon(50% 20%, 100% 0, 100% 100%, 50% 80%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape54.png"></span> 
+								
+							</td>
+						</tr>
+						<tr>
+							<td>Clip path</td>
+							<td><input id="clip_path" type="text" onchange="styleClipPath(this);" placeholder="ellipse(25% 40% at 50% 50%)" style="width:100%;max-width:100%;"></td>
+						</tr>
+					</table>
+					<p class="tip_note">Note: border and box-shadow features can not be used with shapes. Also set background color of the box first to see the effect.</p>
+				</div>
+
+				<div id="font_section">
+					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
+					<table class="section_table">
+						<tr>
+							<td>Direction</td>
+							<td>
+								<select id="direction" onchange="styleDirection(this);">
+									<option value="ltr">left to right</option>
+									<option value="rtl">right to left</option>
+								</select> 
+							</td>
+						</tr>
+						<tr>
+							<td>Alignment</td>
+							<td>
+								<select id="text_align" onchange="styleTextAlign(this);">
+									<option>left</option>
+									<option>center</option>
+									<option>right</option>
+									<option>justify</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Font</td>
+							<td>
+								<select id="font_family" onchange="styleFontFamily(this);"></select> 
+							</td>
+						</tr>
+						<tr>
+							<td>Font size</td>
+							<td>
+								<input id="font_size" type="number" onchange="styleFontSize(this);" step="1" min="5" max="500">
+							</td>
+						</tr>
+						<tr>
+							<td>Spacing</td>
+							<td>
+								<input id="line_height" type="number" onchange="styleLineHeight(this);" step="1" min="5" max="300"> Lines<br>
+								<input id="text_indent" type="number" onchange="styleTextIndent(this);" step="1"> Indent<br>
+								<input id="word_spacing" type="number" onchange="styleWordSpacing(this);" step="1"> Words<br>
+								<input id="letter_spacing" type="number" onchange="styleLetterSpacing(this);" step="1"> Letters<br>
+							</td>
+						</tr>
+						<tr>
+							<td>Padding</td>
+							<td>
+								Top <input id="padding_top" type="number" onchange="stylePaddingTop(this);" step="2">  
+								Bottom <input id="padding_bottom" type="number" onchange="stylePaddingBottom(this);" step="2"><br>
+								Left <input id="padding_left" type="number" onchange="stylePaddingLeft(this);" step="2">  
+								Right <input id="padding_right" type="number" onchange="stylePaddingRight(this);" step="2"><br>
+							</td>
+						</tr>
+						<tr>
+							<td>Columns</td>
+							<td>
+								<input id="column_count" type="number" onchange="styleColumnCount(this);" step="1"> 
+								Gap <input id="column_gap" type="number" onchange="styleColumnGap(this);" step="10"> 
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="color_section">
+					<h4 id="color_heading" onclick="hideSectionPanel('color_section');">Color and Gradient</h4>
+					<table class="section_table">
+						<tr>
+							<td>Text</td>
+							<td>
+								<input id="color" type="color" onchange="styleColor(this);"> 
+								<button onclick="setColorableElement('color', selected_section.id, 'color');showPopupPanel('color_pallette');">🚥</button>
+								<button onclick="styleRandomTextColor();">↻</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Background color</td>
+							<td>
+								<input id="background_color" type="color" onchange="styleBackgroundColor(this);"> 
+								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="styleRandomBackgroundColor();">↻</button> 
+								<button id="remove_background_color" onclick="styleRemoveBackgroundColor();">x</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Background gradient</td>
+							<td>
+								<input id="gradient_color1" type="color" onchange="styleBackgroundImage();"> 
+								<input id="gradient_color2" type="color" onchange="styleBackgroundImage();"> 
+								<input id="gradient_color3" type="color" onchange="styleBackgroundImage();"> 
+								<input id="gradient_color4" type="color" onchange="styleBackgroundImage();"> 
+								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage();">Same</button>
+								<button id="remove_background" onclick="styleRemoveBackgroundImage();">x</button><br>
+								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage();" checked>
+								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage();" checked> 
+								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage();" checked> 
+								<input id="gradient_alpha4" type="checkbox" onchange="styleBackgroundImage();" checked><br>
+
+								<select id="gradient_type" onchange="setGradientDirection();styleBackgroundImage();">
+									<option value="linear-gradient">linear</option>
+									<option value="radial-gradient">radial</option>
+									<option value="conic-gradient">conic</option>
+								</select> 
+								<select id="gradient_direction" onchange="styleBackgroundImage();">
+									<optgroup label="Linear">
+										<option>to top</option>
+										<option>to bottom</option>
+										<option>to right</option>
+										<option>to left
+										<option>to right top</option>
+										<option>to left top</option>
+										<option>to right bottom</option>
+										<option>to left bottom</option>
+									</optgroup>
+									<optgroup label="Radial">
+										<option>circle</option>
+										<option>ellipse</option>
+									</optgroup>
+								</select> 
+							</td>
+						</tr>
+						<tr>
+							<td>Transparency</td>
+							<td><input id="opacity" type="range" onchange="styleOpacity(this);" min="0.1" max="1" step="0.01" value="1"></td>
+						</tr>
+					</table>	
+				</div>		
+
+				<div id="art_section">
+					<h4 id="art_heading" onclick="hideSectionPanel('art_section');">Background Image</h4>
+					<table class="section_table">
+						<tr>
+							<td>Image URL</td>
+							<td>
+								<input id="background_image" type="text" onchange="styleBackgroundImage();"> 
+								<button onclick="document.getElementById('browse_image').click();">Browse</button>
+								<input id="browse_image" type="file" accept="image/*" onchange="styleBrowseImage('background_image', 'browse_image')"
+									style="display:none;">
+								<button id="remove_background_image" onclick="styleRemoveBackgroundImage();" title="Remove Background Image">x</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Repeat</td>
+							<td>
+								<input id="background_image_repeat" type="checkbox" onchange="styleBackgroundImage();">
+							</td>
+						</tr>
+						<tr>
+							<td>Size</td>
+							<td>
+								<select id="background_size" onchange="styleBackgroundImage();">
+									<option>auto</option>
+									<option>cover</option>
+									<option>contain</option>
+									<option value="100% 100%" selected>stretch</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Position X</td>
+							<td>
+								<select id="background_position_x" onchange="styleBackgroundImage();">
+									<option value="0%">left</option>
+									<option value="50%" selected>center</option>
+									<option value="100%">right</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Position Y</td>
+							<td>
+								<select id="background_position_y" onchange="styleBackgroundImage();">
+									<option value="0%">top</option>
+									<option value="50%"selected>center</option>
+									<option value="100%">bottom</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Clip text</td>
+							<td>
+								<button onclick="styleClipText();">Set</button> 
+								<button onclick="styleRemoveClipText();">Remove</button> 
+							</td>
+						</tr>
+
+						<!--
+						<tr>
+							<td>Art</td>
+							<td>
+								<img src="images/icon_art.png" onclick="showPopupPanel('graphics_panel');">
+							</td>
+						</tr>
+						-->
+					</table>
+				</div>
+
+				<div id="border_section">
+					<h4 id="border_heading" onclick="hideSectionPanel('border_section');">Border</h4>
+					<table class="section_table">
+						<tr>
+							<td>Style</td>
+							<td>
+								<input id="border_width" type="number" onchange="styleBorderWidth(this);" step="1">
+								<select id="border_style" onchange="styleBorderStyle(this);">
+									<option>solid</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select>
+								<input id="border_color" type="color" onchange="styleBorderColor(this);">
+								<button onclick="setColorableElement('border_color', selected_section.id, 'border');showPopupPanel('color_pallette');">🚥</button> 
+								<button id="remove_border" onclick="styleRemoveBorder();" title="Remove Border">x</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Radius</td>
+							<td>
+								<input id="border_radius1" type="number" onchange="styleBorderRadius1(this);" title="Top left radius"> 
+								<input id="border_radius2" type="number" onchange="styleBorderRadius2(this);" title="Top right radius"><br>
+								<input id="border_radius3" type="number" onchange="styleBorderRadius3(this);" title="Bottom left radius">
+								<input id="border_radius4" type="number" onchange="styleBorderRadius4(this);" title="Bottom right radius">
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="text_shadow_section">
+					<h4 id="text_shadow_heading" onclick="hideSectionPanel('text_shadow_section');">Text Shadow</h4>
+					<table class="section_table">
+						<tr>
+							<td>Text shadow</td>
+							<td>
+								H <input id="text_shadow_h" type="number" onchange="styleTextShadow();" step="1">
+								V <input id="text_shadow_y" type="number" onchange="styleTextShadow();" step="1"> 
+								<input id="text_shadow_color" type="color" onchange="styleTextShadow();"> 
+								<button onclick="setColorableElement('text_shadow_color', selected_section.id, 'textshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button id="remove_text_shadow" onclick="styleRemoveTextShadow();" title="Remove Text Shadow">x</button>
+								<br>
+								Blur <input id="text_shadow_blur" type="number" onchange="styleTextShadow();" step="1"> 
+								Count <input id="text_shadow_count" type="number" onchange="styleTextShadow();" step="1" value="0"> 
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="box_shadow_section">
+					<h4 id="box_shadow_heading" onclick="hideSectionPanel('box_shadow_section');">Box Shadow</h4>
+					<table class="section_table">
+						<tr>
+							<td>Box shadow</td>
+							<td>
+								H <input id="box_shadow_h" type="number" onchange="styleBoxShadow();" step="1">
+								V <input id="box_shadow_y" type="number" onchange="styleBoxShadow();" step="1"> 
+								<button id="remove_box_shadow" onclick="styleRemoveBoxShadow();" title="Remove Box Shadow">x</button>
+								<br>
+								<input id="box_shadow_color" type="color" onchange="styleBoxShadow();">
+								<button onclick="setColorableElement('box_shadow_color', selected_section.id, 'boxshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<input id="box_shadow_inset" type="checkbox" onclick="styleBoxShadow();"> Inset
+								<br>
+								Blur <input id="box_shadow_blur" type="number" onchange="styleBoxShadow();" step="1"> 
+								Spread <input id="box_shadow_spread" type="number" onchange="styleBoxShadow();" step="1"> 
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="transform_section">
+					<h4 id="transform_heading" onclick="hideSectionPanel('transform_section');">Transform</h4>
+					<table class="section_table">
+						<tr>
+							<td>Type</td>
+							<td>
+								<select id="transform_type" onchange="styleTransform();">
+									<option>rotate</option>
+									<option>skew</option>
+								</select>
+								<button id="remove_transform" onclick="styleRemoveTransform();" title="Remove Transform">x</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Degree</td>
+							<td>
+								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1"> 
+								<input id="transform_degree2" type="number" onchange="styleTransform();" step="1">
+							</td>
+						</tr>
+					</table>
+				</div>
+
+			</div> <!-- dash panel -->
+		</div>
+		
+		
+		
+		<div id="popup_panel" onfocusout="hidePopupPanel();" tabindex="1">
+			
+			<div id="hide_popup_panel" onclick="hidePopupPanel();">X</div>
+			
+			<div id="color_pallette">
+				<span style="background-color:#F0F8FF" onclick="useColorPallette('#F0F8FF');" title="AliceBlue"></span>
+				<span style="background-color:#FAEBD7" onclick="useColorPallette('#FAEBD7');" title="AntiqueWhite"></span>
+				<span style="background-color:#00FFFF" onclick="useColorPallette('#00FFFF');" title="Aqua"></span>
+				<span style="background-color:#7FFFD4" onclick="useColorPallette('#7FFFD4');" title="Aquamarine"></span>
+				<span style="background-color:#F5F5DC" onclick="useColorPallette('#F5F5DC');" title="Beige"></span>
+				<span style="background-color:#FFE4C4" onclick="useColorPallette('#FFE4C4');" title="Bisque"></span>
+				<span style="background-color:#000000" onclick="useColorPallette('#000000');" title="Black"></span>
+				<span style="background-color:#0000FF" onclick="useColorPallette('#0000FF');" title="Blue"></span>
+				<span style="background-color:#8A2BE2" onclick="useColorPallette('#8A2BE2');" title="BlueViolet"></span>
+				<span style="background-color:#A52A2A" onclick="useColorPallette('#A52A2A');" title="Brown"></span>
+				<span style="background-color:#DEB887" onclick="useColorPallette('#DEB887');" title="BurlyWood"></span>
+				<span style="background-color:#5F9EA0" onclick="useColorPallette('#5F9EA0');" title="CadetBlue"></span>
+				<span style="background-color:#7FFF00" onclick="useColorPallette('#7FFF00');" title="Chartreuse"></span>
+				<span style="background-color:#D2691E" onclick="useColorPallette('#D2691E');" title="Chocolate"></span>
+				<span style="background-color:#FF7F50" onclick="useColorPallette('#FF7F50');" title="Coral"></span>
+				<span style="background-color:#6495ED" onclick="useColorPallette('#6495ED');" title="CornflowerBlue"></span>
+				<span style="background-color:#FFF8DC" onclick="useColorPallette('#FFF8DC');" title="Cornsilk"></span>
+				<span style="background-color:#DC143C" onclick="useColorPallette('#DC143C');" title="Crimson"></span>
+				<span style="background-color:#00FFFF" onclick="useColorPallette('#00FFFF');" title="Cyan"></span>
+				<span style="background-color:#00008B" onclick="useColorPallette('#00008B');" title="DarkBlue"></span>
+				<span style="background-color:#008B8B" onclick="useColorPallette('#008B8B');" title="DarkCyan"></span>
+				<span style="background-color:#B8860B" onclick="useColorPallette('#B8860B');" title="DarkGoldenRod"></span>
+				<span style="background-color:#A9A9A9" onclick="useColorPallette('#A9A9A9');" title="DarkGray"></span>
+				<span style="background-color:#006400" onclick="useColorPallette('#006400');" title="DarkGreen"></span>
+				<span style="background-color:#BDB76B" onclick="useColorPallette('#BDB76B');" title="DarkKhaki"></span>
+				<span style="background-color:#8B008B" onclick="useColorPallette('#8B008B');" title="DarkMagenta"></span>
+				<span style="background-color:#556B2F" onclick="useColorPallette('#556B2F');" title="DarkOliveGreen"></span>
+				<span style="background-color:#FF8C00" onclick="useColorPallette('#FF8C00');" title="DarkOrange"></span>
+				<span style="background-color:#9932CC" onclick="useColorPallette('#9932CC');" title="DarkOrchid"></span>
+				<span style="background-color:#8B0000" onclick="useColorPallette('#8B0000');" title="DarkRed"></span>
+				<span style="background-color:#E9967A" onclick="useColorPallette('#E9967A');" title="DarkSalmon"></span>
+				<span style="background-color:#8FBC8F" onclick="useColorPallette('#8FBC8F');" title="DarkSeaGreen"></span>
+				<span style="background-color:#483D8B" onclick="useColorPallette('#483D8B');" title="DarkSlateBlue"></span>
+				<span style="background-color:#2F4F4F" onclick="useColorPallette('#2F4F4F');" title="DarkSlateGray"></span>
+				<span style="background-color:#00CED1" onclick="useColorPallette('#00CED1');" title="DarkTurquoise"></span>
+				<span style="background-color:#9400D3" onclick="useColorPallette('#9400D3');" title="DarkViolet"></span>
+				<span style="background-color:#FF1493" onclick="useColorPallette('#FF1493');" title="DeepPink"></span>
+				<span style="background-color:#00BFFF" onclick="useColorPallette('#00BFFF');" title="DeepSkyBlue"></span>
+				<span style="background-color:#696969" onclick="useColorPallette('#696969');" title="DimGray"></span>
+				<span style="background-color:#1E90FF" onclick="useColorPallette('#1E90FF');" title="DodgerBlue"></span>
+				<span style="background-color:#B22222" onclick="useColorPallette('#B22222');" title="FireBrick"></span>
+				<span style="background-color:#228B22" onclick="useColorPallette('#228B22');" title="ForestGreen"></span>
+				<span style="background-color:#FF00FF" onclick="useColorPallette('#FF00FF');" title="Fuchsia"></span>
+				<span style="background-color:#DCDCDC" onclick="useColorPallette('#DCDCDC');" title="Gainsboro"></span>
+				<span style="background-color:#FFD700" onclick="useColorPallette('#FFD700');" title="Gold"></span>
+				<span style="background-color:#DAA520" onclick="useColorPallette('#DAA520');" title="GoldenRod"></span>
+				<span style="background-color:#808080" onclick="useColorPallette('#808080');" title="Gray"></span>
+				<span style="background-color:#008000" onclick="useColorPallette('#008000');" title="Green"></span>
+				<span style="background-color:#ADFF2F" onclick="useColorPallette('#ADFF2F');" title="GreenYellow"></span>
+				<span style="background-color:#F0FFF0" onclick="useColorPallette('#F0FFF0');" title="HoneyDew"></span>
+				<span style="background-color:#FF69B4" onclick="useColorPallette('#FF69B4');" title="HotPink"></span>
+				<span style="background-color:#CD5C5C" onclick="useColorPallette('#CD5C5C');" title="IndianRed"></span>
+				<span style="background-color:#4B0082" onclick="useColorPallette('#4B0082');" title="Indigo"></span>
+				<span style="background-color:#F0E68C" onclick="useColorPallette('#F0E68C');" title="Khaki"></span>
+				<span style="background-color:#E6E6FA" onclick="useColorPallette('#E6E6FA');" title="Lavender"></span>
+				<span style="background-color:#FFF0F5" onclick="useColorPallette('#FFF0F5');" title="LavenderBlush"></span>
+				<span style="background-color:#ADD8E6" onclick="useColorPallette('#ADD8E6');" title="LightBlue"></span>
+				<span style="background-color:#F08080" onclick="useColorPallette('#F08080');" title="LightCoral"></span>
+				<span style="background-color:#E0FFFF" onclick="useColorPallette('#E0FFFF');" title="LightCyan"></span>
+				<span style="background-color:#FAFAD2" onclick="useColorPallette('#FAFAD2');" title="LightGoldenRodYellow"></span>
+				<span style="background-color:#D3D3D3" onclick="useColorPallette('#D3D3D3');" title="LightGrey"></span>
+				<span style="background-color:#90EE90" onclick="useColorPallette('#90EE90');" title="LightGreen"></span>
+				<span style="background-color:#FFB6C1" onclick="useColorPallette('#FFB6C1');" title="LightPink"></span>
+				<span style="background-color:#FFA07A" onclick="useColorPallette('#FFA07A');" title="LightSalmon"></span>
+				<span style="background-color:#20B2AA" onclick="useColorPallette('#20B2AA');" title="LightSeaGreen"></span>
+				<span style="background-color:#87CEFA" onclick="useColorPallette('#87CEFA');" title="LightSkyBlue"></span>
+				<span style="background-color:#778899" onclick="useColorPallette('#778899');" title="LightSlateGray"></span>
+				<span style="background-color:#B0C4DE" onclick="useColorPallette('#B0C4DE');" title="LightSteelBlue"></span>
+				<span style="background-color:#FFFFE0" onclick="useColorPallette('#FFFFE0');" title="LightYellow"></span>
+				<span style="background-color:#FAF0E6" onclick="useColorPallette('#FAF0E6');" title="Linen"></span>
+				<span style="background-color:#FF00FF" onclick="useColorPallette('#FF00FF');" title="Magenta"></span>
+				<span style="background-color:#800000" onclick="useColorPallette('#800000');" title="Maroon"></span>
+				<span style="background-color:#66CDAA" onclick="useColorPallette('#66CDAA');" title="MediumAquaMarine"></span>
+				<span style="background-color:#0000CD" onclick="useColorPallette('#0000CD');" title="MediumBlue"></span>
+				<span style="background-color:#BA55D3" onclick="useColorPallette('#BA55D3');" title="MediumOrchid"></span>
+				<span style="background-color:#9370DB" onclick="useColorPallette('#9370DB');" title="MediumPurple"></span>
+				<span style="background-color:#3CB371" onclick="useColorPallette('#3CB371');" title="MediumSeaGreen"></span>
+				<span style="background-color:#7B68EE" onclick="useColorPallette('#7B68EE');" title="MediumSlateBlue"></span>
+				<span style="background-color:#00FA9A" onclick="useColorPallette('#00FA9A');" title="MediumSpringGreen"></span>
+				<span style="background-color:#48D1CC" onclick="useColorPallette('#48D1CC');" title="MediumTurquoise"></span>
+				<span style="background-color:#C71585" onclick="useColorPallette('#C71585');" title="MediumVioletRed"></span>
+				<span style="background-color:#191970" onclick="useColorPallette('#191970');" title="MidnightBlue"></span>
+				<span style="background-color:#F5FFFA" onclick="useColorPallette('#F5FFFA');" title="MintCream"></span>
+				<span style="background-color:#FFE4E1" onclick="useColorPallette('#FFE4E1');" title="MistyRose"></span>
+				<span style="background-color:#FFE4B5" onclick="useColorPallette('#FFE4B5');" title="Moccasin"></span>
+				<span style="background-color:#FFDEAD" onclick="useColorPallette('#FFDEAD');" title="NavajoWhite"></span>
+				<span style="background-color:#000080" onclick="useColorPallette('#000080');" title="Navy"></span>
+				<span style="background-color:#FDF5E6" onclick="useColorPallette('#FDF5E6');" title="OldLace"></span>
+				<span style="background-color:#808000" onclick="useColorPallette('#808000');" title="Olive"></span>
+				<span style="background-color:#6B8E23" onclick="useColorPallette('#6B8E23');" title="OliveDrab"></span>
+				<span style="background-color:#FFA500" onclick="useColorPallette('#FFA500');" title="Orange"></span>
+				<span style="background-color:#FF4500" onclick="useColorPallette('#FF4500');" title="OrangeRed"></span>
+				<span style="background-color:#DA70D6" onclick="useColorPallette('#DA70D6');" title="Orchid"></span>
+				<span style="background-color:#EEE8AA" onclick="useColorPallette('#EEE8AA');" title="PaleGoldenRod"></span>
+				<span style="background-color:#98FB98" onclick="useColorPallette('#98FB98');" title="PaleGreen"></span>
+				<span style="background-color:#AFEEEE" onclick="useColorPallette('#AFEEEE');" title="PaleTurquoise"></span>
+				<span style="background-color:#DB7093" onclick="useColorPallette('#DB7093');" title="PaleVioletRed"></span>
+				<span style="background-color:#FFDAB9" onclick="useColorPallette('#FFDAB9');" title="PeachPuff"></span>
+				<span style="background-color:#CD853F" onclick="useColorPallette('#CD853F');" title="Peru"></span>
+				<span style="background-color:#FFC0CB" onclick="useColorPallette('#FFC0CB');" title="Pink"></span>
+				<span style="background-color:#DDA0DD" onclick="useColorPallette('#DDA0DD');" title="Plum"></span>
+				<span style="background-color:#B0E0E6" onclick="useColorPallette('#B0E0E6');" title="PowderBlue"></span>
+				<span style="background-color:#800080" onclick="useColorPallette('#800080');" title="Purple"></span>
+				<span style="background-color:#663399" onclick="useColorPallette('#663399');" title="RebeccaPurple"></span>
+				<span style="background-color:#FF0000" onclick="useColorPallette('#FF0000');" title="Red"></span>
+				<span style="background-color:#BC8F8F" onclick="useColorPallette('#BC8F8F');" title="RosyBrown"></span>
+				<span style="background-color:#4169E1" onclick="useColorPallette('#4169E1');" title="RoyalBlue"></span>
+				<span style="background-color:#8B4513" onclick="useColorPallette('#8B4513');" title="SaddleBrown"></span>
+				<span style="background-color:#FA8072" onclick="useColorPallette('#FA8072');" title="Salmon"></span>
+				<span style="background-color:#F4A460" onclick="useColorPallette('#F4A460');" title="SandyBrown"></span>
+				<span style="background-color:#2E8B57" onclick="useColorPallette('#2E8B57');" title="SeaGreen"></span>
+				<span style="background-color:#A0522D" onclick="useColorPallette('#A0522D');" title="Sienna"></span>
+				<span style="background-color:#C0C0C0" onclick="useColorPallette('#C0C0C0');" title="Silver"></span>
+				<span style="background-color:#87CEEB" onclick="useColorPallette('#87CEEB');" title="SkyBlue"></span>
+				<span style="background-color:#6A5ACD" onclick="useColorPallette('#6A5ACD');" title="SlateBlue"></span>
+				<span style="background-color:#708090" onclick="useColorPallette('#708090');" title="SlateGray"></span>
+				<span style="background-color:#4682B4" onclick="useColorPallette('#4682B4');" title="SteelBlue"></span>
+				<span style="background-color:#D2B48C" onclick="useColorPallette('#D2B48C');" title="Tan"></span>
+				<span style="background-color:#008080" onclick="useColorPallette('#008080');" title="Teal"></span>
+				<span style="background-color:#D8BFD8" onclick="useColorPallette('#D8BFD8');" title="Thistle"></span>
+				<span style="background-color:#FF6347" onclick="useColorPallette('#FF6347');" title="Tomato"></span>
+				<span style="background-color:#40E0D0" onclick="useColorPallette('#40E0D0');" title="Turquoise"></span>
+				<span style="background-color:#EE82EE" onclick="useColorPallette('#EE82EE');" title="Violet"></span>
+				<span style="background-color:#F5DEB3" onclick="useColorPallette('#F5DEB3');" title="Wheat"></span>
+				<span style="background-color:#FFFFFF" onclick="useColorPallette('#FFFFFF');" title="White"></span>
+				<span style="background-color:#F5F5F5" onclick="useColorPallette('#F5F5F5');" title="WhiteSmoke"></span>
+				<span style="background-color:#FFFF00" onclick="useColorPallette('#FFFF00');" title="Yellow"></span>
+				<span style="background-color:#9ACD32" onclick="useColorPallette('#9ACD32');" title="YellowGreen"></span>		
+			</div>
+
+			<!--
+			<div id="graphics_panel">
+
+				<ul class="tab_btns">
+					<li id="tab_btn1" href="#" onclick="changetab('1'); return false;">Badges</li>
+					<li id="tab_btn2" href="#" onclick="changetab('2'); return false;">Borders</li>
+					<li id="tab_btn3" href="#" onclick="changetab('3'); return false;">Calligraphy</li>
+					<li id="tab_btn4" href="#" onclick="changetab('4'); return false;">Frames</li>
+					<li id="tab_btn5" href="#" onclick="changetab('5'); return false;">Labels</li>
+					<li id="tab_btn6" href="#" onclick="changetab('6'); return false;">Ornaments</li>
+					<li id="tab_btn7" href="#" onclick="changetab('7'); return false;">Ribbons</li>
+					<li id="tab_btn8" href="#" onclick="changetab('8'); return false;">Rules</li>
+					<li id="tab_btn9" href="#" onclick="changetab('9'); return false;">Stickers</li>
+					<li id="tab_btn10" href="#" onclick="changetab('10'); return false;">Shapes</li>
+					<li id="tab_btn11" href="#" onclick="changetab('11'); return false;">Titles</li>
+				</ul>
+				
+				<article class="tab_panels">
+					
+					<aside id="tab_panel1"> 
+						<span onclick="addGraphic('images/art/badges/601.png');"><img loading="lazy" src="images/art/badges/601t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/602.png');"><img loading="lazy" src="images/art/badges/602t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/603.png');"><img loading="lazy" src="images/art/badges/603t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/604.png');"><img loading="lazy" src="images/art/badges/604t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/605.png');"><img loading="lazy" src="images/art/badges/605t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/606.png');"><img loading="lazy" src="images/art/badges/606t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/607.png');"><img loading="lazy" src="images/art/badges/607t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/608.png');"><img loading="lazy" src="images/art/badges/608t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/609.png');"><img loading="lazy" src="images/art/badges/609t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/610.png');"><img loading="lazy" src="images/art/badges/610t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/611.png');"><img loading="lazy" src="images/art/badges/611t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/612.png');"><img loading="lazy" src="images/art/badges/612t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/613.png');"><img loading="lazy" src="images/art/badges/613t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/614.png');"><img loading="lazy" src="images/art/badges/614t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/615.png');"><img loading="lazy" src="images/art/badges/615t.png"></span> 
+						<span onclick="addGraphic('images/art/badges/616.png');"><img loading="lazy" src="images/art/badges/616t.png"></span> 
+					</aside>
+
+					<aside id="tab_panel2"> 
+						<span onclick="addGraphic('images/art/borders/01.png');"><img loading="lazy" src="images/art/borders/01t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/02.png');"><img loading="lazy" src="images/art/borders/02t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/03.png');"><img loading="lazy" src="images/art/borders/03t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/04.png');"><img loading="lazy" src="images/art/borders/04t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/05.png');"><img loading="lazy" src="images/art/borders/05t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/06.png');"><img loading="lazy" src="images/art/borders/06t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/07.png');"><img loading="lazy" src="images/art/borders/07t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/08.png');"><img loading="lazy" src="images/art/borders/08t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/09.png');"><img loading="lazy" src="images/art/borders/09t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/10.png');"><img loading="lazy" src="images/art/borders/10t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/11.png');"><img loading="lazy" src="images/art/borders/11t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/12.png');"><img loading="lazy" src="images/art/borders/12t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/13.png');"><img loading="lazy" src="images/art/borders/13t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/14.png');"><img loading="lazy" src="images/art/borders/14t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/17.png');"><img loading="lazy" src="images/art/borders/17t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/18.png');"><img loading="lazy" src="images/art/borders/18t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/19.png');"><img loading="lazy" src="images/art/borders/19t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/20.png');"><img loading="lazy" src="images/art/borders/20t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/21.png');"><img loading="lazy" src="images/art/borders/21t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/22.png');"><img loading="lazy" src="images/art/borders/22t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/23.png');"><img loading="lazy" src="images/art/borders/23t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/24.png');"><img loading="lazy" src="images/art/borders/24t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/25.png');"><img loading="lazy" src="images/art/borders/25t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/26.png');"><img loading="lazy" src="images/art/borders/26t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/27.png');"><img loading="lazy" src="images/art/borders/27t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/28.png');"><img loading="lazy" src="images/art/borders/28t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/29.png');"><img loading="lazy" src="images/art/borders/29t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/30.png');"><img loading="lazy" src="images/art/borders/30t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/31.png');"><img loading="lazy" src="images/art/borders/31t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/32.png');"><img loading="lazy" src="images/art/borders/32t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/33.png');"><img loading="lazy" src="images/art/borders/33t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/34.png');"><img loading="lazy" src="images/art/borders/34t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/35.png');"><img loading="lazy" src="images/art/borders/35t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/36.png');"><img loading="lazy" src="images/art/borders/36t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/37.png');"><img loading="lazy" src="images/art/borders/37t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/38.png');"><img loading="lazy" src="images/art/borders/38t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/39.png');"><img loading="lazy" src="images/art/borders/39t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/40.png');"><img loading="lazy" src="images/art/borders/40t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/41.png');"><img loading="lazy" src="images/art/borders/41t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/101.png');"><img loading="lazy" src="images/art/borders/101t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/102.png');"><img loading="lazy" src="images/art/borders/102t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/103.png');"><img loading="lazy" src="images/art/borders/103t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/104.png');"><img loading="lazy" src="images/art/borders/104t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/105.png');"><img loading="lazy" src="images/art/borders/105t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/106.png');"><img loading="lazy" src="images/art/borders/106t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/107.png');"><img loading="lazy" src="images/art/borders/107t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/108.png');"><img loading="lazy" src="images/art/borders/108t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/109.png');"><img loading="lazy" src="images/art/borders/109t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/110.png');"><img loading="lazy" src="images/art/borders/110t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/111.png');"><img loading="lazy" src="images/art/borders/111t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/112.png');"><img loading="lazy" src="images/art/borders/112t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/113.png');"><img loading="lazy" src="images/art/borders/113t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/114.png');"><img loading="lazy" src="images/art/borders/114t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/115.png');"><img loading="lazy" src="images/art/borders/115t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/116.png');"><img loading="lazy" src="images/art/borders/116t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/117.png');"><img loading="lazy" src="images/art/borders/117t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/118.png');"><img loading="lazy" src="images/art/borders/118t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/119.png');"><img loading="lazy" src="images/art/borders/119t.png"></span> 
+						<span onclick="addGraphic('images/art/borders/120.png');"><img loading="lazy" src="images/art/borders/120t.png"></span> 
+					</aside>
+
+					<aside id="tab_panel3"> 
+						<span onclick="addGraphic('images/art/calligraphy/401.png');"><img loading="lazy" src="images/art/calligraphy/401t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/402.png');"><img loading="lazy" src="images/art/calligraphy/402t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/403.png');"><img loading="lazy" src="images/art/calligraphy/403t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/404.png');"><img loading="lazy" src="images/art/calligraphy/404t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/405.png');"><img loading="lazy" src="images/art/calligraphy/405t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/406.png');"><img loading="lazy" src="images/art/calligraphy/406t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/407.png');"><img loading="lazy" src="images/art/calligraphy/407t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/408.png');"><img loading="lazy" src="images/art/calligraphy/408t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/409.png');"><img loading="lazy" src="images/art/calligraphy/409t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/410.png');"><img loading="lazy" src="images/art/calligraphy/410t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/411.png');"><img loading="lazy" src="images/art/calligraphy/411t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/412.png');"><img loading="lazy" src="images/art/calligraphy/412t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/413.png');"><img loading="lazy" src="images/art/calligraphy/413t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/414.png');"><img loading="lazy" src="images/art/calligraphy/414t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/415.png');"><img loading="lazy" src="images/art/calligraphy/415t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/416.png');"><img loading="lazy" src="images/art/calligraphy/416t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/417.png');"><img loading="lazy" src="images/art/calligraphy/417t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/418.png');"><img loading="lazy" src="images/art/calligraphy/418t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/419.png');"><img loading="lazy" src="images/art/calligraphy/419t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/420.png');"><img loading="lazy" src="images/art/calligraphy/420t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/421.png');"><img loading="lazy" src="images/art/calligraphy/421t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/422.png');"><img loading="lazy" src="images/art/calligraphy/422t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/423.png');"><img loading="lazy" src="images/art/calligraphy/423t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/424.png');"><img loading="lazy" src="images/art/calligraphy/424t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/425.png');"><img loading="lazy" src="images/art/calligraphy/425t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/501.png');"><img loading="lazy" src="images/art/calligraphy/501t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/502.png');"><img loading="lazy" src="images/art/calligraphy/502t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/503.png');"><img loading="lazy" src="images/art/calligraphy/503t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/504.png');"><img loading="lazy" src="images/art/calligraphy/504t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/505.png');"><img loading="lazy" src="images/art/calligraphy/505t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/506.png');"><img loading="lazy" src="images/art/calligraphy/506t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/507.png');"><img loading="lazy" src="images/art/calligraphy/507t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/508.png');"><img loading="lazy" src="images/art/calligraphy/508t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/509.png');"><img loading="lazy" src="images/art/calligraphy/509t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/510.png');"><img loading="lazy" src="images/art/calligraphy/510t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/511.png');"><img loading="lazy" src="images/art/calligraphy/511t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/512.png');"><img loading="lazy" src="images/art/calligraphy/512t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/513.png');"><img loading="lazy" src="images/art/calligraphy/513t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/514.png');"><img loading="lazy" src="images/art/calligraphy/514t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/515.png');"><img loading="lazy" src="images/art/calligraphy/515t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/516.png');"><img loading="lazy" src="images/art/calligraphy/516t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/517.png');"><img loading="lazy" src="images/art/calligraphy/517t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/518.png');"><img loading="lazy" src="images/art/calligraphy/518t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/519.png');"><img loading="lazy" src="images/art/calligraphy/519t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/520.png');"><img loading="lazy" src="images/art/calligraphy/520t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/521.png');"><img loading="lazy" src="images/art/calligraphy/521t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/522.png');"><img loading="lazy" src="images/art/calligraphy/522t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/523.png');"><img loading="lazy" src="images/art/calligraphy/523t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/524.png');"><img loading="lazy" src="images/art/calligraphy/524t.png"></span> 
+						<span onclick="addGraphic('images/art/calligraphy/525.png');"><img loading="lazy" src="images/art/calligraphy/525t.png"></span> 
+					</aside>
+
+					<aside id="tab_panel4"> 
+						<span onclick="addGraphic('images/art/frames/301.png');"><img loading="lazy" src="images/art/frames/301t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/302.png');"><img loading="lazy" src="images/art/frames/302t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/303.png');"><img loading="lazy" src="images/art/frames/303t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/304.png');"><img loading="lazy" src="images/art/frames/304t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/306.png');"><img loading="lazy" src="images/art/frames/306t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/307.png');"><img loading="lazy" src="images/art/frames/307t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/308.png');"><img loading="lazy" src="images/art/frames/308t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/309.png');"><img loading="lazy" src="images/art/frames/309t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/310.png');"><img loading="lazy" src="images/art/frames/310t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/311.png');"><img loading="lazy" src="images/art/frames/311t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/312.png');"><img loading="lazy" src="images/art/frames/312t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/313.png');"><img loading="lazy" src="images/art/frames/313t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/314.png');"><img loading="lazy" src="images/art/frames/314t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/315.png');"><img loading="lazy" src="images/art/frames/315t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/316.png');"><img loading="lazy" src="images/art/frames/316t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/317.png');"><img loading="lazy" src="images/art/frames/317t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/318.png');"><img loading="lazy" src="images/art/frames/318t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/319.png');"><img loading="lazy" src="images/art/frames/319t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/320.png');"><img loading="lazy" src="images/art/frames/320t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/321.png');"><img loading="lazy" src="images/art/frames/321t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/322.png');"><img loading="lazy" src="images/art/frames/322t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/323.png');"><img loading="lazy" src="images/art/frames/323t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/324.png');"><img loading="lazy" src="images/art/frames/324t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/325.png');"><img loading="lazy" src="images/art/frames/325t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/326.png');"><img loading="lazy" src="images/art/frames/326t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/327.png');"><img loading="lazy" src="images/art/frames/327t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/329.png');"><img loading="lazy" src="images/art/frames/329t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/330.png');"><img loading="lazy" src="images/art/frames/330t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/331.png');"><img loading="lazy" src="images/art/frames/331t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/332.png');"><img loading="lazy" src="images/art/frames/332t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/333.png');"><img loading="lazy" src="images/art/frames/333t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/334.png');"><img loading="lazy" src="images/art/frames/334t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/335.png');"><img loading="lazy" src="images/art/frames/335t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/336.png');"><img loading="lazy" src="images/art/frames/336t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/337.png');"><img loading="lazy" src="images/art/frames/337t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/338.png');"><img loading="lazy" src="images/art/frames/338t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/339.png');"><img loading="lazy" src="images/art/frames/339t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/340.png');"><img loading="lazy" src="images/art/frames/340t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/341.png');"><img loading="lazy" src="images/art/frames/341t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/342.png');"><img loading="lazy" src="images/art/frames/342t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/343.png');"><img loading="lazy" src="images/art/frames/343t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/344.png');"><img loading="lazy" src="images/art/frames/344t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/345.png');"><img loading="lazy" src="images/art/frames/345t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/346.png');"><img loading="lazy" src="images/art/frames/346t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/347.png');"><img loading="lazy" src="images/art/frames/347t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/348.png');"><img loading="lazy" src="images/art/frames/348t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/349.png');"><img loading="lazy" src="images/art/frames/349t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/350.png');"><img loading="lazy" src="images/art/frames/350t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/351.png');"><img loading="lazy" src="images/art/frames/351t.png"></span> 
+						<span onclick="addGraphic('images/art/frames/352.png');"><img loading="lazy" src="images/art/frames/352t.png"></span> 
+					</aside>
+
+				<aside id="tab_panel5"> 
+						<span onclick="addGraphic('images/art/labels/701.png');"><img loading="lazy" src="images/art/labels/701t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/702.png');"><img loading="lazy" src="images/art/labels/702t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/703.png');"><img loading="lazy" src="images/art/labels/703t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/704.png');"><img loading="lazy" src="images/art/labels/704t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/705.png');"><img loading="lazy" src="images/art/labels/705t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/706.png');"><img loading="lazy" src="images/art/labels/706t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/707.png');"><img loading="lazy" src="images/art/labels/707t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/708.png');"><img loading="lazy" src="images/art/labels/708t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/709.png');"><img loading="lazy" src="images/art/labels/709t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/710.png');"><img loading="lazy" src="images/art/labels/710t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/721.png');"><img loading="lazy" src="images/art/labels/721t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/722.png');"><img loading="lazy" src="images/art/labels/722t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/723.png');"><img loading="lazy" src="images/art/labels/723t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/724.png');"><img loading="lazy" src="images/art/labels/724t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/725.png');"><img loading="lazy" src="images/art/labels/725t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/726.png');"><img loading="lazy" src="images/art/labels/726t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/727.png');"><img loading="lazy" src="images/art/labels/727t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/728.png');"><img loading="lazy" src="images/art/labels/728t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/729.png');"><img loading="lazy" src="images/art/labels/729t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/730.png');"><img loading="lazy" src="images/art/labels/730t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/731.png');"><img loading="lazy" src="images/art/labels/731t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/732.png');"><img loading="lazy" src="images/art/labels/732t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/733.png');"><img loading="lazy" src="images/art/labels/733t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/734.png');"><img loading="lazy" src="images/art/labels/734t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/735.png');"><img loading="lazy" src="images/art/labels/735t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/736.png');"><img loading="lazy" src="images/art/labels/736t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/737.png');"><img loading="lazy" src="images/art/labels/737t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/738.png');"><img loading="lazy" src="images/art/labels/738t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/739.png');"><img loading="lazy" src="images/art/labels/739t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/740.png');"><img loading="lazy" src="images/art/labels/740t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/741.png');"><img loading="lazy" src="images/art/labels/741t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/742.png');"><img loading="lazy" src="images/art/labels/742t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/743.png');"><img loading="lazy" src="images/art/labels/743t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/744.png');"><img loading="lazy" src="images/art/labels/744t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/745.png');"><img loading="lazy" src="images/art/labels/745t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/746.png');"><img loading="lazy" src="images/art/labels/746t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/747.png');"><img loading="lazy" src="images/art/labels/747t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/748.png');"><img loading="lazy" src="images/art/labels/748t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/749.png');"><img loading="lazy" src="images/art/labels/749t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/750.png');"><img loading="lazy" src="images/art/labels/750t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/751.png');"><img loading="lazy" src="images/art/labels/751t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/752.png');"><img loading="lazy" src="images/art/labels/752t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/753.png');"><img loading="lazy" src="images/art/labels/753t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/754.png');"><img loading="lazy" src="images/art/labels/754t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/755.png');"><img loading="lazy" src="images/art/labels/755t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/756.png');"><img loading="lazy" src="images/art/labels/756t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/757.png');"><img loading="lazy" src="images/art/labels/757t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/758.png');"><img loading="lazy" src="images/art/labels/758t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/759.png');"><img loading="lazy" src="images/art/labels/759t.png"></span> 
+						<span onclick="addGraphic('images/art/labels/760.png');"><img loading="lazy" src="images/art/labels/760t.png"></span> 
+					</aside>
+
+					<aside id="tab_panel6"> 
+						<span onclick="addGraphic('images/art/ornaments/1401.png');"><img loading="lazy" src="images/art/ornaments/1401t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1402.png');"><img loading="lazy" src="images/art/ornaments/1402t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1403.png');"><img loading="lazy" src="images/art/ornaments/1403t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1404.png');"><img loading="lazy" src="images/art/ornaments/1404t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1405.png');"><img loading="lazy" src="images/art/ornaments/1405t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1406.png');"><img loading="lazy" src="images/art/ornaments/1406t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1407.png');"><img loading="lazy" src="images/art/ornaments/1407t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1408.png');"><img loading="lazy" src="images/art/ornaments/1408t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1409.png');"><img loading="lazy" src="images/art/ornaments/1409t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1410.png');"><img loading="lazy" src="images/art/ornaments/1410t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1411.png');"><img loading="lazy" src="images/art/ornaments/1411t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1412.png');"><img loading="lazy" src="images/art/ornaments/1412t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1413.png');"><img loading="lazy" src="images/art/ornaments/1413t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1414.png');"><img loading="lazy" src="images/art/ornaments/1414t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1415.png');"><img loading="lazy" src="images/art/ornaments/1415t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1416.png');"><img loading="lazy" src="images/art/ornaments/1416t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1417.png');"><img loading="lazy" src="images/art/ornaments/1417t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1418.png');"><img loading="lazy" src="images/art/ornaments/1418t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1419.png');"><img loading="lazy" src="images/art/ornaments/1419t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1420.png');"><img loading="lazy" src="images/art/ornaments/1420t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1421.png');"><img loading="lazy" src="images/art/ornaments/1421t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1422.png');"><img loading="lazy" src="images/art/ornaments/1422t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1423.png');"><img loading="lazy" src="images/art/ornaments/1423t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1424.png');"><img loading="lazy" src="images/art/ornaments/1424t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1425.png');"><img loading="lazy" src="images/art/ornaments/1425t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1426.png');"><img loading="lazy" src="images/art/ornaments/1426t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1501.png');"><img loading="lazy" src="images/art/ornaments/1501t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1502.png');"><img loading="lazy" src="images/art/ornaments/1502t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1503.png');"><img loading="lazy" src="images/art/ornaments/1503t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1504.png');"><img loading="lazy" src="images/art/ornaments/1504t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1505.png');"><img loading="lazy" src="images/art/ornaments/1505t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1506.png');"><img loading="lazy" src="images/art/ornaments/1506t.png"></span> 
+						<span onclick="addGraphic('images/art/ornaments/1507.png');"><img loading="lazy" src="images/art/ornaments/1507t.png"></span> 
+					</aside>
+					
+					<aside id="tab_panel7"> 
+						<span onclick="addGraphic('images/art/ribbons/801.png');"><img loading="lazy" src="images/art/ribbons/801t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/802.png');"><img loading="lazy" src="images/art/ribbons/802t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/803.png');"><img loading="lazy" src="images/art/ribbons/803t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/804.png');"><img loading="lazy" src="images/art/ribbons/804t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/805.png');"><img loading="lazy" src="images/art/ribbons/805t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/806.png');"><img loading="lazy" src="images/art/ribbons/806t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/807.png');"><img loading="lazy" src="images/art/ribbons/807t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/808.png');"><img loading="lazy" src="images/art/ribbons/808t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/809.png');"><img loading="lazy" src="images/art/ribbons/809t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/810.png');"><img loading="lazy" src="images/art/ribbons/810t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/811.png');"><img loading="lazy" src="images/art/ribbons/811t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/812.png');"><img loading="lazy" src="images/art/ribbons/812t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/813.png');"><img loading="lazy" src="images/art/ribbons/813t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/814.png');"><img loading="lazy" src="images/art/ribbons/814t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/815.png');"><img loading="lazy" src="images/art/ribbons/815t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/816.png');"><img loading="lazy" src="images/art/ribbons/816t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/817.png');"><img loading="lazy" src="images/art/ribbons/817t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/818.png');"><img loading="lazy" src="images/art/ribbons/818t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/819.png');"><img loading="lazy" src="images/art/ribbons/819t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/820.png');"><img loading="lazy" src="images/art/ribbons/820t.png"></span> 
+						<span onclick="addGraphic('images/art/ribbons/821.png');"><img loading="lazy" src="images/art/ribbons/821t.png"></span> 
+					</aside>
+					
+					<aside id="tab_panel8"> 
+						<span onclick="addGraphic('images/art/rules/901.png');"><img loading="lazy" src="images/art/rules/901t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/902.png');"><img loading="lazy" src="images/art/rules/902t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/903.png');"><img loading="lazy" src="images/art/rules/903t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/904.png');"><img loading="lazy" src="images/art/rules/904t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/905.png');"><img loading="lazy" src="images/art/rules/905t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/906.png');"><img loading="lazy" src="images/art/rules/906t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/907.png');"><img loading="lazy" src="images/art/rules/907t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/908.png');"><img loading="lazy" src="images/art/rules/908t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/909.png');"><img loading="lazy" src="images/art/rules/909t.png"></span> 
+						<span onclick="addGraphic('images/art/rules/910.png');"><img loading="lazy" src="images/art/rules/910t.png"></span> 
+					</aside>
+					
+					<aside id="tab_panel9"> 
+						<span onclick="addGraphic('images/art/stickers/1101.png');"><img loading="lazy" src="images/art/stickers/1101t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1102.png');"><img loading="lazy" src="images/art/stickers/1102t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1103.png');"><img loading="lazy" src="images/art/stickers/1103t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1104.png');"><img loading="lazy" src="images/art/stickers/1104t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1105.png');"><img loading="lazy" src="images/art/stickers/1105t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1106.png');"><img loading="lazy" src="images/art/stickers/1106t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1107.png');"><img loading="lazy" src="images/art/stickers/1107t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1108.png');"><img loading="lazy" src="images/art/stickers/1108t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1109.png');"><img loading="lazy" src="images/art/stickers/1109t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1110.png');"><img loading="lazy" src="images/art/stickers/1110t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1111.png');"><img loading="lazy" src="images/art/stickers/1111t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1112.png');"><img loading="lazy" src="images/art/stickers/1112t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1113.png');"><img loading="lazy" src="images/art/stickers/1113t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1114.png');"><img loading="lazy" src="images/art/stickers/1114t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1115.png');"><img loading="lazy" src="images/art/stickers/1115t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1116.png');"><img loading="lazy" src="images/art/stickers/1116t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1117.png');"><img loading="lazy" src="images/art/stickers/1117t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1118.png');"><img loading="lazy" src="images/art/stickers/1118t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1119.png');"><img loading="lazy" src="images/art/stickers/1119t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1120.png');"><img loading="lazy" src="images/art/stickers/1120t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1121.png');"><img loading="lazy" src="images/art/stickers/1121t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1122.png');"><img loading="lazy" src="images/art/stickers/1122t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1123.png');"><img loading="lazy" src="images/art/stickers/1123t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1124.png');"><img loading="lazy" src="images/art/stickers/1124t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1125.png');"><img loading="lazy" src="images/art/stickers/1125t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1126.png');"><img loading="lazy" src="images/art/stickers/1126t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1127.png');"><img loading="lazy" src="images/art/stickers/1127t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1128.png');"><img loading="lazy" src="images/art/stickers/1128t.png"></span> 
+						<span onclick="addGraphic('images/art/stickers/1129.png');"><img loading="lazy" src="images/art/stickers/1129t.png"></span> 
+					</aside>
+
+	
+					<aside id="tab_panel10"> 
+						<span onclick="addGraphic('images/art/shapes/1001.png');"><img loading="lazy" src="images/art/shapes/1001t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1002.png');"><img loading="lazy" src="images/art/shapes/1002t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1003.png');"><img loading="lazy" src="images/art/shapes/1003t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1004.png');"><img loading="lazy" src="images/art/shapes/1004t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1005.png');"><img loading="lazy" src="images/art/shapes/1005t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1006.png');"><img loading="lazy" src="images/art/shapes/1006t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1007.png');"><img loading="lazy" src="images/art/shapes/1007t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1008.png');"><img loading="lazy" src="images/art/shapes/1008t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1009.png');"><img loading="lazy" src="images/art/shapes/1009t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1010.png');"><img loading="lazy" src="images/art/shapes/1010t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1011.png');"><img loading="lazy" src="images/art/shapes/1011t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1012.png');"><img loading="lazy" src="images/art/shapes/1012t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1013.png');"><img loading="lazy" src="images/art/shapes/1013t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1014.png');"><img loading="lazy" src="images/art/shapes/1014t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1015.png');"><img loading="lazy" src="images/art/shapes/1015t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1016.png');"><img loading="lazy" src="images/art/shapes/1016t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1017.png');"><img loading="lazy" src="images/art/shapes/1017t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1018.png');"><img loading="lazy" src="images/art/shapes/1018t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1019.png');"><img loading="lazy" src="images/art/shapes/1019t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1020.png');"><img loading="lazy" src="images/art/shapes/1020t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1021.png');"><img loading="lazy" src="images/art/shapes/1021t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1022.png');"><img loading="lazy" src="images/art/shapes/1022t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1023.png');"><img loading="lazy" src="images/art/shapes/1023t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1024.png');"><img loading="lazy" src="images/art/shapes/1024t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1025.png');"><img loading="lazy" src="images/art/shapes/1025t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1026.png');"><img loading="lazy" src="images/art/shapes/1026t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1027.png');"><img loading="lazy" src="images/art/shapes/1027t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1029.png');"><img loading="lazy" src="images/art/shapes/1029t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1030.png');"><img loading="lazy" src="images/art/shapes/1030t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1033.png');"><img loading="lazy" src="images/art/shapes/1033t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1034.png');"><img loading="lazy" src="images/art/shapes/1034t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1035.png');"><img loading="lazy" src="images/art/shapes/1035t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1036.png');"><img loading="lazy" src="images/art/shapes/1036t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1037.png');"><img loading="lazy" src="images/art/shapes/1037t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1038.png');"><img loading="lazy" src="images/art/shapes/1038t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1039.png');"><img loading="lazy" src="images/art/shapes/1039t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1040.png');"><img loading="lazy" src="images/art/shapes/1040t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1041.png');"><img loading="lazy" src="images/art/shapes/1041t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1042.png');"><img loading="lazy" src="images/art/shapes/1042t.png"></span> 
+						<span onclick="addGraphic('images/art/shapes/1043.png');"><img loading="lazy" src="images/art/shapes/1043t.png"></span> 
+					</aside>
+
+					<aside id="tab_panel11"> 
+						<span onclick="addGraphic('images/art/titles/1204.png');"><img loading="lazy" src="images/art/titles/1204t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1205.png');"><img loading="lazy" src="images/art/titles/1205t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1206.png');"><img loading="lazy" src="images/art/titles/1206t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1207.png');"><img loading="lazy" src="images/art/titles/1207t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1208.png');"><img loading="lazy" src="images/art/titles/1208t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1209.png');"><img loading="lazy" src="images/art/titles/1209t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1211.png');"><img loading="lazy" src="images/art/titles/1211t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1212.png');"><img loading="lazy" src="images/art/titles/1212t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1213.png');"><img loading="lazy" src="images/art/titles/1213t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1214.png');"><img loading="lazy" src="images/art/titles/1214t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1215.png');"><img loading="lazy" src="images/art/titles/1215t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1216.png');"><img loading="lazy" src="images/art/titles/1216t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1217.png');"><img loading="lazy" src="images/art/titles/1217t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1218.png');"><img loading="lazy" src="images/art/titles/1218t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1219.png');"><img loading="lazy" src="images/art/titles/1219t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1220.png');"><img loading="lazy" src="images/art/titles/1220t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1221.png');"><img loading="lazy" src="images/art/titles/1221t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1222.png');"><img loading="lazy" src="images/art/titles/1222t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1223.png');"><img loading="lazy" src="images/art/titles/1223t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1224.png');"><img loading="lazy" src="images/art/titles/1224t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1225.png');"><img loading="lazy" src="images/art/titles/1225t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1226.png');"><img loading="lazy" src="images/art/titles/1226t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1227.png');"><img loading="lazy" src="images/art/titles/1227t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1228.png');"><img loading="lazy" src="images/art/titles/1228t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1229.png');"><img loading="lazy" src="images/art/titles/1229t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1230.png');"><img loading="lazy" src="images/art/titles/1230t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1231.png');"><img loading="lazy" src="images/art/titles/1231t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1232.png');"><img loading="lazy" src="images/art/titles/1232t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1233.png');"><img loading="lazy" src="images/art/titles/1233t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1234.png');"><img loading="lazy" src="images/art/titles/1234t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1235.png');"><img loading="lazy" src="images/art/titles/1235t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1236.png');"><img loading="lazy" src="images/art/titles/1236t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1237.png');"><img loading="lazy" src="images/art/titles/1237t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1238.png');"><img loading="lazy" src="images/art/titles/1238t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1239.png');"><img loading="lazy" src="images/art/titles/1239t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1240.png');"><img loading="lazy" src="images/art/titles/1240t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1241.png');"><img loading="lazy" src="images/art/titles/1241t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1242.png');"><img loading="lazy" src="images/art/titles/1242t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1243.png');"><img loading="lazy" src="images/art/titles/1243t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1244.png');"><img loading="lazy" src="images/art/titles/1244t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1245.png');"><img loading="lazy" src="images/art/titles/1245t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1246.png');"><img loading="lazy" src="images/art/titles/1246t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1247.png');"><img loading="lazy" src="images/art/titles/1247t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1248.png');"><img loading="lazy" src="images/art/titles/1248t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1249.png');"><img loading="lazy" src="images/art/titles/1249t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1250.png');"><img loading="lazy" src="images/art/titles/1250t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1251.png');"><img loading="lazy" src="images/art/titles/1251t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1252.png');"><img loading="lazy" src="images/art/titles/1252t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1253.png');"><img loading="lazy" src="images/art/titles/1253t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1254.png');"><img loading="lazy" src="images/art/titles/1254t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1255.png');"><img loading="lazy" src="images/art/titles/1255t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1256.png');"><img loading="lazy" src="images/art/titles/1256t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1257.png');"><img loading="lazy" src="images/art/titles/1257t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1258.png');"><img loading="lazy" src="images/art/titles/1258t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1259.png');"><img loading="lazy" src="images/art/titles/1259t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1260.png');"><img loading="lazy" src="images/art/titles/1260t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1261.png');"><img loading="lazy" src="images/art/titles/1261t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1262.png');"><img loading="lazy" src="images/art/titles/1262t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1263.png');"><img loading="lazy" src="images/art/titles/1263t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1264.png');"><img loading="lazy" src="images/art/titles/1264t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1265.png');"><img loading="lazy" src="images/art/titles/1265t.png"></span> 
+						<span onclick="addGraphic('images/art/titles/1266.png');"><img loading="lazy" src="images/art/titles/1266t.png"></span> 
+					</aside>
+
+				</article>
+				
+			</div> 
+			-->
+			<!-- graphic panel -->
+			
+
+		</div> <!-- popup panel -->
+		
+	</body>
+</html>
