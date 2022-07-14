@@ -58,20 +58,22 @@ body {
 
 #wrapper section {
 	position:absolute;
-	transition:.1s;
+	transition:.2s;
 }
 
 #wrapper .move {
+	visibility:hidden;
 	position:absolute;
 	background-color:orange;
 	padding:5px;
 	border-radius:20px;
 	border:2px solid navy;
 	cursor:pointer;
-	transition:.1s;
+	transition:.2s;
 }
 
 #wrapper .resize {
+	visibility:hidden;
 	position:absolute;
 	padding-top:1px;
 	background-color:black;
@@ -79,7 +81,7 @@ body {
 	color:white;
 	border-radius:20px;
 	cursor:pointer;
-	transition:.1s;
+	transition:.2s;
 }
 
 

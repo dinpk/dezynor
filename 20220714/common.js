@@ -16,7 +16,7 @@ function showMessage(msg, color) {
 	let message = document.createElement("div");
 	let message_text = document.createTextNode(msg);
 	message.appendChild(message_text);
-	message.setAttribute("style", "width:200px;position:fixed;top:10px;left:50%;margin-left:-100px;font-family:Arial;font-weight:bold;font-size:15px;text-align:center;padding:5px 10px 5px 10px;border:1px solid " + color + ";border-radius:5px;color:" + color + ";background-color:lightyellow;");
+	message.setAttribute("style", "z-index:5000;width:400px;position:fixed;top:10px;left:50%;margin-left:-200px;font-family:Arial;font-weight:bold;font-size:15px;text-align:center;padding:5px 10px 5px 10px;border:1px solid " + color + ";border-radius:5px;color:" + color + ";background-color:lightyellow;");
 	document.getElementsByTagName("body")[0].appendChild(message);
 	setTimeout(function() {document.getElementsByTagName("body")[0].removeChild(message);},3000);
 }

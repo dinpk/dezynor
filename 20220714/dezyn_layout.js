@@ -1,128 +1,136 @@
 let dezyn_id = generateDeisgnId() + "|default";
 let section_counter = 0;
-let selected_move = "";
-let selected_resize_bottom_right = "";
-let selected_resize_top_right = "";
-let selected_resize_bottom_left = "";
-let selected_resize_top_left = "";
-let selected_resize_center_right = "";
-let selected_resize_center_left = "";
-let selected_resize_center_top = "";
-let selected_resize_center_bottom = "";
-let selected_section = "";
+let selected_section;
+let move;
+let resize_bottom_right;
+let resize_top_right;
+let resize_top_left;
+let resize_bottom_left;
+let resize_center_right;
+let resize_center_left;
+let resize_center_top;
+let resize_center_bottom;
 
 function generateDeisgnId() {
 	return "dezyn-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 }
 
-function addSection() {
 
-	section_counter = getNewSectionCount();
+function addHandles() {
 
-	let section_id = "section" + section_counter;
-	let move_id = "move" + section_counter;
-	let resize_bottom_right_id = "resize_bottom_right" + section_counter;
-	let resize_top_right_id = "resize_top_right" + section_counter;
-	let resize_bottom_left_id = "resize_bottom_left" + section_counter;
-	let resize_top_left_id = "resize_top_left" + section_counter;
-	let resize_center_right_id = "resize_center_right" + section_counter;
-	let resize_center_left_id = "resize_center_left" + section_counter;
-	let resize_center_top_id = "resize_center_top" + section_counter;
-	let resize_center_bottom_id = "resize_center_bottom" + section_counter;
+	if (getNewSectionCount() > 1) return;
+
+	move = document.createElement("span");
+	move.setAttribute("id", "move");
+	move.setAttribute("class", "move");
 	
+	document.getElementById("wrapper").appendChild(move);
+	document.getElementById("move").innerHTML = " ";
+	document.getElementById("move").style.zIndex = "10000";
+
+	resize_bottom_right = document.createElement("span");
+	resize_bottom_right.setAttribute("id", "resize_bottom_right");
+	resize_bottom_right.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_bottom_right);
+	document.getElementById("resize_bottom_right").innerHTML = "O";
+	document.getElementById("resize_bottom_right").style.zIndex = "10000";
+
+	resize_top_right = document.createElement("span");
+	resize_top_right.setAttribute("id", "resize_top_right");
+	resize_top_right.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_top_right);
+	document.getElementById("resize_top_right").innerHTML = "O";
+	document.getElementById("resize_top_right").style.zIndex = "10000";
+
+	resize_top_left = document.createElement("span");
+	resize_top_left.setAttribute("id", "resize_top_left");
+	resize_top_left.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_top_left);
+	document.getElementById("resize_top_left").innerHTML = "O";
+	document.getElementById("resize_top_left").style.zIndex = "10000";
+
+	resize_bottom_left = document.createElement("span");
+	resize_bottom_left.setAttribute("id", "resize_bottom_left");
+	resize_bottom_left.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_bottom_left);
+	document.getElementById("resize_bottom_left").innerHTML = "O";
+	document.getElementById("resize_bottom_left").style.zIndex = "10000";
+
+	resize_center_right = document.createElement("span");
+	resize_center_right.setAttribute("id", "resize_center_right");
+	resize_center_right.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_center_right);
+	document.getElementById("resize_center_right").innerHTML = "O";
+	document.getElementById("resize_center_right").style.zIndex = "10000";
+
+	resize_center_left = document.createElement("span");
+	resize_center_left.setAttribute("id", "resize_center_left");
+	resize_center_left.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_center_left);
+	document.getElementById("resize_center_left").innerHTML = "O";
+	document.getElementById("resize_center_left").style.zIndex = "10000";
+
+	resize_center_top = document.createElement("span");
+	resize_center_top.setAttribute("id", "resize_center_top");
+	resize_center_top.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_center_top);
+	document.getElementById("resize_center_top").innerHTML = "O";
+	document.getElementById("resize_center_top").style.zIndex = "10000";
+
+	resize_center_bottom = document.createElement("span");
+	resize_center_bottom.setAttribute("id", "resize_center_bottom");
+	resize_center_bottom.setAttribute("class", "resize");
+	document.getElementById("wrapper").appendChild(resize_center_bottom);
+	document.getElementById("resize_center_bottom").innerHTML = "O";
+	document.getElementById("resize_center_bottom").style.zIndex = "10000";
+			
+}
+
+function hideHandles() {
+	move.style.visibility = "hidden";
+	resize_bottom_right.style.visibility = "hidden";
+	resize_top_right.style.visibility = "hidden";
+	resize_bottom_left.style.visibility = "hidden";
+	resize_top_left.style.visibility = "hidden";
+	resize_center_right.style.visibility = "hidden";
+	resize_center_left.style.visibility = "hidden";
+	resize_center_top.style.visibility = "hidden";
+	resize_center_bottom.style.visibility = "hidden";
+	move.style.transition = "initial";
+	resize_bottom_right.style.transition = "initial";
+	resize_top_right.style.transition = "initial";
+	resize_bottom_left.style.transition = "initial";
+	resize_top_left.style.transition = "initial";
+	resize_center_right.style.transition = "initial";
+	resize_center_left.style.transition = "initial";
+	resize_center_top.style.transition = "initial";
+	resize_center_bottom.style.transition = "initial";	
+}
+
+function showHandles() {
+	move.style.visibility = "visible";
+	resize_bottom_right.style.visibility = "visible";
+	resize_top_right.style.visibility = "visible";
+	resize_bottom_left.style.visibility = "visible";
+	resize_top_left.style.visibility = "visible";
+	resize_center_right.style.visibility = "visible";
+	resize_center_left.style.visibility = "visible";
+	resize_center_top.style.visibility = "visible";
+	resize_center_bottom.style.visibility = "visible";
+}
+
+function addSection() {
+	section_counter = getNewSectionCount();
+	let section_id = "section" + section_counter;
 	let section = document.createElement("section");
 	let section_text = document.createTextNode(" ");
 	section.appendChild(section_text);
 	section.setAttribute("id", section_id);
 	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
 	section.setAttribute("onpaste", "pasteText(event);");
-	//section.setAttribute("tabindex", section_counter);
 	section.setAttribute("contenteditable", "true");
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
-
-
-	let move = document.createElement("span");
-	move.setAttribute("id", move_id);
-	move.setAttribute("class", "move");
-	move.setAttribute("onmousedown", "onMouseDown4Move('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(move);
-	document.getElementById(move_id).innerHTML = " ";
-	document.getElementById(move_id).style.zIndex = "10000";
-
-
-	// resize bottom right
-	let resize_bottom_right = document.createElement("span");
-	resize_bottom_right.setAttribute("id", resize_bottom_right_id);
-	resize_bottom_right.setAttribute("class", "resize");
-	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_bottom_right);
-	document.getElementById(resize_bottom_right_id).innerHTML = "O";
-	document.getElementById(resize_bottom_right_id).style.zIndex = "10000";
-
-	// resize top right
-	let resize_top_right = document.createElement("span");
-	resize_top_right.setAttribute("id", resize_top_right_id);
-	resize_top_right.setAttribute("class", "resize");
-	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_top_right);
-	document.getElementById(resize_top_right_id).innerHTML = "O";
-	document.getElementById(resize_top_right_id).style.zIndex = "10000";
-
-	// resize top left
-	let resize_top_left = document.createElement("span");
-	resize_top_left.setAttribute("id", resize_top_left_id);
-	resize_top_left.setAttribute("class", "resize");
-	resize_top_left.setAttribute("onmousedown", "onMouseDown4ResizeTopLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_top_left);
-	document.getElementById(resize_top_left_id).innerHTML = "O";
-	document.getElementById(resize_top_left_id).style.zIndex = "10000";
-
-	// resize bottom left
-	let resize_bottom_left = document.createElement("span");
-	resize_bottom_left.setAttribute("id", resize_bottom_left_id);
-	resize_bottom_left.setAttribute("class", "resize");
-	resize_bottom_left.setAttribute("onmousedown", "onMouseDown4ResizeBottomLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_bottom_left);
-	document.getElementById(resize_bottom_left_id).innerHTML = "O";
-	document.getElementById(resize_bottom_left_id).style.zIndex = "10000";
-
-	// resize center right
-	let resize_center_right = document.createElement("span");
-	resize_center_right.setAttribute("id", resize_center_right_id);
-	resize_center_right.setAttribute("class", "resize");
-	resize_center_right.setAttribute("onmousedown", "onMouseDown4ResizeCenterRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_right);
-	document.getElementById(resize_center_right_id).innerHTML = "O";
-	document.getElementById(resize_center_right_id).style.zIndex = "10000";
-	
-	// resize center left
-	let resize_center_left = document.createElement("span");
-	resize_center_left.setAttribute("id", resize_center_left_id);
-	resize_center_left.setAttribute("class", "resize");
-	resize_center_left.setAttribute("onmousedown", "onMouseDown4ResizeCenterLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_left);
-	document.getElementById(resize_center_left_id).innerHTML = "O";
-	document.getElementById(resize_center_left_id).style.zIndex = "10000";
-
-	// resize center top
-	let resize_center_top = document.createElement("span");
-	resize_center_top.setAttribute("id", resize_center_top_id);
-	resize_center_top.setAttribute("class", "resize");
-	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_top);
-	document.getElementById(resize_center_top_id).innerHTML = "O";
-	document.getElementById(resize_center_top_id).style.zIndex = "10000";
-
-	// resize center bottom
-	let resize_center_bottom = document.createElement("span");
-	resize_center_bottom.setAttribute("id", resize_center_bottom_id);
-	resize_center_bottom.setAttribute("class", "resize");
-	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_bottom);
-	document.getElementById(resize_center_bottom_id).innerHTML = "O";
-	document.getElementById(resize_center_bottom_id).style.zIndex = "10000";
-	
 	setSectionDefaultStyles(document.getElementById(section_id));
 	selectSection(section_counter);
 	styleAlignTopLeft();
@@ -149,32 +157,35 @@ function getNewSectionCount() {
 
 function selectSection(counter) {
 	unselectSections();
-	
-	selected_move = document.getElementById("move" + counter);
-	selected_resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	selected_resize_top_right = document.getElementById("resize_top_right" + counter);
-	selected_resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	selected_resize_top_left = document.getElementById("resize_top_left" + counter);
-	selected_resize_center_right = document.getElementById("resize_center_right" + counter);
-	selected_resize_center_left = document.getElementById("resize_center_left" + counter);
-	selected_resize_center_top = document.getElementById("resize_center_top" + counter);
-	selected_resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
+	move = document.getElementById("move");
+	resize_bottom_right = document.getElementById("resize_bottom_right");
+	resize_top_right = document.getElementById("resize_top_right");
+	resize_bottom_left = document.getElementById("resize_bottom_left");
+	resize_top_left = document.getElementById("resize_top_left");
+	resize_center_right = document.getElementById("resize_center_right");
+	resize_center_left = document.getElementById("resize_center_left");
+	resize_center_top = document.getElementById("resize_center_top");
+	resize_center_bottom = document.getElementById("resize_center_bottom");
 
-	selected_move.style.visibility = "visible";
-	selected_resize_bottom_right.style.visibility = "visible";
-	selected_resize_top_right.style.visibility = "visible";
-	selected_resize_bottom_left.style.visibility = "visible";
-	selected_resize_top_left.style.visibility = "visible";
-	selected_resize_center_right.style.visibility = "visible";
-	selected_resize_center_left.style.visibility = "visible";
-	selected_resize_center_top.style.visibility = "visible";
-	selected_resize_center_bottom.style.visibility = "visible";
+	hideHandles();
+	
+	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
+	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + counter + "');");
+	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + counter + "');");
+	resize_top_left.setAttribute("onmousedown", "onMouseDown4ResizeTopLeft('" + counter + "');");
+	resize_bottom_left.setAttribute("onmousedown", "onMouseDown4ResizeBottomLeft('" + counter + "');");
+	resize_center_right.setAttribute("onmousedown", "onMouseDown4ResizeCenterRight('" + counter + "');");
+	resize_center_left.setAttribute("onmousedown", "onMouseDown4ResizeCenterLeft('" + counter + "');");
+	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + counter + "');");
+	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + counter + "');");
 
 	selected_section = document.getElementById("section" + counter);
 	selected_section.style.outline = "4px dashed yellow"
 	//selected_section.innerHTML = selected_section.innerHTML.replace(/<\/?span[^>]*>/g, "");
 	colorable_element = selected_section;
 	loadSectionStyles();
+	reAlignSectionHandles();
+	showHandles();
 }
 
 function duplicateSection() {
@@ -256,16 +267,8 @@ function duplicateSection() {
 }
 
 function removeSection() {
-	selected_move.remove();
-	selected_resize_bottom_right.remove();
-	selected_resize_top_right.remove();
-	selected_resize_bottom_left.remove();
-	selected_resize_top_left.remove();
-	selected_resize_center_right.remove();
-	selected_resize_center_left.remove();
-	selected_resize_center_top.remove();
-	selected_resize_center_bottom.remove();
 	selected_section.remove();
+	hideHandles();
 }
 
 function copySection() {
@@ -395,34 +398,9 @@ function pasteText(e) {
 }
 
 function onMouseDown4Move(counter) { // move
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let section = document.getElementById("section" + counter);
 
-	resize_bottom_right.style.visibility = "hidden";
-	resize_top_right.style.visibility = "hidden";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_top_left.style.visibility = "hidden";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_bottom.style.visibility = "hidden";
-	move.style.transition = "initial";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.transition = "initial";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.transition = "initial";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.transition = "initial";
+	hideHandles();
+	let section = document.getElementById("section" + counter);
 	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
@@ -434,6 +412,7 @@ function onMouseDown4Move(counter) { // move
 	function onMouseUp() {
 		reAlignSectionHandles();
 		loadSectionStyles();
+		showHandles();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -445,34 +424,9 @@ function onMouseDown4Move(counter) { // move
 
 
 function onMouseDown4ResizeTopRight(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_top_right.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
@@ -489,6 +443,7 @@ function onMouseDown4ResizeTopRight(counter) {
 	
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -502,34 +457,8 @@ function onMouseDown4ResizeTopRight(counter) {
 
 
 function onMouseDown4ResizeCenterRight(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_center_right.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
@@ -541,6 +470,7 @@ function onMouseDown4ResizeCenterRight(counter) {
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
 		document.removeEventListener('mousemove', onMouseMove);
@@ -553,34 +483,8 @@ function onMouseDown4ResizeCenterRight(counter) {
 
 
 function onMouseDown4ResizeCenterLeft(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_center_left.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
@@ -592,6 +496,7 @@ function onMouseDown4ResizeCenterLeft(counter) {
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -604,36 +509,9 @@ function onMouseDown4ResizeCenterLeft(counter) {
 
 
 function onMouseDown4ResizeCenterTop(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_center_top.style.transition = "initial";
 	section.style.transition = "initial";
-	
 	
 	function onMouseMove(event) {
 		resize_center_top.style.top = (event.pageY - 30) + "px";
@@ -645,6 +523,7 @@ function onMouseDown4ResizeCenterTop(counter) {
 	
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -657,34 +536,8 @@ function onMouseDown4ResizeCenterTop(counter) {
 
 
 function onMouseDown4ResizeCenterBottom(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_center_bottom.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	
@@ -696,6 +549,7 @@ function onMouseDown4ResizeCenterBottom(counter) {
 	
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -708,34 +562,8 @@ function onMouseDown4ResizeCenterBottom(counter) {
 
 
 function onMouseDown4ResizeBottomRight(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_bottom_right.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
@@ -747,6 +575,7 @@ function onMouseDown4ResizeBottomRight(counter) {
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
 		document.removeEventListener('mousemove', onMouseMove);
@@ -759,34 +588,8 @@ function onMouseDown4ResizeBottomRight(counter) {
 
 
 function onMouseDown4ResizeTopLeft(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_bottom_left.style.visibility = "hidden";
-	resize_bottom_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_top_left.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	
@@ -805,6 +608,7 @@ function onMouseDown4ResizeTopLeft(counter) {
 	
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -817,34 +621,8 @@ function onMouseDown4ResizeTopLeft(counter) {
 
 
 function onMouseDown4ResizeBottomLeft(counter) {
-	let move = document.getElementById("move" + counter);
-	let resize_bottom_left = document.getElementById("resize_bottom_left" + counter);
-	let resize_top_left = document.getElementById("resize_top_left" + counter);
-	let resize_center_right = document.getElementById("resize_center_right" + counter);
-	let resize_center_left = document.getElementById("resize_center_left" + counter);
-	let resize_center_top = document.getElementById("resize_center_top" + counter);
-	let resize_center_bottom = document.getElementById("resize_center_bottom" + counter);
-	let resize_bottom_right = document.getElementById("resize_bottom_right" + counter);
-	let resize_top_right = document.getElementById("resize_top_right" + counter);
+	hideHandles();
 	let section = document.getElementById("section" + counter);
-
-	move.style.visibility = "hidden";
-	resize_bottom_right.style.visibility = "hidden";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.visibility = "hidden";
-	resize_top_right.style.transition = "initial";
-	resize_top_left.style.visibility = "hidden";
-	resize_top_left.style.transition = "initial";
-	resize_center_right.style.visibility = "hidden";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.visibility = "hidden";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.visibility = "hidden";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.visibility = "hidden";
-	resize_center_bottom.style.transition = "initial";
-	move.style.transition = "initial";
-	resize_bottom_left.style.transition = "initial";
 	section.style.transition = "initial";
 	
 	
@@ -861,6 +639,7 @@ function onMouseDown4ResizeBottomLeft(counter) {
 	
 	function onMouseUp() {
 		reAlignSectionHandles();
+		showHandles();
 		document.getElementById("left").value = section.style.left.replace("px", "");
 		document.getElementById("width").value = section.style.width.replace("px", "");
 		document.getElementById("height").value = section.style.height.replace("px", "");
@@ -873,55 +652,57 @@ function onMouseDown4ResizeBottomLeft(counter) {
 
 
 function reAlignSectionHandles() {
+
+
+	move = document.getElementById("move");
+	resize_bottom_right = document.getElementById("resize_bottom_right");
+	resize_top_right = document.getElementById("resize_top_right");
+	resize_bottom_left = document.getElementById("resize_bottom_left");
+	resize_top_left = document.getElementById("resize_top_left");
+	resize_center_right = document.getElementById("resize_center_right");
+	resize_center_left = document.getElementById("resize_center_left");
+	resize_center_top = document.getElementById("resize_center_top");
+	resize_center_bottom = document.getElementById("resize_center_bottom");
 	
-	selected_move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) + "px";
-	selected_move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) + "px";
+	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
 
-	selected_resize_bottom_right.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
-	selected_resize_bottom_right.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
+	resize_bottom_right.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
+	resize_bottom_right.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
 
-	selected_resize_top_right.style.top = parseInt(selected_section.style.top.replace("px", "")) - 5 + "px";
-	selected_resize_top_right.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
+	resize_top_right.style.top = parseInt(selected_section.style.top.replace("px", "")) - 5 + "px";
+	resize_top_right.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
 	
-	selected_resize_bottom_left.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
-	selected_resize_bottom_left.style.left = parseInt(selected_section.style.left.replace("px", "")) - 5 + "px";
+	resize_bottom_left.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
+	resize_bottom_left.style.left = parseInt(selected_section.style.left.replace("px", "")) - 5 + "px";
 
-	selected_resize_top_left.style.top = parseInt(selected_section.style.top.replace("px", "")) - 5 + "px";
-	selected_resize_top_left.style.left = parseInt(selected_section.style.left.replace("px", "")) - 5 + "px";
+	resize_top_left.style.top = parseInt(selected_section.style.top.replace("px", "")) - 5 + "px";
+	resize_top_left.style.left = parseInt(selected_section.style.left.replace("px", "")) - 5 + "px";
 
-	selected_resize_center_right.style.top =  parseInt((selected_section.style.top.replace("px", ""))) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
-	selected_resize_center_right.style.left = parseInt((selected_section.style.left.replace("px", ""))) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
+	resize_center_right.style.top =  parseInt((selected_section.style.top.replace("px", ""))) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
+	resize_center_right.style.left = parseInt((selected_section.style.left.replace("px", ""))) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
 
-	selected_resize_center_left.style.top =  parseInt((selected_section.style.top.replace("px", ""))) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
-	selected_resize_center_left.style.left = parseInt((selected_section.style.left.replace("px", ""))) - 10 + "px";
+	resize_center_left.style.top =  parseInt((selected_section.style.top.replace("px", ""))) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
+	resize_center_left.style.left = parseInt((selected_section.style.left.replace("px", ""))) - 10 + "px";
 	
-	selected_resize_center_top.style.top =  parseInt(selected_section.style.top.replace("px", "")) - 10 + "px";
-	selected_resize_center_top.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	resize_center_top.style.top =  parseInt(selected_section.style.top.replace("px", "")) - 10 + "px";
+	resize_center_top.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
 
-	selected_resize_center_bottom.style.top =  parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
-	selected_resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	resize_center_bottom.style.top =  parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
+	resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
 	
-	selected_move.style.visibility = "visible";
-	selected_resize_bottom_right.style.visibility = "visible";
-	selected_resize_top_right.style.visibility = "visible";
-	selected_resize_top_left.style.visibility = "visible";
-	selected_resize_center_right.style.visibility = "visible";
-	selected_resize_center_left.style.visibility = "visible";
-	selected_resize_center_top.style.visibility = "visible";
-	selected_resize_center_bottom.style.visibility = "visible";
-	selected_resize_bottom_left.style.visibility = "visible";
 	
 	setTimeout(function() { 
-		selected_move.style.transition = ".3s";
-		selected_resize_bottom_right.style.transition = ".3s";
-		selected_resize_top_right.style.transition = ".3s";
-		selected_resize_top_left.style.transition = ".3s";
-		selected_resize_center_right.style.transition = ".3s";
-		selected_resize_center_left.style.transition = ".3s";
-		selected_resize_center_top.style.transition = ".3s";
-		selected_resize_center_bottom.style.transition = ".3s";
-		selected_resize_bottom_left.style.transition = ".3s";
-		selected_section.style.transition = ".3s";
+		move.style.transition = ".1s";
+		resize_bottom_right.style.transition = ".1s";
+		resize_top_right.style.transition = ".1s";
+		resize_top_left.style.transition = ".1s";
+		resize_center_right.style.transition = ".1s";
+		resize_center_left.style.transition = ".1s";
+		resize_center_top.style.transition = ".1s";
+		resize_center_bottom.style.transition = ".1s";
+		resize_bottom_left.style.transition = ".1s";
+		selected_section.style.transition = ".1s";
 	}, 100);
 
 }
@@ -1179,15 +960,15 @@ function boxesPanelToggle() {
 let dash_panel_toggle = true;
 function dashPanelToggle() {
 	if (dash_panel_toggle) {
-		document.getElementById("dash_panel_wrapper").style.top = "-200px";
-		document.getElementById("dash_panel_toggle").innerHTML = "▼";
+		document.getElementById("dash_panel_wrapper").style.right = "-500px";
+		document.getElementById("dash_panel_toggle").innerHTML = "◄";
 		dash_panel_toggle = false;
 		preview("on");
 		hidePopupPanel();
-		hideSectionPanels();
+		//hideSectionPanels();
 	} else {
-		document.getElementById("dash_panel_wrapper").style.top = "0";
-		document.getElementById("dash_panel_toggle").innerHTML = "▲";
+		document.getElementById("dash_panel_wrapper").style.right = "0";
+		document.getElementById("dash_panel_toggle").innerHTML = "►";
 		dash_panel_toggle = true;
 		preview("off");
 	}
@@ -1342,7 +1123,11 @@ function loadSelectFolders() {
 }
 
 function loadSelectFonts() {
-	let select_fonts = document.getElementById("font_family");
+	
+	let google_fonts = "";
+	let installed_fonts = "";
+	let included_fonts = "";
+	
 	let fonts = localStorage.getItem("dezynor_fonts").split(",");
 	fonts.sort();
 	let fonts_list = "";
@@ -1351,17 +1136,28 @@ function loadSelectFonts() {
 		let storage_font_location = fonts[i].split("|")[1];
 		if (storage_font_location == "Google") {
 			fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
+			google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
+		} else if (storage_font_location == "Installed") {
+			installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
 		}
-		let option = document.createElement("option");
-		option.text = storage_font_name;
-		select_fonts.add(option);
 	}
-	
+
+	included_fonts_array = new Array("aslam","mehr","nafeesnaskh");
+	for (i = 0; i < included_fonts_array.length; i++) {
+		let font_name = included_fonts_array[i];
+		included_fonts = included_fonts + "<option>" + font_name + "</option>";
+		fonts_list = fonts_list + "@font-face {font-family:'" + font_name + "';font-style:normal;font-weight:400;src:url(fonts/" + font_name + ".ttf) format('truetype');}";
+	}
+
 	let style = document.createElement("style");
 	let fonts_node = document.createTextNode(fonts_list);
 	style.appendChild(fonts_node);
 	document.getElementsByTagName("head")[0].appendChild(style);
 	
+	document.getElementById("google_fonts").innerHTML = google_fonts;
+	document.getElementById("installed_fonts").innerHTML = installed_fonts;
+	document.getElementById("included_fonts").innerHTML = included_fonts;
+
 }
 
 /* -------------- Boxes Panel Sort ---------------------- */
