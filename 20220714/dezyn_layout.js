@@ -1,4 +1,4 @@
-let design_id = generateDeisgnId() + "|default";
+let dezyn_id = generateDeisgnId() + "|default";
 let section_counter = 0;
 let selected_move = "";
 let selected_resize_bottom_right = "";
@@ -12,7 +12,7 @@ let selected_resize_center_bottom = "";
 let selected_section = "";
 
 function generateDeisgnId() {
-	return "design-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+	return "dezyn-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 }
 
 function addSection() {
@@ -41,6 +41,7 @@ function addSection() {
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
 
+
 	let move = document.createElement("span");
 	move.setAttribute("id", move_id);
 	move.setAttribute("class", "move");
@@ -48,6 +49,7 @@ function addSection() {
 	document.getElementById("wrapper").appendChild(move);
 	document.getElementById(move_id).innerHTML = " ";
 	document.getElementById(move_id).style.zIndex = "10000";
+
 
 	// resize bottom right
 	let resize_bottom_right = document.createElement("span");
@@ -1247,61 +1249,61 @@ function setZIndex(element) {
 }
 
 
-function saveDesign() {
-	localStorage.removeItem(design_id);
+function saveDezyn() {
+	localStorage.removeItem(dezyn_id);
 	let selected_folder = document.getElementById("select_folders").value;
-	let new_design_id = generateDeisgnId() + "|" + selected_folder;
-	localStorage.setItem(new_design_id, document.getElementById("container").innerHTML);
-	design_id = new_design_id;
+	let new_dezyn_id = generateDeisgnId() + "|" + selected_folder;
+	localStorage.setItem(new_dezyn_id, document.getElementById("container").innerHTML);
+	dezyn_id = new_dezyn_id;
 	showMessage("Saved", "Green");
 }
 
-function newDesign() {
-	if (design_id in localStorage) {
-		localStorage.setItem(design_id, document.getElementById("container").innerHTML);
+function newDezyn() {
+	if (dezyn_id in localStorage) {
+		localStorage.setItem(dezyn_id, document.getElementById("container").innerHTML);
 		window.location.href = "index.html";
 	} else {
 		let total_sections = document.querySelectorAll("section");
 		if (total_sections.length > 0) {
-			if (confirm("The current design is not saved yet, would like to continue?")) {
+			if (confirm("The current dezyn is not saved yet, would like to continue?")) {
 				window.location.href = "index.html";
 			}
 		}
 	}
 }
 
-function duplicateDesign() {
-	if (design_id in localStorage) {
+function duplicateDezyn() {
+	if (dezyn_id in localStorage) {
 		let selected_folder = document.getElementById("select_folders").value;
-		let new_design_id = generateDeisgnId() + "|" + selected_folder;
-		localStorage.setItem(new_design_id, document.getElementById("container").innerHTML);
+		let new_dezyn_id = generateDeisgnId() + "|" + selected_folder;
+		localStorage.setItem(new_dezyn_id, document.getElementById("container").innerHTML);
 		alert("Duplicated successfully!");
 	} else {
-		alert("The current design is not saved yet!");
+		alert("The current dezyn is not saved yet!");
 	}
 }
 
-function deleteDesign() {
+function deleteDezyn() {
 
-	if (design_id in localStorage) {
-		if (confirm("Do you really want to delete this design?")) {
-			localStorage.removeItem(design_id);
+	if (dezyn_id in localStorage) {
+		if (confirm("Do you really want to delete this dezyn?")) {
+			localStorage.removeItem(dezyn_id);
 			location.reload();
 		}
 	} else {
-		alert("The current design is not saved yet!");
+		alert("The current dezyn is not saved yet!");
 	}
 
 }
 
-function loadCurrentDesign() {
-	let current_design_key = localStorage.getItem("current_design");
-	if (current_design_key === null) {
-		localStorage.setItem("current_design", "");
-	} else if (current_design_key != "") {
-		document.getElementById("container").innerHTML = localStorage.getItem(current_design_key);
-		design_id = current_design_key;
-		localStorage.setItem("current_design", "");
+function loadCurrentDezyn() {
+	let current_dezyn_key = localStorage.getItem("current_dezyn");
+	if (current_dezyn_key === null) {
+		localStorage.setItem("current_dezyn", "");
+	} else if (current_dezyn_key != "") {
+		document.getElementById("container").innerHTML = localStorage.getItem(current_dezyn_key);
+		dezyn_id = current_dezyn_key;
+		localStorage.setItem("current_dezyn", "");
 		loadWrapperStyles();
 		let all_sections = document.querySelectorAll("section");
 		if (all_sections.length > 0) {
@@ -1310,8 +1312,8 @@ function loadCurrentDesign() {
 			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
 			section_counter = last_section_number;
 		}
-		document.getElementsByTagName("title")[0].innerText = design_id.split("|")[0];
-		document.getElementById("select_folders").value = design_id.split("|")[1];
+		document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
+		document.getElementById("select_folders").value = dezyn_id.split("|")[1];
 	}
 }
 
@@ -1453,7 +1455,7 @@ document.onkeyup = function(e) {
 	
 	// CTRL + 
 	if (key == 112) {
-		saveDesign(); // f1
+		saveDezyn(); // f1
 	} else if (e.ctrlKey && e.altKey && key == 65) {
 		addSection(); // Ctrl + Shift + a
 	} else if (e.ctrlKey && e.altKey && key == 90) {

@@ -1,7 +1,7 @@
-// reload folder designs on tab focus since updated design_id has changed to new date
+// reload folder dezyns on tab focus since updated dezyn_id has changed to new date
 document.addEventListener('visibilitychange', function(ev) { 
 	if (current_folder != "" && document.visibilityState == "visible") {
-		showFolderDesigns(current_folder);
+		showFolderDezyns(current_folder);
 	}
 });
 
@@ -26,9 +26,9 @@ function init() {
 }
 
 
-function setCurrentDesign(key) {
-	localStorage.setItem("current_design", key);
-	window.open("design.html");
+function setCurrentDezyn(key) {
+	localStorage.setItem("current_dezyn", key);
+	window.open("dezyn.html");
 }
 
 function selectSection(num) {
@@ -87,15 +87,15 @@ function renameFolder(folder_name) {
 		localStorage.setItem("dezynor_folders", folders.toString());
 		loadFolders();
 		for (let key in localStorage) {
-			if (key.indexOf("design") == 0) {
-				let design_html = localStorage.getItem(key);
-				let design_name = key.split("|")[0];
-				let design_folder_name = key.split("|")[1];
-				if (folder_name == design_folder_name) {
-					design_name = design_name + "|" + new_folder_name;
-					localStorage.setItem(design_name, design_html);
+			if (key.indexOf("dezyn") == 0) {
+				let dezyn_html = localStorage.getItem(key);
+				let dezyn_name = key.split("|")[0];
+				let dezyn_folder_name = key.split("|")[1];
+				if (folder_name == dezyn_folder_name) {
+					dezyn_name = dezyn_name + "|" + new_folder_name;
+					localStorage.setItem(dezyn_name, dezyn_html);
 					localStorage.removeItem(key);
-					showFolderDesigns(new_folder_name);
+					showFolderDezyns(new_folder_name);
 				}
 			}
 		}					
@@ -109,12 +109,12 @@ function loadFolders() {
 	folders.sort();
 	let folders_html = "";
 	for (let i = 0; i < folders.length; i++) {
-		folders_html = folders_html + "<div><span onclick=\"renameFolder('" + folders[i].trim() + "');\">" + "R</span> <a onclick=\"showFolderDesigns('" + folders[i].trim() + "');\">" + folders[i].trim() + "</a></div>";
+		folders_html = folders_html + "<div><span onclick=\"renameFolder('" + folders[i].trim() + "');\">" + "R</span> <a onclick=\"showFolderDezyns('" + folders[i].trim() + "');\">" + folders[i].trim() + "</a></div>";
 	}
 	document.getElementById("folders").innerHTML = folders_html;
 }
 
-async function showFolderDesigns(folder) {
+async function showFolderDezyns(folder) {
 	
 	current_folder = folder;
 	
@@ -122,27 +122,27 @@ async function showFolderDesigns(folder) {
 	document.getElementById("folder_label").innerHTML = "";
 	document.getElementById("message").innerHTML = "Loading...";
 	
-	let design_keys = [];
+	let dezyn_keys = [];
 	for (let key in localStorage) {
-		if (key.indexOf("design") == 0) {
-			design_keys.push(key);
+		if (key.indexOf("dezyn") == 0) {
+			dezyn_keys.push(key);
 		}
 	}
 	
-	design_keys.sort();
-	design_keys.reverse();
+	dezyn_keys.sort();
+	dezyn_keys.reverse();
 	
-	let folder_designs = "";
-	for (i = 0; i < design_keys.length; i++) {
-		let key = design_keys[i];
+	let folder_dezyns = "";
+	for (i = 0; i < dezyn_keys.length; i++) {
+		let key = dezyn_keys[i];
 		let key_folder = key.split("|")[1];
 		if (folder == key_folder) {
-			folder_designs += localStorage.getItem(key).replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDesign(this.id);'");
+			folder_dezyns += localStorage.getItem(key).replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
 		}
 
 	}
 	
-	document.getElementById("designs").innerHTML = folder_designs;
+	document.getElementById("dezyns").innerHTML = folder_dezyns;
 
 	let message = await hideMessage(); // await
 	document.getElementById("message").innerHTML = message;

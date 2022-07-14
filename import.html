@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Import Designs</title>
+		<title>Import Dezyns</title>
 		<style>
 			body {
 				text-align:center;
@@ -27,23 +27,23 @@
 		</style>
 		<script>
 			function importData() {
-				let designs_added = 0;
+				let dezyns_added = 0;
 				let data = JSON.parse(document.getElementById("imported_data").value);
 				localStorage.setItem("dezynor_folders", data.folders);
 				localStorage.setItem("dezynor_fonts", data.fonts);
-				let designs = data.designs;
-				for (let i = 0; i < designs.length; i++) {
-					let design = designs[i];
-					let design_key = design.key + "|" + design.folder;
-					let design_data = design.data;
-					console.log(design_key, design_data);
-					design_data = design_data.replaceAll("url(\"", "url(");
-					design_data = design_data.replaceAll("\");", ");");
-					design_data = design_data.replaceAll("url(\"\")", "url()");
-					localStorage.setItem(design_key, design_data);
-					designs_added++;
+				let dezyns = data.dezyns;
+				for (let i = 0; i < dezyns.length; i++) {
+					let dezyn = dezyns[i];
+					let dezyn_key = dezyn.key + "|" + dezyn.folder;
+					let dezyn_data = dezyn.data;
+					console.log(dezyn_key, dezyn_data);
+					dezyn_data = dezyn_data.replaceAll("url(\"", "url(");
+					dezyn_data = dezyn_data.replaceAll("\");", ");");
+					dezyn_data = dezyn_data.replaceAll("url(\"\")", "url()");
+					localStorage.setItem(dezyn_key, dezyn_data);
+					dezyns_added++;
 				}
-				document.getElementById("import_message").innerHTML = "<span style='color:green'>" + designs_added + " designs imported.</span> <a href='index.html'>Visit designs</a>";
+				document.getElementById("import_message").innerHTML = "<span style='color:green'>" + dezyns_added + " dezyns imported.</span> <a href='index.html'>Visit dezyns</a>";
 			}
 		</script>
 	</head>

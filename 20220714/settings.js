@@ -1,7 +1,7 @@
 function showStorageSpace() {
 	let total_space = 0;
 	for (let key in localStorage) {
-		if (key.indexOf("design") == 0 || key.indexOf("dezynor_folders") == 0 || key.indexOf("dezynor_fonts") == 0) {
+		if (key.indexOf("dezyn") == 0 || key.indexOf("dezynor_folders") == 0 || key.indexOf("dezynor_fonts") == 0) {
 			total_space = total_space + localStorage.getItem(key).length;
 		}
 	}

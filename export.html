@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Export Designs</title>
+		<title>Export Dezyns</title>
 		<style>
 			body {
 				text-align:center;
@@ -24,15 +24,15 @@
 		</style>
 		<script>
 			function loadExportData() {
-				let all_designs = [];
+				let all_dezyns = [];
 				for(let key in localStorage) {
-					if (key.indexOf("design") == 0) {
-						let design = {};
-						design.key = key.split("|")[0];
-						design.folder = key.split("|")[1];
-						design.data = localStorage.getItem(key).trim().replaceAll("&quot;", "");
-						console.log(design.data);
-						all_designs.push(design);
+					if (key.indexOf("dezyn") == 0) {
+						let dezyn = {};
+						dezyn.key = key.split("|")[0];
+						dezyn.folder = key.split("|")[1];
+						dezyn.data = localStorage.getItem(key).trim().replaceAll("&quot;", "");
+						console.log(dezyn.data);
+						all_dezyns.push(dezyn);
 					}
 				}
 				
@@ -40,7 +40,7 @@
 				let data = {};
 				data.folders = localStorage.getItem("dezynor_folders");
 				data.fonts = localStorage.getItem("dezynor_fonts");
-				data.designs = all_designs;
+				data.dezyns = all_dezyns;
 				
 				document.getElementById("exported_data").value = JSON.stringify(data);
 				console.log(JSON.parse(document.getElementById("exported_data").value));
