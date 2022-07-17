@@ -1,13 +1,13 @@
 function writeHeader() {
 	document.write(
 		"<header> " + 
-		"<!-- <img id='logo' src='images/logo.png'> --> " + 
-		"<a href='index.html'>Browse</a> " + 
-		"<a href='dezyn.html' target='_blank'>New Dezyn</a> " + 
-		"<a href='fonts.html'>Fonts</a> " + 
-		"<a href='export.html' target='_blank'>Export</a> " + 
-		"<a href='import.html' target='_blank'>Import</a> " + 
-		"<a href='settings.html'>Settings</a> " + 
+		"<div><img id='logo' src='images/logo.png'></div> " + 
+		"<div><a href='index.html'>Browse</a></div> " + 
+		"<div><a href='dezyn.html' target='_blank'>New Dezyn</a></div> " + 
+		"<div><a href='fonts.html'>Fonts</a></div> " + 
+		"<div><a href='export.html' target='_blank'>Export</a></div> " + 
+		"<div><a href='import.html' target='_blank'>Import</a></div> " + 
+		"<div><a href='settings.html'>Settings</a></div> " + 
 		"</header>"
 		);
 }
