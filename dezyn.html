@@ -7,8 +7,13 @@
 		<script src="20220714/common.js"></script>
 		<script src="20220714/dezyn_layout.js"></script>
 		<script src="20220714/dezyn_formatting.js"></script>
+		<style>
+			@font-face {font-family:'mehr';font-style:normal;font-weight:400;src:url(fonts/mehr.ttf) format('truetype');}
+			@font-face {font-family:'nafeesnaskh';font-style:normal;font-weight:400;src:url(fonts/nafeesnaskh.ttf) format('truetype');}
+			@font-face {font-family:'zafar';font-style:normal;font-weight:400;src:url(fonts/zafar.ttf) format('truetype');}
+		</style>
 	</head>
-	<body onload="styleWrapper();setRandomWrapperColor();loadSelectFolders();loadSelectFonts();loadCurrentDezyn();addHandles();showSectionPanel('box_section');">
+	<body onload="addHandles();styleWrapper();setRandomWrapperColor();loadSelectFolders();loadSelectFonts();loadCurrentDezyn();showSectionPanel('box_section');">
 
 		<div id="boxes_panel_toggle" onclick="boxesPanelToggle();">◫</div>
 		<div id="boxes_panel">
@@ -434,7 +439,11 @@
 								<select id="font_family" onchange="styleFontFamily(this);">
 									<optgroup id="google_fonts" label="Google fonts"></optgroup>
 									<optgroup id="installed_fonts" label="Installed fonts"></optgroup>
-									<optgroup id="included_fonts" label="Included fonts"></optgroup>
+									<optgroup id="included_fonts" label="Included fonts">
+										<option value="mehr">Mehr Nastaleeq</option>
+										<option value="nafeesnaskh">Nafees Naskh</option>
+										<option value="zafar">Zafar</option>
+									</optgroup>
 								</select> 
 							</td>
 						</tr>

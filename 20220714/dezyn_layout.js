@@ -18,75 +18,69 @@ function generateDeisgnId() {
 
 function addHandles() {
 
-	if (getNewSectionCount() > 1) return;
+	if (document.getElementById("move") == null) {
+		
+		move = document.createElement("span");
+		move.setAttribute("id", "move");
+		move.setAttribute("class", "move");
+		
+		document.getElementById("wrapper").appendChild(move);
+		document.getElementById("move").innerHTML = " ";
 
-	move = document.createElement("span");
-	move.setAttribute("id", "move");
-	move.setAttribute("class", "move");
-	
-	document.getElementById("wrapper").appendChild(move);
-	document.getElementById("move").innerHTML = " ";
-	document.getElementById("move").style.zIndex = "10000";
+		resize_bottom_right = document.createElement("span");
+		resize_bottom_right.setAttribute("id", "resize_bottom_right");
+		resize_bottom_right.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_bottom_right);
+		document.getElementById("resize_bottom_right").innerHTML = "O";
 
-	resize_bottom_right = document.createElement("span");
-	resize_bottom_right.setAttribute("id", "resize_bottom_right");
-	resize_bottom_right.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_bottom_right);
-	document.getElementById("resize_bottom_right").innerHTML = "O";
-	document.getElementById("resize_bottom_right").style.zIndex = "10000";
+		resize_top_right = document.createElement("span");
+		resize_top_right.setAttribute("id", "resize_top_right");
+		resize_top_right.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_top_right);
+		document.getElementById("resize_top_right").innerHTML = "O";
 
-	resize_top_right = document.createElement("span");
-	resize_top_right.setAttribute("id", "resize_top_right");
-	resize_top_right.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_top_right);
-	document.getElementById("resize_top_right").innerHTML = "O";
-	document.getElementById("resize_top_right").style.zIndex = "10000";
+		resize_top_left = document.createElement("span");
+		resize_top_left.setAttribute("id", "resize_top_left");
+		resize_top_left.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_top_left);
+		document.getElementById("resize_top_left").innerHTML = "O";
 
-	resize_top_left = document.createElement("span");
-	resize_top_left.setAttribute("id", "resize_top_left");
-	resize_top_left.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_top_left);
-	document.getElementById("resize_top_left").innerHTML = "O";
-	document.getElementById("resize_top_left").style.zIndex = "10000";
+		resize_bottom_left = document.createElement("span");
+		resize_bottom_left.setAttribute("id", "resize_bottom_left");
+		resize_bottom_left.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_bottom_left);
+		document.getElementById("resize_bottom_left").innerHTML = "O";
 
-	resize_bottom_left = document.createElement("span");
-	resize_bottom_left.setAttribute("id", "resize_bottom_left");
-	resize_bottom_left.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_bottom_left);
-	document.getElementById("resize_bottom_left").innerHTML = "O";
-	document.getElementById("resize_bottom_left").style.zIndex = "10000";
+		resize_center_right = document.createElement("span");
+		resize_center_right.setAttribute("id", "resize_center_right");
+		resize_center_right.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_right);
+		document.getElementById("resize_center_right").innerHTML = "O";
 
-	resize_center_right = document.createElement("span");
-	resize_center_right.setAttribute("id", "resize_center_right");
-	resize_center_right.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_center_right);
-	document.getElementById("resize_center_right").innerHTML = "O";
-	document.getElementById("resize_center_right").style.zIndex = "10000";
+		resize_center_left = document.createElement("span");
+		resize_center_left.setAttribute("id", "resize_center_left");
+		resize_center_left.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_left);
+		document.getElementById("resize_center_left").innerHTML = "O";
 
-	resize_center_left = document.createElement("span");
-	resize_center_left.setAttribute("id", "resize_center_left");
-	resize_center_left.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_center_left);
-	document.getElementById("resize_center_left").innerHTML = "O";
-	document.getElementById("resize_center_left").style.zIndex = "10000";
+		resize_center_top = document.createElement("span");
+		resize_center_top.setAttribute("id", "resize_center_top");
+		resize_center_top.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_top);
+		document.getElementById("resize_center_top").innerHTML = "O";
 
-	resize_center_top = document.createElement("span");
-	resize_center_top.setAttribute("id", "resize_center_top");
-	resize_center_top.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_center_top);
-	document.getElementById("resize_center_top").innerHTML = "O";
-	document.getElementById("resize_center_top").style.zIndex = "10000";
+		resize_center_bottom = document.createElement("span");
+		resize_center_bottom.setAttribute("id", "resize_center_bottom");
+		resize_center_bottom.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_bottom);
+		document.getElementById("resize_center_bottom").innerHTML = "O";
+	}
 
-	resize_center_bottom = document.createElement("span");
-	resize_center_bottom.setAttribute("id", "resize_center_bottom");
-	resize_center_bottom.setAttribute("class", "resize");
-	document.getElementById("wrapper").appendChild(resize_center_bottom);
-	document.getElementById("resize_center_bottom").innerHTML = "O";
-	document.getElementById("resize_center_bottom").style.zIndex = "10000";
-			
+
 }
 
 function hideHandles() {
+	
 	move.style.visibility = "hidden";
 	resize_bottom_right.style.visibility = "hidden";
 	resize_top_right.style.visibility = "hidden";
@@ -156,19 +150,11 @@ function getNewSectionCount() {
 
 
 function selectSection(counter) {
-	unselectSections();
-	move = document.getElementById("move");
-	resize_bottom_right = document.getElementById("resize_bottom_right");
-	resize_top_right = document.getElementById("resize_top_right");
-	resize_bottom_left = document.getElementById("resize_bottom_left");
-	resize_top_left = document.getElementById("resize_top_left");
-	resize_center_right = document.getElementById("resize_center_right");
-	resize_center_left = document.getElementById("resize_center_left");
-	resize_center_top = document.getElementById("resize_center_top");
-	resize_center_bottom = document.getElementById("resize_center_bottom");
 
-	hideHandles();
+	unselectSections();
+	selected_section = document.getElementById("section" + counter);
 	
+	//move.addEventListener("onmousedown", onMouseDown4Move(counter));
 	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
 	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + counter + "');");
 	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + counter + "');");
@@ -179,7 +165,6 @@ function selectSection(counter) {
 	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + counter + "');");
 	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + counter + "');");
 
-	selected_section = document.getElementById("section" + counter);
 	selected_section.style.outline = "4px dashed yellow"
 	//selected_section.innerHTML = selected_section.innerHTML.replace(/<\/?span[^>]*>/g, "");
 	colorable_element = selected_section;
@@ -195,67 +180,11 @@ function duplicateSection() {
 	section_counter = getNewSectionCount();
 
 	let section_id = "section" + section_counter;
-	let move_id = "move" + section_counter;
-	let resize_bottom_right_id = "resize_bottom_right" + section_counter;
-	let resize_top_right_id = "resize_top_right" + section_counter;
-	let resize_bottom_left_id = "resize_bottom_left" + section_counter;
-	let resize_top_left_id = "resize_top_left" + section_counter;
-	let resize_center_right_id = "resize_center_right" + section_counter;
-	let resize_center_left_id = "resize_center_left" + section_counter;
-	let resize_center_top_id = "resize_center_top" + section_counter;
-	let resize_center_bottom_id = "resize_center_bottom" + section_counter;
 	
 	let section = selected_section.cloneNode(true);
 	section.setAttribute("id", section_id);
 	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
 	document.getElementById("wrapper").appendChild(section);
-
-	let move = selected_move.cloneNode(true);
-	move.setAttribute("id", move_id);
-	move.setAttribute("class", "move");
-	move.setAttribute("onmousedown", "onMouseDown4Move('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(move);
-	document.getElementById(move_id).innerHTML = " ";
-
-	let resize_bottom_right = selected_resize_bottom_right.cloneNode(true);
-	resize_bottom_right.setAttribute("id", resize_bottom_right_id);
-	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_bottom_right);
-
-	let resize_top_right = selected_resize_top_right.cloneNode(true);
-	resize_top_right.setAttribute("id", resize_top_right_id);
-	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_top_right);
-
-	let resize_top_left = selected_resize_top_left.cloneNode(true);
-	resize_top_left.setAttribute("id", resize_top_left_id);
-	resize_top_left.setAttribute("onmousedown", "onMouseDown4ResizeTopLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_top_left);
-	
-	let resize_bottom_left = selected_resize_bottom_left.cloneNode(true);
-	resize_bottom_left.setAttribute("id", resize_bottom_left_id);
-	resize_bottom_left.setAttribute("onmousedown", "onMouseDown4ResizeBottomLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_bottom_left);
-
-	let resize_center_right = selected_resize_center_right.cloneNode(true);
-	resize_center_right.setAttribute("id", resize_center_right_id);
-	resize_center_right.setAttribute("onmousedown", "onMouseDown4ResizeCenterRight('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_right);
-
-	let resize_center_left = selected_resize_center_left.cloneNode(true);
-	resize_center_left.setAttribute("id", resize_center_left_id);
-	resize_center_left.setAttribute("onmousedown", "onMouseDown4ResizeCenterLeft('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_left);
-
-	let resize_center_top = selected_resize_center_top.cloneNode(true);
-	resize_center_top.setAttribute("id", resize_center_top_id);
-	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_top);
-
-	let resize_center_bottom = selected_resize_center_bottom.cloneNode(true);
-	resize_center_bottom.setAttribute("id", resize_center_bottom_id);
-	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + section_counter + "');");
-	document.getElementById("wrapper").appendChild(resize_center_bottom);
 	
 	setTimeout(function() { 
 		selectSection(section_counter);
@@ -385,10 +314,7 @@ function unselectSections() {
 		all_sections[i].style.outline = "1px dashed gray";
 	}
 
-	let spans = document.getElementsByClassName("move");
-	for (i = 0; i < spans.length; i++) spans[i].style.visibility = "hidden";
-	spans = document.getElementsByClassName("resize");
-	for (i = 0; i < spans.length; i++) spans[i].style.visibility = "hidden";
+	hideHandles();
 }
 
 function pasteText(e) {
@@ -653,7 +579,6 @@ function onMouseDown4ResizeBottomLeft(counter) {
 
 function reAlignSectionHandles() {
 
-
 	move = document.getElementById("move");
 	resize_bottom_right = document.getElementById("resize_bottom_right");
 	resize_top_right = document.getElementById("resize_top_right");
@@ -691,7 +616,7 @@ function reAlignSectionHandles() {
 	resize_center_bottom.style.top =  parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
 	resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
 	
-	
+	/*
 	setTimeout(function() { 
 		move.style.transition = ".1s";
 		resize_bottom_right.style.transition = ".1s";
@@ -704,6 +629,9 @@ function reAlignSectionHandles() {
 		resize_bottom_left.style.transition = ".1s";
 		selected_section.style.transition = ".1s";
 	}, 100);
+	* */
+	
+	
 
 }
 
@@ -926,15 +854,14 @@ function styleLayout(parameters) {
 
 // preview
 function preview(status) {
+
+	hideHandles();
+
 	let all_sections = document.querySelectorAll("section");
-	let all_spans = document.querySelectorAll("#wrapper > span");
 
 	if (status == "on") {
 		for (i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "none";
-		}
-		for (i = 0; i < all_spans.length; i++) {
-			all_spans[i].style.visibility = "hidden";
 		}
 		document.getElementById("wrapper").style.outline = "";
 	} else {
@@ -1126,7 +1053,6 @@ function loadSelectFonts() {
 	
 	let google_fonts = "";
 	let installed_fonts = "";
-	let included_fonts = "";
 	
 	let fonts = localStorage.getItem("dezynor_fonts").split(",");
 	fonts.sort();
@@ -1142,13 +1068,6 @@ function loadSelectFonts() {
 		}
 	}
 
-	included_fonts_array = new Array("aslam","mehr","nafeesnaskh");
-	for (i = 0; i < included_fonts_array.length; i++) {
-		let font_name = included_fonts_array[i];
-		included_fonts = included_fonts + "<option>" + font_name + "</option>";
-		fonts_list = fonts_list + "@font-face {font-family:'" + font_name + "';font-style:normal;font-weight:400;src:url(fonts/" + font_name + ".ttf) format('truetype');}";
-	}
-
 	let style = document.createElement("style");
 	let fonts_node = document.createTextNode(fonts_list);
 	style.appendChild(fonts_node);
@@ -1156,7 +1075,6 @@ function loadSelectFonts() {
 	
 	document.getElementById("google_fonts").innerHTML = google_fonts;
 	document.getElementById("installed_fonts").innerHTML = installed_fonts;
-	document.getElementById("included_fonts").innerHTML = included_fonts;
 
 }
 

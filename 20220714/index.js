@@ -13,7 +13,9 @@ function init() {
 		localStorage.setItem("dezynor_folders", "default");
 	}
 	if (!("dezynor_fonts" in localStorage)) {
-		localStorage.setItem("dezynor_fonts", "Anton|Google,Bakbak One|Google,Cabin|Google,Cookie|Google,Fredoka One|Google,Kaushan Script|Google,Libre Baskerville|Google,Lobster|Google,Pacifico|Google,Roboto|Google,Russo One|Google,Smooch|Google");
+		localStorage.setItem("dezynor_fonts", 
+			"Anton|Google,Bakbak One|Google,Lobster|Google,Pacifico|Google,Roboto|Google,Russo One|Google,Smooch|Google," + 
+			"Arial|Installed,Times New Roman|Installed,Palatino|installed,Garamond|Installed,Bookman|Installed,Avant Garde|Installed,Verdana|Installed,Georgia|Installed");
 	}
 
 	if (!("dezynor_settings" in localStorage)) {
