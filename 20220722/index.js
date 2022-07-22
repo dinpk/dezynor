@@ -139,7 +139,9 @@ async function showFolderDezyns(folder) {
 		let key = dezyn_keys[i];
 		let key_folder = key.split("|")[1];
 		if (folder == key_folder) {
-			folder_dezyns += localStorage.getItem(key).replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
+			let item = localStorage.getItem(key).replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
+			item = item.replace(/((background-image: url\(.*?\);))/g, '');
+			folder_dezyns += item;
 		}
 
 	}

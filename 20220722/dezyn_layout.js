@@ -213,15 +213,6 @@ function pasteSection() {
 	section_counter = getNewSectionCount();
 
 	let section_id = "section" + section_counter;
-	let move_id = "move" + section_counter;
-	let resize_bottom_right_id = "resize_bottom_right" + section_counter;
-	let resize_top_right_id = "resize_top_right" + section_counter;
-	let resize_bottom_left_id = "resize_bottom_left" + section_counter;
-	let resize_top_left_id = "resize_top_left" + section_counter;
-	let resize_center_right_id = "resize_center_right" + section_counter;
-	let resize_center_left_id = "resize_center_left" + section_counter;
-	let resize_center_top_id = "resize_center_top" + section_counter;
-	let resize_center_bottom_id = "resize_center_bottom" + section_counter;
 	
 	let section = copied_section;
 	section.setAttribute("id", section_id);
@@ -229,78 +220,6 @@ function pasteSection() {
 	section.setAttribute("onpaste", "pasteText(event);");
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
-
-	let move = document.createElement("span");
-	move.setAttribute("id", move_id);
-	move.setAttribute("class", "move");
-	move.setAttribute("onmousedown", "onMouseDown4Move('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(move);
-	document.getElementById(move_id).innerHTML = " ";
-	document.getElementById(move_id).style.zIndex = "10000";
-
-	let resize_bottom_right = document.createElement("span");
-	resize_bottom_right.setAttribute("id", resize_bottom_right_id);
-	resize_bottom_right.setAttribute("class", "resize");
-	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_bottom_right);
-	document.getElementById(resize_bottom_right_id).innerHTML = "O";
-	document.getElementById(resize_bottom_right_id).style.zIndex = "10000";
-
-	let resize_top_right = document.createElement("span");
-	resize_top_right.setAttribute("id", resize_top_right_id);
-	resize_top_right.setAttribute("class", "resize");
-	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_top_right);
-	document.getElementById(resize_top_right_id).innerHTML = "O";
-	document.getElementById(resize_top_right_id).style.zIndex = "10000";
-
-	let resize_top_left = document.createElement("span");
-	resize_top_left.setAttribute("id", resize_top_left_id);
-	resize_top_left.setAttribute("class", "resize");
-	resize_top_left.setAttribute("onmousedown", "onMouseDown4ResizeTopLeft('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_top_left);
-	document.getElementById(resize_top_left_id).innerHTML = "O";
-	document.getElementById(resize_top_left_id).style.zIndex = "10000";
-
-	let resize_center_right = document.createElement("span");
-	resize_center_right.setAttribute("id", resize_center_right_id);
-	resize_center_right.setAttribute("class", "resize");
-	resize_center_right.setAttribute("onmousedown", "onMouseDown4ResizeCenterRight('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_center_right);
-	document.getElementById(resize_center_right_id).innerHTML = "O";
-	document.getElementById(resize_center_right_id).style.zIndex = "10000";
-
-	let resize_center_left = document.createElement("span");
-	resize_center_left.setAttribute("id", resize_center_left_id);
-	resize_center_left.setAttribute("class", "resize");
-	resize_center_left.setAttribute("onmousedown", "onMouseDown4ResizeCenterLeft('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_center_left);
-	document.getElementById(resize_center_left_id).innerHTML = "O";
-	document.getElementById(resize_center_left_id).style.zIndex = "10000";
-
-	let resize_center_top = document.createElement("span");
-	resize_center_top.setAttribute("id", resize_center_top_id);
-	resize_center_top.setAttribute("class", "resize");
-	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_center_top);
-	document.getElementById(resize_center_top_id).innerHTML = "O";
-	document.getElementById(resize_center_top_id).style.zIndex = "10000";
-
-	let resize_center_bottom = document.createElement("span");
-	resize_center_bottom.setAttribute("id", resize_center_bottom_id);
-	resize_center_bottom.setAttribute("class", "resize");
-	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_center_bottom);
-	document.getElementById(resize_center_bottom_id).innerHTML = "O";
-	document.getElementById(resize_center_bottom_id).style.zIndex = "10000";
-	
-	let resize_bottom_left = document.createElement("span");
-	resize_bottom_left.setAttribute("id", resize_bottom_left_id);
-	resize_bottom_left.setAttribute("class", "resize");
-	resize_bottom_left.setAttribute("onmousedown", "onMouseDown4ResizeBottomLeft('" + section_counter + "');")
-	document.getElementById("wrapper").appendChild(resize_bottom_left);
-	document.getElementById(resize_bottom_left_id).innerHTML = "O";
-	document.getElementById(resize_bottom_left_id).style.zIndex = "10000";
 
 	selectSection(section_counter);
 	reAlignSectionHandles();
@@ -1020,7 +939,7 @@ function loadCurrentDezyn() {
 			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
 			section_counter = last_section_number;
 		}
-		document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
+		//document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
 		document.getElementById("select_folders").value = dezyn_id.split("|")[1];
 	}
 }
