@@ -201,28 +201,30 @@ function removeSection() {
 }
 
 function copySection() {
-	localStorage.setItem("copied_section", selected_section.outerHTML);
+	idbPutItem("dezynor_settings", {setting_key:"copied_section", value:selected_section.outerHTML});
 }
 
 function pasteSection() {
-	let copied_section_string = localStorage.getItem("copied_section");
-	let html = new DOMParser().parseFromString(copied_section_string, "text/html");
-	let sections = html.body.querySelectorAll("section");
-	let copied_section = sections[0];
+	idbGetItem("dezynor_settings", "copied_section").then(function(result) {
+		let copied_section_string = result;
+		let html = new DOMParser().parseFromString(copied_section_string, "text/html");
+		let sections = html.body.querySelectorAll("section");
+		let copied_section = sections[0];
 
-	section_counter = getNewSectionCount();
+		section_counter = getNewSectionCount();
 
-	let section_id = "section" + section_counter;
-	
-	let section = copied_section;
-	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
-	section.setAttribute("onpaste", "pasteText(event);");
-	document.getElementById("wrapper").appendChild(section);
-	document.getElementById(section_id).style.zIndex = section_counter;
+		let section_id = "section" + section_counter;
+		
+		let section = copied_section;
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_counter + "');");
+		section.setAttribute("onpaste", "pasteText(event);");
+		document.getElementById("wrapper").appendChild(section);
+		document.getElementById(section_id).style.zIndex = section_counter;
 
-	selectSection(section_counter);
-	reAlignSectionHandles();
+		selectSection(section_counter);
+		reAlignSectionHandles();
+	});	
 
 }
 
@@ -877,71 +879,60 @@ function setZIndex(element) {
 
 
 function saveDezyn() {
-	localStorage.removeItem(dezyn_id);
-	let selected_folder = document.getElementById("select_folders").value;
-	let new_dezyn_id = generateDeisgnId() + "|" + selected_folder;
-	localStorage.setItem(new_dezyn_id, document.getElementById("container").innerHTML);
-	dezyn_id = new_dezyn_id;
-	showMessage("Saved", "Green");
+	idbRemoveItem("dezynor_designs", dezyn_id).then(function(result) {
+		console.log(result);
+		let selected_folder = document.getElementById("select_folders").value;
+		dezyn_id = dezyn_id.split("|")[0] + "|" + selected_folder;
+		idbPutItem("dezynor_designs", {design_key:dezyn_id, value:document.getElementById("container").innerHTML});
+		showMessage("Saved", "Green");
+	});
 }
 
 function newDezyn() {
-	if (dezyn_id in localStorage) {
-		localStorage.setItem(dezyn_id, document.getElementById("container").innerHTML);
-		window.location.href = "index.html";
-	} else {
-		let total_sections = document.querySelectorAll("section");
-		if (total_sections.length > 0) {
-			if (confirm("The current dezyn is not saved yet, would like to continue?")) {
-				window.location.href = "index.html";
-			}
-		}
-	}
+	idbPutItem("dezynor_designs", {design_key:dezyn_id, value:document.getElementById("container").innerHTML});
+	window.location.href = "index.html";
 }
 
 function duplicateDezyn() {
-	if (dezyn_id in localStorage) {
-		let selected_folder = document.getElementById("select_folders").value;
-		let new_dezyn_id = generateDeisgnId() + "|" + selected_folder;
-		localStorage.setItem(new_dezyn_id, document.getElementById("container").innerHTML);
-		alert("Duplicated successfully!");
-	} else {
-		alert("The current dezyn is not saved yet!");
-	}
+	let selected_folder = document.getElementById("select_folders").value;
+	let new_dezyn_id = generateDeisgnId() + "|" + selected_folder;
+	idbPutItem("dezynor_designs", {design_key:new_dezyn_id, value:document.getElementById("container").innerHTML});
+	alert("Duplicated successfully!");
 }
 
 function deleteDezyn() {
-
-	if (dezyn_id in localStorage) {
-		if (confirm("Do you really want to delete this dezyn?")) {
-			localStorage.removeItem(dezyn_id);
-			location.reload();
-		}
-	} else {
-		alert("The current dezyn is not saved yet!");
+	if (confirm("Do you really want to delete this dezyn?")) {
+		idbRemoveItem("dezynor_designs", dezyn_id).then(function(result) {
+			showMessage("Deleted successfully", "Red");
+			document.getElementById("container").innerHTML = "";
+		});
 	}
-
 }
 
 function loadCurrentDezyn() {
-	let current_dezyn_key = localStorage.getItem("current_dezyn");
-	if (current_dezyn_key === null) {
-		localStorage.setItem("current_dezyn", "");
-	} else if (current_dezyn_key != "") {
-		document.getElementById("container").innerHTML = localStorage.getItem(current_dezyn_key);
-		dezyn_id = current_dezyn_key;
-		localStorage.setItem("current_dezyn", "");
-		loadWrapperStyles();
-		let all_sections = document.querySelectorAll("section");
-		if (all_sections.length > 0) {
-			let first_section_number = all_sections[0].id.replace("section", "");
-			selectSection(first_section_number);
-			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
-			section_counter = last_section_number;
+	
+	idbGetItem("dezynor_settings", "current_design").then(function(result) {
+		let current_dezyn_key = result;
+		if (current_dezyn_key != "") {
+			idbGetItem("dezynor_designs", current_dezyn_key).then(function(result) {
+				document.getElementById("container").innerHTML = result;
+				dezyn_id = current_dezyn_key;
+				idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
+				loadWrapperStyles();
+				let all_sections = document.querySelectorAll("section");
+				if (all_sections.length > 0) {
+					let first_section_number = all_sections[0].id.replace("section", "");
+					selectSection(first_section_number);
+					let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
+					section_counter = last_section_number;
+				}
+				//document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
+				document.getElementById("select_folders").value = dezyn_id.split("|")[1];
+			});
+		} else {
+			
 		}
-		//document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
-		document.getElementById("select_folders").value = dezyn_id.split("|")[1];
-	}
+	});
 }
 
 
@@ -958,42 +949,46 @@ function changetab(num) {
 }
 
 function loadSelectFolders() {
-	let select_folders = document.getElementById("select_folders");
-	let folders = localStorage.getItem("dezynor_folders").split(",");
-	folders.sort();
-	for (i = 0; i < folders.length; i++) {
-		let option = document.createElement("option");
-		option.text = folders[i].trim();
-		select_folders.add(option);
-	}
+	idbGetItem("dezynor_settings", "folders").then(function(result) {
+		let select_folders = document.getElementById("select_folders");
+		let folders = result;
+		folders.sort();
+		for (i = 0; i < folders.length; i++) {
+			let option = document.createElement("option");
+			option.text = folders[i].trim();
+			select_folders.add(option);
+		}
+	});	
 }
 
 function loadSelectFonts() {
-	
-	let google_fonts = "";
-	let installed_fonts = "";
-	
-	let fonts = localStorage.getItem("dezynor_fonts").split(",");
-	fonts.sort();
-	let fonts_list = "";
-	for (i = 0; i < fonts.length; i++) {
-		let storage_font_name = fonts[i].split("|")[0];
-		let storage_font_location = fonts[i].split("|")[1];
-		if (storage_font_location == "Google") {
-			fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
-			google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
-		} else if (storage_font_location == "Installed") {
-			installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
-		}
-	}
 
-	let style = document.createElement("style");
-	let fonts_node = document.createTextNode(fonts_list);
-	style.appendChild(fonts_node);
-	document.getElementsByTagName("head")[0].appendChild(style);
-	
-	document.getElementById("google_fonts").innerHTML = google_fonts;
-	document.getElementById("installed_fonts").innerHTML = installed_fonts;
+	idbGetItem("dezynor_settings", "fonts").then(function(result) {
+		let google_fonts = "";
+		let installed_fonts = "";
+		
+		let fonts = result;
+		fonts.sort();
+		let fonts_list = "";
+		for (i = 0; i < fonts.length; i++) {
+			let storage_font_name = fonts[i].split("|")[0];
+			let storage_font_location = fonts[i].split("|")[1];
+			if (storage_font_location == "Google") {
+				fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
+				google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
+			} else if (storage_font_location == "Installed") {
+				installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
+			}
+		}
+
+		let style = document.createElement("style");
+		let fonts_node = document.createTextNode(fonts_list);
+		style.appendChild(fonts_node);
+		document.getElementsByTagName("head")[0].appendChild(style);
+		
+		document.getElementById("google_fonts").innerHTML = google_fonts;
+		document.getElementById("installed_fonts").innerHTML = installed_fonts;
+	});
 
 }
 
