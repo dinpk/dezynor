@@ -880,7 +880,6 @@ function setZIndex(element) {
 
 function saveDezyn() {
 	idbRemoveItem("dezynor_designs", dezyn_id).then(function(result) {
-		console.log(result);
 		let selected_folder = document.getElementById("select_folders").value;
 		dezyn_id = dezyn_id.split("|")[0] + "|" + selected_folder;
 		idbPutItem("dezynor_designs", {design_key:dezyn_id, value:document.getElementById("container").innerHTML});
@@ -967,7 +966,7 @@ function loadSelectFonts() {
 		let google_fonts = "";
 		let installed_fonts = "";
 		
-		let fonts = result;
+		let fonts = result.split(",");
 		fonts.sort();
 		let fonts_list = "";
 		for (i = 0; i < fonts.length; i++) {

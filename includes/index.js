@@ -1,4 +1,3 @@
-// reload folder dezyns on tab focus since updated dezyn_id has changed to new date
 document.addEventListener('visibilitychange', function(ev) { 
 	if (current_folder != "" && document.visibilityState == "visible") {
 		showFolderDezyns(current_folder);
@@ -48,8 +47,6 @@ function addFolder() {
 }
 
 function renameFolder(folder_name) {
-	
-	
 	showMessage("'" + folder_name + "' renamed to '" + new_folder_name + "'", "Green");
 }
 
@@ -101,8 +98,4 @@ function hideMessage() {
   return new Promise(resolve => {
 		setTimeout(() => {resolve("");}, 0); // setTimeOut is put at the end of the rendering queue
   });
-}
-
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
 }

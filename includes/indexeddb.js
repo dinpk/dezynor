@@ -2,8 +2,8 @@
 let database_name = "dezynordb";
 let openRequest = indexedDB.open(database_name, 1);
 
-let max_resize_width = 1000;
-let max_resize_height = 1000;
+let max_resize_width = "1000";
+let max_resize_height = "1000";
 
 openRequest.onupgradeneeded = function() { // runs once when the app is loaded first time
 	let db = openRequest.result;
@@ -13,7 +13,7 @@ openRequest.onupgradeneeded = function() { // runs once when the app is loaded f
 	let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 	// insert initial data
 	dezynor_settings.add({setting_key: "folders", value: ["default"]});
-	dezynor_settings.add({setting_key: "fonts", value: ["Anton"]});
+	dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google"]});
 	dezynor_settings.add({setting_key: "max_upload_width",value: max_resize_width});
 	dezynor_settings.add({setting_key: "max_upload_height",value: max_resize_height});
 	dezynor_settings.add({setting_key: "current_design", value: ""});

@@ -5,23 +5,23 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="includes/common.css?v=20220729">
+		<script src="includes/indexeddb.js?v=20220729"></script>
 		<script src="includes/common.js?v=20220729"></script>
 		<script src="includes/settings.js?v=20220729"></script>
 	</head>
-	<body onload="showStorageSpace();loadSettings();">
+	<body>
 		<script>writeHeader();</script>
 		<main>
 			<div class="padleft50">
 			</div>
 			
-			<div id="settings" class="padleft50 mxw500">
+			<div id="settings" class="pad50 mxw500">
 				<div id="space_usage"></div>
 				<table>
 					<tr>
 						<td class="padright10"><img src="images/icon_caution.png"></td>
-						<td>Dezynor uses browser's local storage for the purpose of saving all dezyns and settings. If you use some performance
-							and tunning application such as <strong>CCleaner</strong>, please disable "cookies clean-up" feature for this
-							browser because it wipes up local storage of the browser.
+						<td>Dezynor uses browser's IndexedDB for the purpose of saving all designs and settings. If you use some performance
+							and tunning application such as <strong>CCleaner</strong>, please make sure it does not wipe up the IndexedDB.
 						</td>
 					</tr>
 				</table>
@@ -30,13 +30,18 @@
 				<form onsubmit="event.preventDefault();saveSettings();">
 				<table>
 					<tr>
-						<td>Upload URL</td>
+						<td>Max upload width</td>
 						<td>
-							<input type="url" id="upload_url" placeholder="Imgbb URL"> 
 							<input type="number" id="max_upload_width" value="1000" min="200" title="Max Upload Width" required> 
+						</td>
+					</tr>
+					<tr>
+						<td>Max upload height</td>
+						<td>
 							<input type="number" id="max_upload_height" value="1000" min="200" title="Max Upload Height" required>
 						</td>
 					</tr>
+					
 				</table>
 				<p>
 					<input type="submit" value="Save">
