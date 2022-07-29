@@ -5,6 +5,7 @@ body {
 #dezyns_table {
 	width:100%;
 	border-collapse:collapse;
+	min-height:90vh;
 }
 
 #dezyns_table td {

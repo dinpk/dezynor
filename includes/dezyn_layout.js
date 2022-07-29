@@ -1,3 +1,16 @@
+
+window.onload = async function() {
+	await delay(500);
+	addHandles();
+	styleWrapper();
+	setRandomWrapperColor();
+	loadSelectFolders();
+	loadSelectFonts();
+	loadCurrentDezyn();
+	showSectionPanel('box_section');
+}
+
+
 let dezyn_id = generateDeisgnId() + "|default";
 let section_counter = 0;
 let selected_section;
@@ -965,8 +978,9 @@ function loadSelectFonts() {
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
 		let google_fonts = "";
 		let installed_fonts = "";
+		console.log(result);
 		
-		let fonts = result.split(",");
+		let fonts = result;
 		fonts.sort();
 		let fonts_list = "";
 		for (i = 0; i < fonts.length; i++) {

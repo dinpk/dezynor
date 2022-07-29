@@ -4,7 +4,7 @@ window.onload = async function() {
 	loadFonts();
 }
 
-function addNewFont() {
+function addFont() {
 	let font_name = document.getElementById("font_name").value.trim();
 	let font_location = document.getElementById("font_location").value;
 	if (font_name.length < 1) return;
@@ -12,15 +12,13 @@ function addNewFont() {
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
 		
 		let fonts = result;
-		for (let i = 0; i < fonts.length; i++) {
-			storage_font_name = fonts[i].split("|")[0];
-			if (font_name == storage_font_name) {
-				alert("A font with the name '" + font_name + "' already exists.");
-				document.getElementById("font_name").value = "";
-				return;
-			}
+		let index = fonts.indexOf(font_name);
+		if (index > -1) {
+			alert("A font with the name '" + font_name + "' already exists.");
+			return;
+		} else {
+			fonts.push(font_name + "|" + font_location);
 		}
-		fonts = fonts + "," + font_name + "|" + font_location;
 		idbPutItem("dezynor_settings", {setting_key:"fonts", value:fonts});
 		document.getElementById("font_name").value = "";
 		document.getElementById("font_name").focus();
@@ -34,8 +32,7 @@ function addNewFont() {
 async function loadFonts() {
 	
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
-		let fonts = result.split(",");
-		
+		let fonts = result;
 		fonts.sort();
 		let fonts_html = "";
 		for (let i = 0; i < fonts.length; i++) {
@@ -47,37 +44,32 @@ async function loadFonts() {
 				font_location = " <span class='installed'>(" + font_location + ")</span>";
 			}
 			
-			fonts_html = fonts_html + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + font_name + "');\">" + "x</span> " + font_name + font_location + "</div>";
+			fonts_html = fonts_html + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + font_location + "</div>";
 		}
 		document.getElementById("fonts").innerHTML = fonts_html;
 		document.getElementById("font_name").focus();
 	});
 }
 
-function deleteFont(deleted_font) {
-	if (deleted_font == "Anton") {
+function deleteFont(font_name) {
+	if (font_name == "Anton|Google") {
 		alert("The 'Anton' font can not be deleted.");
 		return;
 	}
-	
+
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
-
-		let fonts = result.split(",");
-		let updated_fonts = "";
-
-		for (let i = 0; i < fonts.length; i++) {
-			storage_font_name = fonts[i].split("|")[0];
-			storage_font_location = fonts[i].split("|")[1];
-			if (deleted_font != storage_font_name) {
-				updated_fonts = updated_fonts + "," + storage_font_name + "|" + storage_font_location;
-			}
+		let fonts = result;
+		let index = fonts.indexOf(font_name);
+		if (index > -1) {
+			fonts.splice(index, 1);
+			showMessage("'" + font_name + "' deleted successfully", "Red");
+		} else {
+			alert("'" + font_name + "' does not exist");
+			return;
 		}
-		updated_fonts = updated_fonts.replace(",", "");
-		idbPutItem("dezynor_settings", {setting_key:"fonts", value:updated_fonts});
+		idbPutItem("dezynor_settings", {setting_key:"fonts", value:fonts});
 		loadFonts();
-		showMessage("'" + deleted_font + "' deleted", "Red");
 		document.getElementById("font_name").focus();
-
 	});
 	
 }

@@ -41,13 +41,32 @@ function addFolder() {
 		}
 		idbPutItem("dezynor_settings", {setting_key:"folders", value:folders});
 		document.getElementById("new_folder").value = "";
+		document.getElementById("new_folder").focus();
 		showMessage("'" + new_folder + "' added", "Green");
 		loadFolders();
 	});
 }
 
 function renameFolder(folder_name) {
-	showMessage("'" + folder_name + "' renamed to '" + new_folder_name + "'", "Green");
+	let new_folder_name = prompt("Enter new folder name");
+	if (!new_folder_name || new_folder_name.trim().length == 0) return;
+
+	idbGetItem("dezynor_settings", "folders").then(function(result) {
+		let folders = result;
+		let index = folders.indexOf(folder_name);
+		if (index > -1) {
+			folders.splice(index, 1);
+			folders.push(new_folder_name);
+		} else {
+			alert("'" + folder_name + "' does not exist");
+			return;
+		}
+		idbPutItem("dezynor_settings", {setting_key:"folders", value:folders});
+		loadFolders();
+		document.getElementById("new_folder").focus();
+		showMessage("'" + folder_name + "' renamed to '" + new_folder_name + "'", "Green");
+	});
+
 }
 
 function loadFolders() {
