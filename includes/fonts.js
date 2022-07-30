@@ -12,9 +12,11 @@ function addFont() {
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
 		
 		let fonts = result;
-		let index = fonts.indexOf(font_name);
+		let index = fonts.indexOf(font_name + "|" + font_location);
 		if (index > -1) {
 			alert("A font with the name '" + font_name + "' already exists.");
+			document.getElementById("font_name").value = "";
+			document.getElementById("font_name").focus();
 			return;
 		} else {
 			fonts.push(font_name + "|" + font_location);

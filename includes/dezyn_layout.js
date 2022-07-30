@@ -1,7 +1,7 @@
 
-window.onload = async function() {
-	await delay(500);
-	addHandles();
+// console.trace(); // put before the statement that generates error
+
+window.onload = function() {
 	styleWrapper();
 	setRandomWrapperColor();
 	loadSelectFolders();
@@ -9,7 +9,6 @@ window.onload = async function() {
 	loadCurrentDezyn();
 	showSectionPanel('box_section');
 }
-
 
 let dezyn_id = generateDeisgnId() + "|default";
 let section_counter = 0;
@@ -29,66 +28,76 @@ function generateDeisgnId() {
 }
 
 
-function addHandles() {
+async function addHandles() {
 
 	if (document.getElementById("move") == null) {
 		
-		move = document.createElement("span");
-		move.setAttribute("id", "move");
-		move.setAttribute("class", "move");
-		
-		document.getElementById("wrapper").appendChild(move);
+		let move_span = document.createElement("span");
+		move_span.setAttribute("id", "move");
+		move_span.setAttribute("class", "move");
+		document.getElementById("wrapper").appendChild(move_span);
 		document.getElementById("move").innerHTML = " ";
+		console.log(document.getElementById("move"));
 
-		resize_bottom_right = document.createElement("span");
-		resize_bottom_right.setAttribute("id", "resize_bottom_right");
-		resize_bottom_right.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_bottom_right);
+		let resize_bottom_right_span = document.createElement("span");
+		resize_bottom_right_span.setAttribute("id", "resize_bottom_right");
+		resize_bottom_right_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_bottom_right_span);
 		document.getElementById("resize_bottom_right").innerHTML = "O";
+		
 
-		resize_top_right = document.createElement("span");
-		resize_top_right.setAttribute("id", "resize_top_right");
-		resize_top_right.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_top_right);
+		let resize_top_right_span = document.createElement("span");
+		resize_top_right_span.setAttribute("id", "resize_top_right");
+		resize_top_right_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_top_right_span);
 		document.getElementById("resize_top_right").innerHTML = "O";
 
-		resize_top_left = document.createElement("span");
-		resize_top_left.setAttribute("id", "resize_top_left");
-		resize_top_left.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_top_left);
+		let resize_top_left_span = document.createElement("span");
+		resize_top_left_span.setAttribute("id", "resize_top_left");
+		resize_top_left_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_top_left_span);
 		document.getElementById("resize_top_left").innerHTML = "O";
 
-		resize_bottom_left = document.createElement("span");
-		resize_bottom_left.setAttribute("id", "resize_bottom_left");
-		resize_bottom_left.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_bottom_left);
+		let resize_bottom_left_span = document.createElement("span");
+		resize_bottom_left_span.setAttribute("id", "resize_bottom_left");
+		resize_bottom_left_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_bottom_left_span);
 		document.getElementById("resize_bottom_left").innerHTML = "O";
 
-		resize_center_right = document.createElement("span");
-		resize_center_right.setAttribute("id", "resize_center_right");
-		resize_center_right.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_center_right);
+		let resize_center_right_span = document.createElement("span");
+		resize_center_right_span.setAttribute("id", "resize_center_right");
+		resize_center_right_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_right_span);
 		document.getElementById("resize_center_right").innerHTML = "O";
 
-		resize_center_left = document.createElement("span");
-		resize_center_left.setAttribute("id", "resize_center_left");
-		resize_center_left.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_center_left);
+		let resize_center_left_span = document.createElement("span");
+		resize_center_left_span.setAttribute("id", "resize_center_left");
+		resize_center_left_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_left_span);
 		document.getElementById("resize_center_left").innerHTML = "O";
 
-		resize_center_top = document.createElement("span");
-		resize_center_top.setAttribute("id", "resize_center_top");
-		resize_center_top.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_center_top);
+		let resize_center_top_span = document.createElement("span");
+		resize_center_top_span.setAttribute("id", "resize_center_top");
+		resize_center_top_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_top_span);
 		document.getElementById("resize_center_top").innerHTML = "O";
 
-		resize_center_bottom = document.createElement("span");
-		resize_center_bottom.setAttribute("id", "resize_center_bottom");
-		resize_center_bottom.setAttribute("class", "resize");
-		document.getElementById("wrapper").appendChild(resize_center_bottom);
+		let resize_center_bottom_span = document.createElement("span");
+		resize_center_bottom_span.setAttribute("id", "resize_center_bottom");
+		resize_center_bottom_span.setAttribute("class", "resize");
+		document.getElementById("wrapper").appendChild(resize_center_bottom_span);
 		document.getElementById("resize_center_bottom").innerHTML = "O";
 	}
 
+	move = document.getElementById("move");
+	resize_bottom_right = document.getElementById("resize_bottom_right");
+	resize_top_right = document.getElementById("resize_top_right");
+	resize_bottom_left = document.getElementById("resize_bottom_left");
+	resize_top_left = document.getElementById("resize_top_left");
+	resize_center_right = document.getElementById("resize_center_right");
+	resize_center_left = document.getElementById("resize_center_left");
+	resize_center_top = document.getElementById("resize_center_top");
+	resize_center_bottom = document.getElementById("resize_center_bottom");
 
 }
 
@@ -512,16 +521,6 @@ function onMouseDown4ResizeBottomLeft(counter) {
 
 
 function reAlignSectionHandles() {
-
-	move = document.getElementById("move");
-	resize_bottom_right = document.getElementById("resize_bottom_right");
-	resize_top_right = document.getElementById("resize_top_right");
-	resize_bottom_left = document.getElementById("resize_bottom_left");
-	resize_top_left = document.getElementById("resize_top_left");
-	resize_center_right = document.getElementById("resize_center_right");
-	resize_center_left = document.getElementById("resize_center_left");
-	resize_center_top = document.getElementById("resize_center_top");
-	resize_center_bottom = document.getElementById("resize_center_bottom");
 	
 	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) + "px";
 	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
@@ -549,23 +548,6 @@ function reAlignSectionHandles() {
 
 	resize_center_bottom.style.top =  parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
 	resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
-	
-	/*
-	setTimeout(function() { 
-		move.style.transition = ".1s";
-		resize_bottom_right.style.transition = ".1s";
-		resize_top_right.style.transition = ".1s";
-		resize_top_left.style.transition = ".1s";
-		resize_center_right.style.transition = ".1s";
-		resize_center_left.style.transition = ".1s";
-		resize_center_top.style.transition = ".1s";
-		resize_center_bottom.style.transition = ".1s";
-		resize_bottom_left.style.transition = ".1s";
-		selected_section.style.transition = ".1s";
-	}, 100);
-	* */
-	
-	
 
 }
 
@@ -934,6 +916,7 @@ function loadCurrentDezyn() {
 				let all_sections = document.querySelectorAll("section");
 				if (all_sections.length > 0) {
 					let first_section_number = all_sections[0].id.replace("section", "");
+					addHandles();
 					selectSection(first_section_number);
 					let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
 					section_counter = last_section_number;
@@ -978,7 +961,6 @@ function loadSelectFonts() {
 	idbGetItem("dezynor_settings", "fonts").then(function(result) {
 		let google_fonts = "";
 		let installed_fonts = "";
-		console.log(result);
 		
 		let fonts = result;
 		fonts.sort();
