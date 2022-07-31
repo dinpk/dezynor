@@ -147,6 +147,7 @@ function addSection() {
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
 	setSectionDefaultStyles(document.getElementById(section_id));
+	addHandles();
 	selectSection(section_counter);
 	styleAlignTopLeft();
 	document.getElementById(section_id).focus();
@@ -225,27 +226,26 @@ function copySection() {
 	idbPutItem("dezynor_settings", {setting_key:"copied_section", value:selected_section.outerHTML});
 }
 
-function pasteSection() {
-	idbGetItem("dezynor_settings", "copied_section").then(function(result) {
-		let copied_section_string = result;
-		let html = new DOMParser().parseFromString(copied_section_string, "text/html");
-		let sections = html.body.querySelectorAll("section");
-		let copied_section = sections[0];
+async function pasteSection() {
 
-		section_counter = getNewSectionCount();
+	let copied_section_string = await idbGetItem("dezynor_settings", "copied_section");
+	let html = new DOMParser().parseFromString(copied_section_string, "text/html");
+	let sections = html.body.querySelectorAll("section");
+	let copied_section = sections[0];
 
-		let section_id = "section" + section_counter;
-		
-		let section = copied_section;
-		section.setAttribute("id", section_id);
-		section.setAttribute("onclick", "selectSection('" + section_counter + "');");
-		section.setAttribute("onpaste", "pasteText(event);");
-		document.getElementById("wrapper").appendChild(section);
-		document.getElementById(section_id).style.zIndex = section_counter;
+	section_counter = getNewSectionCount();
 
-		selectSection(section_counter);
-		reAlignSectionHandles();
-	});	
+	let section_id = "section" + section_counter;
+	
+	let section = copied_section;
+	section.setAttribute("id", section_id);
+	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
+	section.setAttribute("onpaste", "pasteText(event);");
+	document.getElementById("wrapper").appendChild(section);
+	document.getElementById(section_id).style.zIndex = section_counter;
+
+	selectSection(section_counter);
+	reAlignSectionHandles();
 
 }
 
@@ -872,13 +872,12 @@ function setZIndex(element) {
 }
 
 
-function saveDezyn() {
-	idbRemoveItem("dezynor_designs", dezyn_id).then(function(result) {
-		let selected_folder = document.getElementById("select_folders").value;
-		dezyn_id = dezyn_id.split("|")[0] + "|" + selected_folder;
-		idbPutItem("dezynor_designs", {design_key:dezyn_id, value:document.getElementById("container").innerHTML});
-		showMessage("Saved", "Green");
-	});
+async function saveDezyn() {
+	await idbRemoveItem("dezynor_designs", dezyn_id);
+	let selected_folder = document.getElementById("select_folders").value;
+	dezyn_id = dezyn_id.split("|")[0] + "|" + selected_folder;
+	idbPutItem("dezynor_designs", {design_key:dezyn_id, value:document.getElementById("container").innerHTML});
+	showMessage("Saved", "Green");
 }
 
 function newDezyn() {
@@ -893,42 +892,35 @@ function duplicateDezyn() {
 	alert("Duplicated successfully!");
 }
 
-function deleteDezyn() {
+async function deleteDezyn() {
 	if (confirm("Do you really want to delete this dezyn?")) {
-		idbRemoveItem("dezynor_designs", dezyn_id).then(function(result) {
-			showMessage("Deleted successfully", "Red");
-			document.getElementById("container").innerHTML = "";
-		});
+		await idbRemoveItem("dezynor_designs", dezyn_id);
+		showMessage("Deleted successfully", "Red");
+		document.getElementById("container").innerHTML = "";
 	}
 }
 
 async function loadCurrentDezyn() {
 
-
-	idbGetItem("dezynor_settings", "current_design").then(function(result) {
-		let current_dezyn_key = result;
-		if (current_dezyn_key != "") {
-			idbGetItem("dezynor_designs", current_dezyn_key).then(function(result) {
-				document.getElementById("container").innerHTML = result;
-				dezyn_id = current_dezyn_key;
-				idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
-				loadWrapperStyles();
-				let all_sections = document.querySelectorAll("section");
-				if (all_sections.length > 0) {
-					let first_section_number = all_sections[0].id.replace("section", "");
-					addHandles();
-					selectSection(first_section_number);
-					let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
-					section_counter = last_section_number;
-				}
-				//document.getElementsByTagName("title")[0].innerText = dezyn_id.split("|")[0];
-				document.getElementById("select_folders").value = dezyn_id.split("|")[1];
-			});
-		} else {
-			
+	let current_dezyn_key = await idbGetItem("dezynor_settings", "current_design");
+	if (current_dezyn_key != "") {
+		document.getElementById("container").innerHTML = await idbGetItem("dezynor_designs", current_dezyn_key);
+		dezyn_id = current_dezyn_key;
+		idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
+		loadWrapperStyles();
+		let all_sections = document.querySelectorAll("section");
+		if (all_sections.length > 0) {
+			let first_section_number = all_sections[0].id.replace("section", "");
+			addHandles();
+			selectSection(first_section_number);
+			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
+			section_counter = last_section_number;
 		}
-	});
+		document.getElementById("select_folders").value = dezyn_id.split("|")[1];
 
+	} else {
+		
+	}
 
 }
 
@@ -945,47 +937,43 @@ function changetab(num) {
 	document.getElementById("tab_panel" + num).style.display = "block";
 }
 
-function loadSelectFolders() {
-	idbGetItem("dezynor_settings", "folders").then(function(result) {
-		let select_folders = document.getElementById("select_folders");
-		let folders = result;
-		folders.sort();
-		for (i = 0; i < folders.length; i++) {
-			let option = document.createElement("option");
-			option.text = folders[i].trim();
-			select_folders.add(option);
-		}
-	});	
+async function loadSelectFolders() {
+	let select_folders = document.getElementById("select_folders");
+	let folders = await idbGetItem("dezynor_settings", "folders");
+	folders.sort();
+	for (i = 0; i < folders.length; i++) {
+		let option = document.createElement("option");
+		option.text = folders[i].trim();
+		select_folders.add(option);
+	}
 }
 
-function loadSelectFonts() {
+async function loadSelectFonts() {
 
-	idbGetItem("dezynor_settings", "fonts").then(function(result) {
-		let google_fonts = "";
-		let installed_fonts = "";
-		
-		let fonts = result;
-		fonts.sort();
-		let fonts_list = "";
-		for (i = 0; i < fonts.length; i++) {
-			let storage_font_name = fonts[i].split("|")[0];
-			let storage_font_location = fonts[i].split("|")[1];
-			if (storage_font_location == "Google") {
-				fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
-				google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
-			} else if (storage_font_location == "Installed") {
-				installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
-			}
+	let google_fonts = "";
+	let installed_fonts = "";
+	
+	let fonts = await idbGetItem("dezynor_settings", "fonts");
+	fonts.sort();
+	let fonts_list = "";
+	for (i = 0; i < fonts.length; i++) {
+		let storage_font_name = fonts[i].split("|")[0];
+		let storage_font_location = fonts[i].split("|")[1];
+		if (storage_font_location == "Google") {
+			fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
+			google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
+		} else if (storage_font_location == "Installed") {
+			installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
 		}
+	}
 
-		let style = document.createElement("style");
-		let fonts_node = document.createTextNode(fonts_list);
-		style.appendChild(fonts_node);
-		document.getElementsByTagName("head")[0].appendChild(style);
-		
-		document.getElementById("google_fonts").innerHTML = google_fonts;
-		document.getElementById("installed_fonts").innerHTML = installed_fonts;
-	});
+	let style = document.createElement("style");
+	let fonts_node = document.createTextNode(fonts_list);
+	style.appendChild(fonts_node);
+	document.getElementsByTagName("head")[0].appendChild(style);
+	
+	document.getElementById("google_fonts").innerHTML = google_fonts;
+	document.getElementById("installed_fonts").innerHTML = installed_fonts;
 
 }
 

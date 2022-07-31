@@ -22,6 +22,7 @@ body {
 #folder_label {
     width: 100%;
     position: fixed;
+    margin-top:2px;
     z-index: 2000;
 }
 
@@ -63,23 +64,25 @@ body {
 }
 
 #dezyns {
-	zoom:15%;
+	zoom:10%;
 	-moz-transform: scale(.10, .10);
 	-moz-transform-origin:0 0;
 	display:flex;
 	flex-wrap:wrap;
-	padding-top: 250px;
+	padding-top: 400px;
 }
 
 .wrapper {
 	position:relative;
 	margin:100px;
 	cursor:pointer;
+	overflow:hidden;
 }
 .wrapper section {
 	position:absolute;
 	outline:none !important;
 	cursor:pointer;
+	
 }
 .wrapper span {
 	display:none;
