@@ -14,8 +14,15 @@ let current_folder = "";
 
 
 function setCurrentDezyn(key) {
-	idbPutItem("dezynor_settings", {setting_key:"current_design", value: key});
+	/*
+	let request = await openRequest.result.transaction("dezynor_settings", "readwrite").objectStore("dezynor_settings").put({setting_key:"current_design", value: key});
 	window.open("dezyn.html");
+	*/
+		
+	idbPutItem("dezynor_settings", {setting_key:"current_design", value: key}).then(async function(result) {
+		window.open("dezyn.html");
+	});
+	
 }
 
 function selectSection(num) {

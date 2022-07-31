@@ -41,15 +41,19 @@ openRequest.onsuccess = function() {
 
 };
 
-function idbPutItem(store, object) {
+async function idbPutItem(store, object) {
 	let db = openRequest.result;
 	let transaction = db.transaction(store, "readwrite");
 	store = transaction.objectStore(store);
-	request = store.put(object);
-	request.onsucess = function() {
-		console.log("Saved successfully");
-	};
+	return new Promise(function(resolve, reject) {
+		let request = store.put(object);
+        request.onsuccess = function() {
+			resolve(true);
+        }		
+	});
 }
+
+
 
 async function idbGetItem(store, key) {
 	let db = openRequest.result;
@@ -60,8 +64,6 @@ async function idbGetItem(store, key) {
         request.onsuccess = function() {
 			if (request.result != undefined) {
 				resolve(request.result.value);
-			} else {
-				resolve(null);
 			}
         }
     });

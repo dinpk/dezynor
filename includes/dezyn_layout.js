@@ -6,8 +6,8 @@ window.onload = function() {
 	setRandomWrapperColor();
 	loadSelectFolders();
 	loadSelectFonts();
-	loadCurrentDezyn();
 	showSectionPanel('box_section');
+	loadCurrentDezyn();
 }
 
 let dezyn_id = generateDeisgnId() + "|default";
@@ -37,7 +37,6 @@ async function addHandles() {
 		move_span.setAttribute("class", "move");
 		document.getElementById("wrapper").appendChild(move_span);
 		document.getElementById("move").innerHTML = " ";
-		console.log(document.getElementById("move"));
 
 		let resize_bottom_right_span = document.createElement("span");
 		resize_bottom_right_span.setAttribute("id", "resize_bottom_right");
@@ -903,8 +902,9 @@ function deleteDezyn() {
 	}
 }
 
-function loadCurrentDezyn() {
-	
+async function loadCurrentDezyn() {
+
+
 	idbGetItem("dezynor_settings", "current_design").then(function(result) {
 		let current_dezyn_key = result;
 		if (current_dezyn_key != "") {
@@ -928,6 +928,8 @@ function loadCurrentDezyn() {
 			
 		}
 	});
+
+
 }
 
 

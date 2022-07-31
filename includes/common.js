@@ -5,7 +5,7 @@ function writeHeader() {
 		"<div><a href='index.html'>Browse</a></div> " + 
 		"<div><a href='dezyn.html' target='_blank'>New Dezyn</a></div> " + 
 		"<div><a href='fonts.html'>Fonts</a></div> " + 
-		"<div><a href='import-export.html' target='_blank'>Import/Export</a></div> " + 
+		"<div><a href='import-export.html'>Import/Export</a></div> " + 
 		"<div><a href='settings.html'>Settings</a></div> " + 
 		"</header>"
 		);
