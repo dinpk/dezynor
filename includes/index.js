@@ -11,21 +11,12 @@ window.onload = async function() {
 
 let current_folder = "";
 
-
-
 async function setCurrentDezyn(key) {
-	/*
-	let request = await openRequest.result.transaction("dezynor_settings", "readwrite").objectStore("dezynor_settings").put({setting_key:"current_design", value: key});
-	window.open("dezyn.html");
-	*/
-		
-	await idbPutItem("dezynor_settings", {setting_key:"current_design", value: key});
-	window.open("dezyn.html");
+	//await idbPutItem("dezynor_settings", {setting_key:"current_design", value: key});
+	//window.open("dezyn.html");
 }
 
-function selectSection(num) {
-	// dummy
-}
+function selectSection(num) {}
 
 async function addFolder() {
 
@@ -34,6 +25,8 @@ async function addFolder() {
 	new_folder = new_folder.trim();
 	
 	if (new_folder.length < 1) return;
+	
+	new_folder = new_folder.replaceAll(" ", "-");
 	
 	let folders = await idbGetItem("dezynor_settings", "folders");
 	let index = folders.indexOf(new_folder);
@@ -72,6 +65,7 @@ async function deleteFolder(folder_name) {
 			await idbPutItem("dezynor_settings", {setting_key:"folders", value:folders});
 			loadFolders();
 			showMessage("Folder '" + folder_name + "' deleted successfully", "Red");
+			document.getElementById("folder_label").innerHTML = "";
 		}
 	}
 
@@ -79,10 +73,12 @@ async function deleteFolder(folder_name) {
 
 async function renameFolder(folder_name) {
 
-	// add folder
+	// rename folder
 	
 	let new_folder_name = prompt("Enter new folder name");
 	if (!new_folder_name || new_folder_name.trim().length == 0) return;
+	
+	new_folder_name = new_folder_name.replaceAll(" ", "-");
 
 	let folders = await idbGetItem("dezynor_settings", "folders");
 	
@@ -127,7 +123,7 @@ async function loadFolders() {
 	let folders_html = "";
 	for (let i = 0; i < folders.length; i++) {
 		let folder_name = folders[i].trim();
-		folders_html = folders_html + "<div><a onclick=\"showFolderDezyns('" + folder_name + "');\">" + folder_name + "</a></div>";
+		folders_html = folders_html + "<div><a onclick=\"showFolderDezyns('" + folder_name + "');\"> <img src='images/icon_folder.png'>" + folder_name + "</a></div>";
 	}
 	document.getElementById("folders").innerHTML = folders_html;		
 }
@@ -147,7 +143,8 @@ async function showFolderDezyns(folder) {
 		let key = all_designs[i].design_key;
 		let key_folder = key.split("|")[1];
 		if (folder == key_folder) {
-			let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
+			//let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
+			let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('dezyn.html?key=" + key + "');\"");
 			item = item.replace(/((background-image: url\(.*?\);))/g, '');
 			folder_dezyns += item;
 		}

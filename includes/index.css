@@ -76,6 +76,12 @@ body {
 	padding:1px 2px 1px 2px;
 }
 
+#folders img {
+	max-height:14px;
+	vertical-align:middle;
+	margin-right:5px;
+}
+
 #folders span {
 	font-size:70%;
 	margin-right:5px;
@@ -113,7 +119,8 @@ body {
 #message {
 	padding:5px;
 	min-height:30px;
-	color:chocolate;
+	color:green;;
+	font-weight:bold;
 }
 
 #storage_space {

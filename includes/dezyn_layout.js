@@ -2,12 +2,11 @@
 // console.trace(); // put before the statement that generates error
 
 window.onload = function() {
-	styleWrapper();
 	setRandomWrapperColor();
 	loadSelectFolders();
 	loadSelectFonts();
 	showSectionPanel('box_section');
-	loadCurrentDezyn();
+	loadDezyn();
 }
 
 let dezyn_id = generateDeisgnId() + "|default";
@@ -144,6 +143,7 @@ function addSection() {
 	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
 	section.setAttribute("onpaste", "pasteText(event);");
 	section.setAttribute("contenteditable", "true");
+	section.style.transition = "initial";
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
 	setSectionDefaultStyles(document.getElementById(section_id));
@@ -269,7 +269,6 @@ function onMouseDown4Move(counter) { // move
 
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		move.style.left = (event.pageX - 30) + "px";
@@ -295,7 +294,6 @@ function onMouseDown4ResizeTopRight(counter) {
 	
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		resize_top_right.style.left = (event.pageX - 25) + "px";
@@ -327,7 +325,6 @@ function onMouseDown4ResizeTopRight(counter) {
 function onMouseDown4ResizeCenterRight(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		//resize_center_right.style.top = (event.pageY - 25) + "px";
@@ -353,7 +350,6 @@ function onMouseDown4ResizeCenterRight(counter) {
 function onMouseDown4ResizeCenterLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		resize_center_left.style.left = (event.pageX - 30) + "px";
@@ -379,7 +375,6 @@ function onMouseDown4ResizeCenterLeft(counter) {
 function onMouseDown4ResizeCenterTop(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		resize_center_top.style.top = (event.pageY - 30) + "px";
@@ -406,8 +401,6 @@ function onMouseDown4ResizeCenterTop(counter) {
 function onMouseDown4ResizeCenterBottom(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
-	
 	
 	function onMouseMove(event) {
 		resize_center_bottom.style.top = (event.pageY - 30) + "px";
@@ -432,7 +425,6 @@ function onMouseDown4ResizeCenterBottom(counter) {
 function onMouseDown4ResizeBottomRight(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
 	
 	function onMouseMove(event) {
 		resize_bottom_right.style.top = (event.pageY - 25) + "px";
@@ -458,8 +450,6 @@ function onMouseDown4ResizeBottomRight(counter) {
 function onMouseDown4ResizeTopLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
-	
 	
 	function onMouseMove(event) {
 		resize_top_left.style.left = (event.pageX - 25) + "px";
@@ -491,8 +481,6 @@ function onMouseDown4ResizeTopLeft(counter) {
 function onMouseDown4ResizeBottomLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
-	section.style.transition = "initial";
-	
 	
 	function onMouseMove(event) {
 		resize_bottom_left.style.left = (event.pageX - 25) + "px";
@@ -900,11 +888,15 @@ async function deleteDezyn() {
 	}
 }
 
-async function loadCurrentDezyn() {
+async function loadDezyn() {
 
-	let current_dezyn_key = await idbGetItem("dezynor_settings", "current_design");
+	// let current_dezyn_key = await idbGetItem("dezynor_settings", "current_design");
+	let current_dezyn_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_dezyn_key != "") {
+		console.log("before design html");
+		console.trace();
 		document.getElementById("container").innerHTML = await idbGetItem("dezynor_designs", current_dezyn_key);
+		console.log("after design html");
 		dezyn_id = current_dezyn_key;
 		idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
 		loadWrapperStyles();
@@ -919,23 +911,11 @@ async function loadCurrentDezyn() {
 		document.getElementById("select_folders").value = dezyn_id.split("|")[1];
 
 	} else {
-		
+		styleWrapper();
 	}
 
 }
 
-
-function changetab(num) {
-	
-	let all_tabs = document.querySelectorAll(".tab_panels aside");
-	for (let i = 1; i <= all_tabs.length; i++) {
-		document.getElementById("tab_btn" + i).style.backgroundColor = "#FFF";
-		document.getElementById("tab_panel" + i).style.display = "none";
-	}
-
-	document.getElementById("tab_btn" + num).style.backgroundColor = "PowderBlue";
-	document.getElementById("tab_panel" + num).style.display = "block";
-}
 
 async function loadSelectFolders() {
 	let select_folders = document.getElementById("select_folders");

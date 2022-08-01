@@ -1,4 +1,5 @@
 
+
 let database_name = "dezynordb";
 let openRequest = indexedDB.open(database_name, 1);
 
@@ -25,21 +26,21 @@ openRequest.onerror = function() {
 };
 
 openRequest.onsuccess = function() {
-	let db = openRequest.result;
-	db.onerror = function() {console.log("Error: ", db.error);};
-
-
-	db.onversionchange = function() {
-		db.close();
-		alert("Database is outdated, please reload the page.")
-		return
-	};
-	
-	// load app settings
-	idbGetItem("dezynor_settings", "max_upload_width").then(function(result) {max_resize_width = result;});
-	idbGetItem("dezynor_settings", "max_upload_height").then(function(result) {max_resize_height = result;});
-
+	if (window.location.href.endsWith("/") || window.location.href.endsWith("index.html")) {
+		console.log("home OpenRequest onsuccess");
+		let db = openRequest.result;
+		db.onerror = function() {console.log("Error: ", db.error);};
+		db.onversionchange = function() {
+			db.close();
+			alert("Database is outdated, please reload the page.")
+			return
+		};
+		// load app settings
+		idbGetItem("dezynor_settings", "max_upload_width").then(function(result) {max_resize_width = result;});
+		idbGetItem("dezynor_settings", "max_upload_height").then(function(result) {max_resize_height = result;});
+	}
 };
+
 
 async function idbPutItem(store, object) {
 	let db = openRequest.result;
@@ -49,13 +50,12 @@ async function idbPutItem(store, object) {
 		let request = store.put(object);
         request.onsuccess = function() {
 			resolve(true);
-        }		
+        }
 	});
 }
 
-
-
 async function idbGetItem(store, key) {
+	await delay(200);
 	let db = openRequest.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);
@@ -68,7 +68,6 @@ async function idbGetItem(store, key) {
         }
     });
 }
-
 
 async function idbRemoveItem(store, key) {
 	let db = openRequest.result;
