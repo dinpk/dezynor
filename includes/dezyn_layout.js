@@ -746,16 +746,16 @@ function styleLayout(parameters) {
 
 function preview(status) {
 
-	hideHandles();
-
 	let all_sections = document.querySelectorAll("section");
 
 	if (status == "on") {
+		hideHandles();
 		for (i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "none";
 		}
 		document.getElementById("wrapper").style.outline = "";
 	} else {
+		showHandles();
 		for (i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "1px dashed gray";
 		}

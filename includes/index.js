@@ -15,13 +15,45 @@ let current_folder = "";
 
 function selectSection(num) {}
 
+async function search() {
+
+	let search = document.getElementById("search").value.trim();
+	if (search.length == 0) return;
+
+	document.getElementById("disclaimer").style.display = "none";
+	document.getElementById("folder_label").innerHTML = "";
+	document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
+	
+	let all_designs = await idbGetAllItems("dezynor_designs");
+
+	let searched_dezyns = "";
+	for (i = 0; i < all_designs.length; i++) {
+		let key = all_designs[i].design_key;
+		let value = all_designs[i].value;
+		if (value.indexOf(search) > -1) {
+			let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('dezyn.html?key=" + key + "');\"");
+			item = item.replace(/((background-image: url\(.*?\);))/g, '');
+			searched_dezyns += item;
+		}
+
+	}
+	
+	document.getElementById("dezyns").innerHTML = searched_dezyns;
+
+	let message = await hideMessage();
+	document.getElementById("message").innerHTML = message;
+	let folder_label = "Search results for '" + search + "' ";
+	document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";	
+	
+}
+
+
 async function addFolder() {
 
-	let new_folder = document.getElementById("new_folder").value;
-	new_folder = new_folder.replaceAll(",", " ");
-	new_folder = new_folder.trim();
 	
-	if (new_folder.length < 1) return;
+	let new_folder = prompt("Enter new folder name");
+	if (!new_folder || new_folder.trim().length == 0) return;
+	
 	
 	new_folder = new_folder.replaceAll(" ", "-");
 	
@@ -132,6 +164,7 @@ async function loadFolders() {
 		let folder_name = folders[i].trim();
 		folders_html = folders_html + "<div><a onclick=\"showFolderDezyns('" + folder_name + "');\"> <img src='images/icon_folder.png'>" + folder_name + "</a></div>";
 	}
+	folders_html = folders_html + "<img id='icon_folder_new' src='images/icon_folder_new.png' onclick='addFolder();'>";
 	document.getElementById("folders").innerHTML = folders_html;		
 }
 
@@ -140,6 +173,7 @@ async function showFolderDezyns(folder) {
 	current_folder = folder;
 	
 	document.getElementById("disclaimer").style.display = "none";
+	document.getElementById("search").value = "";
 	document.getElementById("folder_label").innerHTML = "";
 	document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
 	
