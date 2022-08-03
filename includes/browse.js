@@ -20,7 +20,6 @@ async function search() {
 	let search = document.getElementById("search").value.trim();
 	if (search.length == 0) return;
 
-	document.getElementById("disclaimer").style.display = "none";
 	document.getElementById("folder_label").innerHTML = "";
 	document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
 	
@@ -40,8 +39,7 @@ async function search() {
 	
 	document.getElementById("dezyns").innerHTML = searched_dezyns;
 
-	let message = await hideMessage();
-	document.getElementById("message").innerHTML = message;
+	document.getElementById("message").innerHTML = await hideMessage();
 	let folder_label = "Search results for '" + search + "' ";
 	document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";	
 	
@@ -172,7 +170,6 @@ async function showFolderDezyns(folder) {
 	
 	current_folder = folder;
 	
-	document.getElementById("disclaimer").style.display = "none";
 	document.getElementById("search").value = "";
 	document.getElementById("folder_label").innerHTML = "";
 	document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
@@ -193,8 +190,7 @@ async function showFolderDezyns(folder) {
 	
 	document.getElementById("dezyns").innerHTML = folder_dezyns;
 
-	let message = await hideMessage();
-	document.getElementById("message").innerHTML = message;
+	document.getElementById("message").innerHTML = await hideMessage();
 	let folder_label = "<b>" + folder + "</b> ";
 	folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
 	folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
@@ -202,8 +198,3 @@ async function showFolderDezyns(folder) {
 
 }
 
-function hideMessage() {
-  return new Promise(resolve => {
-		setTimeout(() => {resolve("");}, 0);
-  });
-}

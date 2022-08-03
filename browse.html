@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Home - Dezynor</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="includes/dezyn.css?v=20220801">
+		<link rel="stylesheet" href="includes/styles.css?v=20220801">
+		<script src="includes/indexeddb.js?v=20220801"></script>
+		<script src="includes/common.js?v=20220801"></script>
+		<script src="includes/browse.js?v=20220801"></script>
+	</head>
+	<body>
+
+		<script>writeHeader();</script>
+		
+		<table id="dezyns_table">
+			<tr>
+				<td>
+					<div id="folders_wrapper">
+						<input type="text" id="search" required><br>
+						<button onclick="search();">Search</button> 
+						<div id="message"></div>
+						<div id="folders"></div>
+					</div>
+				</td>
+				<td>
+					<div id="folder_label"></div>
+					<div  id="dezyns"></div>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
+

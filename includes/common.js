@@ -2,7 +2,7 @@ function writeHeader() {
 	document.write(
 		"<header> " + 
 		"<div><img id='logo' src='images/logo.png'></div> " + 
-		"<div><a href='index.html'>Browse</a></div> " + 
+		"<div><a href='browse.html'>Browse</a></div> " + 
 		"<div><a href='dezyn.html' target='_blank'>New Dezyn</a></div> " + 
 		"<div><a href='fonts.html'>Fonts</a></div> " + 
 		"<div><a href='import-export.html'>Import/Export</a></div> " + 
@@ -20,6 +20,11 @@ function showMessage(msg, color) {
 	setTimeout(function() {document.getElementsByTagName("body")[0].removeChild(message);},3000);
 }
 
+function hideMessage() {
+  return new Promise(resolve => {
+		setTimeout(() => {resolve("");}, 0);
+  });
+}
 
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));

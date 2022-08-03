@@ -4,10 +4,32 @@
 		<title>Settings - Dezynor</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="includes/common.css?v=20220801">
 		<script src="includes/indexeddb.js?v=20220801"></script>
 		<script src="includes/common.js?v=20220801"></script>
-		<script src="includes/settings.js?v=20220801"></script>
+		<script>
+			window.onload = async function() {
+				await delay(500);
+				loadSettings();
+			}
+
+			function saveSettings() {
+				let max_upload_width = document.getElementById("max_upload_width").value;
+				let max_upload_height = document.getElementById("max_upload_height").value;
+				idbPutItem("dezynor_settings", {setting_key:"max_upload_width", value:max_upload_width});
+				idbPutItem("dezynor_settings", {setting_key:"max_upload_height", value:max_upload_height});
+				showMessage("Saved", "DarkGreen");
+			}
+
+			function loadSettings() {
+				idbGetItem("dezynor_settings", "max_upload_width").then(function(result) {
+					document.getElementById("max_upload_width").value = result;
+				});
+				idbGetItem("dezynor_settings", "max_upload_height").then(function(result) {
+					document.getElementById("max_upload_height").value = result;
+				});
+
+			}
+		</script>
 	</head>
 	<body>
 		<script>writeHeader();</script>
