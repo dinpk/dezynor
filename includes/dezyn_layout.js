@@ -1,6 +1,3 @@
-
-// console.trace(); // put before the statement that generates error
-
 window.onload = function() {
 	setRandomWrapperColor();
 	loadSelectFolders();
@@ -176,7 +173,6 @@ function selectSection(counter) {
 	unselectSections();
 	selected_section = document.getElementById("section" + counter);
 	
-	//move.addEventListener("onmousedown", onMouseDown4Move(counter));
 	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
 	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + counter + "');");
 	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + counter + "');");
@@ -188,7 +184,6 @@ function selectSection(counter) {
 	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + counter + "');");
 
 	selected_section.style.outline = "4px dashed yellow"
-	//selected_section.innerHTML = selected_section.innerHTML.replace(/<\/?span[^>]*>/g, "");
 	colorable_element = selected_section;
 	loadSectionStyles();
 	reAlignSectionHandles();
@@ -260,12 +255,12 @@ function unselectSections() {
 }
 
 function pasteText(e) {
-	e.preventDefault(); // cancel paste
-	var text = (e.originalEvent || e).clipboardData.getData('text/plain'); // get text representation of clipboard
-	document.execCommand("insertHTML", false, text); // insert text manually
+	e.preventDefault();
+	var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+	document.execCommand("insertHTML", false, text); 
 }
 
-function onMouseDown4Move(counter) { // move
+function onMouseDown4Move(counter) {
 
 	hideHandles();
 	let section = document.getElementById("section" + counter);
@@ -301,7 +296,7 @@ function onMouseDown4ResizeTopRight(counter) {
 
 		section.style.width = (event.pageX - 20) - parseInt(section.style.left.replace("px", "")) + "px";
 
-		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20); // how much moved from previous top
+		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
 		resize_top_right.style.top = (event.pageY - 25) + "px";
 		section.style.top = (event.pageY - 20) + "px";
 		section.style.height =  parseInt(section.style.height.replace("px", "")) + y_diff + "px";
@@ -327,11 +322,8 @@ function onMouseDown4ResizeCenterRight(counter) {
 	let section = document.getElementById("section" + counter);
 	
 	function onMouseMove(event) {
-		//resize_center_right.style.top = (event.pageY - 25) + "px";
 		resize_center_right.style.left = (event.pageX - 25) + "px";
-
 		section.style.width = (event.pageX - 20) - parseInt(section.style.left.replace("px", "")) + "px";
-		//section.style.height = (event.pageY - 20) - parseInt(section.style.top.replace("px", "")) + "px";
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
@@ -354,7 +346,7 @@ function onMouseDown4ResizeCenterLeft(counter) {
 	function onMouseMove(event) {
 		resize_center_left.style.left = (event.pageX - 30) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); // how much moved from previous left
+		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); 
 		section.style.left = (event.pageX - 20) + "px";
 		section.style.width =  parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 	}
@@ -379,7 +371,7 @@ function onMouseDown4ResizeCenterTop(counter) {
 	function onMouseMove(event) {
 		resize_center_top.style.top = (event.pageY - 30) + "px";
 
-		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20); // how much moved from previous top
+		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
 		section.style.height = parseInt(section.style.height.replace("px", "")) + y_diff + "px";
 		section.style.top = (event.pageY - 20) + "px";
 	}
@@ -455,11 +447,11 @@ function onMouseDown4ResizeTopLeft(counter) {
 		resize_top_left.style.left = (event.pageX - 25) + "px";
 		resize_top_left.style.top = (event.pageY - 25) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); // how much moved from previous left
+		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
 		section.style.width = parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 		section.style.left = (event.pageX - 20) + "px";
 		
-		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20); // how much moved from previous top
+		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
 		section.style.height = parseInt(section.style.height.replace("px", "")) + y_diff + "px";
 		section.style.top = (event.pageY - 20) + "px";
 	}
@@ -486,7 +478,7 @@ function onMouseDown4ResizeBottomLeft(counter) {
 		resize_bottom_left.style.left = (event.pageX - 25) + "px";
 		resize_bottom_left.style.top = (event.pageY - 25) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); // how much moved from previous left
+		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
 		section.style.width =  parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 		section.style.left = (event.pageX - 20) + "px";
 
@@ -539,7 +531,6 @@ function reAlignSectionHandles() {
 }
 
 
-// width and height
 function styleResizeFullWidth() {
 	selected_section.style.width = document.getElementById("wrapper").style.width;
 	selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -581,7 +572,7 @@ function styleResizeQuarter() {
 	loadSectionStyles();
 }
 
-// align
+
 function styleAlignTopLeft() {
 	selected_section.style.top = document.getElementById("wrapper").style.top;
 	selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -697,7 +688,6 @@ function styleAlignVBottom() {
 	loadSectionStyles();
 }
 
-// layout
 function styleLayout(parameters) {
 	
 	let wrapper_width = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
@@ -707,7 +697,7 @@ function styleLayout(parameters) {
 	let gutter_y = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) * .04;
 
 
-	let all_sections = document.querySelectorAll("section"); // node list
+	let all_sections = document.querySelectorAll("section");
 	let section_ids = [];
 	for (d = 0; d < all_sections.length; d++) {
 		section_ids.push(all_sections[d].id);
@@ -754,8 +744,6 @@ function styleLayout(parameters) {
 	}
 }
 
-
-// preview
 function preview(status) {
 
 	hideHandles();
@@ -795,7 +783,6 @@ function dashPanelToggle() {
 		dash_panel_toggle = false;
 		preview("on");
 		hidePopupPanel();
-		//hideSectionPanels();
 	} else {
 		document.getElementById("dash_panel_wrapper").style.right = "0";
 		document.getElementById("dash_panel_toggle").innerHTML = "►";
@@ -890,13 +877,10 @@ async function deleteDezyn() {
 
 async function loadDezyn() {
 
-	// let current_dezyn_key = await idbGetItem("dezynor_settings", "current_design");
 	let current_dezyn_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_dezyn_key != "") {
-		console.log("before design html");
-		console.trace();
+		await delay(500);
 		document.getElementById("container").innerHTML = await idbGetItem("dezynor_designs", current_dezyn_key);
-		console.log("after design html");
 		dezyn_id = current_dezyn_key;
 		idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
 		loadWrapperStyles();
@@ -1014,6 +998,108 @@ onkeydown = function(e){
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 	//console.log(key);
+
+	KeyCode = {
+      BACKSPACE: 8,
+      TAB: 9,
+      ENTER: 13,
+      SHIFT: 16,
+      CTRL: 17,
+      ALT: 18,
+      PAUSE: 19,
+      CAPS_LOCK: 20,
+      ESCAPE: 27,
+      SPACE: 32,
+      PAGE_UP: 33,
+      PAGE_DOWN: 34,
+      END: 35,
+      HOME: 36,
+      LEFT_ARROW: 37,
+      UP_ARROW: 38,
+      RIGHT_ARROW: 39,
+      DOWN_ARROW: 40,
+      INSERT: 45,
+      DELETE: 46,
+      KEY_0: 48,
+      KEY_1: 49,
+      KEY_2: 50,
+      KEY_3: 51,
+      KEY_4: 52,
+      KEY_5: 53,
+      KEY_6: 54,
+      KEY_7: 55,
+      KEY_8: 56,
+      KEY_9: 57,
+      KEY_A: 65,
+      KEY_B: 66,
+      KEY_C: 67,
+      KEY_D: 68,
+      KEY_E: 69,
+      KEY_F: 70,
+      KEY_G: 71,
+      KEY_H: 72,
+      KEY_I: 73,
+      KEY_J: 74,
+      KEY_K: 75,
+      KEY_L: 76,
+      KEY_M: 77,
+      KEY_N: 78,
+      KEY_O: 79,
+      KEY_P: 80,
+      KEY_Q: 81,
+      KEY_R: 82,
+      KEY_S: 83,
+      KEY_T: 84,
+      KEY_U: 85,
+      KEY_V: 86,
+      KEY_W: 87,
+      KEY_X: 88,
+      KEY_Y: 89,
+      KEY_Z: 90,
+      LEFT_META: 91,
+      RIGHT_META: 92,
+      SELECT: 93,
+      NUMPAD_0: 96,
+      NUMPAD_1: 97,
+      NUMPAD_2: 98,
+      NUMPAD_3: 99,
+      NUMPAD_4: 100,
+      NUMPAD_5: 101,
+      NUMPAD_6: 102,
+      NUMPAD_7: 103,
+      NUMPAD_8: 104,
+      NUMPAD_9: 105,
+      MULTIPLY: 106,
+      ADD: 107,
+      SUBTRACT: 109,
+      DECIMAL: 110,
+      DIVIDE: 111,
+      F1: 112,
+      F2: 113,
+      F3: 114,
+      F4: 115,
+      F5: 116,
+      F6: 117,
+      F7: 118,
+      F8: 119,
+      F9: 120,
+      F10: 121,
+      F11: 122,
+      F12: 123,
+      NUM_LOCK: 144,
+      SCROLL_LOCK: 145,
+      SEMICOLON: 186,
+      EQUALS: 187,
+      COMMA: 188,
+      DASH: 189,
+      PERIOD: 190,
+      FORWARD_SLASH: 191,
+      GRAVE_ACCENT: 192,
+      OPEN_BRACKET: 219,
+      BACK_SLASH: 220,
+      CLOSE_BRACKET: 221,
+      SINGLE_QUOTE: 222
+    };
 	
 	// http://gcctech.org/csc/javascript/javascript_keycodes.htm
 	
@@ -1101,6 +1187,5 @@ document.onkeyup = function(e) {
 		}
 		element.dispatchEvent(new Event("change"));
 	}
-	
 	
 };

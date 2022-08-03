@@ -14,7 +14,7 @@ openRequest.onupgradeneeded = function() { // runs once when the app is loaded f
 	let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 	// insert initial data
 	dezynor_settings.add({setting_key: "folders", value: ["default"]});
-	dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google"]});
+	dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});
 	dezynor_settings.add({setting_key: "max_upload_width",value: max_resize_width});
 	dezynor_settings.add({setting_key: "max_upload_height",value: max_resize_height});
 	dezynor_settings.add({setting_key: "current_design", value: ""});
@@ -27,7 +27,6 @@ openRequest.onerror = function() {
 
 openRequest.onsuccess = function() {
 	if (window.location.href.endsWith("/") || window.location.href.endsWith("index.html")) {
-		console.log("home OpenRequest onsuccess");
 		let db = openRequest.result;
 		db.onerror = function() {console.log("Error: ", db.error);};
 		db.onversionchange = function() {
@@ -55,7 +54,7 @@ async function idbPutItem(store, object) {
 }
 
 async function idbGetItem(store, key) {
-	await delay(200);
+	//await delay(1000);
 	let db = openRequest.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);

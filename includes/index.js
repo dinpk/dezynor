@@ -1,8 +1,10 @@
+/*
 document.addEventListener('visibilitychange', function(ev) { 
 	if (current_folder != "" && document.visibilityState == "visible") {
 		showFolderDezyns(current_folder);
 	}
 });
+*/
 
 window.onload = async function() {
 	await delay(500);
@@ -10,11 +12,6 @@ window.onload = async function() {
 }
 
 let current_folder = "";
-
-async function setCurrentDezyn(key) {
-	//await idbPutItem("dezynor_settings", {setting_key:"current_design", value: key});
-	//window.open("dezyn.html");
-}
 
 function selectSection(num) {}
 
@@ -46,6 +43,11 @@ async function addFolder() {
 
 async function deleteFolder(folder_name) {
 	
+	if (folder_name == "default") {
+		alert("'default' folder can not be deleted.");
+		return;
+	}
+	
 	let all_designs = await idbGetAllItems("dezynor_designs");
 	for (i = 0; i < all_designs.length; i++) {
 		let design_key = all_designs[i].design_key;
@@ -72,6 +74,11 @@ async function deleteFolder(folder_name) {
 }
 
 async function renameFolder(folder_name) {
+
+	if (folder_name == "default") {
+		alert("'default' folder can not be renamed.");
+		return;
+	}
 
 	// rename folder
 	
@@ -134,7 +141,7 @@ async function showFolderDezyns(folder) {
 	
 	document.getElementById("disclaimer").style.display = "none";
 	document.getElementById("folder_label").innerHTML = "";
-	document.getElementById("message").innerHTML = "Loading...";
+	document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
 	
 	let all_designs = await idbGetAllItems("dezynor_designs");
 
@@ -143,7 +150,6 @@ async function showFolderDezyns(folder) {
 		let key = all_designs[i].design_key;
 		let key_folder = key.split("|")[1];
 		if (folder == key_folder) {
-			//let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick='setCurrentDezyn(this.id);'");
 			let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('dezyn.html?key=" + key + "');\"");
 			item = item.replace(/((background-image: url\(.*?\);))/g, '');
 			folder_dezyns += item;
@@ -153,7 +159,7 @@ async function showFolderDezyns(folder) {
 	
 	document.getElementById("dezyns").innerHTML = folder_dezyns;
 
-	let message = await hideMessage(); // await
+	let message = await hideMessage();
 	document.getElementById("message").innerHTML = message;
 	let folder_label = "<b>" + folder + "</b> ";
 	folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
@@ -164,6 +170,6 @@ async function showFolderDezyns(folder) {
 
 function hideMessage() {
   return new Promise(resolve => {
-		setTimeout(() => {resolve("");}, 0); // setTimeOut is put at the end of the rendering queue
+		setTimeout(() => {resolve("");}, 0);
   });
 }
