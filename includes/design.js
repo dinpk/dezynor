@@ -20,7 +20,7 @@ let resize_center_top;
 let resize_center_bottom;
 
 function generateDeisgnId() {
-	return "design-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+	return "dezyn-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 }
 
 
@@ -848,22 +848,50 @@ function setZIndex(element) {
 
 
 async function saveDezyn() {
-	await idbRemoveItem("dezynor_designs", design_id);
-	let selected_folder = document.getElementById("select_folders").value;
-	design_id = design_id.split("|")[0] + "|" + selected_folder;
-	idbPutItem("dezynor_designs", {design_key:design_id, value:document.getElementById("container").innerHTML});
+	let object = await idbGetItem("dezynor_designs", design_id);
+	let created = object.created;
+	let modified = new Date().getTime();
+	let folder = document.getElementById("select_folders").value;
+	let data = document.getElementById("container").innerHTML;
+	let updated_object = {
+		created:created,
+		modified:modified,
+		folder:folder,
+		data:data,
+		keywords:""
+	}
+	await idbPutItem("dezynor_designs", {design_key:design_id, value:updated_object});
+	
 	showMessage("Saved", "Green");
 }
 
+/*
 function newDezyn() {
-	idbPutItem("dezynor_designs", {design_key:design_id, value:document.getElementById("container").innerHTML});
+	let data = document.getElementById("container").innerHTML;
+	let object = {
+		created:created,
+		modified:modified,
+		folder:folder,
+		data:data,
+		keywords:""
+	}	
+	idbPutItem("dezynor_designs", {design_key:design_id, value:object});
 	window.location.href = "index.html";
 }
+*/
 
 function duplicateDezyn() {
-	let selected_folder = document.getElementById("select_folders").value;
-	let new_design_id = generateDeisgnId() + "|" + selected_folder;
-	idbPutItem("dezynor_designs", {design_key:new_design_id, value:document.getElementById("container").innerHTML});
+	let folder = document.getElementById("select_folders").value;
+	let new_design_id = generateDeisgnId();
+	let data = document.getElementById("container").innerHTML;
+	let object = {
+		created:new Date().getTime(),
+		modified:new Date().getTime(),
+		folder:folder,
+		data:data,
+		keywords:""
+	}	
+	idbPutItem("dezynor_designs", {design_key:new_design_id, value:object});
 	alert("Duplicated successfully!");
 }
 
@@ -880,9 +908,9 @@ async function loadDezyn() {
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
 		await delay(500);
-		document.getElementById("container").innerHTML = await idbGetItem("dezynor_designs", current_design_key);
+		let object = await idbGetItem("dezynor_designs", current_design_key);
+		document.getElementById("container").innerHTML = object.data;
 		design_id = current_design_key;
-		idbPutItem("dezynor_settings", {setting_key:"current_design", value:""});
 		loadWrapperStyles();
 		let all_sections = document.querySelectorAll("section");
 		if (all_sections.length > 0) {
@@ -892,7 +920,7 @@ async function loadDezyn() {
 			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
 			section_counter = last_section_number;
 		}
-		document.getElementById("select_folders").value = design_id.split("|")[1];
+		document.getElementById("select_folders").value = object.folder;
 
 	} else {
 		styleWrapper();

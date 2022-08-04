@@ -2,12 +2,7 @@
 <html>
 	<head>
 		<title>Import / Export - Dezynor</title>
-		<style>
-			#importexport-table {
-				margin:20px 0 0 50px;
-				line-height:300%;
-			}
-		</style>
+		<link rel="stylesheet" href="includes/styles.css?v=20220722">
 		<script src="includes/indexeddb.js"></script>
 		<script src="includes/common.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
@@ -25,8 +20,9 @@
 				zip_items.file("settings.backup", JSON.stringify(all_settings));
 			
 				let all_designs = await idbGetAllItems("dezynor_designs");
-				for (i = 0; i < all_designs.length; i++) {
-					zip_items.file(all_designs[i].design_key + ".backup", all_designs[i].value);
+				let total_exported = all_designs.length;
+				for (i = 0; i < total_exported; i++) {
+					zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
 				}
 
 				let all_images = await idbGetAllItems("dezynor_images");
@@ -42,74 +38,79 @@
 					}}).then(function(content) {
 						saveAs(content, file_name + ".zip");
 						progress_bar.style.visibility = "hidden";
-						document.getElementById("message").innerHTML = "Exported data successfully";
+						document.getElementById("message").innerHTML = "<div class='pad20'>Exported " + total_exported + " designs.</div>";
 					});
 				
 			}
-				
+
+
+
+			let total_files = 0;
+			let total_imported = 0;
+			
 			function importData() {
+			
+				let import_files = document.getElementById("import_files").files;
+				if (import_files.length == 0) return;
 				
-				let backup_files = document.getElementById('backup_files').files;
+				total_files = import_files.length; // exclude setting file
+
+				document.getElementById("progress_bar").style.visibility = "visible";
 				
-				if (backup_files.length == 0) return;
-				
-				let progress_bar = document.getElementById("progress_bar");
-				progress_bar.style.visibility = "visible";
-				
-				
-				Array.from(backup_files).forEach(file => {
+				Array.from(import_files).forEach(file => {
 					
 					let reader = new FileReader();
 					reader.onload = async function(e) {
-						
 						let file_name = file.name;
 						let file_data = e.target.result;
 						
-						// import settings
-						if (file_name == "settings.backup") {
+						if (file_name.indexOf("dezyn-") == 0) {
+							let key = file_name.replace(".backup", "");
+							let object = JSON.parse(file_data);
+							console.log(key);
+							if (await idbPutItem("dezynor_designs", {design_key:key, value:object})) {
+								total_imported++;
+								showProgress();
+							}
+
+						} else if (file_name.indexOf("image-") == 0) {
+							let key_of_image = file_name.replace(".backup", "");
+							let new_blob = dataURItoBlob(file_data);
+							if (await idbPutItem("dezynor_images", {image_key:key_of_image, value:new_blob})) {
+								total_imported++;
+								showProgress();
+							}
+						} else if (file_name == "settings.backup") {
 							let settings = JSON.parse(file_data);
+							total_files = total_files + settings.length - 1;
 							for (i = 0; i < settings.length; i++) {
-								// console.log(settings[i].setting_key + " - " + settings[i].value);
 								let key_of_setting = settings[i].setting_key;
 								let value_of_setting = settings[i].value;
-								idbPutItem("dezynor_settings", {setting_key:key_of_setting, value: value_of_setting});
+								if (await idbPutItem("dezynor_settings", {setting_key:key_of_setting, value: value_of_setting})) {
+									total_imported++;
+									showProgress();
+								}
 							}
-						}
-						// import designs
-						if (file_name.indexOf("design-") == 0) {
-							let key_of_design = file_name.replace(".backup", "");
-							idbPutItem("dezynor_designs", {design_key:key_of_design, value: file_data});
 						}
 						
 					}
-					
 					reader.readAsText(file);
 				});
 
-
-
-				// import images
-				Array.from(backup_files).forEach(file => {
-					
-					let reader = new FileReader();
-					reader.onload = async function(e) {
-						
-						let file_name = file.name;
-						let file_data = e.target.result;
-
-						if (file_name.indexOf("image-") == 0) {
-							let key_of_image = file_name.replace(".backup", "");
-							let new_blob = dataURItoBlob(file_data);
-							idbPutItem("dezynor_images", {image_key:key_of_image, value:new_blob});
-						}
-						
-						progress_bar.style.visibility = "hidden";
-						document.getElementById("backup_files").value = "";
-						document.getElementById("message").innerHTML = "Imported data successfully";
+				let timer = setInterval(function() {
+					if (total_files == total_imported) {
+						document.getElementById("message").innerHTML = "<div class='pad20'>Imported data successfully.</div>";
+						total_files = 0;
+						total_imported = 0;
+						document.getElementById("progress_bar").style.visibility = "hidden";
+						document.getElementById("import_files").value = "";
+						clearInterval(timer);
 					}
-					reader.readAsDataURL(file);
-				});
-
+				}, 1000);
+			}
+			
+			function showProgress() {
+				document.getElementById("message").innerHTML = "<div class='pad20'>Importing " + total_imported + " of " + total_files + "</div>";
 			}
 			
 			function dataURItoBlob(dataURI) {
@@ -123,33 +124,19 @@
 				var blob = new Blob([ab], {type: mimeString});
 				return blob;
 			}		
-				
-
+							
 		</script>
 	</head>
 	<body>
-		
 		<script>writeHeader();</script>
-		
 		<div id="message"></div>
-		
-		<table id="importexport-table">
-			<tr>
-				<td>Export data</td>
-				<td><input type="button" value="Export" onclick="exportData();"></td>
-			</tr>
-			<tr>
-				<td>Import data</td>
-				<td><input type="file" name="backup_files" id="backup_files" accept=".backup" onchange="importData();" multiple></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<div id="progress_bar" style="visibility:hidden">
-						<progress></progress>
-					</div>				
-				</td>
-			</tr>
-		</table>
+		<div id="progress_bar" class="padleft20" style="visibility:hidden"><progress></progress></div>				
+		<div class="pad20">
+			<input type="button" value="Export data" onclick="exportData();">
+			<br><br>
+			<input type="file" name="import_files" id="import_files" accept=".backup" onchange="importData();" multiple style="display:none;">
+			<input type="button" value="Import data" onclick="document.getElementById('import_files').click();">
+		</div>
+
 	</body>
 </html>

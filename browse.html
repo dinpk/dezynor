@@ -9,13 +9,12 @@
 		<script src="includes/indexeddb.js?v=20220801"></script>
 		<script src="includes/common.js?v=20220801"></script>
 		<script>
-			/*
+
 			document.addEventListener('visibilitychange', function(ev) { 
 				if (current_folder != "" && document.visibilityState == "visible") {
 					showFolderDezyns(current_folder);
 				}
 			});
-			*/
 
 			window.onload = async function() {
 				await delay(500);
@@ -39,9 +38,9 @@
 				let searched_designs = "";
 				for (i = 0; i < all_designs.length; i++) {
 					let key = all_designs[i].design_key;
-					let value = all_designs[i].value;
-					if (value.indexOf(search) > -1) {
-						let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
+					let data = all_designs[i].value.data;
+					if (data.indexOf(search) > -1) {
+						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
 						item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						searched_designs += item;
 					}
@@ -89,8 +88,9 @@
 				let all_designs = await idbGetAllItems("dezynor_designs");
 				for (i = 0; i < all_designs.length; i++) {
 					let design_key = all_designs[i].design_key;
-					let design_data = all_designs[i].value;
-					if (design_key.split("|")[1] == folder_name) {
+					let design_folder = all_designs[i].value.folder;
+					
+					if (design_folder == folder_name) {
 						alert("Folder '" + folder_name + "' is not empty");
 						return;
 					}
@@ -142,18 +142,17 @@
 				}
 				await idbPutItem("dezynor_settings", {setting_key:"folders", value:folders});
 				loadFolders();
-				document.getElementById("new_folder").focus();
 
 				// update design keys
-				
 				let all_designs = await idbGetAllItems("dezynor_designs");
 				for (i = 0; i < all_designs.length; i++) {
 					let design_key = all_designs[i].design_key;
-					let design_data = all_designs[i].value;
-					if (design_key.split("|")[1] == folder_name) {
+					let object = all_designs[i].value;
+					let design_folder = object.folder;
+					if (design_folder == folder_name) {
 						await idbRemoveItem("dezynor_designs", design_key);
-						let new_design_key = design_key.split("|")[0] + "|" + new_folder_name;
-						await idbPutItem("dezynor_designs", {design_key:new_design_key, value:design_data});
+						object.folder = new_folder_name;
+						await idbPutItem("dezynor_designs", {design_key:design_key, value:object});
 					}
 				}
 
@@ -186,10 +185,12 @@
 
 				let folder_designs = "";
 				for (i = 0; i < all_designs.length; i++) {
-					let key = all_designs[i].design_key;
-					let key_folder = key.split("|")[1];
-					if (folder == key_folder) {
-						let item = all_designs[i].value.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
+					let design_key = all_designs[i].design_key;
+					let object = all_designs[i].value;
+					let design_folder = object.folder;
+					let data = object.data;
+					if (folder == design_folder) {
+						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
 						item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						folder_designs += item;
 					}
