@@ -6,7 +6,9 @@ window.onload = function() {
 	loadDezyn();
 }
 
-let design_id = generateDeisgnId() + "|default";
+let design_id = generateDeisgnId();
+let design_object;
+
 let section_counter = 0;
 let selected_section;
 let move;
@@ -19,8 +21,9 @@ let resize_center_left;
 let resize_center_top;
 let resize_center_bottom;
 
+
 function generateDeisgnId() {
-	return "dezyn-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+	return "dezyn-" + new Date().getTime();
 }
 
 
@@ -848,29 +851,47 @@ function setZIndex(element) {
 
 
 async function saveDezyn() {
-	let object = await idbGetItem("dezynor_designs", design_id);
-	let created = object.created;
+
 	let modified = new Date().getTime();
 	let folder = document.getElementById("select_folders").value;
 	let data = document.getElementById("container").innerHTML;
-	let updated_object = {
-		created:created,
-		modified:modified,
-		folder:folder,
-		data:data,
-		keywords:""
+
+	if (design_object) { // set in loadDezyn()
+		design_object = await idbGetItem("dezynor_designs", design_id);
+		let created = design_object.created;
+		let updated_object = {
+			created:created,
+			modified:modified,
+			folder:folder,
+			data:data,
+			keywords:""
+		}
+		await idbPutItem("dezynor_designs", {design_key:design_id, value:updated_object});
+		design_object = updated_object;
+		showMessage("Updated design", "Green");
+
+	} else {
+
+		let created = new Date().getTime();
+		let new_object = {
+			created:created,
+			modified:modified,
+			folder:folder,
+			data:data,
+			keywords:""
+		}
+		await idbPutItem("dezynor_designs", {design_key:design_id, value:new_object});
+		design_object = new_object;
+		showMessage("Saved design", "Green");
 	}
-	await idbPutItem("dezynor_designs", {design_key:design_id, value:updated_object});
-	
-	showMessage("Saved", "Green");
 }
 
 /*
 function newDezyn() {
 	let data = document.getElementById("container").innerHTML;
 	let object = {
-		created:created,
-		modified:modified,
+		created:new Date().getTime(),
+		modified:new Date().getTime(),
 		folder:folder,
 		data:data,
 		keywords:""
@@ -909,6 +930,7 @@ async function loadDezyn() {
 	if (current_design_key != "") {
 		await delay(500);
 		let object = await idbGetItem("dezynor_designs", current_design_key);
+		design_object = object;
 		document.getElementById("container").innerHTML = object.data;
 		design_id = current_design_key;
 		loadWrapperStyles();
