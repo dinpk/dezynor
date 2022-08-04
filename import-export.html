@@ -76,7 +76,7 @@
 							}
 						}
 						// import designs
-						if (file_name.indexOf("dezyn-") == 0) {
+						if (file_name.indexOf("design-") == 0) {
 							let key_of_design = file_name.replace(".backup", "");
 							idbPutItem("dezynor_designs", {design_key:key_of_design, value: file_data});
 						}

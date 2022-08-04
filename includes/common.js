@@ -3,7 +3,7 @@ function writeHeader() {
 		"<header> " + 
 		"<div><img id='logo' src='images/logo.png'></div> " + 
 		"<div><a href='browse.html'>Browse</a></div> " + 
-		"<div><a href='dezyn.html' target='_blank'>New Dezyn</a></div> " + 
+		"<div><a href='design.html' target='_blank'>New Dezyn</a></div> " + 
 		"<div><a href='fonts.html'>Fonts</a></div> " + 
 		"<div><a href='import-export.html'>Import/Export</a></div> " + 
 		"<div><a href='settings.html'>Settings</a></div> " + 

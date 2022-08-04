@@ -92,18 +92,18 @@ td {
 }
 
 
-#dezyns_table {
+#designs_table {
 	width:100%;
 	border-collapse:collapse;
 	min-height:90vh;
 }
 
-#dezyns_table td {
+#designs_table td {
 	vertical-align:top;
 	box-sizing:border-box;
 }
 
-#dezyns_table td:first-child {
+#designs_table td:first-child {
 	background-color:#DDD;
 	padding:7px 15px 15px 7px;
 	width:170px;
@@ -192,7 +192,7 @@ input#search {
 }
 
 
-#dezyns {
+#designs {
 	zoom:10%;
 	-moz-transform: scale(.10, .10);
 	-moz-transform-origin:0 0;
@@ -299,7 +299,7 @@ input#search {
 
 @media only screen and (max-width: 970px) {
 
-	#dezyns_table td:first-child {
+	#designs_table td:first-child {
 		display:none;
 	}
 	
