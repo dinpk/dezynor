@@ -1,9 +1,9 @@
 window.onload = function() {
-	setRandomWrapperColor();
+	loadDezyn();
 	loadSelectFolders();
 	loadSelectFonts();
+	setRandomWrapperColor();
 	showSectionPanel('box_section');
-	loadDezyn();
 }
 
 let design_id = generateDeisgnId();
@@ -147,7 +147,6 @@ function addSection() {
 	document.getElementById("wrapper").appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_counter;
 	setSectionDefaultStyles(document.getElementById(section_id));
-	addHandles();
 	selectSection(section_counter);
 	styleAlignTopLeft();
 	document.getElementById(section_id).focus();
@@ -935,7 +934,7 @@ async function loadDezyn() {
 
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
-		await delay(500);
+		//await delay(1000);
 		let object = await idbGetItem("dezynor_designs", current_design_key);
 		design_object = object;
 		document.getElementById("container").innerHTML = object.data;
@@ -953,6 +952,7 @@ async function loadDezyn() {
 
 	} else {
 		styleWrapper();
+		addHandles();
 	}
 
 }

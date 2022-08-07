@@ -11,14 +11,21 @@
 			window.onload = async function() {
 				await delay(500);
 				loadSettings();
-				if ("show_background_images" in localStorage) document.getElementById("show_background_images").checked = true;
 			}
 
-			function saveSettings() {
+			async function saveSettings() {
+
 				let max_upload_width = document.getElementById("max_upload_width").value;
 				let max_upload_height = document.getElementById("max_upload_height").value;
-				idbPutItem("dezynor_settings", {setting_key:"max_upload_width", value:max_upload_width});
-				idbPutItem("dezynor_settings", {setting_key:"max_upload_height", value:max_upload_height});
+				await idbPutItem("dezynor_settings", {setting_key:"max_upload_width", value:max_upload_width});
+				await idbPutItem("dezynor_settings", {setting_key:"max_upload_height", value:max_upload_height});
+
+				if (document.getElementById("show_background_images").checked) {
+					localStorage.setItem("show_background_images", "");
+				} else {
+					localStorage.removeItem("show_background_images");
+				}
+
 				showMessage("Saved", "DarkGreen");
 			}
 
@@ -30,13 +37,7 @@
 					document.getElementById("max_upload_height").value = result;
 				});
 
-			}
-			
-			function showBackgroundImages(checkbox) {
-				localStorage.setItem("show_background_images", "");
-				if (!checkbox.checked) {
-					localStorage.removeItem("show_background_images");
-				}
+				if ("show_background_images" in localStorage) document.getElementById("show_background_images").checked = true;
 			}
 			
 		</script>
@@ -76,7 +77,7 @@
 					<tr>
 						<td>Show background images</td>
 						<td>
-							<input type="checkbox" id="show_background_images" onclick="showBackgroundImages(this);">
+							<input type="checkbox" id="show_background_images">
 						</td>
 					</tr>
 					
