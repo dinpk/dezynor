@@ -11,6 +11,7 @@
 			window.onload = async function() {
 				await delay(500);
 				loadSettings();
+				if ("show_background_images" in localStorage) document.getElementById("show_background_images").checked = true;
 			}
 
 			function saveSettings() {
@@ -30,6 +31,14 @@
 				});
 
 			}
+			
+			function showBackgroundImages(checkbox) {
+				localStorage.setItem("show_background_images", "");
+				if (!checkbox.checked) {
+					localStorage.removeItem("show_background_images");
+				}
+			}
+			
 		</script>
 	</head>
 	<body>
@@ -62,6 +71,12 @@
 						<td>Max upload height</td>
 						<td>
 							<input type="number" id="max_upload_height" value="1000" min="200" title="Max Upload Height" required>
+						</td>
+					</tr>
+					<tr>
+						<td>Show background images</td>
+						<td>
+							<input type="checkbox" id="show_background_images" onclick="showBackgroundImages(this);">
 						</td>
 					</tr>
 					

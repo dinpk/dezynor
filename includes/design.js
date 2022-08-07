@@ -173,8 +173,15 @@ function getNewSectionCount() {
 
 function selectSection(counter) {
 
+	let new_selected_id = "section" + counter;
+
+	if (selected_section && selected_section.id == new_selected_id) {
+		// console.log("selecting same session " + new_selected_id);
+		return;
+	}
+	
 	unselectSections();
-	selected_section = document.getElementById("section" + counter);
+	selected_section = document.getElementById(new_selected_id);
 	
 	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
 	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + counter + "');");
