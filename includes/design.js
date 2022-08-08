@@ -1,7 +1,7 @@
 window.onload = function() {
-	loadDezyn();
 	loadSelectFolders();
 	loadSelectFonts();
+	loadDezyn();
 	setRandomWrapperColor();
 	showSectionPanel('box_section');
 }
@@ -227,12 +227,13 @@ function removeSection() {
 }
 
 function copySection() {
-	idbPutItem("dezynor_settings", {setting_key:"copied_section", value:selected_section.outerHTML});
+	//idbPutItem("dezynor_settings", {setting_key:"copied_section", value:selected_section.outerHTML});
+	localStorage.setItem("copied_section", selected_section.outerHTML);
 }
 
 async function pasteSection() {
 
-	let copied_section_string = await idbGetItem("dezynor_settings", "copied_section");
+	let copied_section_string = localStorage.getItem("copied_section");
 	let html = new DOMParser().parseFromString(copied_section_string, "text/html");
 	let sections = html.body.querySelectorAll("section");
 	let copied_section = sections[0];
@@ -892,21 +893,6 @@ async function saveDezyn() {
 	}
 }
 
-/*
-function newDezyn() {
-	let data = document.getElementById("container").innerHTML;
-	let object = {
-		created:new Date().getTime(),
-		modified:new Date().getTime(),
-		folder:folder,
-		data:data,
-		keywords:""
-	}	
-	idbPutItem("dezynor_designs", {design_key:design_id, value:object});
-	window.location.href = "index.html";
-}
-*/
-
 function duplicateDezyn() {
 	let folder = document.getElementById("select_folders").value;
 	let new_design_id = generateDeisgnId();
@@ -934,7 +920,6 @@ async function loadDezyn() {
 
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
-		//await delay(1000);
 		let object = await idbGetItem("dezynor_designs", current_design_key);
 		design_object = object;
 		document.getElementById("container").innerHTML = object.data;
@@ -1321,10 +1306,8 @@ function styleBrowseImage(url_element_id, file_element_id) {
 			} catch (e) {
 				console.log(e);
 			}	
-		}
-		// image.src = e.target.result;
-	}
-	// reader.readAsDataURL(file);
+		} // image.src = e.target.result;
+	} // reader.readAsDataURL(file);
 }
 
 function styleBackgroundImageSameColor() {

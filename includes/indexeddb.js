@@ -3,22 +3,18 @@
 let database_name = "dezynordb";
 let openRequest = indexedDB.open(database_name, 1);
 
-let max_resize_width = "1000";
-let max_resize_height = "1000";
-
-openRequest.onupgradeneeded = function() { // runs once when the app is loaded first time
+openRequest.onupgradeneeded = function() {
 	let db = openRequest.result;
-	// create stores (tables)
+
 	let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
 	let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
 	let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
-	// insert initial data
+
 	dezynor_settings.add({setting_key: "folders", value: ["default"]});
 	dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});
-	dezynor_settings.add({setting_key: "max_upload_width",value: max_resize_width});
-	dezynor_settings.add({setting_key: "max_upload_height",value: max_resize_height});
-	dezynor_settings.add({setting_key: "current_design", value: ""});
-	dezynor_settings.add({setting_key: "copied_section",value: ""});
+	dezynor_settings.add({setting_key: "max_upload_width",value: "1000"});
+	dezynor_settings.add({setting_key: "max_upload_height",value: "1000"});
+	localStorage.setItem("copied_section", "");
 };
 
 openRequest.onerror = function() {
@@ -26,20 +22,14 @@ openRequest.onerror = function() {
 };
 
 openRequest.onsuccess = function() {
-	if (window.location.href.endsWith("/") || window.location.href.endsWith("index.html")) {
-		let db = openRequest.result;
-		db.onerror = function() {console.log("Error: ", db.error);};
-		db.onversionchange = function() {
-			db.close();
-			alert("Database is outdated, please reload the page.")
-			return
-		};
-		// load app settings
-		idbGetItem("dezynor_settings", "max_upload_width").then(function(result) {max_resize_width = result;});
-		idbGetItem("dezynor_settings", "max_upload_height").then(function(result) {max_resize_height = result;});
-	}
+	let db = openRequest.result;
+	db.onerror = function() {console.log("Error: ", db.error);};
+	db.onversionchange = function() {
+		db.close();
+		alert("Database is outdated, please reload the page.")
+		return
+	};
 };
-
 
 async function idbPutItem(store, object) {
 	let db = openRequest.result;
@@ -54,7 +44,6 @@ async function idbPutItem(store, object) {
 }
 
 async function idbGetItem(store, key) {
-	//await delay(1000);
 	let db = openRequest.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);
@@ -79,7 +68,6 @@ async function idbRemoveItem(store, key) {
 		};
     });
 }
-
 
 async function idbKeyExists(store, key) {
 	let db = openRequest.result;
