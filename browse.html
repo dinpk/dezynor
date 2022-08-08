@@ -39,11 +39,10 @@
 				for (i = 0; i < all_designs.length; i++) {
 					let key = all_designs[i].design_key;
 					let data = all_designs[i].value.data;
-					if (data.indexOf(search) > -1) {
+					if (data.toLowerCase().indexOf(search.toLowerCase()) > -1) {
 						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
-						if (!("show_background_images" in localStorage)) {
-							item = item.replace(/((background-image: url\(.*?\);))/g, '');
-						}
+						// remove here: blob images with expired object url
+						if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						searched_designs += item;
 					}
 
@@ -53,7 +52,12 @@
 
 				document.getElementById("message").innerHTML = await hideMessage();
 				let folder_label = "Search results for '" + search + "' ";
-				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";	
+				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+				
+				
+				if ("show_background_images" in localStorage) {
+					showBackgroundImages();
+				}
 				
 			}
 
@@ -193,9 +197,8 @@
 					let data = object.data;
 					if (folder == design_folder) {
 						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
-						if (!("show_background_images" in localStorage)) {
-							item = item.replace(/((background-image: url\(.*?\);))/g, '');
-						}
+						// remove here: blob images with expired object url
+						if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						folder_designs += item;
 					}
 
@@ -208,8 +211,24 @@
 				folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
 				folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
 				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+				
+				if ("show_background_images" in localStorage) {
+					showBackgroundImages();
+				}
 
 			}
+			
+			async function showBackgroundImages() {
+				let all_sections = document.querySelectorAll("section");
+				for (i = 0; i < all_sections.length; i++) {
+					if (all_sections[i].dataset.image_key) {
+						let result = await idbGetItem("dezynor_images", all_sections[i].dataset.image_key);
+						all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+					}
+				}
+			}
+			
+			
 		</script>
 	</head>
 	<body>

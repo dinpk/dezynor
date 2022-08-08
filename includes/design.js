@@ -841,11 +841,6 @@ function hidePopupPanel() {
 	}
 }
 
-function addGraphic(url) {
-	document.getElementById("background_image").value = url;
-	styleBackgroundImage();
-}
-
 function setShape(value) {
 	if (!(selected_section)) return;
 	selected_section.style.clipPath = value;
@@ -922,10 +917,17 @@ async function loadDezyn() {
 	if (current_design_key != "") {
 		let object = await idbGetItem("dezynor_designs", current_design_key);
 		design_object = object;
-		document.getElementById("container").innerHTML = object.data;
+		let data = object.data.replace(/((background-image: url\(.*?\);))/g, '');
+		document.getElementById("container").innerHTML = data;
 		design_id = current_design_key;
 		loadWrapperStyles();
 		let all_sections = document.querySelectorAll("section");
+		for (i = 0; i < all_sections.length; i++) {
+			if (all_sections[i].dataset.image_key) {
+				let result = await idbGetItem("dezynor_images", all_sections[i].dataset.image_key);
+				all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+			}
+		}
 		if (all_sections.length > 0) {
 			let first_section_number = all_sections[0].id.replace("section", "");
 			addHandles();
@@ -1206,12 +1208,30 @@ function styleRandomBackgroundColor() {
 
 
 function styleBackgroundImage() {
-	let background_image_url = document.getElementById("background_image").value;
-	let background_size = document.getElementById("background_size").value;
-	let background_position_x = document.getElementById("background_position_x").value;
-	let background_position_y = document.getElementById("background_position_y").value;
 
-	if (background_image_url == "") {
+	if (selected_section.dataset.image_key) {
+		
+		idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
+			if (!result) {
+				console.log("Image not found");
+				return;
+			}				
+			
+			let image = URL.createObjectURL(result);
+			selected_section.style.backgroundImage = "url(" + image + ")";
+
+			selected_section.style.backgroundSize = document.getElementById("background_size").value;
+			selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
+			selected_section.style.backgroundPositionY = document.getElementById("background_position_y").value;
+			if (document.getElementById("background_image_repeat").checked) {
+				selected_section.style.backgroundRepeat = "repeat";
+			} else {
+				selected_section.style.backgroundRepeat = "no-repeat";
+			}
+
+		});		
+		
+	} else {
 		let gradient_type = document.getElementById("gradient_type").value;
 		let gradient_direction = document.getElementById("gradient_direction").value;
 		let color1 = document.getElementById("gradient_color1").value;
@@ -1223,18 +1243,61 @@ function styleBackgroundImage() {
 		let color4 = document.getElementById("gradient_color4").value;
 		if (document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
 		selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
-	} else {
-		selected_section.style.backgroundImage = "url(" + background_image_url + ")";
-		selected_section.style.backgroundSize = background_size;
-		selected_section.style.backgroundPositionX = background_position_x;
-		selected_section.style.backgroundPositionY = background_position_y;
-		if (document.getElementById("background_image_repeat").checked) {
-			selected_section.style.backgroundRepeat = "repeat";
-		} else {
-			selected_section.style.backgroundRepeat = "no-repeat";
-		}
 	}
 }
+
+
+		async function styleUploadImage(element) {
+			image_key = "image-" + new Date().getTime();
+			const image_file = element.files[0];
+
+			const reader = new FileReader();
+			reader.addEventListener("load", async function () {
+
+				let image = document.createElement("img");
+				image.src = reader.result // file reader result;
+				image.onload = async function (e) {
+					let max_resize_width = await idbGetItem("dezynor_settings", "max_upload_width");
+					let max_resize_height = await idbGetItem("dezynor_settings", "max_upload_height");
+					let width = image.width;
+					let height = image.height;
+					let canvas = document.createElement("canvas");
+					let context = canvas.getContext("2d");
+					context.drawImage(image, 0, 0);
+					if (width > height) {
+						if (width > max_resize_width) {
+							height *= max_resize_width / width;
+							width = max_resize_width;
+						}
+					} else {
+						if (height > max_resize_height) {
+							width *= max_resize_height / height;
+							height = max_resize_height;
+						}
+					}
+					canvas.width = width;
+					canvas.height = height;
+					context.drawImage(image, 0, 0, width, height);
+					let data_url = canvas.toDataURL(image_file.type);
+					let arr = data_url.split(',');
+					let mime = arr[0].match(/:(.*?);/)[1];
+					let bstr = atob(arr[1]);
+					let n = bstr.length;
+					let u8arr = new Uint8Array(n);
+					while (n--) {
+						u8arr[n] = bstr.charCodeAt(n);
+					}
+					let resized_blob = new Blob([u8arr], { type: mime });
+					await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
+					selected_section.dataset.image_key = image_key;
+					styleBackgroundImage();
+				}
+
+			}, false);
+			if (image_file) {
+				reader.readAsDataURL(image_file);
+			}
+		}
 
 function styleBrowseImage(url_element_id, file_element_id) {
 
@@ -1316,9 +1379,13 @@ function styleBackgroundImageSameColor() {
 	document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
 }
 
-function styleRemoveBackgroundImage() {
-	document.querySelector("#browse_image").value = "";
-	selected_section.style.backgroundImage = "";
+async function styleRemoveImage() {
+	if (selected_section.dataset.image_key) {
+		let image_key = selected_section.dataset.image_key;
+		delete selected_section.dataset.image_key;
+		await idbRemoveItem("dezynor_images", image_key);
+		selected_section.style.backgroundImage = "";
+	}
 }
 
 function setGradientDirection() {
@@ -1361,14 +1428,7 @@ function styleBoxShadow() {
 	let spread = document.getElementById("box_shadow_spread").value;
 	let color = document.getElementById("box_shadow_color").value;
 	let inset = document.getElementById("box_shadow_inset").checked ? "inset " : "";
-	
-	let background_image = document.getElementById("background_image").value;
-	if (background_image.indexOf("http") > -1 || background_image.indexOf(":") > 0 || background_image.indexOf("art/") > -1 && blur > 0) {
-		selected_section.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
-		selected_section.style.boxShadow = "none";
-	} else {
-		selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
-	}
+	selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
 }
 
 function styleTransform() {
@@ -1386,10 +1446,6 @@ function styleTransform() {
 	}
 }
 
-function styleRemoveBackgroundImage() {
-	document.getElementById("background_image").value = "";
-	styleBackgroundImage();
-}
 
 function styleRemoveBorder() {
 	selected_section.style.borderWidth = "0";
@@ -1522,7 +1578,6 @@ function loadSectionStyles() {
 	document.getElementById("padding_left").value = selected_section.style.paddingLeft.replace("px", "");
 	
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients
-	document.getElementById("background_image").value = "";
 	let background_image = selected_section.style.backgroundImage;
 
 	if (background_image.indexOf("gradient") > -1) {
@@ -1560,9 +1615,7 @@ function loadSectionStyles() {
 		document.getElementById("gradient_alpha3").checked = (hex3.length == 9) ? true : false;
 		document.getElementById("gradient_alpha4").checked = (hex4.length == 9) ? true : false;
 
-	//} else if (background_image.indexOf("http") > -1 || background_image.indexOf("art/") > -1  || background_image.indexOf("data:image") > -1) {
 	} else {
-		document.getElementById("background_image").value = selected_section.style.backgroundImage.replace("url(\"", "").replace("\")", "");
 		document.getElementById("background_size").value = selected_section.style.backgroundSize;
 		
 	}
