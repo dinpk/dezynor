@@ -917,12 +917,15 @@ async function loadDezyn() {
 	if (current_design_key != "") {
 		let object = await idbGetItem("dezynor_designs", current_design_key);
 		design_object = object;
-		let data = object.data.replace(/((background-image: url\(.*?\);))/g, '');
+		let data = object.data;
+		if (data.indexOf("blob:") > -1) { // remove expired object URLs
+			data = data.replace(/((background-image: url\(.*?\);))/g, '');
+		}
 		document.getElementById("container").innerHTML = data;
 		design_id = current_design_key;
 		loadWrapperStyles();
 		let all_sections = document.querySelectorAll("section");
-		for (i = 0; i < all_sections.length; i++) {
+		for (i = 0; i < all_sections.length; i++) { // add new object URLs
 			if (all_sections[i].dataset.image_key) {
 				let result = await idbGetItem("dezynor_images", all_sections[i].dataset.image_key);
 				all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
@@ -1250,6 +1253,8 @@ function styleBackgroundImage() {
 		async function styleUploadImage(element) {
 			image_key = "image-" + new Date().getTime();
 			const image_file = element.files[0];
+
+			styleRemoveImage();
 
 			const reader = new FileReader();
 			reader.addEventListener("load", async function () {
