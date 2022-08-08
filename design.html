@@ -551,12 +551,16 @@
 					<h4 id="art_heading" onclick="hideSectionPanel('art_section');">Background Image</h4>
 					<table class="section_table">
 						<tr>
-							<td>Upload</td>
+							<td>Image upload</td>
 							<td>
 								<input id="upload_image" type="file" accept="image/*" onchange="styleUploadImage(this);" style="display:none;">
 								<button onclick="document.getElementById('upload_image').click();">Upload image</button>
 								<button id="remove_image" onclick="styleRemoveImage();" title="Remove image">x</button>
 							</td>
+						</tr>
+						<tr>
+							<td>Image URL</td>
+							<td><button onclick="styleAddImageURL();" title="Add Image URL">Add URL</button></td>
 						</tr>
 						<tr>
 							<td>Repeat</td>

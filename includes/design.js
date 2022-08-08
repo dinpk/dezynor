@@ -915,20 +915,22 @@ async function loadDezyn() {
 
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
+		
 		let object = await idbGetItem("dezynor_designs", current_design_key);
 		design_object = object;
 		let data = object.data;
-		if (data.indexOf("blob:") > -1) { // remove expired object URLs
-			data = data.replace(/((background-image: url\(.*?\);))/g, '');
-		}
+		// remove here: expired object URLs
+		// data = data.replace(/((background-image: url\(.*?\);))/g, '');
 		document.getElementById("container").innerHTML = data;
 		design_id = current_design_key;
 		loadWrapperStyles();
 		let all_sections = document.querySelectorAll("section");
 		for (i = 0; i < all_sections.length; i++) { // add new object URLs
-			if (all_sections[i].dataset.image_key) {
-				let result = await idbGetItem("dezynor_images", all_sections[i].dataset.image_key);
-				all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+			let image_key = all_sections[i].dataset.image_key;
+			if (image_key && image_key != "") {
+				idbGetItem("dezynor_images", image_key).then(function(result) {
+					if (result) all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+				});
 			}
 		}
 		if (all_sections.length > 0) {
@@ -1232,7 +1234,7 @@ function styleBackgroundImage() {
 				selected_section.style.backgroundRepeat = "no-repeat";
 			}
 
-		});		
+		});
 		
 	} else {
 		let gradient_type = document.getElementById("gradient_type").value;
@@ -1250,104 +1252,41 @@ function styleBackgroundImage() {
 }
 
 
-		async function styleUploadImage(element) {
-			image_key = "image-" + new Date().getTime();
-			const image_file = element.files[0];
+async function styleUploadImage(element) {
+	image_key = "image-" + new Date().getTime();
+	const image_file = element.files[0];
 
-			styleRemoveImage();
+	styleRemoveImage();
 
-			const reader = new FileReader();
-			reader.addEventListener("load", async function () {
+	const reader = new FileReader();
+	reader.addEventListener("load", async function () {
 
-				let image = document.createElement("img");
-				image.src = reader.result // file reader result;
-				image.onload = async function (e) {
-					let max_resize_width = await idbGetItem("dezynor_settings", "max_upload_width");
-					let max_resize_height = await idbGetItem("dezynor_settings", "max_upload_height");
-					let width = image.width;
-					let height = image.height;
-					let canvas = document.createElement("canvas");
-					let context = canvas.getContext("2d");
-					context.drawImage(image, 0, 0);
-					if (width > height) {
-						if (width > max_resize_width) {
-							height *= max_resize_width / width;
-							width = max_resize_width;
-						}
-					} else {
-						if (height > max_resize_height) {
-							width *= max_resize_height / height;
-							height = max_resize_height;
-						}
-					}
-					canvas.width = width;
-					canvas.height = height;
-					context.drawImage(image, 0, 0, width, height);
-					let data_url = canvas.toDataURL(image_file.type);
-					let arr = data_url.split(',');
-					let mime = arr[0].match(/:(.*?);/)[1];
-					let bstr = atob(arr[1]);
-					let n = bstr.length;
-					let u8arr = new Uint8Array(n);
-					while (n--) {
-						u8arr[n] = bstr.charCodeAt(n);
-					}
-					let resized_blob = new Blob([u8arr], { type: mime });
-					await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
-					selected_section.dataset.image_key = image_key;
-					styleBackgroundImage();
-				}
-
-			}, false);
-			if (image_file) {
-				reader.readAsDataURL(image_file);
-			}
-		}
-
-function styleBrowseImage(url_element_id, file_element_id) {
-
-	let settings = JSON.parse(localStorage.getItem("dezynor_settings"));
-	let upload_url = settings.upload_url;
-	let max_upload_width = settings.max_upload_width;
-	let max_upload_height = settings.max_upload_height;
-
-	if (!upload_url) {
-		alert("Provide the upload URL in the Settings,\nor paste in the URL directly.");
-		return;
-	}
-
-	let file = document.getElementById(file_element_id).files[0];
-
-	// FILE READER
-	let reader = new FileReader();
-	reader.readAsDataURL(file);
-	reader.onload =  function(e) {
-
-		// RESIZE IMAGE
 		let image = document.createElement("img");
-		image.src = e.target.result; // file reader result
-		image.onload = async function(e) {
+		image.src = reader.result // file reader result;
+		image.onload = async function (e) {
+			let max_resize_width = await idbGetItem("dezynor_settings", "max_upload_width");
+			let max_resize_height = await idbGetItem("dezynor_settings", "max_upload_height");
 			let width = image.width;
 			let height = image.height;
 			let canvas = document.createElement("canvas");
 			let context = canvas.getContext("2d");
 			context.drawImage(image, 0, 0);
 			if (width > height) {
-				if (width > max_upload_width) {
-					height *= max_upload_width / width;
-					width = max_upload_width;
+				if (width > max_resize_width) {
+					height *= max_resize_width / width;
+					width = max_resize_width;
 				}
 			} else {
-				if (height > max_upload_height) {
-					width *= max_upload_height / height;
-					height = max_upload_height;
+				if (height > max_resize_height) {
+					width *= max_resize_height / height;
+					height = max_resize_height;
 				}
 			}
 			canvas.width = width;
 			canvas.height = height;
 			context.drawImage(image, 0, 0, width, height);
-			let dataurl = canvas.toDataURL(file.type);
-			let arr = dataurl.split(',');
+			let data_url = canvas.toDataURL(image_file.type);
+			let arr = data_url.split(',');
 			let mime = arr[0].match(/:(.*?);/)[1];
 			let bstr = atob(arr[1]);
 			let n = bstr.length;
@@ -1356,26 +1295,21 @@ function styleBrowseImage(url_element_id, file_element_id) {
 				u8arr[n] = bstr.charCodeAt(n);
 			}
 			let resized_blob = new Blob([u8arr], { type: mime });
+			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
+			selected_section.dataset.image_key = image_key;
+			styleBackgroundImage();
+		}
 
+	}, false);
+	if (image_file) {
+		reader.readAsDataURL(image_file);
+	}
+}
 
-			// UPLOAD IMAGE
-			let form = new FormData();
-			form.append("image", resized_blob);
-			try {
-				const response = await fetch(upload_url, {
-					method: 'POST',
-					body: form
-				});
-				const result = await response.json();
-				let url_element = document.getElementById(url_element_id);
-				url_element.value = result.data.url;
-				url_element.onchange();
-				//selected_section.style.backgroundImage = "url(" + result.data.url + ")";
-			} catch (e) {
-				console.log(e);
-			}	
-		} // image.src = e.target.result;
-	} // reader.readAsDataURL(file);
+function styleAddImageURL() {
+	let image_url = prompt("Provide image URL");
+	if (!image_url || image_url.trim().length == 0) return;
+	selected_section.style.backgroundImage = "url(" + image_url + ")";
 }
 
 function styleBackgroundImageSameColor() {
@@ -1385,11 +1319,11 @@ function styleBackgroundImageSameColor() {
 }
 
 async function styleRemoveImage() {
+	selected_section.style.backgroundImage = "";
 	if (selected_section.dataset.image_key) {
 		let image_key = selected_section.dataset.image_key;
 		delete selected_section.dataset.image_key;
 		await idbRemoveItem("dezynor_images", image_key);
-		selected_section.style.backgroundImage = "";
 	}
 }
 
