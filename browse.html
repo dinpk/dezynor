@@ -4,7 +4,6 @@
 		<title>Home - Dezynor</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="includes/design.css?v=20220801">
 		<link rel="stylesheet" href="includes/styles.css?v=20220801">
 		<script src="includes/indexeddb.js?v=20220801"></script>
 		<script src="includes/common.js?v=20220801"></script>
@@ -31,7 +30,7 @@
 				if (search.length == 0) return;
 
 				document.getElementById("folder_label").innerHTML = "";
-				document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
+				document.getElementById("loader").innerHTML = "<img src='images/loading.gif' class='loader'>";
 				
 				let all_designs = await idbGetAllItems("dezynor_designs");
 
@@ -53,7 +52,7 @@
 				let folder_label = "Search results for '" + search + "' ";
 				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
 
-				document.getElementById("message").innerHTML = await hideMessage();
+				document.getElementById("loader").innerHTML = await hideMessage();
 				
 				
 				if ("show_background_images" in localStorage) {
@@ -186,7 +185,7 @@
 				
 				document.getElementById("search").value = "";
 				document.getElementById("folder_label").innerHTML = "";
-				document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
+				document.getElementById("loader").innerHTML = "<img src='images/loading.gif' class='loader'>";
 				
 				idbGetAllItems("dezynor_designs").then(async function(result) {
 					
@@ -218,7 +217,7 @@
 						showBackgroundImages();
 					}
 
-					document.getElementById("message").innerHTML = await hideMessage();
+					document.getElementById("loader").innerHTML = await hideMessage();
 					
 				});
 
@@ -242,27 +241,135 @@
 			
 
 		</script>
+		
+
+		<style>
+			#browse {
+				display:flex;
+				min-height:90vh;
+			}
+
+			#loader {
+				min-height:20px;
+			}
+
+			#folders_wrapper {
+				background-color:#DDD;
+				padding:10px;
+			}
+
+			#folders_wrapper_inner {
+				position:fixed;
+			}
+
+			#folder_label {
+				width:100%;
+				position:fixed;
+				margin-top:2px;
+				z-index:2000;
+				background-color:lightblue;
+			}
+
+			#folder_label div {
+				padding:5px 10px 5px 10px;
+			}
+
+			#folder_label b {
+				font-size:170%;
+				margin-right:10px;
+			}
+
+			#folder_label #delete_folder {
+				background-color:#cae6ef;
+				color:rgb(120,0,0);
+				padding:1px 3px 1px 3px;
+				cursor:pointer;
+				font-weight:bold;
+				font-size:90%;
+			}
+
+			#folder_label #rename_folder {
+				background-color:#cae6ef;
+				color:rgb(0,120,0);
+				padding:1px 3px 1px 3px;
+				cursor:pointer;
+				font-weight:bold;
+				font-size:90%;
+			}
+
+
+			#folders div {
+				margin:0 0 5px 0;
+				cursor:pointer;
+				padding:3px 0 3px 3px;
+				border-radius:5px;
+			}
+
+			#folders div:hover {
+				background-color:white;
+			}
+
+			#folders a {
+				text-decoration:none;
+				color:navy;
+				padding:1px 2px 1px 2px;
+			}
+
+			#folders img {
+				max-height:14px;
+				vertical-align:middle;
+				margin-right:5px;
+			}
+
+			#folders #icon_folder_new {
+				max-height:24px;
+				cursor:pointer;
+				margin:5px 0 0 7px;
+			}
+
+			#folders span {
+				font-size:70%;
+				margin-right:5px;
+				cursor:pointer;
+				color:white;
+				background-color:#888;
+				padding:1px 2px 1px 2px;
+			}
+
+			#designs_wrapper {
+				
+			}
+
+			#designs {
+				zoom:10%;
+				-moz-transform: scale(.10, .10);
+				-moz-transform-origin:0 0;
+				display:flex;
+				flex-wrap:wrap;
+				padding-top: 400px;
+			}	
+		</style>
 	</head>
 	<body>
 
 		<script>writeHeader();</script>
 		
-		<table id="designs_table">
-			<tr>
-				<td>
-					<div id="folders_wrapper">
-						<input type="text" id="search" required><br>
-						<button onclick="search();">Search</button> 
-						<div id="message"></div>
-						<div id="folders"></div>
-					</div>
-				</td>
-				<td>
-					<div id="folder_label"></div>
-					<div  id="designs"></div>
-				</td>
-			</tr>
-		</table>
+		<div id="browse">
+			<div id="folders_wrapper">
+				<div id="folders_wrapper_inner">
+					<input type="text" id="search" required><br>
+					<button onclick="search();">Search</button> 
+					<div id="loader"></div>
+					<div id="folders"></div>
+				</div>
+				<input type="text" id="spacer" style="visibility:hidden;">
+			</div>
+			<div id="designs_wrapper">
+				<div id="folder_label"></div>
+				<div  id="designs"></div>
+			</div>
+		</div>		
+
 	</body>
 </html>
 
