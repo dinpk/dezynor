@@ -41,7 +41,7 @@
 					let data = all_designs[i].value.data;
 					if (data.toLowerCase().indexOf(search.toLowerCase()) > -1) {
 						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
-						// remove here: blob images with expired object url
+						item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
 						if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						searched_designs += item;
 					}
@@ -50,9 +50,10 @@
 				
 				document.getElementById("designs").innerHTML = searched_designs;
 
-				document.getElementById("message").innerHTML = await hideMessage();
 				let folder_label = "Search results for '" + search + "' ";
 				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+
+				document.getElementById("message").innerHTML = await hideMessage();
 				
 				
 				if ("show_background_images" in localStorage) {
@@ -187,48 +188,59 @@
 				document.getElementById("folder_label").innerHTML = "";
 				document.getElementById("message").innerHTML = "<img src='images/loading.gif' class='loader'>";
 				
-				let all_designs = await idbGetAllItems("dezynor_designs");
+				idbGetAllItems("dezynor_designs").then(async function(result) {
+					
+					let all_designs = result;
+					
+					let folder_designs = "";
+					for (i = 0; i < all_designs.length; i++) {
+						let design_key = all_designs[i].design_key;
+						let object = all_designs[i].value;
+						let design_folder = object.folder;
+						let data = object.data;
+						if (folder == design_folder) {
+							let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
+							item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
+							if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
+							folder_designs += item;
+						}
 
-				let folder_designs = "";
-				for (i = 0; i < all_designs.length; i++) {
-					let design_key = all_designs[i].design_key;
-					let object = all_designs[i].value;
-					let design_folder = object.folder;
-					let data = object.data;
-					if (folder == design_folder) {
-						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
-						// remove here: blob images with expired object url
-						if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
-						folder_designs += item;
+					}
+					
+					document.getElementById("designs").innerHTML = folder_designs;
+
+					let folder_label = "<b>" + folder + "</b> ";
+					folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
+					folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
+					document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+					
+					if ("show_background_images" in localStorage) {
+						showBackgroundImages();
 					}
 
-				}
-				
-				document.getElementById("designs").innerHTML = folder_designs;
-
-				document.getElementById("message").innerHTML = await hideMessage();
-				let folder_label = "<b>" + folder + "</b> ";
-				folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
-				folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
-				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
-				
-				if ("show_background_images" in localStorage) {
-					showBackgroundImages();
-				}
+					document.getElementById("message").innerHTML = await hideMessage();
+					
+				});
 
 			}
 			
 			async function showBackgroundImages() {
 				let all_sections = document.querySelectorAll("section");
-				for (i = 0; i < all_sections.length; i++) {
-					if (all_sections[i].dataset.image_key) {
-						let result = await idbGetItem("dezynor_images", all_sections[i].dataset.image_key);
-						all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+				for (i = 0; i < all_sections.length; i++) { // add new object URLs
+					let section = all_sections[i];
+					let image_key = section.dataset.image_key;
+					if (image_key && image_key != "") {
+						idbGetItem("dezynor_images", image_key).then(function(result) {
+							if (result) {
+								let object_url = URL.createObjectURL(result);
+								section.style.backgroundImage = "url(" + object_url + ")";
+							}
+						});
 					}
 				}
 			}
 			
-			
+
 		</script>
 	</head>
 	<body>

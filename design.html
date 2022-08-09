@@ -554,13 +554,17 @@
 							<td>Image upload</td>
 							<td>
 								<input id="upload_image" type="file" accept="image/*" onchange="styleUploadImage(this);" style="display:none;">
-								<button onclick="document.getElementById('upload_image').click();">Upload image</button>
-								<button id="remove_image" onclick="styleRemoveImage();" title="Remove image">x</button>
+								<button onclick="document.getElementById('upload_image').click();">Upload</button>
+								<input id="delete_image" type="checkbox" title="Delete existing image" style="vertical-align:middle;" checked>
+								
 							</td>
 						</tr>
 						<tr>
 							<td>Image URL</td>
-							<td><button onclick="styleAddImageURL();" title="Add Image URL">Add URL</button></td>
+							<td>
+								<button onclick="styleAddImageURL();" title="Add Image URL">Add URL</button>
+								<button id="remove_image" onclick="styleRemoveImage();" title="Remove image">x</button>
+							</td>
 						</tr>
 						<tr>
 							<td>Repeat</td>

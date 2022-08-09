@@ -16,12 +16,13 @@ header {
 	left:0;
 	width:100%;
 	display:flex;
-	justify-content:left;
+	justify-content:space-between;
 	align-items:center;
 	background-color:black;
 	border-bottom:1px solid #777;
 	padding:10px 15px 10px 15px;
 	z-index:2000;
+	box-sizing:border-box;
 }
 
 header #logo {
@@ -29,16 +30,19 @@ header #logo {
 	margin-right:20px;
 }
 
-header a {
+header img {
+	cursor:pointer;
+}
+
+header #menu_items a {
 	color:lightblue;
 	border:1px solid lightblue;
 	padding:5px;
 	text-decoration:none;
 	margin-right:10px;
-	transition:.5s;
 }
 
-header a:hover {
+header #menu_items a:hover {
 	color:navy;
 	background-color:lightblue;
 }

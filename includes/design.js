@@ -916,31 +916,40 @@ async function loadDezyn() {
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
 		
-		let object = await idbGetItem("dezynor_designs", current_design_key);
-		design_object = object;
-		let data = object.data;
-		// remove here: expired object URLs
-		// data = data.replace(/((background-image: url\(.*?\);))/g, '');
-		document.getElementById("container").innerHTML = data;
-		design_id = current_design_key;
-		loadWrapperStyles();
-		let all_sections = document.querySelectorAll("section");
-		for (i = 0; i < all_sections.length; i++) { // add new object URLs
-			let image_key = all_sections[i].dataset.image_key;
-			if (image_key && image_key != "") {
-				idbGetItem("dezynor_images", image_key).then(function(result) {
-					if (result) all_sections[i].style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
-				});
+		idbGetItem("dezynor_designs", current_design_key).then(function(result) {
+
+			let object = result
+			design_object = object;
+			
+			let data = object.data;
+			data = data.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls of sections
+			document.getElementById("container").innerHTML = data;
+			design_id = current_design_key;
+			loadWrapperStyles();
+			let all_sections = document.querySelectorAll("section");
+			if (all_sections.length > 0) {
+				let first_section_number = all_sections[0].id.replace("section", "");
+				addHandles();
+				selectSection(first_section_number);
+				let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
+				section_counter = last_section_number;
 			}
-		}
-		if (all_sections.length > 0) {
-			let first_section_number = all_sections[0].id.replace("section", "");
-			addHandles();
-			selectSection(first_section_number);
-			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
-			section_counter = last_section_number;
-		}
-		document.getElementById("select_folders").value = object.folder;
+			document.getElementById("select_folders").value = object.folder;
+			
+		}).then(function() { // add new object URLs to sections
+
+			let all_sections = document.querySelectorAll("section");
+			for (i = 0; i < all_sections.length; i++) { 
+				let section = all_sections[i];
+				let image_key = section.dataset.image_key;
+				if (image_key && image_key != "") {
+					idbGetItem("dezynor_images", image_key).then(function(result) {
+						if (result && section) section.style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+					});
+				}
+			}
+		});
+		
 
 	} else {
 		styleWrapper();
@@ -1256,7 +1265,9 @@ async function styleUploadImage(element) {
 	image_key = "image-" + new Date().getTime();
 	const image_file = element.files[0];
 
-	styleRemoveImage();
+	if (document.getElementById("delete_image").checked) {
+		styleRemoveImage();
+	}
 
 	const reader = new FileReader();
 	reader.addEventListener("load", async function () {
@@ -1297,6 +1308,7 @@ async function styleUploadImage(element) {
 			let resized_blob = new Blob([u8arr], { type: mime });
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
 			selected_section.dataset.image_key = image_key;
+			document.getElementById("upload_image").value = "";
 			styleBackgroundImage();
 		}
 
