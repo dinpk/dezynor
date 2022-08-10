@@ -4,9 +4,9 @@
 		<title>Settings - Dezynor</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="includes/styles.css?v=20220722">
-		<script src="includes/indexeddb.js?v=20220801"></script>
-		<script src="includes/common.js?v=20220801"></script>
+		<link rel="stylesheet" href="includes/styles.css">
+		<script src="includes/indexeddb.js"></script>
+		<script src="includes/common.js"></script>
 		<script>
 			window.onload = async function() {
 				await delay(500);
@@ -29,18 +29,20 @@
 				showMessage("Saved", "DarkGreen");
 			}
 
-			function loadSettings() {
-				idbGetItem("dezynor_settings", "max_upload_width").then(function(result) {
-					document.getElementById("max_upload_width").value = result;
-				});
-				idbGetItem("dezynor_settings", "max_upload_height").then(function(result) {
-					document.getElementById("max_upload_height").value = result;
-				});
-
+			async function loadSettings() {
+				document.getElementById("max_upload_width").value = await idbGetItem("dezynor_settings", "max_upload_width");
+				document.getElementById("max_upload_height").value = await idbGetItem("dezynor_settings", "max_upload_height");
 				if ("show_background_images" in localStorage) document.getElementById("show_background_images").checked = true;
 			}
 			
 		</script>
+		<style>
+		
+			#settings input[type=number] {
+				max-width:70px;
+			}
+		
+		</style>
 	</head>
 	<body>
 		<script>writeHeader();</script>

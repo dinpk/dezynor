@@ -4,9 +4,9 @@
 		<title>Fonts - Dezynor</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="includes/styles.css?v=20220722">
-		<script src="includes/indexeddb.js?v=20220722"></script>
-		<script src="includes/common.js?v=20220722"></script>
+		<link rel="stylesheet" href="includes/styles.css">
+		<script src="includes/indexeddb.js"></script>
+		<script src="includes/common.js"></script>
 		<script>
 
 			window.onload = async function() {
@@ -86,6 +86,31 @@
 				
 			}
 		</script>
+		<style>
+
+			#fonts {
+				font-size:120%;		
+				line-height:170%;
+				padding-bottom:50px;
+			}
+
+			#fonts .google {
+				font-size:80%;
+				color:blue;
+			}
+
+			#fonts .installed {
+				font-size:80%;
+				color:forestgreen;
+			}
+
+			.delete {
+				cursor:pointer;
+				padding-right:10px;
+				color:red;
+			}
+		
+		</style>
 	</head>
 	<body>
 		<script>writeHeader();</script>

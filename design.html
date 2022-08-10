@@ -3,10 +3,10 @@
 	<head>
 		<title>Design</title>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="includes/design.css?v=20220801">
-		<script src="includes/indexeddb.js?v=20220801"></script>
-		<script src="includes/common.js?v=20220801"></script>
-		<script src="includes/design.js?v=20220801"></script>
+		<link rel="stylesheet" href="includes/design.css">
+		<script src="includes/indexeddb.js"></script>
+		<script src="includes/common.js"></script>
+		<script src="includes/design.js"></script>
 		<style>
 			@font-face {font-family:'editserifarabic';font-style:normal;font-weight:400;src:url(fonts/editserifarabic.ttf) format('truetype');}
 			@font-face {font-family:'mehr';font-style:normal;font-weight:400;src:url(fonts/mehr.ttf) format('truetype');}
@@ -512,12 +512,12 @@
 								<input id="gradient_color4" type="color" onchange="styleBackgroundImage();"> 
 								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage();">Same</button>
 								<button id="remove_background" onclick="styleRemoveBackgroundImage();">x</button><br>
-								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage();" checked>
-								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage();" checked> 
-								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage();" checked> 
-								<input id="gradient_alpha4" type="checkbox" onchange="styleBackgroundImage();" checked><br>
+								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage('gradient');" checked>
+								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
+								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
+								<input id="gradient_alpha4" type="checkbox" onchange="styleBackgroundImage('gradient');" checked><br>
 
-								<select id="gradient_type" onchange="setGradientDirection();styleBackgroundImage();">
+								<select id="gradient_type" onchange="setGradientDirection();styleBackgroundImage('gradient');">
 									<option value="linear-gradient">linear</option>
 									<option value="radial-gradient">radial</option>
 									<option value="conic-gradient">conic</option>

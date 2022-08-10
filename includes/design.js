@@ -1221,31 +1221,9 @@ function styleRandomBackgroundColor() {
 
 
 
-function styleBackgroundImage() {
+function styleBackgroundImage(type = "") {
 
-	if (selected_section.dataset.image_key) {
-		
-		idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
-			if (!result) {
-				console.log("Image not found");
-				return;
-			}				
-			
-			let image = URL.createObjectURL(result);
-			selected_section.style.backgroundImage = "url(" + image + ")";
-
-			selected_section.style.backgroundSize = document.getElementById("background_size").value;
-			selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
-			selected_section.style.backgroundPositionY = document.getElementById("background_position_y").value;
-			if (document.getElementById("background_image_repeat").checked) {
-				selected_section.style.backgroundRepeat = "repeat";
-			} else {
-				selected_section.style.backgroundRepeat = "no-repeat";
-			}
-
-		});
-		
-	} else {
+	if (type == "gradient") {
 		let gradient_type = document.getElementById("gradient_type").value;
 		let gradient_direction = document.getElementById("gradient_direction").value;
 		let color1 = document.getElementById("gradient_color1").value;
@@ -1257,7 +1235,32 @@ function styleBackgroundImage() {
 		let color4 = document.getElementById("gradient_color4").value;
 		if (document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
 		selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
+	} else if (selected_section.dataset.image_key) {
+		
+		
+		idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
+			if (!result) {
+				console.log("Image not found");
+				return;
+			}				
+			
+			let image = URL.createObjectURL(result);
+			selected_section.style.backgroundImage = "url(" + image + ")";
+
+		});
+		
 	}
+	
+	
+	selected_section.style.backgroundSize = document.getElementById("background_size").value;
+	selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
+	selected_section.style.backgroundPositionY = document.getElementById("background_position_y").value;
+	if (document.getElementById("background_image_repeat").checked) {
+		selected_section.style.backgroundRepeat = "repeat";
+	} else {
+		selected_section.style.backgroundRepeat = "no-repeat";
+	}
+	
 }
 
 

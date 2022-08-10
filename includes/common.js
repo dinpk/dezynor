@@ -22,12 +22,6 @@ function showMessage(msg, color) {
 	setTimeout(function() {document.getElementsByTagName("body")[0].removeChild(message);},3000);
 }
 
-function hideMessage() {
-  return new Promise(resolve => {
-		setTimeout(() => {resolve("");}, 0);
-  });
-}
-
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }

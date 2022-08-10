@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Import / Export - Dezynor</title>
-		<link rel="stylesheet" href="includes/styles.css?v=20220722">
+		<link rel="stylesheet" href="includes/styles.css">
 		<script src="includes/indexeddb.js"></script>
 		<script src="includes/common.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
@@ -134,6 +134,18 @@
 			}			
 
 		</script>
+
+		<style>
+
+			#message {
+				padding:5px;
+				min-height:30px;
+				color:green;
+				font-weight:bold;
+			}		
+
+		</style>
+
 	</head>
 	<body>
 		<script>writeHeader();</script>
@@ -141,6 +153,8 @@
 		<div id="progress_bar" class="padleft20" style="visibility:hidden"><progress></progress></div>				
 		<div class="pad20">
 			<input type="button" value="Export data" onclick="exportData();">
+			<br><br>
+			<br><br>
 			<br><br>
 			<input type="file" name="import_files" id="import_files" accept=".backup,.png" onchange="importData();" multiple style="display:none;">
 			<input type="button" value="Import data" onclick="document.getElementById('import_files').click();">

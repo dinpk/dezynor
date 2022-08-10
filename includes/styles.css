@@ -6,10 +6,6 @@ body {
 	padding-top:46px;
 }
 
-p {
-	line-height:150%;
-}
-
 header {
 	position:fixed;
 	top:0;
@@ -47,14 +43,6 @@ header #menu_items a:hover {
 	background-color:lightblue;
 }
 
-main {
-	font-size:15px;
-}
-
-td {
-	vertical-align: top;
-}
-
 .pad5 {padding:5px;}
 .pad10 {padding:10px;}
 .pad20 {padding:20px;}
@@ -85,114 +73,5 @@ td {
 .mxw500 {max-width:500px;}
 
 
-#settings input[type=number] {
-	max-width:70px;
-}
 
-
-.wrapper {
-	position:relative;
-	margin:100px;
-	cursor:pointer;
-	overflow:hidden;
-}
-.wrapper section {
-	position:absolute;
-	outline:none !important;
-	cursor:pointer;
-	
-}
-.wrapper span {
-	display:none;
-}
-
-#message {
-	padding:5px;
-	min-height:30px;
-	color:green;;
-	font-weight:bold;
-}
-
-#storage_space {
-	margin-top:15px;
-	border-top:1px solid #BBB;
-	padding-top:10px;
-}
-
-#storage_space div {
-	color:#555;
-	font-size:90%;
-	padding-left:5px;
-}
-
-
-
-#disclaimer {
-	font-family:mehr-nastaliq;
-	max-width:700px;
-	padding:30px;
-	box-sizing:border-box;
-	font-size:140%;
-	line-height:140%;
-}
-
-#disclaimer h1,h2,h3 {
-	line-height:130%;
-	color:#333;
-}
-
-#disclaimer p {
-	margin:0;
-}
-
-#disclaimer a {
-	text-decoration:none;
-}
-
-#flagcounter {
-	 margin-top:20px;
-}
-
-#flagcounter img {
-	max-width:100%;
-}
-
-.loader {
-	width:100%;
-	height:8px;
-	margin-top:8px;
-}
-
-#fonts {
-	font-size:120%;		
-	line-height:170%;
-	padding-bottom:50px;
-}
-
-#fonts .google {
-	font-size:80%;
-	color:blue;
-}
-
-#fonts .installed {
-	font-size:80%;
-	color:forestgreen;
-}
-
-.delete {
-	cursor:pointer;
-	padding-right:10px;
-	color:red;
-}
-
-
-@media only screen and (max-width: 970px) {
-
-	#designs_table td:first-child {
-		display:none;
-	}
-	
-	#disclaimer {
-		font-size:130%;
-	}
-}
+@media only screen and (max-width: 970px) {}
