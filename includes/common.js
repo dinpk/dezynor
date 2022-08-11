@@ -1,14 +1,19 @@
 function writeHeader() {
 	document.write(
 		"<header> " + 
-		"<a href='index.html'> <img id='logo' src='images/logo.png'></a> " + 
+		"<div>" +
+			"<a href='index.html'> <img id='logo' src='images/logo.png'></a> " + 
+			"<img src='images/loading.gif' id='loader'>" + 
+		"</div>" +
 		"<div id='menu_items'>" +
-		"<a href='design.html' target='_blank'>New Design</a> " + 
-		"<a href='browse.html'>Browse</a> " + 
-		"<a href='fonts.html'>Fonts</a> " + 
-		"<a href='import-export.html'>Backup</a> " + 
+			"<a href='design.html' target='_blank'>New Design</a> " + 
+			"<a href='browse.html'>Browse</a> " + 
+			"<a href='fonts.html'>Fonts</a> " + 
+			"<a href='import-export.html'>Backup</a> " + 
 		"</div>" + 
-		"<a href='settings.html'><img src='images/header_icon_settings.png'></a> " + 
+		"<div>" + 
+			"<a href='settings.html'><img src='images/header_icon_settings.png'></a>" + 
+		"</div>" + 
 		"</header>"
 		);
 }

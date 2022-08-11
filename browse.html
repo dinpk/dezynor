@@ -30,7 +30,7 @@
 				if (search.length == 0) return;
 
 				document.getElementById("folder_label").innerHTML = "";
-				document.getElementById("loader").innerHTML = "<img src='images/loading.gif' id='loader'>";
+				document.getElementById("loader").style.display ="inline";
 				
 				let all_designs = await idbGetAllItems("dezynor_designs");
 
@@ -52,7 +52,7 @@
 				let folder_label = "Search results for '" + search + "' ";
 				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
 				
-				document.getElementById("loader").innerHTML = "";
+				document.getElementById("loader").style.display ="none";
 				
 				if ("show_background_images" in localStorage) {
 					showBackgroundImages();
@@ -184,7 +184,7 @@
 				
 				document.getElementById("search").value = "";
 				document.getElementById("folder_label").innerHTML = "";
-				document.getElementById("loader").innerHTML = "<img src='images/loading.gif' id='loader'>";
+				document.getElementById("loader").style.display = "inline";
 				
 				idbGetAllItems("dezynor_designs").then(async function(result) {
 					
@@ -213,7 +213,7 @@
 					document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
 					
 					
-					document.getElementById("loader").innerHTML = "";
+					document.getElementById("loader").style.display = "none";
 					
 					if ("show_background_images" in localStorage) {
 						showBackgroundImages();
@@ -253,15 +253,10 @@
 				vertical-align:top;
 			}
 
-			#loader {
-				width:100%;
-				height:8px;
-				margin:8px 0 15px 0;
-			}
 
 			#folders_wrapper {
 				background-color:#DDD;
-				padding:30px 10px 30px 10px;
+				padding:20px 10px 30px 10px;
 			}
 			
 			#search {
@@ -303,6 +298,9 @@
 				font-size:90%;
 			}
 
+			#folders {
+				margin-top:10px;
+			}
 
 			#folders div {
 				margin:0 0 5px 0;
@@ -384,7 +382,7 @@
 				<td id="folders_wrapper">
 					<input type="text" id="search" required><br>
 					<button onclick="search();">Search</button> 
-					<div id="loader"></div>
+					
 					<div id="folders"></div>
 				</td>
 				<td id="designs_wrapper">

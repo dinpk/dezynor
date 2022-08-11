@@ -73,5 +73,11 @@ header #menu_items a:hover {
 .mxw500 {max-width:500px;}
 
 
+#loader {
+	max-width:30px;
+	display:none;
+	vertical-align:middle;
+}
+
 
 @media only screen and (max-width: 970px) {}
