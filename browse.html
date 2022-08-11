@@ -52,6 +52,8 @@
 				let folder_label = "Search results for '" + search + "' ";
 				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
 				
+				document.getElementById("loader").innerHTML = "";
+				
 				if ("show_background_images" in localStorage) {
 					showBackgroundImages();
 				}
@@ -209,6 +211,9 @@
 					folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
 					folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
 					document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+					
+					
+					document.getElementById("loader").innerHTML = "";
 					
 					if ("show_background_images" in localStorage) {
 						showBackgroundImages();

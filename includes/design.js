@@ -1324,6 +1324,11 @@ async function styleUploadImage(element) {
 function styleAddImageURL() {
 	let image_url = prompt("Provide image URL");
 	if (!image_url || image_url.trim().length == 0) return;
+	
+	if (document.getElementById("delete_image").checked) {
+		styleRemoveImage();
+	}
+	
 	selected_section.style.backgroundImage = "url(" + image_url + ")";
 }
 
@@ -1382,7 +1387,14 @@ function styleBoxShadow() {
 	let spread = document.getElementById("box_shadow_spread").value;
 	let color = document.getElementById("box_shadow_color").value;
 	let inset = document.getElementById("box_shadow_inset").checked ? "inset " : "";
-	selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
+	
+	if (selected_section.dataset.image_key && inset.length == 0) {
+		selected_section.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
+		selected_section.style.boxShadow = "none";
+	} else {
+		selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
+		selected_section.style.filter = "none";
+	}
 }
 
 function styleTransform() {
