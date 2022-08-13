@@ -9,7 +9,7 @@ window.onload = function() {
 let design_id = generateDeisgnId();
 let design_object;
 
-let section_counter = 0;
+let section_number = 0;
 let selected_section;
 let move;
 let resize_bottom_right;
@@ -110,15 +110,6 @@ function hideHandles() {
 	resize_center_left.style.visibility = "hidden";
 	resize_center_top.style.visibility = "hidden";
 	resize_center_bottom.style.visibility = "hidden";
-	move.style.transition = "initial";
-	resize_bottom_right.style.transition = "initial";
-	resize_top_right.style.transition = "initial";
-	resize_bottom_left.style.transition = "initial";
-	resize_top_left.style.transition = "initial";
-	resize_center_right.style.transition = "initial";
-	resize_center_left.style.transition = "initial";
-	resize_center_top.style.transition = "initial";
-	resize_center_bottom.style.transition = "initial";	
 }
 
 function showHandles() {
@@ -134,26 +125,26 @@ function showHandles() {
 }
 
 function addSection() {
-	section_counter = getNewSectionCount();
-	let section_id = "section" + section_counter;
+	section_number = getNewSectionNumber();
+	let section_id = "section" + section_number;
 	let section = document.createElement("section");
 	let section_text = document.createTextNode(" ");
 	section.appendChild(section_text);
 	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
+	section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	section.setAttribute("onpaste", "pasteText(event);");
 	section.setAttribute("contenteditable", "true");
-	section.style.transition = "initial";
 	document.getElementById("wrapper").appendChild(section);
-	document.getElementById(section_id).style.zIndex = section_counter;
+	document.getElementById(section_id).style.zIndex = section_number;
 	setSectionDefaultStyles(document.getElementById(section_id));
-	selectSection(section_counter);
+	selectSection(section_number);
 	styleAlignTopLeft();
 	document.getElementById(section_id).focus();
 	styleAlignCenterCenter();
+
 }
 
-function getNewSectionCount() {
+function getNewSectionNumber() {
 	let section_ids = [];
 	let all_sections = document.querySelectorAll("section");
 	for (let i = 0; i < all_sections.length; i++) {
@@ -174,7 +165,7 @@ function selectSection(counter) {
 
 	let new_selected_id = "section" + counter;
 
-	if (selected_section && selected_section.id == new_selected_id) {
+	if (selected_section && selected_section.id == new_selected_id && section_number > 1) {
 		// console.log("selecting same session " + new_selected_id);
 		return;
 	}
@@ -203,17 +194,17 @@ function duplicateSection() {
 
 	if (!(selected_section)) return;
 
-	section_counter = getNewSectionCount();
+	section_number = getNewSectionNumber();
 
-	let section_id = "section" + section_counter;
+	let section_id = "section" + section_number;
 	
 	let section = selected_section.cloneNode(true);
 	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
+	section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	document.getElementById("wrapper").appendChild(section);
 	
 	setTimeout(function() { 
-		selectSection(section_counter);
+		selectSection(section_number);
 		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + 10 + "px";
 		reAlignSectionHandles();
 	}, 100);
@@ -224,10 +215,10 @@ function duplicateSection() {
 function removeSection() {
 	selected_section.remove();
 	hideHandles();
+	section_number = getNewSectionNumber();
 }
 
 function copySection() {
-	//idbPutItem("dezynor_settings", {setting_key:"copied_section", value:selected_section.outerHTML});
 	localStorage.setItem("copied_section", selected_section.outerHTML);
 }
 
@@ -238,18 +229,18 @@ async function pasteSection() {
 	let sections = html.body.querySelectorAll("section");
 	let copied_section = sections[0];
 
-	section_counter = getNewSectionCount();
+	section_number = getNewSectionNumber();
 
-	let section_id = "section" + section_counter;
+	let section_id = "section" + section_number;
 	
 	let section = copied_section;
 	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_counter + "');");
+	section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	section.setAttribute("onpaste", "pasteText(event);");
 	document.getElementById("wrapper").appendChild(section);
-	document.getElementById(section_id).style.zIndex = section_counter;
+	document.getElementById(section_id).style.zIndex = section_number;
 
-	selectSection(section_counter);
+	selectSection(section_number);
 	reAlignSectionHandles();
 
 }
@@ -287,6 +278,7 @@ function onMouseDown4Move(counter) {
 		showHandles();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
+
 	};
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('mouseup', onMouseUp);
@@ -932,7 +924,7 @@ async function loadDezyn() {
 				addHandles();
 				selectSection(first_section_number);
 				let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
-				section_counter = last_section_number;
+				section_number = last_section_number;
 			}
 			document.getElementById("select_folders").value = object.folder;
 			
@@ -1016,7 +1008,6 @@ function styleWrapper() {
 	wrapper.style.left = "0";
 	wrapper.style.width = document.getElementById("wrapper_width").value + "px";
 	wrapper.style.height = document.getElementById("wrapper_height").value + "px";
-	//document.getElementsByTagName("body")[0].style.width = parseInt(document.getElementById("wrapper_width").value) + 400 + "px";
 	wrapper.style.borderWidth = document.getElementById("wrapper_border_width").value + "px";
 	wrapper.style.borderStyle = document.getElementById("wrapper_border_style").value;
 	wrapper.style.borderColor = document.getElementById("wrapper_border_color").value;
@@ -1029,13 +1020,6 @@ function styleWrapper() {
 	wrapper.style.backgroundColor = document.getElementById("wrapper_background_color").value;
 
 	if (wrapper.style.backgroundColor == "rgb(0, 0, 1)") { // fake color for transparent, set by background removal function
-		let gradient_type = document.getElementById("wrapper_gradient_type").value;
-		let gradient_direction = document.getElementById("wrapper_gradient_direction").value;
-		let color1 = document.getElementById("wrapper_gradient_color1").value;
-		let color2 = document.getElementById("wrapper_gradient_color2").value;
-		let color3 = document.getElementById("wrapper_gradient_color3").value;
-		let color4 = document.getElementById("wrapper_gradient_color4").value;
-		wrapper.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
 
 		let bg_image1 = document.getElementById("wrapper_bg_image1").value;
 		let bg_image2 = document.getElementById("wrapper_bg_image2").value;
@@ -1073,15 +1057,6 @@ function styleWrapperSameColor() {
 function styleRemoveWrapperBackgroundColor() {
 	document.getElementById("wrapper_background_color").value = "#000001";
 	document.getElementById("wrapper").style.backgroundColor = "rgb(0, 0, 1)";
-}
-
-function setWrapperGradientDirection() {
-	let gradient_type = document.getElementById("wrapper_gradient_type").value;
-	if (gradient_type == "linear-gradient") {
-		document.getElementById("wrapper_gradient_direction").value = "to bottom";
-	} else {
-		document.getElementById("wrapper_gradient_direction").value = "ellipse";
-	}
 }
 
 function styleRemoveWrapperBackgroundImage1() {
@@ -1707,26 +1682,123 @@ function isBefore(el1, el2) {
 		  return true;
   return false;
 }
+
+
+
 			
 /* -------------- SHORTCUTS ---------------------- */
 
-onkeydown = function(e){
 
+let keyCode = {
+  BACKSPACE: 8,
+  TAB: 9,
+  ENTER: 13,
+  SHIFT: 16,
+  CTRL: 17,
+  ALT: 18,
+  PAUSE: 19,
+  CAPS_LOCK: 20,
+  ESCAPE: 27,
+  SPACE: 32,
+  PAGE_UP: 33,
+  PAGE_DOWN: 34,
+  END: 35,
+  HOME: 36,
+  LEFT_ARROW: 37,
+  UP_ARROW: 38,
+  RIGHT_ARROW: 39,
+  DOWN_ARROW: 40,
+  INSERT: 45,
+  DELETE: 46,
+  KEY_0: 48,
+  KEY_1: 49,
+  KEY_2: 50,
+  KEY_3: 51,
+  KEY_4: 52,
+  KEY_5: 53,
+  KEY_6: 54,
+  KEY_7: 55,
+  KEY_8: 56,
+  KEY_9: 57,
+  KEY_A: 65,
+  KEY_B: 66,
+  KEY_C: 67,
+  KEY_D: 68,
+  KEY_E: 69,
+  KEY_F: 70,
+  KEY_G: 71,
+  KEY_H: 72,
+  KEY_I: 73,
+  KEY_J: 74,
+  KEY_K: 75,
+  KEY_L: 76,
+  KEY_M: 77,
+  KEY_N: 78,
+  KEY_O: 79,
+  KEY_P: 80,
+  KEY_Q: 81,
+  KEY_R: 82,
+  KEY_S: 83,
+  KEY_T: 84,
+  KEY_U: 85,
+  KEY_V: 86,
+  KEY_W: 87,
+  KEY_X: 88,
+  KEY_Y: 89,
+  KEY_Z: 90,
+  LEFT_META: 91,
+  RIGHT_META: 92,
+  SELECT: 93,
+  NUMPAD_0: 96,
+  NUMPAD_1: 97,
+  NUMPAD_2: 98,
+  NUMPAD_3: 99,
+  NUMPAD_4: 100,
+  NUMPAD_5: 101,
+  NUMPAD_6: 102,
+  NUMPAD_7: 103,
+  NUMPAD_8: 104,
+  NUMPAD_9: 105,
+  MULTIPLY: 106,
+  ADD: 107,
+  SUBTRACT: 109,
+  DECIMAL: 110,
+  DIVIDE: 111,
+  F1: 112,
+  F2: 113,
+  F3: 114,
+  F4: 115,
+  F5: 116,
+  F6: 117,
+  F7: 118,
+  F8: 119,
+  F9: 120,
+  F10: 121,
+  F11: 122,
+  F12: 123,
+  NUM_LOCK: 144,
+  SCROLL_LOCK: 145,
+  SEMICOLON: 186,
+  EQUALS: 187,
+  COMMA: 188,
+  DASH: 189,
+  PERIOD: 190,
+  FORWARD_SLASH: 191,
+  GRAVE_ACCENT: 192,
+  OPEN_BRACKET: 219,
+  BACK_SLASH: 220,
+  CLOSE_BRACKET: 221,
+  SINGLE_QUOTE: 222
+};
+
+
+onkeydown = function(e){
+	let key = e.which || e.keyCode;
+	
 	if (
-	(e.ctrlKey && e.keyCode == 96)  // numpad 0
-	|| (e.ctrlKey && e.keyCode == 107)  // numpad +
-	|| (e.ctrlKey && e.keyCode == 109)  // numpad -
-	|| (e.keyCode == 112)  // F1
-	|| (e.keyCode == 113)  // F2
-	|| (e.keyCode == 114)  // F3
-	|| (e.keyCode == 115)  // F4
-	|| (e.keyCode == 116)  // F5
-	|| (e.keyCode == 117)  // F6
-	|| (e.keyCode == 118)  // F7
-	|| (e.keyCode == 119)  // F8
-	|| (e.keyCode == 120)  // F9
-	|| (e.keyCode == 121)  // F10
-	)
+		(e.ctrlKey && (key >= 96 && key <= 111)) // numpad and operators
+		|| (key >= 112 && key <= 123) // function keys
+	) 
 	{e.preventDefault();}
 
 }
@@ -1735,182 +1807,44 @@ document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 	//console.log(key);
 
-	let keyCode = {
-      BACKSPACE: 8,
-      TAB: 9,
-      ENTER: 13,
-      SHIFT: 16,
-      CTRL: 17,
-      ALT: 18,
-      PAUSE: 19,
-      CAPS_LOCK: 20,
-      ESCAPE: 27,
-      SPACE: 32,
-      PAGE_UP: 33,
-      PAGE_DOWN: 34,
-      END: 35,
-      HOME: 36,
-      LEFT_ARROW: 37,
-      UP_ARROW: 38,
-      RIGHT_ARROW: 39,
-      DOWN_ARROW: 40,
-      INSERT: 45,
-      DELETE: 46,
-      KEY_0: 48,
-      KEY_1: 49,
-      KEY_2: 50,
-      KEY_3: 51,
-      KEY_4: 52,
-      KEY_5: 53,
-      KEY_6: 54,
-      KEY_7: 55,
-      KEY_8: 56,
-      KEY_9: 57,
-      KEY_A: 65,
-      KEY_B: 66,
-      KEY_C: 67,
-      KEY_D: 68,
-      KEY_E: 69,
-      KEY_F: 70,
-      KEY_G: 71,
-      KEY_H: 72,
-      KEY_I: 73,
-      KEY_J: 74,
-      KEY_K: 75,
-      KEY_L: 76,
-      KEY_M: 77,
-      KEY_N: 78,
-      KEY_O: 79,
-      KEY_P: 80,
-      KEY_Q: 81,
-      KEY_R: 82,
-      KEY_S: 83,
-      KEY_T: 84,
-      KEY_U: 85,
-      KEY_V: 86,
-      KEY_W: 87,
-      KEY_X: 88,
-      KEY_Y: 89,
-      KEY_Z: 90,
-      LEFT_META: 91,
-      RIGHT_META: 92,
-      SELECT: 93,
-      NUMPAD_0: 96,
-      NUMPAD_1: 97,
-      NUMPAD_2: 98,
-      NUMPAD_3: 99,
-      NUMPAD_4: 100,
-      NUMPAD_5: 101,
-      NUMPAD_6: 102,
-      NUMPAD_7: 103,
-      NUMPAD_8: 104,
-      NUMPAD_9: 105,
-      MULTIPLY: 106,
-      ADD: 107,
-      SUBTRACT: 109,
-      DECIMAL: 110,
-      DIVIDE: 111,
-      F1: 112,
-      F2: 113,
-      F3: 114,
-      F4: 115,
-      F5: 116,
-      F6: 117,
-      F7: 118,
-      F8: 119,
-      F9: 120,
-      F10: 121,
-      F11: 122,
-      F12: 123,
-      NUM_LOCK: 144,
-      SCROLL_LOCK: 145,
-      SEMICOLON: 186,
-      EQUALS: 187,
-      COMMA: 188,
-      DASH: 189,
-      PERIOD: 190,
-      FORWARD_SLASH: 191,
-      GRAVE_ACCENT: 192,
-      OPEN_BRACKET: 219,
-      BACK_SLASH: 220,
-      CLOSE_BRACKET: 221,
-      SINGLE_QUOTE: 222
-    };
 	
 	// http://gcctech.org/csc/javascript/javascript_keycodes.htm
 	
-	// ALT +
-	if (e.altKey && key == 80) {
-		showSectionPanel('wrapper_section'); // Alt + p
-	} else if (e.altKey && key == 66) {
-		showSectionPanel('box_section'); // Alt + b
-	} else if (e.altKey && key == 83) {
-		showSectionPanel('size_section'); // Alt + s
-	} else if (e.altKey && key == 84) {
-		showSectionPanel('font_section'); // Alt + t
-	} else if (e.altKey && key == 67) {
-		showSectionPanel('color_section'); // Alt + c
-	} else if (e.altKey && key == 73) {
-		showSectionPanel('art_section'); // Alt + i
-	} else if (e.altKey && key == 82) {
-		showSectionPanel('border_section'); // Alt + r
-	} else if (e.altKey && key == 88) {
-		showSectionPanel('text_shadow_section'); // Alt + x
-	} else if (e.altKey && key == 87) {
-		showSectionPanel('box_shadow_section'); // Alt + w
-	} else if (e.altKey && key == 77) {
-		showSectionPanel('transform_section'); // Alt + m
-	} else if (e.altKey && key == 79) { 
-		showSectionPanel('layout_section'); // Alt + o
-	} else if (e.altKey && key == 72) { 
-		showSectionPanel('shape_section'); // Alt + h
-	} else if (e.altKey && key == 85) { 
-		showSectionPanel('utility_section'); // Alt + u
-	}
-	
 	// CTRL + 
-	if (key == 112) {
-		saveDezyn(); // f1
-	} else if (e.ctrlKey && e.altKey && key == 65) {
-		addSection(); // Ctrl + Shift + a
-	} else if (e.ctrlKey && e.altKey && key == 90) {
-		duplicateSection(); // Ctrl + Shift + z
+	if (key == keyCode.F1) {
+		saveDezyn();
+	} else if (e.ctrlKey && e.altKey && key == keyCode.KEY_A) {
+		addSection();
+	} else if (e.ctrlKey && e.altKey && key == keyCode.KEY_Z) {
+		duplicateSection();
 	}
 	
 	// NUM PAD
-	if (e.ctrlKey && key == 107) { // +
+	if (e.ctrlKey && key == keyCode.ADD) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) + 3;
 		element.dispatchEvent(new Event("change"));
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) + 4;
 		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == 109) { // -
+	} else if (e.ctrlKey && key == keyCode.SUBTRACT) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) - 3;
 		element.dispatchEvent(new Event("change"));
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) - 4;
 		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == 13) { // Enter
+	} else if (e.ctrlKey && key == keyCode.ENTER) {
 		styleAlignHCenter();
-	} else if (e.ctrlKey && key == 111) { // /
+	} else if (e.ctrlKey && key == keyCode.DIVIDE) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) + 3;
 		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == 106) { // *
+	} else if (e.ctrlKey && key == keyCode.MULTIPLY) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) - 3;
 		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == 96) { // 0
-		let element = document.getElementById("direction");
-		if (element.value == "rtl") {
-			element.value = "ltr";
-		} else {
-			element.value = "rtl";
-		}
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == 110) { // .
+	} else if (e.ctrlKey && key == keyCode.DECIMAL) { // .
 		let element = document.getElementById("text_align");
 		if (element.value == "left") {
 			element.value = "center";
@@ -1922,6 +1856,32 @@ document.onkeyup = function(e) {
 			element.value = "left";
 		}
 		element.dispatchEvent(new Event("change"));
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_0) {
+		let element = document.getElementById("direction");
+		if (element.value == "rtl") {
+			element.value = "ltr";
+		} else {
+			element.value = "rtl";
+		}
+		element.dispatchEvent(new Event("change"));
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_1) {
+		styleAlignBottomLeft();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_2) {
+		styleAlignBottomCenter();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_3) {
+		styleAlignBottomRight();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_4) {
+		styleAlignLeftCenter();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_5) {
+		styleAlignCenterCenter();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_6) {
+		styleAlignRightCenter();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_7) {
+		styleAlignTopLeft();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_8) {
+		styleAlignTopCenter();
+	} else if (e.ctrlKey && key == keyCode.NUMPAD_9) {
+		styleAlignTopRight();
 	}
 	
 };

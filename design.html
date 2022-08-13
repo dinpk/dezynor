@@ -41,19 +41,19 @@
 			<div id="dash_panel">
 
 				<header id="menu_icons">
-					<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page (Alt + p)">
-					<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box (Alt + b)"> 
-					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position (Alt + s)">
-					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing (Alt + t)">
-					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and Gradient (Alt + c)">
-					<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image (Alt + i)">
-					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border (Alt + r)">
-					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text Shadow (Alt + x)">
-					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box Shadow (Alt + w)">
-					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform (Alt + m)">
-					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts (Alt + o)">
-					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes (Alt + h)">
-					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="File (Alt + u)"> 
+					<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
+					<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
+					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position">
+					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing">
+					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and Gradient">
+					<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image">
+					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
+					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text Shadow">
+					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box Shadow">
+					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
+					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
+					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
+					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="File"> 
 				</header>
 
 				<div id="box_section">
@@ -98,13 +98,13 @@
 						<tr>
 							<td>Width</td>
 							<td>
-								<input id="wrapper_width" type="number" onchange="styleWrapper();" value="800" step="50"> 
+								<input id="wrapper_width" type="number" onchange="styleWrapper();" value="1000" step="50"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Height</td>
 							<td>
-								<input id="wrapper_height" type="number" onchange="styleWrapper();" value="800" step="50"> 
+								<input id="wrapper_height" type="number" onchange="styleWrapper();" value="500" step="50"> 
 							</td>
 						</tr>
 						<tr>
@@ -117,57 +117,25 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Gradient</td>
-							<td>
-								<select id="wrapper_gradient_type" onchange="setWrapperGradientDirection();styleRemoveWrapperBackgroundColor();styleWrapper();">
-									<option value="linear-gradient">linear</option>
-									<option value="radial-gradient">radial</option>
-								</select> 
-								<select id="wrapper_gradient_direction" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
-									<optgroup label="Linear">
-										<option>to top</option>
-										<option>to bottom</option>
-										<option>to right</option>
-										<option>to left
-										<option>to right top</option>
-										<option>to left top</option>
-										<option>to right bottom</option>
-										<option>to left bottom</option>
-									</optgroup>
-									<optgroup label="Radial">
-										<option>circle</option>
-										<option>ellipse</option>
-									</optgroup>
-								</select><br>
-								<input id="wrapper_gradient_color1" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#F3D9D8"> 
-								<input id="wrapper_gradient_color2" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#F0DAFB"> 
-								<input id="wrapper_gradient_color3" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#CCF0FF"> 
-								<input id="wrapper_gradient_color4" type="color" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" value="#E0FAE3"> 
-								<button onclick="styleWrapperSameColor();styleRemoveWrapperBackgroundColor();styleWrapper();">Same</button><br>
-							</td>
-						</tr>
-						<tr>
 							<td>Image URLs</td>
 							<td>
 								<input id="wrapper_bg_image1" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();"> 
-								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove">x</button>
-								<br>
 								<select id="wrapper_bg1_position" onchange="styleWrapper();">
 									<option>top</option>
 									<option>bottom</option>
 									<option>left</option>
 									<option>right</option>
 								</select>
+								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove">x</button>
 								<br>
 								<input id="wrapper_bg_image2" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
-								<button id="remove_wrapper_bg_image2" onclick="styleRemoveWrapperBackgroundImage2();" title="Remove">x</button>
-								<br>
 								<select id="wrapper_bg2_position" onchange="styleWrapper();">
 									<option>top</option>
 									<option>bottom</option>
 									<option>left</option>
 									<option>right</option>
 								</select> 
+								<button id="remove_wrapper_bg_image2" onclick="styleRemoveWrapperBackgroundImage2();" title="Remove">x</button>
 							</td>
 						</tr>
 						<tr>
