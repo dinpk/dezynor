@@ -479,7 +479,6 @@
 								<input id="gradient_color3" type="color" onchange="styleBackgroundImage();"> 
 								<input id="gradient_color4" type="color" onchange="styleBackgroundImage();"> 
 								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage();">Same</button>
-								<button id="remove_background" onclick="styleRemoveBackgroundImage();">x</button><br>
 								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage('gradient');" checked>
 								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
 								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
@@ -573,14 +572,6 @@
 							</td>
 						</tr>
 
-						<!--
-						<tr>
-							<td>Art</td>
-							<td>
-								<img src="images/icon_art.png" onclick="showPopupPanel('graphics_panel');">
-							</td>
-						</tr>
-						-->
 					</table>
 				</div>
 
@@ -608,6 +599,61 @@
 								<input id="border_radius2" type="number" onchange="styleBorderRadius2(this);" title="Top right radius"><br>
 								<input id="border_radius3" type="number" onchange="styleBorderRadius3(this);" title="Bottom left radius">
 								<input id="border_radius4" type="number" onchange="styleBorderRadius4(this);" title="Bottom right radius">
+							</td>
+						</tr>
+						<tr>
+							<td>Presets </td>
+							<td>
+								<b>Shape</b><br>
+								<img src="images/borders/border01.png" onclick="styleBorderRadiusPreset('0', '0', '0', '0');"> 
+								<img src="images/borders/border02.png" onclick="styleBorderRadiusPreset('200', '200', '200', '200');">
+								<img src="images/borders/border03.png" onclick="styleBorderRadiusPreset('100', '100', '100', '100');">
+								<img src="images/borders/border04.png" onclick="styleBorderRadiusPreset('50', '50', '50', '50');">
+								<img src="images/borders/border05.png" onclick="styleBorderRadiusPreset('20', '20', '20', '20');">
+								<img src="images/borders/border06.png" onclick="styleBorderRadiusPreset('0', '0', '200', '200');">
+								<img src="images/borders/border07.png" onclick="styleBorderRadiusPreset('200', '200', '0', '0');">
+								<img src="images/borders/border08.png" onclick="styleBorderRadiusPreset('200', '0', '200', '0');">
+								<img src="images/borders/border09.png" onclick="styleBorderRadiusPreset('0', '200', '0', '200');">
+								<img src="images/borders/border10.png" onclick="styleBorderRadiusPreset('200', '0', '0', '200');">
+								<img src="images/borders/border11.png" onclick="styleBorderRadiusPreset('0', '200', '200', '0');">
+								<img src="images/borders/border12.png" onclick="styleBorderRadiusPreset('0', '200', '200', '200');">
+								<img src="images/borders/border13.png" onclick="styleBorderRadiusPreset('200', '0', '200', '200');">
+								<img src="images/borders/border14.png" onclick="styleBorderRadiusPreset('200', '200', '0', '200');">
+								<img src="images/borders/border15.png" onclick="styleBorderRadiusPreset('200', '200', '200', '0');">
+								<br>
+								<b>Width</b><br>
+								<img src="images/borders/border_width01.png" onclick="styleBorderWidthPreset('1');"> 
+								<img src="images/borders/border_width02.png" onclick="styleBorderWidthPreset('2');"> 
+								<img src="images/borders/border_width03.png" onclick="styleBorderWidthPreset('4');"> 
+								<img src="images/borders/border_width04.png" onclick="styleBorderWidthPreset('8');"> 
+								<img src="images/borders/border_width05.png" onclick="styleBorderWidthPreset('15');"> 
+								<img src="images/borders/border_width06.png" onclick="styleBorderWidthPreset('30');"> 
+								<img src="images/borders/border_width07.png" onclick="styleBorderWidthPreset('50');"> 
+								<img src="images/borders/border_width08.png" onclick="styleBorderWidthPreset('100');">
+								<br>
+								<b>Color</b><br>
+								<span style="background:rgb(0, 255, 255);cursor:pointer" onclick="styleBorderColorPreset('Aqua');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(127, 255, 212);cursor:pointer" onclick="styleBorderColorPreset('Aquamarine');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(242, 210, 189);cursor:pointer" onclick="styleBorderColorPreset('Bisque');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(0, 0, 255);cursor:pointer" onclick="styleBorderColorPreset('Blue');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(138,43,226);cursor:pointer" onclick="styleBorderColorPreset('BlueViolet');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(165, 42, 42);cursor:pointer" onclick="styleBorderColorPreset('Brown');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(223, 255, 0);cursor:pointer" onclick="styleBorderColorPreset('Chartreuse');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(255, 127, 80);cursor:pointer" onclick="styleBorderColorPreset('Coral');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(255, 87, 51);cursor:pointer" onclick="styleBorderColorPreset('CornflowerBlue');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(0, 255, 255);cursor:pointer" onclick="styleBorderColorPreset('Cyan');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(85,107,47);cursor:pointer" onclick="styleBorderColorPreset('DarkOliveGreen');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(0,191,255);cursor:pointer" onclick="styleBorderColorPreset('DeepSkyBlue');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(128, 128, 128);cursor:pointer" onclick="styleBorderColorPreset('Gray');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(255, 215, 0);cursor:pointer" onclick="styleBorderColorPreset('Gold');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(218, 165, 32);cursor:pointer" onclick="styleBorderColorPreset('GoldenRod');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(227,28,121);cursor:pointer" onclick="styleBorderColorPreset('HotPink');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(100,71,0,66);cursor:pointer" onclick="styleBorderColorPreset('MidnightBlue');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(182, 208, 226);cursor:pointer" onclick="styleBorderColorPreset('PowderBlue');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(50,205,50);cursor:pointer" onclick="styleBorderColorPreset('SeaGreen');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(192, 192, 192);cursor:pointer" onclick="styleBorderColorPreset('Silver');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(255, 255, 255);cursor:pointer" onclick="styleBorderColorPreset('White');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
+								<span style="background:rgb(214,232,101);cursor:pointer" onclick="styleBorderColorPreset('YellowGreen');">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp; 
 							</td>
 						</tr>
 					</table>

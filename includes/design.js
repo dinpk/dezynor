@@ -1085,7 +1085,6 @@ function loadWrapperStyles() {
 	background_image = wrapper.style.backgroundImage;
 	if (background_image.indexOf("gradient") > -1) {
 		gradient_type = background_image.indexOf("linear") > -1 ? "linear-gradient" : "radial-gradient";
-		document.getElementById("wrapper_gradient_type").value = gradient_type;
 		// add missing default value
 		background_image = background_image.replace("linear-gradient(", "").replace("radial-gradient(", "").replace("))", ")");
 		if (gradient_type == "linear-gradient" && background_image.indexOf("rgb") == 0) {
@@ -1093,12 +1092,6 @@ function loadWrapperStyles() {
 		} else if (gradient_type == "radial-gradient" && background_image.indexOf("rgb") == 0) {
 			background_image = "ellipse, " + background_image;
 		}
-		background_image = background_image.split(", rgb");
-		document.getElementById("wrapper_gradient_direction").value = background_image[0];
-		document.getElementById("wrapper_gradient_color1").value = rgb2hex("rgb" + background_image[1]);
-		document.getElementById("wrapper_gradient_color2").value = rgb2hex("rgb" + background_image[2]);
-		document.getElementById("wrapper_gradient_color3").value = rgb2hex("rgb" + background_image[3]);
-		document.getElementById("wrapper_gradient_color4").value = rgb2hex("rgb" + background_image[4]);
 	}
 
 	let wrapper_bg1 = document.getElementById("wrapper_bg1");
@@ -1138,6 +1131,21 @@ function styleBorderRadius1(element) {selected_section.style.borderTopLeftRadius
 function styleBorderRadius2(element) {selected_section.style.borderTopRightRadius = element.value + "px";}
 function styleBorderRadius3(element) {selected_section.style.borderBottomLeftRadius = element.value + "px";}
 function styleBorderRadius4(element) {selected_section.style.borderBottomRightRadius = element.value + "px";}
+function styleBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
+		document.getElementById("border_radius1").value = top_left;
+		document.getElementById("border_radius2").value = top_right;
+		document.getElementById("border_radius3").value = bottom_left;
+		document.getElementById("border_radius4").value = bottom_right;
+		selected_section.style.borderTopLeftRadius = top_left + "px";
+		selected_section.style.borderTopRightRadius = top_right + "px";
+		selected_section.style.borderBottomLeftRadius = bottom_left + "px";
+		selected_section.style.borderBottomRightRadius = bottom_right + "px";
+}
+function styleBorderWidthPreset(width) {
+	document.getElementById("border_width").value = width;
+	selected_section.style.borderWidth = width + "px";
+}
+function styleBorderColorPreset(color) {selected_section.style.borderColor = color;}
 function styleColumnCount(element) {selected_section.style.columnCount = element.value;}
 function styleColumnGap(element) {selected_section.style.columnGap = element.value + "px";}
 function styleDirection(element) {selected_section.style.direction = element.value;}
