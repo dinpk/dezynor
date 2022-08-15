@@ -15,6 +15,9 @@ openRequest.onupgradeneeded = function() {
 	dezynor_settings.add({setting_key: "max_upload_width",value: "1000"});
 	dezynor_settings.add({setting_key: "max_upload_height",value: "1000"});
 	localStorage.setItem("copied_section", "");
+	localStorage.setItem("show_background_image", "1");
+	localStorage.setItem("duplicate_offset_x", "10");
+	localStorage.setItem("duplicate_offset_y", "0");
 };
 
 openRequest.onerror = function() {

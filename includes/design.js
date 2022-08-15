@@ -205,7 +205,8 @@ function duplicateSection() {
 	
 	setTimeout(function() { 
 		selectSection(section_number);
-		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + 10 + "px";
+		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
+		selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
 		reAlignSectionHandles();
 	}, 100);
 
@@ -1145,7 +1146,6 @@ function styleBorderWidthPreset(width) {
 	document.getElementById("border_width").value = width;
 	selected_section.style.borderWidth = width + "px";
 }
-function styleBorderColorPreset(color) {selected_section.style.borderColor = color;}
 function styleColumnCount(element) {selected_section.style.columnCount = element.value;}
 function styleColumnGap(element) {selected_section.style.columnGap = element.value + "px";}
 function styleDirection(element) {selected_section.style.direction = element.value;}

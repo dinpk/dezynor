@@ -20,11 +20,10 @@
 				await idbPutItem("dezynor_settings", {setting_key:"max_upload_width", value:max_upload_width});
 				await idbPutItem("dezynor_settings", {setting_key:"max_upload_height", value:max_upload_height});
 
-				if (document.getElementById("show_background_images").checked) {
-					localStorage.setItem("show_background_images", "");
-				} else {
-					localStorage.removeItem("show_background_images");
-				}
+				localStorage.setItem("duplicate_offset_x", document.getElementById("duplicate_offset_x").value);
+				localStorage.setItem("duplicate_offset_y", document.getElementById("duplicate_offset_y").value);
+				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
+				
 
 				showMessage("Saved", "DarkGreen");
 			}
@@ -32,7 +31,11 @@
 			async function loadSettings() {
 				document.getElementById("max_upload_width").value = await idbGetItem("dezynor_settings", "max_upload_width");
 				document.getElementById("max_upload_height").value = await idbGetItem("dezynor_settings", "max_upload_height");
-				if ("show_background_images" in localStorage) document.getElementById("show_background_images").checked = true;
+
+				document.getElementById("duplicate_offset_x").value = localStorage.getItem("duplicate_offset_x");
+				document.getElementById("duplicate_offset_y").value = localStorage.getItem("duplicate_offset_y");
+
+				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 			}
 			
 		</script>
@@ -40,6 +43,16 @@
 		
 			#settings input[type=number] {
 				max-width:70px;
+			}
+			
+			tr:nth-child(even) {
+				background-color:#EEE;
+			}
+			td:first-child {
+				vertical-align:top;
+			}
+			td {
+				padding:5px;
 			}
 		
 		</style>
@@ -67,20 +80,20 @@
 					<tr>
 						<td>Max upload width</td>
 						<td>
-							<input type="number" id="max_upload_width" value="1000" min="200" title="Max Upload Width" required> 
+							<input type="number" id="max_upload_width" value="1000" min="200" required> width<br>
+							<input type="number" id="max_upload_height" value="1000" min="200" required> height
 						</td>
 					</tr>
 					<tr>
-						<td>Max upload height</td>
+						<td>Duplicate offset</td>
 						<td>
-							<input type="number" id="max_upload_height" value="1000" min="200" title="Max Upload Height" required>
+							<input type="number" id="duplicate_offset_x" value="10" required> x<br>
+							<input type="number" id="duplicate_offset_y" value="0" required> y
 						</td>
 					</tr>
 					<tr>
 						<td>Show background images</td>
-						<td>
-							<input type="checkbox" id="show_background_images">
-						</td>
+						<td><input type="checkbox" id="show_background_images"></td>
 					</tr>
 					
 				</table>

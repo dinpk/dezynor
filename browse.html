@@ -41,7 +41,7 @@
 					if (data.toLowerCase().indexOf(search.toLowerCase()) > -1) {
 						let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + key + "' onclick=\"window.open('design.html?key=" + key + "');\"");
 						item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
-						if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
+						if (localStorage.getItem("show_background_images" == "false")) item = item.replace(/((background-image: url\(.*?\);))/g, '');
 						searched_designs += item;
 					}
 
@@ -54,7 +54,7 @@
 				
 				document.getElementById("loader").style.display ="none";
 				
-				if ("show_background_images" in localStorage) {
+				if (localStorage.getItem("show_background_images") == "true") {
 					showBackgroundImages();
 				}
 				
@@ -199,7 +199,7 @@
 						if (folder == design_folder) {
 							let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
 							item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
-							if (!("show_background_images" in localStorage)) item = item.replace(/((background-image: url\(.*?\);))/g, '');
+							if (localStorage.getItem("show_background_images") == "false") item = item.replace(/((background-image: url\(.*?\);))/g, '');
 							folder_designs += item;
 						}
 
@@ -215,7 +215,7 @@
 					
 					document.getElementById("loader").style.display = "none";
 					
-					if ("show_background_images" in localStorage) {
+					if (localStorage.getItem("show_background_images") == "true") {
 						showBackgroundImages();
 					}
 			
