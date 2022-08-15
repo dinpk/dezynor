@@ -1806,8 +1806,12 @@ onkeydown = function(e){
 	if (
 		(e.ctrlKey && (key >= 96 && key <= 111)) // numpad and operators
 		|| (key >= 112 && key <= 123) // function keys
+		|| e.ctrlKey && key == keyCode.HOME 
+		|| e.ctrlKey && key == keyCode.END
 	) 
-	{e.preventDefault();}
+	{
+		e.preventDefault();
+	}
 
 }
 
@@ -1864,6 +1868,14 @@ document.onkeyup = function(e) {
 			element.value = "left";
 		}
 		element.dispatchEvent(new Event("change"));
+	} else if (key == keyCode.F7) {
+		let z_index_element = document.getElementById("z_index");
+		z_index_element.value = parseInt(z_index_element.value) - 1;
+		z_index_element.onchange();
+	} else if (key == keyCode.F8) {
+		let z_index_element = document.getElementById("z_index");
+		z_index_element.value = parseInt(z_index_element.value) + 1;
+		z_index_element.onchange();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_0) {
 		let element = document.getElementById("direction");
 		if (element.value == "rtl") {
