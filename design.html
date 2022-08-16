@@ -195,6 +195,7 @@
 						<tr>
 							<td>Align</td>
 							<td>
+								<!--
 								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();" title="Ctrl + Numpad7">
 								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();" title="Ctrl + Numpad9"> 
 								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();" title="Ctrl + Numpad1">
@@ -206,20 +207,21 @@
 								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();" title="Ctrl + Numpad6">
 
 								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Ctrl + Numpad5"><br>
+								-->
 
-								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Left"> 
-								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Center"> 
-								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Right"> 
-								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Top"> 
-								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Center"> 
-								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Bottom">
+								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Ctrl + Left Arrow"> 
+								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Ctrl + Right/Left Arrow"> 
+								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Ctrl + Right Arrow"> 
+								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Ctrl + Up Arrow"> 
+								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Ctrl + Up/Down Arrow"> 
+								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Ctrl + Down Arrow">
 
 							</td>
 						</tr>
 						<tr>
 							<td>Layer order</td>
 							<td>
-								<input id="z_index" type="number" onchange="setZIndex(this);" title="F7 / F8"> 
+								<input id="z_index" type="number" onchange="setZIndex(this);" title="Ctrl + Home / Ctrl + End"> 
 							</td>
 						</tr>
 					</table>
@@ -692,7 +694,7 @@
 						<tr>
 							<td>Degree</td>
 							<td>
-								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1"> 
+								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1" title="Ctrl + Num7 / Ctrl + Num9"> 
 								<input id="transform_degree2" type="number" onchange="styleTransform();" step="1">
 							</td>
 						</tr>

@@ -691,6 +691,62 @@ function styleAlignVBottom() {
 	loadSectionStyles();
 }
 
+function styleMoveRight() {
+	let new_left = parseInt(selected_section.style.left.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
+	let element = document.getElementById("left");
+	element.value = new_left;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleMoveLeft() {
+	let new_left = parseInt(selected_section.style.left.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
+	let element = document.getElementById("left");
+	element.value = new_left;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleMoveUp() {
+	let new_top = parseInt(selected_section.style.top.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
+	let element = document.getElementById("top");
+	element.value = new_top;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleMoveDown() {
+	let new_top = parseInt(selected_section.style.top.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
+	let element = document.getElementById("top");
+	element.value = new_top;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleRotateRight() {
+	document.getElementById("transform_type").value = "rotate";
+	let element = document.getElementById("transform_degree1");
+	element.onchange();
+	let transform = selected_section.style.transform;
+	let transform_degree = transform.split(", ");
+	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) +  parseInt(localStorage.getItem("rotate_offset"));
+	element.value = new_rotate;
+	element.onchange();
+}
+
+function styleRotateLeft() {
+	document.getElementById("transform_type").value = "rotate";
+	let element = document.getElementById("transform_degree1");
+	element.onchange();
+	let transform = selected_section.style.transform;
+	let transform_degree = transform.split(", ");
+	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) -  parseInt(localStorage.getItem("rotate_offset"));
+	element.value = new_rotate;
+	element.onchange();
+}
+
+
+
 function styleLayout(parameters) {
 	
 	let wrapper_width = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
@@ -1806,8 +1862,12 @@ onkeydown = function(e){
 	if (
 		(e.ctrlKey && (key >= 96 && key <= 111)) // numpad and operators
 		|| (key >= 112 && key <= 123) // function keys
+		|| e.ctrlKey && key == keyCode.UP_ARROW 
+		|| e.ctrlKey && key == keyCode.DOWN_ARROW 
+		|| e.ctrlKey && key == keyCode.RIGHT_ARROW 
+		|| e.ctrlKey && key == keyCode.LEFT_ARROW 
 		|| e.ctrlKey && key == keyCode.HOME 
-		|| e.ctrlKey && key == keyCode.END
+		|| e.ctrlKey && key == keyCode.END 
 	) 
 	{
 		e.preventDefault();
@@ -1868,13 +1928,13 @@ document.onkeyup = function(e) {
 			element.value = "left";
 		}
 		element.dispatchEvent(new Event("change"));
-	} else if (key == keyCode.F7) {
-		let z_index_element = document.getElementById("z_index");
-		z_index_element.value = parseInt(z_index_element.value) - 1;
-		z_index_element.onchange();
-	} else if (key == keyCode.F8) {
+	} else if (e.ctrlKey && key == keyCode.HOME) {
 		let z_index_element = document.getElementById("z_index");
 		z_index_element.value = parseInt(z_index_element.value) + 1;
+		z_index_element.onchange();
+	} else if (e.ctrlKey && key == keyCode.END) {
+		let z_index_element = document.getElementById("z_index");
+		z_index_element.value = parseInt(z_index_element.value) - 1;
 		z_index_element.onchange();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_0) {
 		let element = document.getElementById("direction");
@@ -1885,23 +1945,71 @@ document.onkeyup = function(e) {
 		}
 		element.dispatchEvent(new Event("change"));
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_1) {
-		styleAlignBottomLeft();
+		
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_2) {
-		styleAlignBottomCenter();
+		styleMoveDown();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_3) {
-		styleAlignBottomRight();
+		
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_4) {
-		styleAlignLeftCenter();
+		styleMoveLeft();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_5) {
-		styleAlignCenterCenter();
+		
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_6) {
-		styleAlignRightCenter();
+		styleMoveRight();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_7) {
-		styleAlignTopLeft();
+		styleRotateLeft();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_8) {
-		styleAlignTopCenter();
+		styleMoveUp();
 	} else if (e.ctrlKey && key == keyCode.NUMPAD_9) {
-		styleAlignTopRight();
+		styleRotateRight();
+	} else if (e.ctrlKey && key == keyCode.UP_ARROW) {
+		let section_top = parseInt(selected_section.style.top.replace("px", ""));
+		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
+		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
+		let wrapper_bottom = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
+		if (section_top == wrapper_top) {
+			styleAlignVBottom();
+		} else if (section_bottom == wrapper_bottom) {
+			styleAlignVCenter();
+		} else {
+			styleAlignVTop();
+		}
+	} else if (e.ctrlKey && key == keyCode.DOWN_ARROW) {
+		let section_top = parseInt(selected_section.style.top.replace("px", ""));
+		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
+		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
+		let wrapper_bottom = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
+		if (section_bottom == wrapper_bottom) {
+			styleAlignVTop();
+		} else if (section_top == wrapper_top) {
+			styleAlignVCenter();
+		} else {
+			styleAlignVBottom();
+		}
+	} else if (e.ctrlKey && key == keyCode.RIGHT_ARROW) {
+		let section_left = parseInt(selected_section.style.left.replace("px", ""));
+		let section_right = section_left + parseInt(selected_section.style.width.replace("px", ""));
+		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));
+		let wrapper_right = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
+		if (section_right == wrapper_right) {
+			styleAlignHLeft();
+		} else if (section_left == wrapper_left) {
+			styleAlignHCenter();
+		} else {
+			styleAlignHRight();
+		}
+	} else if (e.ctrlKey && key == keyCode.LEFT_ARROW) {
+		let section_left = parseInt(selected_section.style.left.replace("px", ""));
+		let section_right = section_left + parseInt(selected_section.style.width.replace("px", ""));
+		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));
+		let wrapper_right = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
+		if (section_left == wrapper_left) {
+			styleAlignHRight();
+		} else if (section_right == wrapper_right) {
+			styleAlignHCenter();
+		} else {
+			styleAlignHLeft();
+		}
 	}
 	
 };

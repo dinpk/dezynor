@@ -22,6 +22,11 @@
 
 				localStorage.setItem("duplicate_offset_x", document.getElementById("duplicate_offset_x").value);
 				localStorage.setItem("duplicate_offset_y", document.getElementById("duplicate_offset_y").value);
+				
+				localStorage.setItem("move_offset", document.getElementById("move_offset").value);
+				
+				localStorage.setItem("rotate_offset", document.getElementById("rotate_offset").value);
+				
 				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
 				
 
@@ -34,6 +39,10 @@
 
 				document.getElementById("duplicate_offset_x").value = localStorage.getItem("duplicate_offset_x");
 				document.getElementById("duplicate_offset_y").value = localStorage.getItem("duplicate_offset_y");
+				
+				document.getElementById("move_offset").value = localStorage.getItem("move_offset");
+				
+				document.getElementById("rotate_offset").value = localStorage.getItem("rotate_offset");
 
 				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 			}
@@ -90,6 +99,14 @@
 							<input type="number" id="duplicate_offset_x" value="10" required> x<br>
 							<input type="number" id="duplicate_offset_y" value="0" required> y
 						</td>
+					</tr>
+					<tr>
+						<td>Move offset</td>
+						<td><input type="number" id="move_offset" value="2" required></td>
+					</tr>
+					<tr>
+						<td>Rotate offset</td>
+						<td><input type="number" id="rotate_offset" value="2" required></td>
 					</tr>
 					<tr>
 						<td>Show background images</td>
