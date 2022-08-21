@@ -15,18 +15,16 @@
 
 			async function saveSettings() {
 
-				let max_upload_width = document.getElementById("max_upload_width").value;
-				let max_upload_height = document.getElementById("max_upload_height").value;
-				await idbPutItem("dezynor_settings", {setting_key:"max_upload_width", value:max_upload_width});
-				await idbPutItem("dezynor_settings", {setting_key:"max_upload_height", value:max_upload_height});
+				localStorage.setItem("max_upload_width", document.getElementById("max_upload_width").value);
+				localStorage.setItem("max_upload_height", document.getElementById("max_upload_height").value);
 
 				localStorage.setItem("duplicate_offset_x", document.getElementById("duplicate_offset_x").value);
 				localStorage.setItem("duplicate_offset_y", document.getElementById("duplicate_offset_y").value);
-				
 				localStorage.setItem("move_offset", document.getElementById("move_offset").value);
-				
 				localStorage.setItem("rotate_offset", document.getElementById("rotate_offset").value);
-				
+				localStorage.setItem("font_size_change", document.getElementById("font_size_change").value);
+				localStorage.setItem("line_height_change", document.getElementById("line_height_change").value);
+				localStorage.setItem("word_spacing_change", document.getElementById("word_spacing_change").value);
 				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
 				
 
@@ -34,16 +32,17 @@
 			}
 
 			async function loadSettings() {
-				document.getElementById("max_upload_width").value = await idbGetItem("dezynor_settings", "max_upload_width");
-				document.getElementById("max_upload_height").value = await idbGetItem("dezynor_settings", "max_upload_height");
+				document.getElementById("max_upload_width").value = localStorage.getItem("max_upload_width");
+				document.getElementById("max_upload_height").value = localStorage.getItem("max_upload_height");
 
 				document.getElementById("duplicate_offset_x").value = localStorage.getItem("duplicate_offset_x");
 				document.getElementById("duplicate_offset_y").value = localStorage.getItem("duplicate_offset_y");
-				
 				document.getElementById("move_offset").value = localStorage.getItem("move_offset");
-				
 				document.getElementById("rotate_offset").value = localStorage.getItem("rotate_offset");
-
+				document.getElementById("font_size_change").value = localStorage.getItem("font_size_change");
+				document.getElementById("line_height_change").value = localStorage.getItem("line_height_change");
+				document.getElementById("word_spacing_change").value = localStorage.getItem("word_spacing_change");
+				
 				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 			}
 			
@@ -78,7 +77,7 @@
 					<tr>
 						<td class="padright10"><img src="images/icon_caution.png"></td>
 						<td>Dezynor saves all the data in browser's storage (IndexedDB and localStorage). If you use some performance
-							and tunning application such as <strong>CCleaner</strong>, please make sure it does not wipe up browser's storage.
+							and tunning application such as <strong>CCleaner</strong>, please make sure it does not clear out this browser's storage.
 						</td>
 					</tr>
 				</table>
@@ -87,7 +86,7 @@
 				<form onsubmit="event.preventDefault();saveSettings();">
 				<table>
 					<tr>
-						<td>Max upload width</td>
+						<td>Max upload size</td>
 						<td>
 							<input type="number" id="max_upload_width" value="1000" min="200" required> width<br>
 							<input type="number" id="max_upload_height" value="1000" min="200" required> height
@@ -108,6 +107,19 @@
 						<td>Rotate offset</td>
 						<td><input type="number" id="rotate_offset" value="2" required></td>
 					</tr>
+					<tr>
+						<td>Font size</td>
+						<td><input type="number" id="font_size_change" value="3" required></td>
+					</tr>
+					<tr>
+						<td>Line height</td>
+						<td><input type="number" id="line_height_change" value="3" required></td>
+					</tr>
+					<tr>
+						<td>Word spacing</td>
+						<td><input type="number" id="word_spacing_change" value="1" required></td>
+					</tr>
+
 					<tr>
 						<td>Show background images</td>
 						<td><input type="checkbox" id="show_background_images"></td>

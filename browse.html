@@ -9,18 +9,18 @@
 		<script src="includes/common.js"></script>
 		<script>
 
+
+
 			document.addEventListener('visibilitychange', function(ev) { 
+				let current_folder = localStorage.getItem("current_folder");
 				if (current_folder != "" && document.visibilityState == "visible") {
 					showFolderDezyns(current_folder);
 				}
 			});
 
 			window.onload = async function() {
-				await delay(500);
 				loadFolders();
 			}
-
-			let current_folder = "";
 
 			function selectSection(num) {}
 
@@ -167,6 +167,9 @@
 			}
 
 			async function loadFolders() {
+				
+				await delay(500);
+				
 				let folders = await idbGetItem("dezynor_settings", "folders");
 				folders.sort();
 				let folders_html = "";
@@ -180,7 +183,7 @@
 
 			async function showFolderDezyns(folder) {
 				
-				current_folder = folder;
+				localStorage.setItem("current_folder", folder);
 				
 				document.getElementById("search").value = "";
 				document.getElementById("folder_label").innerHTML = "";
@@ -357,7 +360,7 @@
 				position:relative;
 				margin:100px;
 				cursor:pointer;
-				overflow:hidden;
+				overflow:hidden !important; /* override inline */
 			}
 			#designs .wrapper section {
 				position:absolute;

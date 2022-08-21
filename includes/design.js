@@ -87,6 +87,11 @@ async function addHandles() {
 		document.getElementById("resize_center_bottom").innerHTML = "O";
 	}
 
+	assignHandles();
+
+}
+
+function assignHandles() {
 	move = document.getElementById("move");
 	resize_bottom_right = document.getElementById("resize_bottom_right");
 	resize_top_right = document.getElementById("resize_top_right");
@@ -95,12 +100,13 @@ async function addHandles() {
 	resize_center_right = document.getElementById("resize_center_right");
 	resize_center_left = document.getElementById("resize_center_left");
 	resize_center_top = document.getElementById("resize_center_top");
-	resize_center_bottom = document.getElementById("resize_center_bottom");
-
+	resize_center_bottom = document.getElementById("resize_center_bottom");	
 }
 
 function hideHandles() {
-	
+
+	assignHandles();
+		
 	move.style.visibility = "hidden";
 	resize_bottom_right.style.visibility = "hidden";
 	resize_top_right.style.visibility = "hidden";
@@ -113,6 +119,19 @@ function hideHandles() {
 }
 
 function showHandles() {
+	
+	/*
+	if (parseInt(document.getElementById("transform_degree1").value) != 0) {
+		selected_section.style.resize = "both";
+		selected_section.style.overflow = "auto";
+		return;
+	} else {
+		selected_section.style.resize = "none";
+	}
+	*/ 
+	
+	assignHandles();
+		
 	move.style.visibility = "visible";
 	resize_bottom_right.style.visibility = "visible";
 	resize_top_right.style.visibility = "visible";
@@ -214,9 +233,12 @@ function duplicateSection() {
 }
 
 function removeSection() {
-	selected_section.remove();
-	hideHandles();
-	section_number = getNewSectionNumber();
+	if (!(selected_section)) return;
+	if (confirm("Do you really want to delete this box?")) {
+		selected_section.remove();
+		hideHandles();
+		selected_section = null;
+	}
 }
 
 function copySection() {
@@ -268,8 +290,8 @@ function onMouseDown4Move(counter) {
 	let section = document.getElementById("section" + counter);
 	
 	function onMouseMove(event) {
-		move.style.left = (event.pageX - 30) + "px";
-		move.style.top = (event.pageY - 30) + "px";
+		move.style.left = (event.pageX - 25) + "px";
+		move.style.top = (event.pageY - 25) + "px";
 		section.style.left = (event.pageX - section.style.width.replace("px", "") / 2) - 30 + "px";
 		section.style.top = (event.pageY - section.style.height.replace("px", "") / 2) - 30 + "px";
 	}
@@ -503,6 +525,7 @@ function onMouseDown4ResizeBottomLeft(counter) {
 
 
 function reAlignSectionHandles() {
+
 	
 	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) + "px";
 	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
@@ -814,11 +837,13 @@ function preview(status) {
 		}
 		document.getElementById("wrapper").style.outline = "";
 	} else {
-		showHandles();
 		for (i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "1px dashed gray";
 		}
-		if (selected_section) selected_section.style.outline = "4px dashed yellow";
+		if (selected_section) {
+			selected_section.style.outline = "4px dashed yellow";
+			showHandles();
+		}
 	}
 }
 
@@ -897,6 +922,7 @@ function setShape(value) {
 }
 
 function setZIndex(element) {
+	if (parseInt(element.value) < 0) return;
 	selected_section.style.zIndex = element.value;
 }
 
@@ -965,6 +991,15 @@ async function loadDezyn() {
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
 		
+		/*
+		let key_exists = await idbKeyExists("dezynor_designs", current_design_key);
+		if (!key_exists) {
+			alert("This design does not exist");
+			return;
+		}
+		*/
+
+		
 		idbGetItem("dezynor_designs", current_design_key).then(function(result) {
 
 			let object = result
@@ -1004,6 +1039,7 @@ async function loadDezyn() {
 		styleWrapper();
 		addHandles();
 	}
+
 
 }
 
@@ -1072,6 +1108,7 @@ function styleWrapper() {
 	wrapper.style.borderTopRightRadius = document.getElementById("wrapper_border_radius2").value + "px";
 	wrapper.style.borderBottomLeftRadius = document.getElementById("wrapper_border_radius3").value + "px";
 	wrapper.style.borderBottomRightRadius = document.getElementById("wrapper_border_radius4").value + "px";
+	wrapper.style.overflow = document.getElementById("wrapper_overflow").checked ? "visible" : "hidden";
 	
 	wrapper.style.backgroundImage = "";
 	wrapper.style.backgroundColor = document.getElementById("wrapper_background_color").value;
@@ -1304,6 +1341,9 @@ function styleBackgroundImage(type = "") {
 
 
 async function styleUploadImage(element) {
+	
+	if (!(selected_section)) return;
+	
 	image_key = "image-" + new Date().getTime();
 	const image_file = element.files[0];
 
@@ -1317,8 +1357,8 @@ async function styleUploadImage(element) {
 		let image = document.createElement("img");
 		image.src = reader.result // file reader result;
 		image.onload = async function (e) {
-			let max_resize_width = await idbGetItem("dezynor_settings", "max_upload_width");
-			let max_resize_height = await idbGetItem("dezynor_settings", "max_upload_height");
+			let max_resize_width = localStorage.getItem("max_upload_width");
+			let max_resize_height = localStorage.getItem("max_upload_height");
 			let width = image.width;
 			let height = image.height;
 			let canvas = document.createElement("canvas");
@@ -1361,6 +1401,7 @@ async function styleUploadImage(element) {
 }
 
 function styleAddImageURL() {
+	if (!(selected_section)) return;
 	let image_url = prompt("Provide image URL");
 	if (!image_url || image_url.trim().length == 0) return;
 	
@@ -1860,14 +1901,25 @@ onkeydown = function(e){
 	let key = e.which || e.keyCode;
 	
 	if (
-		(e.ctrlKey && (key >= 96 && key <= 111)) // numpad and operators
-		|| (key >= 112 && key <= 123) // function keys
-		|| e.ctrlKey && key == keyCode.UP_ARROW 
-		|| e.ctrlKey && key == keyCode.DOWN_ARROW 
-		|| e.ctrlKey && key == keyCode.RIGHT_ARROW 
-		|| e.ctrlKey && key == keyCode.LEFT_ARROW 
-		|| e.ctrlKey && key == keyCode.HOME 
-		|| e.ctrlKey && key == keyCode.END 
+			(e.ctrlKey && e.shiftKey) 
+		|| 	(e.ctrlKey && e.altKey) 
+		|| 	(e.shiftKey && e.altKey) 
+		|| 	(e.altKey && (key >= 96 && key <= 111)) // numpad and operators
+		|| 	(key >= 112 && key <= 123) // function keys
+		|| 	(e.ctrlKey && key == keyCode.HOME) 
+		|| 	(e.ctrlKey && key == keyCode.END) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_R) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_L) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_E) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_J) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_9) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_0) 
+		|| 	(e.altKey && key == keyCode.KEY_1) 
+		|| 	(e.altKey && key == keyCode.KEY_2) 
+		|| 	(e.altKey && key == keyCode.RIGHT_ARROW) 
+		|| 	(e.altKey && key == keyCode.LEFT_ARROW) 
+		|| 	(e.altKey && key == keyCode.UP_ARROW) 
+		|| 	(e.altKey && key == keyCode.DOWN_ARROW) 
 	) 
 	{
 		e.preventDefault();
@@ -1875,94 +1927,121 @@ onkeydown = function(e){
 
 }
 
+let next_focused_section = 0;
+
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 	//console.log(key);
 
-	
-	// http://gcctech.org/csc/javascript/javascript_keycodes.htm
-	
-	// CTRL + 
 	if (key == keyCode.F1) {
-		saveDezyn();
-	} else if (e.ctrlKey && e.altKey && key == keyCode.KEY_A) {
-		addSection();
-	} else if (e.ctrlKey && e.altKey && key == keyCode.KEY_Z) {
-		duplicateSection();
-	}
-	
-	// NUM PAD
-	if (e.ctrlKey && key == keyCode.ADD) {
-		let element = document.getElementById("font_size");
-		element.value = parseInt(element.value) + 3;
-		element.dispatchEvent(new Event("change"));
-		element = document.getElementById("line_height");
-		element.value = parseInt(element.value) + 4;
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.SUBTRACT) {
-		let element = document.getElementById("font_size");
-		element.value = parseInt(element.value) - 3;
-		element.dispatchEvent(new Event("change"));
-		element = document.getElementById("line_height");
-		element.value = parseInt(element.value) - 4;
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.ENTER) {
-		styleAlignHCenter();
-	} else if (e.ctrlKey && key == keyCode.DIVIDE) {
-		let element = document.getElementById("word_spacing");
-		element.value = parseInt(element.value) + 3;
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.MULTIPLY) {
-		let element = document.getElementById("word_spacing");
-		element.value = parseInt(element.value) - 3;
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.DECIMAL) { // .
-		let element = document.getElementById("text_align");
-		if (element.value == "left") {
-			element.value = "center";
-		} else if (element.value == "center") {
-			element.value = "right";
-		} else if (element.value == "right") {
-			element.value = "justify";
-		} else if (element.value == "justify") {
-			element.value = "left";
+		dashPanelToggle();
+	} else if (key == keyCode.F2) {
+		if (document.querySelectorAll("section")[next_focused_section]) {
+			let section = document.querySelectorAll("section")[next_focused_section];
+			let section_number = section.id.replace("section", "");
+			selectSection(section_number);
+			next_focused_section++;
+		} else {
+			next_focused_section = 0;
 		}
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.HOME) {
+	} else if (key == keyCode.F3) {
+		let z_index_element = document.getElementById("z_index");
+		let new_z_index = parseInt(z_index_element.value) - 1;
+		if (new_z_index >= 0) {
+			z_index_element.value = new_z_index;
+			z_index_element.onchange();
+		}
+	} else if (key == keyCode.F4) {
 		let z_index_element = document.getElementById("z_index");
 		z_index_element.value = parseInt(z_index_element.value) + 1;
 		z_index_element.onchange();
-	} else if (e.ctrlKey && key == keyCode.END) {
-		let z_index_element = document.getElementById("z_index");
-		z_index_element.value = parseInt(z_index_element.value) - 1;
-		z_index_element.onchange();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_0) {
+	} else if (key == keyCode.F9) {
+		saveDezyn();
+	} else if (e.ctrlKey && key == keyCode.COMMA) {
 		let element = document.getElementById("direction");
-		if (element.value == "rtl") {
-			element.value = "ltr";
-		} else {
-			element.value = "rtl";
-		}
-		element.dispatchEvent(new Event("change"));
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_1) {
+		element.value = "rtl";
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.PERIOD) {
+		let element = document.getElementById("direction");
+		element.value = "ltr";
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_R) {
+		let element = document.getElementById("text_align");
+		element.value = "right";
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_L) {
+		let element = document.getElementById("text_align");
+		element.value = "left";
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_E) {
+		let element = document.getElementById("text_align");
+		element.value = "center";
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_J) {
+		let element = document.getElementById("text_align");
+		element.value = "justify";
+		element.onchange();
+	} else if (e.ctrlKey && e.shiftKey && key == keyCode.CLOSE_BRACKET) {
+		element = document.getElementById("line_height");
+		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));
+		element.onchange();
+	} else if (e.ctrlKey && e.shiftKey && key == keyCode.OPEN_BRACKET) {
+		element = document.getElementById("line_height");
+		element.value = parseInt(element.value) - parseInt(localStorage.getItem("line_height_change"));
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.OPEN_BRACKET) {
+		let element = document.getElementById("font_size");
+		element.value = parseInt(element.value) - parseInt(localStorage.getItem("font_size_change"));
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.CLOSE_BRACKET) {
+		let element = document.getElementById("font_size");
+		element.value = parseInt(element.value) + parseInt(localStorage.getItem("font_size_change"));
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_9) {
+		let element = document.getElementById("word_spacing");
+		element.value = parseInt(element.value) - parseInt(localStorage.getItem("word_spacing_change"));
+		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.KEY_0) {
+		let element = document.getElementById("word_spacing");
+		element.value = parseInt(element.value) + parseInt(localStorage.getItem("word_spacing_change"));
+		element.onchange();
+
+
+	} else if (e.altKey && key == keyCode.KEY_2) {
+		duplicateSection();
+	} else if (e.altKey && key == keyCode.KEY_1) {
+		addSection();
+	} else if (e.altKey && key == keyCode.DELETE) {
+		removeSection();
+	} else if (e.altKey && key == keyCode.SUBTRACT) {
+		styleResizeFullWidth();
+	} else if (e.altKey && key == keyCode.ADD) {
+		styleResizeFullHeight();
+	} else if (e.altKey && key == keyCode.ENTER) {
 		
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_2) {
-		styleMoveDown();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_3) {
-		
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_4) {
-		styleMoveLeft();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_5) {
-		
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_6) {
-		styleMoveRight();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_7) {
+	} else if (e.altKey && key == keyCode.DIVIDE) {
 		styleRotateLeft();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_8) {
-		styleMoveUp();
-	} else if (e.ctrlKey && key == keyCode.NUMPAD_9) {
+	} else if (e.altKey && key == keyCode.MULTIPLY) {
 		styleRotateRight();
-	} else if (e.ctrlKey && key == keyCode.UP_ARROW) {
+	} else if (e.altKey && key == keyCode.DECIMAL) {
+		styleAddImageURL();
+	} else if (e.altKey && key == keyCode.NUMPAD_0) {
+		if (!(selected_section)) return;
+		document.getElementById('upload_image').click();
+	} else if (e.altKey && key == keyCode.NUMPAD_1) {
+	} else if (e.altKey && key == keyCode.NUMPAD_2) {
+		styleMoveDown();
+	} else if (e.altKey && key == keyCode.NUMPAD_3) {
+	} else if (e.altKey && key == keyCode.NUMPAD_4) {
+		styleMoveLeft();
+	} else if (e.altKey && key == keyCode.NUMPAD_5) {
+	} else if (e.altKey && key == keyCode.NUMPAD_6) {
+		styleMoveRight();
+	} else if (e.altKey && key == keyCode.NUMPAD_7) {
+	} else if (e.altKey && key == keyCode.NUMPAD_8) {
+		styleMoveUp();
+	} else if (e.altKey && key == keyCode.NUMPAD_9) {
+	} else if (e.altKey && key == keyCode.UP_ARROW) {
 		let section_top = parseInt(selected_section.style.top.replace("px", ""));
 		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
 		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
@@ -1974,7 +2053,7 @@ document.onkeyup = function(e) {
 		} else {
 			styleAlignVTop();
 		}
-	} else if (e.ctrlKey && key == keyCode.DOWN_ARROW) {
+	} else if (e.altKey && key == keyCode.DOWN_ARROW) {
 		let section_top = parseInt(selected_section.style.top.replace("px", ""));
 		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
 		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
@@ -1986,7 +2065,7 @@ document.onkeyup = function(e) {
 		} else {
 			styleAlignVBottom();
 		}
-	} else if (e.ctrlKey && key == keyCode.RIGHT_ARROW) {
+	} else if (e.altKey && key == keyCode.RIGHT_ARROW) {
 		let section_left = parseInt(selected_section.style.left.replace("px", ""));
 		let section_right = section_left + parseInt(selected_section.style.width.replace("px", ""));
 		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));
@@ -1998,7 +2077,7 @@ document.onkeyup = function(e) {
 		} else {
 			styleAlignHRight();
 		}
-	} else if (e.ctrlKey && key == keyCode.LEFT_ARROW) {
+	} else if (e.altKey && key == keyCode.LEFT_ARROW) {
 		let section_left = parseInt(selected_section.style.left.replace("px", ""));
 		let section_right = section_left + parseInt(selected_section.style.width.replace("px", ""));
 		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));

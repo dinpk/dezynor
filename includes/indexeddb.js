@@ -1,60 +1,75 @@
 
 
-let database_name = "dezynordb";
-let openRequest = indexedDB.open(database_name, 1);
+let db_name = "dezynordb";
+let db_version = "5";
+let connection = indexedDB.open(db_name, db_version);
 
-openRequest.onupgradeneeded = function() {
-	let db = openRequest.result;
+connection.onupgradeneeded = function(e) {
+	let db = connection.result;
+	if (!db.objectStoreNames.contains("dezynor_designs")) {
+		let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
+		let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
+		let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
+		dezynor_settings.add({setting_key: "folders", value: ["default"]});
+		dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});
+		localStorage.setItem("copied_section", "");
+		localStorage.setItem("show_background_image", "1");
+		localStorage.setItem("duplicate_offset_x", "10");
+		localStorage.setItem("duplicate_offset_y", "0");
+		localStorage.setItem("move_offset", "2");
+		localStorage.setItem("rotate_offset", "1");
+		localStorage.setItem("font_size_change", "3");
+		localStorage.setItem("line_height_change", "3");
+		localStorage.setItem("word_spacing_change", "1");
+		localStorage.setItem("max_upload_width", "1200");
+		localStorage.setItem("max_upload_height", "1200");
+	}
+	
+	    console.log("DB updated from version " + e.oldVersion +  " to " + e.newVersion);
 
-	let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
-	let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
-	let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
+	if (e.oldVersion == 5) {
+		// console.log("changes done after version 5");
+	} else if (e.oldVersion == 6) {
 
-	dezynor_settings.add({setting_key: "folders", value: ["default"]});
-	dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});
-	dezynor_settings.add({setting_key: "max_upload_width",value: "1000"});
-	dezynor_settings.add({setting_key: "max_upload_height",value: "1000"});
-	localStorage.setItem("copied_section", "");
-	localStorage.setItem("show_background_image", "1");
-	localStorage.setItem("duplicate_offset_x", "10");
-	localStorage.setItem("duplicate_offset_y", "0");
-	localStorage.setItem("move_offset", "2");
-	localStorage.setItem("rotate_offset", "1");
+	}
 };
 
-openRequest.onerror = function() {
-	console.error("Error: ", openRequest.error);
+connection.onerror = function(e) {
+	console.error("Error: ", connection.error);
 };
 
-openRequest.onsuccess = function() {
-	let db = openRequest.result;
-	db.onerror = function() {console.log("Error: ", db.error);};
-	db.onversionchange = function() {
+connection.onsuccess = function(e) {
+	let db = connection.result;
+	db.onerror = function(e) {
+		console.log("Error: ", db.error);
+	};
+	db.onversionchange = function(e) {
 		db.close();
 		alert("Database is outdated, please reload the page.")
-		return
+		return;
 	};
 };
 
 async function idbPutItem(store, object) {
-	let db = openRequest.result;
+	let db = connection.result;
 	let transaction = db.transaction(store, "readwrite");
 	store = transaction.objectStore(store);
 	return new Promise(function(resolve, reject) {
 		let request = store.put(object);
-        request.onsuccess = function() {
+        request.onsuccess = function(e) {
 			resolve(true);
         }
 	});
 }
 
 async function idbGetItem(store, key) {
-	let db = openRequest.result;
+	let db = connection.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);
     return new Promise(function(resolve, reject) {
         let request = store.get(key);
-        request.onsuccess = function() {
+        request.onsuccess = function(e) {
+			// if (request.result.value == e.target.result.value) console.log("same");
 			if (request.result != undefined) {
 				resolve(request.result.value);
 			}
@@ -63,24 +78,24 @@ async function idbGetItem(store, key) {
 }
 
 async function idbRemoveItem(store, key) {
-	let db = openRequest.result;
+	let db = connection.result;
 	let transaction = db.transaction(store, "readwrite");
 	store = transaction.objectStore(store);
     return new Promise(function(resolve, reject) {
         let request = store.delete(key);
-		request.onsuccess = function(evt) {
+		request.onsuccess = function(e) {
 			resolve(true);
 		};
     });
 }
 
 async function idbKeyExists(store, key) {
-	let db = openRequest.result;
+	let db = connection.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);
     return new Promise(function(resolve, reject) {
         let request = store.get(key);
-        request.onsuccess = function() {
+        request.onsuccess = function(e) {
 			if (request.result != undefined) {
 				resolve(true);
 			} else {
@@ -91,12 +106,12 @@ async function idbKeyExists(store, key) {
 }
 
 async function idbGetAllItems(store) {
-	let db = openRequest.result;
+	let db = connection.result;
 	let transaction = db.transaction(store, "readonly");
 	store = transaction.objectStore(store);
     return new Promise(function(resolve, reject) {
 		let all_items = store.getAll();
-		all_items.onsuccess = function() {
+		all_items.onsuccess = function(e) {
 			resolve(all_items.result);
 		}
     });	

@@ -35,7 +35,7 @@
 		</div>
 
 		
-		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview">►</div>
+		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview" title="Alt + Menu">►</div>
 
 		<div id="dash_panel_wrapper">
 			<div id="dash_panel">
@@ -53,24 +53,24 @@
 					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
 					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
 					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
-					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="File"> 
+					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design File"> 
 				</header>
 
 				<div id="box_section">
 					<h4 id="box_heading" onclick="hideSectionPanel('box_section');">Box</h4>
-					<img src="images/icon_box_add.png" onclick="addSection();" title="Add box (Ctrl + Alt + a)"> 
-					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate box (Ctrl + Alt + z)"> 
+					<img src="images/icon_box_add.png" onclick="addSection();" title="Add box (Alt + 1)"> 
+					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate box (Alt + 2)"> 
 					<img src="images/icon_box_copy.png" onclick="copySection();" title="Copy box"> 
 					<img src="images/icon_box_paste.png" onclick="pasteSection();" title="Paste box"> 
-					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box"> 
+					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box (Alt + Delete)"> 
 				</div>
 
 				<div id="utility_section">
-					<h4 id="utility_heading" onclick="hideSectionPanel('utility_section');">File</h4>
+					<h4 id="utility_heading" onclick="hideSectionPanel('utility_section');">Design File</h4>
 					<table class="utility_table">
 						<tr>
 							<td>
-								<span onclick="saveDezyn();" title="Save design (Ctrl + f1)"><img id="save_design" src="images/icon_save.png"> Save</span> 
+								<span onclick="saveDezyn();" title="Save design (F9)"><img id="save_design" src="images/icon_save.png"> Save</span> 
 								<select id="select_folders" onchange="saveDezyn();"></select> 
 							</td>
 						</tr>
@@ -82,9 +82,6 @@
 						</tr>
 						<tr>
 							<td><span onclick="window.print();" title="Print design"><img src="images/icon_print.png"> Print</span></td>
-						</tr>
-						<tr>
-							<td><a target="_blank" href="index.html" title="Folders"><img src="images/icon_folders.png"> Folders</span></td>
 						</tr>
 					</table>
 				</div>
@@ -154,11 +151,15 @@
 						<tr>
 							<td>Radius</td>
 							<td>
-								<input id="wrapper_border_radius1" type="number" onchange="styleWrapper();" title="Top left radius">
-								<input id="wrapper_border_radius2" type="number" onchange="styleWrapper();" title="Top right radius"><br>
-								<input id="wrapper_border_radius3" type="number" onchange="styleWrapper();" title="Bottom left radius">
-								<input id="wrapper_border_radius4" type="number" onchange="styleWrapper();" title="Bottom right radius">
+								<input id="wrapper_border_radius1" type="number" onchange="styleWrapper();" value="0" title="Top left radius">
+								<input id="wrapper_border_radius2" type="number" onchange="styleWrapper();" value="0" title="Top right radius"><br>
+								<input id="wrapper_border_radius3" type="number" onchange="styleWrapper();" value="0" title="Bottom left radius">
+								<input id="wrapper_border_radius4" type="number" onchange="styleWrapper();" value="0" title="Bottom right radius">
 							</td>
+						</tr>
+						<tr>
+							<td>Overflow</td>
+							<td><input id="wrapper_overflow" type="checkbox" onchange="styleWrapper();" checked></td>
 						</tr>
 					</table>
 				</div>
@@ -185,8 +186,8 @@
 						<tr>
 							<td>Resize</td>
 							<td>
-								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Full Width"> 
-								<img src="images/resize_full_height.png" id="resize_full_height" onclick="styleResizeFullHeight();" title="Full Height"> 
+								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Alt + Numpad Subtract"> 
+								<img src="images/resize_full_height.png" id="resize_full_height" onclick="styleResizeFullHeight();" title="Alt + Numpad Add"> 
 								<img src="images/resize_half_width.png" id="resize_half_width" onclick="styleResizeHalfWidth();" title="Half Width"> 
 								<img src="images/resize_half_height.png" id="resize_half_height" onclick="styleResizeHalfHeight();" title="Half Height"> 
 								<img src="images/resize_quarter.png" id="resize_quarter" onclick="styleResizeQuarter();" title="Quarter"> 
@@ -196,32 +197,32 @@
 							<td>Align</td>
 							<td>
 								<!--
-								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();" title="Ctrl + Numpad7">
-								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();" title="Ctrl + Numpad9"> 
-								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();" title="Ctrl + Numpad1">
-								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="styleAlignBottomRight();" title="Ctrl + Numpad3">
+								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();">
+								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();"> 
+								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();">
+								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="styleAlignBottomRight();">
 
-								<img src="images/align_top_center.png" id="align_top_center" onclick="styleAlignTopCenter();" title="Ctrl + Numpad8">
-								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="styleAlignBottomCenter();" title="Ctrl + Numpad2">
-								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();" title="Ctrl + Numpad4">
-								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();" title="Ctrl + Numpad6">
+								<img src="images/align_top_center.png" id="align_top_center" onclick="styleAlignTopCenter();">
+								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="styleAlignBottomCenter();">
+								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();">
+								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();">
 
-								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Ctrl + Numpad5"><br>
+								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();"><br>
 								-->
 
-								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Ctrl + Left Arrow"> 
-								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Ctrl + Right/Left Arrow"> 
-								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Ctrl + Right Arrow"> 
-								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Ctrl + Up Arrow"> 
-								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Ctrl + Up/Down Arrow"> 
-								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Ctrl + Down Arrow">
+								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Alt + LeftArrow"> 
+								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Alt + RightArrow / Alt + LeftArrow"> 
+								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Alt + RightArrow"> 
+								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Alt + UpArrow"> 
+								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Alt + UpArrow / Alt + DownArrow"> 
+								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Alt + DownArrow">
 
 							</td>
 						</tr>
 						<tr>
 							<td>Layer order</td>
 							<td>
-								<input id="z_index" type="number" onchange="setZIndex(this);" title="Ctrl + Home / Ctrl + End"> 
+								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
 							</td>
 						</tr>
 					</table>
@@ -385,7 +386,7 @@
 						<tr>
 							<td>Direction</td>
 							<td>
-								<select id="direction" onchange="styleDirection(this);">
+								<select id="direction" onchange="styleDirection(this);" title="Ctrl + &lt; / Ctrl + &gt;">
 									<option value="ltr">left to right</option>
 									<option value="rtl">right to left</option>
 								</select> 
@@ -476,11 +477,11 @@
 						<tr>
 							<td>Background gradient</td>
 							<td>
-								<input id="gradient_color1" type="color" onchange="styleBackgroundImage();"> 
-								<input id="gradient_color2" type="color" onchange="styleBackgroundImage();"> 
-								<input id="gradient_color3" type="color" onchange="styleBackgroundImage();"> 
-								<input id="gradient_color4" type="color" onchange="styleBackgroundImage();"> 
-								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage();">Same</button>
+								<input id="gradient_color1" type="color" onchange="styleBackgroundImage('gradient');"> 
+								<input id="gradient_color2" type="color" onchange="styleBackgroundImage('gradient');"> 
+								<input id="gradient_color3" type="color" onchange="styleBackgroundImage('gradient');"> 
+								<input id="gradient_color4" type="color" onchange="styleBackgroundImage('gradient');"> 
+								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage('gradient');">Same</button><br>
 								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage('gradient');" checked>
 								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
 								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
@@ -491,7 +492,7 @@
 									<option value="radial-gradient">radial</option>
 									<option value="conic-gradient">conic</option>
 								</select> 
-								<select id="gradient_direction" onchange="styleBackgroundImage();">
+								<select id="gradient_direction" onchange="styleBackgroundImage('gradient');">
 									<optgroup label="Linear">
 										<option>to top</option>
 										<option>to bottom</option>
@@ -523,8 +524,8 @@
 							<td>Image</td>
 							<td>
 								<input id="upload_image" type="file" accept="image/*" onchange="styleUploadImage(this);" style="display:none;">
-								<button onclick="document.getElementById('upload_image').click();">Upload</button> or 
-								<button onclick="styleAddImageURL();" title="Add Image URL">URL</button> 
+								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> or 
+								<button onclick="styleAddImageURL();" title="Alt + Numpad .">URL</button> 
 								<input id="delete_image" type="checkbox" title="Delete existing uploaded image" style="vertical-align:middle;" checked>
 								<button id="remove_image" onclick="styleRemoveImage();" title="Remove image">x</button>
 							</td>
@@ -694,7 +695,7 @@
 						<tr>
 							<td>Degree</td>
 							<td>
-								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1" title="Ctrl + Num7 / Ctrl + Num9"> 
+								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1" title="Alt + Num7 / Alt + Num9"> 
 								<input id="transform_degree2" type="number" onchange="styleTransform();" step="1">
 							</td>
 						</tr>
