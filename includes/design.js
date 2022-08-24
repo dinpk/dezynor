@@ -124,11 +124,14 @@ function showHandles() {
 	if (parseInt(document.getElementById("transform_degree1").value) != 0) {
 		selected_section.style.resize = "both";
 		selected_section.style.overflow = "auto";
+		hideHandles();
+		move.style.visibility = "visible";
 		return;
 	} else {
 		selected_section.style.resize = "none";
+		selected_section.style.overflow = "visible";
 	}
-	*/ 
+	*/
 	
 	assignHandles();
 		
@@ -292,8 +295,8 @@ function onMouseDown4Move(counter) {
 	function onMouseMove(event) {
 		move.style.left = (event.pageX - 25) + "px";
 		move.style.top = (event.pageY - 25) + "px";
-		section.style.left = (event.pageX - section.style.width.replace("px", "") / 2) - 30 + "px";
-		section.style.top = (event.pageY - section.style.height.replace("px", "") / 2) - 30 + "px";
+		section.style.left = (event.pageX - section.style.width.replace("px", "") / 2) - 25 + "px";
+		section.style.top = (event.pageY - section.style.height.replace("px", "") / 2) - 25 + "px";
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
@@ -527,8 +530,8 @@ function onMouseDown4ResizeBottomLeft(counter) {
 function reAlignSectionHandles() {
 
 	
-	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) + "px";
-	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
+	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) - 5 + "px";
 
 	resize_bottom_right.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
 	resize_bottom_right.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", "")) - 5 + "px";
@@ -549,10 +552,10 @@ function reAlignSectionHandles() {
 	resize_center_left.style.left = parseInt((selected_section.style.left.replace("px", ""))) - 10 + "px";
 	
 	resize_center_top.style.top =  parseInt(selected_section.style.top.replace("px", "")) - 10 + "px";
-	resize_center_top.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	resize_center_top.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) - 5 + "px";
 
 	resize_center_bottom.style.top =  parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", "")) - 5 + "px";
-	resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) + "px";
+	resize_center_bottom.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) - 5 + "px";
 
 }
 
@@ -1135,9 +1138,9 @@ function styleWrapper() {
 }
 
 function setRandomWrapperColor() {
-	let r = Math.floor((Math.random() * 200));
-	let g = Math.floor((Math.random() * 200));
-	let b = Math.floor((Math.random() * 200));
+	let r = getRandomNumber(150, 240);
+	let g = getRandomNumber(150, 240);
+	let b = getRandomNumber(150, 240);
 	document.getElementById("wrapper").style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
@@ -2096,3 +2099,8 @@ document.onkeyup = function(e) {
 	}
 	
 };
+
+
+function getRandomNumber(min, max) { 
+    return Math.floor(Math.random() * (max - min) + min);
+}

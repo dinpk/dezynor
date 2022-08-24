@@ -6,6 +6,8 @@
 }	
 
 * {
+	margin:0;
+	padding:0;
 	box-sizing:border-box;
 }
 
@@ -67,7 +69,7 @@ body {
 	padding:5px;
 	border-radius:20px;
 	border:2px solid navy;
-	cursor:pointer;
+	cursor:move;
 	z-index:10000;
 }
 
@@ -79,7 +81,7 @@ body {
 	line-height:13px;
 	color:white;
 	border-radius:20px;
-	cursor:pointer;
+	cursor:move;
 	z-index:10000;
 }
 
