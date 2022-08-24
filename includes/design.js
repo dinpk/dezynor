@@ -1141,6 +1141,10 @@ function setRandomWrapperColor() {
 	document.getElementById("wrapper").style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
+function setBorderSameAsWrapperColor() {
+	console.log(document.getElementById("wrapper_background_color").style.BackgroundColor);
+	document.getElementById("wrapper_border_color").value = document.getElementById("wrapper_background_color").value;
+}
 
 function styleWrapperSameColor() {
 	document.getElementById("wrapper_gradient_color2").value = document.getElementById("wrapper_gradient_color1").value;
@@ -1497,13 +1501,16 @@ function styleRemoveBorder() {
 	selected_section.style.borderWidth = "0";
 	selected_section.style.borderStyle = "solid";
 	selected_section.style.borderColor = "rgb(255,255,255)";
-	selected_section.style.borderTopLeftRadius = "0px";
-	selected_section.style.borderTopRightRadius = "0px";
-	selected_section.style.borderBottomLeftRadius = "0px";
-	selected_section.style.borderBottomRightRadius = "0px";
 	document.getElementById("border_width").value = "0";
 	document.getElementById("border_style").value = "solid";
 	document.getElementById("border_color").value = "#FFFFFF";
+}
+
+function styleRemoveBorderRadius() {
+	selected_section.style.borderTopLeftRadius = "0";
+	selected_section.style.borderTopRightRadius = "0";
+	selected_section.style.borderBottomLeftRadius = "0";
+	selected_section.style.borderBottomRightRadius = "0";
 	document.getElementById("border_radius1").value = "0";
 	document.getElementById("border_radius2").value = "0";
 	document.getElementById("border_radius3").value =  "0";
@@ -1897,7 +1904,7 @@ let keyCode = {
 };
 
 
-onkeydown = function(e){
+document.onkeydown = function(e){
 	let key = e.which || e.keyCode;
 	
 	if (
@@ -1916,10 +1923,7 @@ onkeydown = function(e){
 		|| 	(e.ctrlKey && key == keyCode.KEY_0) 
 		|| 	(e.altKey && key == keyCode.KEY_1) 
 		|| 	(e.altKey && key == keyCode.KEY_2) 
-		|| 	(e.altKey && key == keyCode.RIGHT_ARROW) 
-		|| 	(e.altKey && key == keyCode.LEFT_ARROW) 
-		|| 	(e.altKey && key == keyCode.UP_ARROW) 
-		|| 	(e.altKey && key == keyCode.DOWN_ARROW) 
+
 	) 
 	{
 		e.preventDefault();

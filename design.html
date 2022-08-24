@@ -35,7 +35,7 @@
 		</div>
 
 		
-		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview" title="Alt + Menu">►</div>
+		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview (Alt + Menu)">►</div>
 
 		<div id="dash_panel_wrapper">
 			<div id="dash_panel">
@@ -43,17 +43,17 @@
 				<header id="menu_icons">
 					<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
 					<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
-					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position">
-					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing">
-					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and Gradient">
+					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and position">
+					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and spacing">
+					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and gradient">
 					<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image">
 					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
-					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text Shadow">
-					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box Shadow">
+					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text shadow">
+					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box shadow">
 					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
 					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
 					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
-					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design File"> 
+					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design file"> 
 				</header>
 
 				<div id="box_section">
@@ -108,8 +108,8 @@
 							<td>Background</td>
 							<td>
 								<input id="wrapper_background_color" type="color" onchange="styleWrapper();"> 
-								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');">🚥</button> 
-								<button onclick="setRandomWrapperColor();styleWrapper();">↻</button>
+								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Choose background color">🚥</button> 
+								<button onclick="setRandomWrapperColor();styleWrapper();" title="Random background color">↻</button>
 								<button id="remove_wrapper_background_color" onclick="styleRemoveWrapperBackgroundColor();styleWrapper();">x</button> 
 							</td>
 						</tr>
@@ -123,7 +123,7 @@
 									<option>left</option>
 									<option>right</option>
 								</select>
-								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove">x</button>
+								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove image 1">x</button>
 								<br>
 								<input id="wrapper_bg_image2" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
 								<select id="wrapper_bg2_position" onchange="styleWrapper();">
@@ -132,7 +132,7 @@
 									<option>left</option>
 									<option>right</option>
 								</select> 
-								<button id="remove_wrapper_bg_image2" onclick="styleRemoveWrapperBackgroundImage2();" title="Remove">x</button>
+								<button id="remove_wrapper_bg_image2" onclick="styleRemoveWrapperBackgroundImage2();" title="Remove image 2">x</button>
 							</td>
 						</tr>
 						<tr>
@@ -145,7 +145,8 @@
 									<option>dotted</option>
 								</select>
 								<input id="wrapper_border_color" type="color" onchange="styleWrapper();" value="#000000">
-								<button onclick="setColorableElement('wrapper_border_color', 'wrapper', 'border');showPopupPanel('color_pallette');">🚥</button>
+								<button onclick="setColorableElement('wrapper_border_color', 'wrapper', 'border');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setBorderSameAsWrapperColor();styleWrapper();" title="Same color as background">s</button>
 							</td>
 						</tr>
 						<tr>
@@ -186,36 +187,34 @@
 						<tr>
 							<td>Resize</td>
 							<td>
-								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Alt + Numpad Subtract"> 
-								<img src="images/resize_full_height.png" id="resize_full_height" onclick="styleResizeFullHeight();" title="Alt + Numpad Add"> 
-								<img src="images/resize_half_width.png" id="resize_half_width" onclick="styleResizeHalfWidth();" title="Half Width"> 
-								<img src="images/resize_half_height.png" id="resize_half_height" onclick="styleResizeHalfHeight();" title="Half Height"> 
+								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Full width (Alt + Numpad Subtract)"> 
+								<img src="images/resize_full_height.png" id="resize_full_height" onclick="styleResizeFullHeight();" title="Full height (Alt + Numpad Add)"> 
+								<img src="images/resize_half_width.png" id="resize_half_width" onclick="styleResizeHalfWidth();" title="Half width"> 
+								<img src="images/resize_half_height.png" id="resize_half_height" onclick="styleResizeHalfHeight();" title="Half height"> 
 								<img src="images/resize_quarter.png" id="resize_quarter" onclick="styleResizeQuarter();" title="Quarter"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Align</td>
 							<td>
-								<!--
-								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();">
-								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();"> 
-								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();">
-								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="styleAlignBottomRight();">
+								<img src="images/align_top_left.png" id="align_top_left" onclick="styleAlignTopLeft();" title="Align top left">
+								<img src="images/align_top_right.png" id="align_top_right" onclick="styleAlignTopRight();" title="Align top right"> 
+								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="styleAlignBottomLeft();" title="Align bottom left">
+								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="styleAlignBottomRight();" title="Align bottom right">
 
-								<img src="images/align_top_center.png" id="align_top_center" onclick="styleAlignTopCenter();">
-								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="styleAlignBottomCenter();">
-								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();">
-								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();">
+								<img src="images/align_top_center.png" id="align_top_center" onclick="styleAlignTopCenter();" title="Align top center">
+								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="styleAlignBottomCenter();" title="Align bottom center">
+								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();" title="Align left center">
+								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();" title="Align right center">
 
-								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();"><br>
-								-->
+								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Align center center"><br>
 
-								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Alt + LeftArrow"> 
-								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Alt + RightArrow / Alt + LeftArrow"> 
-								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Alt + RightArrow"> 
-								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Alt + UpArrow"> 
-								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Alt + UpArrow / Alt + DownArrow"> 
-								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Alt + DownArrow">
+								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Align left horizontally (Ctrl + Alt + LeftArrow)"> 
+								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Align center horizontally (Ctrl + Alt + RightArrow/LeftArrow)"> 
+								<img src="images/align_h_right.png" id="align_h_right" onclick="styleAlignHRight();" title="Align right horizontally (Ctrl + Alt + RightArrow)"> 
+								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Align top vertically (Ctrl + Alt + UpArrow)"> 
+								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Align center vertically (Ctrl + Alt + UpArrow/DownArrow"> 
+								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Align bottom vertically (Ctrl + Alt + DownArrow)">
 
 							</td>
 						</tr>
@@ -599,7 +598,9 @@
 							<td>Radius</td>
 							<td>
 								<input id="border_radius1" type="number" onchange="styleBorderRadius1(this);" title="Top left radius"> 
-								<input id="border_radius2" type="number" onchange="styleBorderRadius2(this);" title="Top right radius"><br>
+								<input id="border_radius2" type="number" onchange="styleBorderRadius2(this);" title="Top right radius">
+								<button id="remove_border" onclick="styleRemoveBorderRadius();" title="Remove Border Radius">x</button>
+								<br>
 								<input id="border_radius3" type="number" onchange="styleBorderRadius3(this);" title="Bottom left radius">
 								<input id="border_radius4" type="number" onchange="styleBorderRadius4(this);" title="Bottom right radius">
 							</td>

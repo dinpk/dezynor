@@ -23,12 +23,13 @@ connection.onupgradeneeded = function(e) {
 		localStorage.setItem("word_spacing_change", "1");
 		localStorage.setItem("max_upload_width", "1200");
 		localStorage.setItem("max_upload_height", "1200");
+		localStorage.setItem("current_folder", "default");
 	}
 	
 	    console.log("DB updated from version " + e.oldVersion +  " to " + e.newVersion);
 
 	if (e.oldVersion == 5) {
-		// console.log("changes done after version 5");
+		// console.log("changes for next version");
 	} else if (e.oldVersion == 6) {
 
 	}
