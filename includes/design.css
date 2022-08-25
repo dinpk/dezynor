@@ -70,7 +70,7 @@ body {
 	border-radius:20px;
 	border:2px solid navy;
 	cursor:move;
-	z-index:10000;
+	z-index:11000;
 }
 
 #wrapper .resize {
@@ -85,6 +85,14 @@ body {
 	z-index:10000;
 }
 
+/*
+#wrapper section::-webkit-resizer {
+  border-radius:15px;
+  border:2px solid black;
+  box-sizing:border-box;
+  background-color:#888;
+}
+*/
 
 /* -------------------------- BOX LIST --------------------------------- */
 

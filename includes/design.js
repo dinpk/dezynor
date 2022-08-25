@@ -11,6 +11,7 @@ let design_object;
 
 let section_number = 0;
 let selected_section;
+let move_rotate;
 let move;
 let resize_bottom_right;
 let resize_top_right;
@@ -30,6 +31,12 @@ function generateDeisgnId() {
 async function addHandles() {
 
 	if (document.getElementById("move") == null) {
+
+		let move_rotate_span = document.createElement("span");
+		move_rotate_span.setAttribute("id", "move_rotate");
+		move_rotate_span.setAttribute("class", "move");
+		document.getElementById("wrapper").appendChild(move_rotate_span);
+		document.getElementById("move_rotate").innerHTML = " ";
 		
 		let move_span = document.createElement("span");
 		move_span.setAttribute("id", "move");
@@ -92,6 +99,7 @@ async function addHandles() {
 }
 
 function assignHandles() {
+	move_rotate = document.getElementById("move_rotate");
 	move = document.getElementById("move");
 	resize_bottom_right = document.getElementById("resize_bottom_right");
 	resize_top_right = document.getElementById("resize_top_right");
@@ -107,6 +115,7 @@ function hideHandles() {
 
 	assignHandles();
 		
+	move_rotate.style.visibility = "hidden";
 	move.style.visibility = "hidden";
 	resize_bottom_right.style.visibility = "hidden";
 	resize_top_right.style.visibility = "hidden";
@@ -120,18 +129,19 @@ function hideHandles() {
 
 function showHandles() {
 	
-	/*
+	
 	if (parseInt(document.getElementById("transform_degree1").value) != 0) {
 		selected_section.style.resize = "both";
 		selected_section.style.overflow = "auto";
 		hideHandles();
-		move.style.visibility = "visible";
+		move_rotate.style.visibility = "visible";
 		return;
 	} else {
 		selected_section.style.resize = "none";
 		selected_section.style.overflow = "visible";
+		move_rotate.style.visibility = "hidden";
 	}
-	*/
+		
 	
 	assignHandles();
 		
@@ -195,6 +205,7 @@ function selectSection(counter) {
 	unselectSections();
 	selected_section = document.getElementById(new_selected_id);
 	
+	move_rotate.setAttribute("onmousedown", "onMouseDown4MoveRotate('" + counter + "');");
 	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
 	resize_bottom_right.setAttribute("onmousedown", "onMouseDown4ResizeBottomRight('" + counter + "');");
 	resize_top_right.setAttribute("onmousedown", "onMouseDown4ResizeTopRight('" + counter + "');");
@@ -310,6 +321,28 @@ function onMouseDown4Move(counter) {
 	document.addEventListener('mouseup', onMouseUp);
 }
 
+function onMouseDown4MoveRotate(counter) {
+
+	hideHandles();
+	let section = document.getElementById("section" + counter);
+	
+	function onMouseMove(event) {
+		move_rotate.style.left = event.pageX - 5 + "px";
+		move_rotate.style.top = event.pageY - 5 + "px";
+		section.style.left = event.pageX - 20 + "px";
+		section.style.top = event.pageY - 20 + "px";
+	}
+	function onMouseUp() {
+		reAlignSectionHandles();
+		loadSectionStyles();
+		showHandles();
+		document.removeEventListener('mousemove', onMouseMove);
+		document.removeEventListener('mouseup', onMouseUp);
+
+	};
+	document.addEventListener('mousemove', onMouseMove);
+	document.addEventListener('mouseup', onMouseUp);
+}
 
 
 
@@ -529,6 +562,8 @@ function onMouseDown4ResizeBottomLeft(counter) {
 
 function reAlignSectionHandles() {
 
+	move_rotate.style.top = parseInt(selected_section.style.top.replace("px", "")) - 5 + "px";
+	move_rotate.style.left = parseInt(selected_section.style.left.replace("px", "")) - 5 + "px";
 	
 	move.style.top = parseInt(selected_section.style.top.replace("px", "")) + (parseInt(selected_section.style.height.replace("px", "")) / 2) - 5 + "px";
 	move.style.left = parseInt(selected_section.style.left.replace("px", "")) + (parseInt(selected_section.style.width.replace("px", "")) / 2) - 5 + "px";
@@ -758,6 +793,7 @@ function styleRotateRight() {
 	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) +  parseInt(localStorage.getItem("rotate_offset"));
 	element.value = new_rotate;
 	element.onchange();
+	showHandles();
 }
 
 function styleRotateLeft() {
@@ -769,6 +805,7 @@ function styleRotateLeft() {
 	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) -  parseInt(localStorage.getItem("rotate_offset"));
 	element.value = new_rotate;
 	element.onchange();
+	showHandles();
 }
 
 
