@@ -30,63 +30,79 @@ function generateDeisgnId() {
 
 async function addHandles() {
 
-	if (document.getElementById("move") == null) {
-
+	if (document.getElementById("move_rotate") == null) {
 		let move_rotate_span = document.createElement("span");
 		move_rotate_span.setAttribute("id", "move_rotate");
 		move_rotate_span.setAttribute("class", "move");
 		document.getElementById("wrapper").appendChild(move_rotate_span);
 		document.getElementById("move_rotate").innerHTML = " ";
-		
+	}
+	
+	if (document.getElementById("move") == null) {
 		let move_span = document.createElement("span");
 		move_span.setAttribute("id", "move");
 		move_span.setAttribute("class", "move");
 		document.getElementById("wrapper").appendChild(move_span);
 		document.getElementById("move").innerHTML = " ";
+	}
 
+	if (document.getElementById("resize_bottom_right") == null) {
 		let resize_bottom_right_span = document.createElement("span");
 		resize_bottom_right_span.setAttribute("id", "resize_bottom_right");
 		resize_bottom_right_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_bottom_right_span);
 		document.getElementById("resize_bottom_right").innerHTML = "O";
-		
+	}
 
+	if (document.getElementById("resize_top_right") == null) {
 		let resize_top_right_span = document.createElement("span");
 		resize_top_right_span.setAttribute("id", "resize_top_right");
 		resize_top_right_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_top_right_span);
 		document.getElementById("resize_top_right").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_top_left") == null) {
 		let resize_top_left_span = document.createElement("span");
 		resize_top_left_span.setAttribute("id", "resize_top_left");
 		resize_top_left_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_top_left_span);
 		document.getElementById("resize_top_left").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_bottom_left") == null) {
 		let resize_bottom_left_span = document.createElement("span");
 		resize_bottom_left_span.setAttribute("id", "resize_bottom_left");
 		resize_bottom_left_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_bottom_left_span);
 		document.getElementById("resize_bottom_left").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_center_right") == null) {
 		let resize_center_right_span = document.createElement("span");
 		resize_center_right_span.setAttribute("id", "resize_center_right");
 		resize_center_right_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_center_right_span);
 		document.getElementById("resize_center_right").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_center_left") == null) {
 		let resize_center_left_span = document.createElement("span");
 		resize_center_left_span.setAttribute("id", "resize_center_left");
 		resize_center_left_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_center_left_span);
 		document.getElementById("resize_center_left").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_center_top") == null) {
 		let resize_center_top_span = document.createElement("span");
 		resize_center_top_span.setAttribute("id", "resize_center_top");
 		resize_center_top_span.setAttribute("class", "resize");
 		document.getElementById("wrapper").appendChild(resize_center_top_span);
 		document.getElementById("resize_center_top").innerHTML = "O";
+	}
 
+	if (document.getElementById("resize_center_bottom") == null) {
 		let resize_center_bottom_span = document.createElement("span");
 		resize_center_bottom_span.setAttribute("id", "resize_center_bottom");
 		resize_center_bottom_span.setAttribute("class", "resize");
@@ -1031,15 +1047,7 @@ async function loadDezyn() {
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
 		
-		/*
-		let key_exists = await idbKeyExists("dezynor_designs", current_design_key);
-		if (!key_exists) {
-			alert("This design does not exist");
-			return;
-		}
-		*/
-
-		
+	
 		idbGetItem("dezynor_designs", current_design_key).then(function(result) {
 
 			let object = result
@@ -1141,13 +1149,6 @@ function styleWrapper() {
 	wrapper.style.left = "0";
 	wrapper.style.width = document.getElementById("wrapper_width").value + "px";
 	wrapper.style.height = document.getElementById("wrapper_height").value + "px";
-	wrapper.style.borderWidth = document.getElementById("wrapper_border_width").value + "px";
-	wrapper.style.borderStyle = document.getElementById("wrapper_border_style").value;
-	wrapper.style.borderColor = document.getElementById("wrapper_border_color").value;
-	wrapper.style.borderTopLeftRadius = document.getElementById("wrapper_border_radius1").value + "px";
-	wrapper.style.borderTopRightRadius = document.getElementById("wrapper_border_radius2").value + "px";
-	wrapper.style.borderBottomLeftRadius = document.getElementById("wrapper_border_radius3").value + "px";
-	wrapper.style.borderBottomRightRadius = document.getElementById("wrapper_border_radius4").value + "px";
 	wrapper.style.overflow = document.getElementById("wrapper_overflow").checked ? "visible" : "hidden";
 	
 	wrapper.style.backgroundImage = "";
@@ -1211,13 +1212,7 @@ function loadWrapperStyles() {
 	let wrapper = document.getElementById("wrapper");
 	document.getElementById("wrapper_width").value = wrapper.style.width.replace("px", "");
 	document.getElementById("wrapper_height").value = wrapper.style.height.replace("px", "");
-	document.getElementById("wrapper_border_width").value = wrapper.style.borderWidth.replace("px", "");
-	document.getElementById("wrapper_border_style").value = wrapper.style.borderStyle;
-	document.getElementById("wrapper_border_color").value = rgb2hex(wrapper.style.borderColor);
-	document.getElementById("wrapper_border_radius1").value = wrapper.style.borderTopLeftRadius.replace("px", "");
-	document.getElementById("wrapper_border_radius2").value = wrapper.style.borderTopRightRadius.replace("px", "");
-	document.getElementById("wrapper_border_radius3").value = wrapper.style.borderBottomLeftRadius.replace("px", "");
-	document.getElementById("wrapper_border_radius4").value = wrapper.style.borderBottomRightRadius.replace("px", "");
+
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
 
 	background_image = wrapper.style.backgroundImage;
