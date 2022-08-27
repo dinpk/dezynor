@@ -366,6 +366,7 @@ function onMouseDown4ResizeTopRight(counter) {
 	
 	hideHandles();
 	let section = document.getElementById("section" + counter);
+	let y_diff = 0;
 	
 	function onMouseMove(event) {
 		resize_top_right.style.left = (event.pageX - 25) + "px";
@@ -373,7 +374,7 @@ function onMouseDown4ResizeTopRight(counter) {
 
 		section.style.width = (event.pageX - 20) - parseInt(section.style.left.replace("px", "")) + "px";
 
-		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
+		y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
 		resize_top_right.style.top = (event.pageY - 25) + "px";
 		section.style.top = (event.pageY - 20) + "px";
 		section.style.height =  parseInt(section.style.height.replace("px", "")) + y_diff + "px";
@@ -419,11 +420,12 @@ function onMouseDown4ResizeCenterRight(counter) {
 function onMouseDown4ResizeCenterLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
+	let x_diff = 0;
 	
 	function onMouseMove(event) {
 		resize_center_left.style.left = (event.pageX - 30) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); 
+		x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20); 
 		section.style.left = (event.pageX - 20) + "px";
 		section.style.width =  parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 	}
@@ -444,11 +446,12 @@ function onMouseDown4ResizeCenterLeft(counter) {
 function onMouseDown4ResizeCenterTop(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
+	let y_diff = 0;
 	
 	function onMouseMove(event) {
 		resize_center_top.style.top = (event.pageY - 30) + "px";
 
-		let y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
+		y_diff = parseInt(section.style.top.replace("px", "")) - (event.pageY - 20);
 		section.style.height = parseInt(section.style.height.replace("px", "")) + y_diff + "px";
 		section.style.top = (event.pageY - 20) + "px";
 	}
@@ -519,12 +522,13 @@ function onMouseDown4ResizeBottomRight(counter) {
 function onMouseDown4ResizeTopLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
+	let x_diff = 0;
 	
 	function onMouseMove(event) {
 		resize_top_left.style.left = (event.pageX - 25) + "px";
 		resize_top_left.style.top = (event.pageY - 25) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
+		x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
 		section.style.width = parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 		section.style.left = (event.pageX - 20) + "px";
 		
@@ -550,12 +554,13 @@ function onMouseDown4ResizeTopLeft(counter) {
 function onMouseDown4ResizeBottomLeft(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
+	let x_diff = 0;
 	
 	function onMouseMove(event) {
 		resize_bottom_left.style.left = (event.pageX - 25) + "px";
 		resize_bottom_left.style.top = (event.pageY - 25) + "px";
 		
-		let x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
+		x_diff = parseInt(section.style.left.replace("px", "")) - (event.pageX - 20);
 		section.style.width =  parseInt(section.style.width.replace("px", "")) + x_diff + "px";
 		section.style.left = (event.pageX - 20) + "px";
 
