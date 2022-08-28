@@ -2062,11 +2062,9 @@ document.onkeyup = function(e) {
 	} else if (e.altKey && key == keyCode.ADD) {
 		styleResizeFullHeight();
 	} else if (e.altKey && key == keyCode.ENTER) {
-		
+		styleAlignHCenter();
 	} else if (e.altKey && key == keyCode.DIVIDE) {
-		styleRotateLeft();
 	} else if (e.altKey && key == keyCode.MULTIPLY) {
-		styleRotateRight();
 	} else if (e.altKey && key == keyCode.DECIMAL) {
 		styleAddImageURL();
 	} else if (e.altKey && key == keyCode.NUMPAD_0) {
@@ -2082,9 +2080,11 @@ document.onkeyup = function(e) {
 	} else if (e.altKey && key == keyCode.NUMPAD_6) {
 		styleMoveRight();
 	} else if (e.altKey && key == keyCode.NUMPAD_7) {
+		styleRotateLeft();
 	} else if (e.altKey && key == keyCode.NUMPAD_8) {
 		styleMoveUp();
 	} else if (e.altKey && key == keyCode.NUMPAD_9) {
+		styleRotateRight();
 	} else if (e.altKey && key == keyCode.UP_ARROW) {
 		let section_top = parseInt(selected_section.style.top.replace("px", ""));
 		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
