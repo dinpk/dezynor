@@ -14,10 +14,12 @@
 				loadFonts();
 			}
 
-			function addFont() {
+			function addGoogleFont() {
+			
 				let font_name = document.getElementById("font_name").value.trim();
 				let font_location = document.getElementById("font_location").value;
-				if (font_name.length < 1) return;
+				
+				if (font_name.trim().length == 0) return;
 				
 				idbGetItem("dezynor_settings", "fonts").then(function(result) {
 					
@@ -85,6 +87,42 @@
 				});
 				
 			}
+			
+						
+			async function addFontsFromFiles(element) {
+			
+				let font_files = element.files;
+
+				let fonts = await idbGetItem("dezynor_settings", "fonts");
+				
+				let counter = 0;
+				let log = "";
+				for (i = 0; i < font_files.length; i++) {
+					let font_name = baseName(font_files[i].name).trim();
+					console.log(font_name);
+					if (font_name.trim().length == 0) continue;
+					let index = fonts.indexOf(font_name + "|Installed");
+					if (index > -1) {
+						log = log + "<div>A font with the name '" + font_name + "' already exists.</div>";
+					} else {
+						counter++;
+						fonts.push(font_name + "|Installed");
+					}
+				}
+				
+				await idbPutItem("dezynor_settings", {setting_key:"fonts", value:fonts});
+				document.getElementById("log").innerHTML = "<div>Added " + counter + " of " + font_files.length + " fonts.</div><hr>" + log;
+				loadFonts();
+
+			}
+			
+			
+		function baseName(str) {
+		   var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+			if(base.lastIndexOf(".") != -1)       
+				base = base.substring(0, base.lastIndexOf("."));
+		   return base;
+		}			
 		</script>
 		<style>
 
@@ -115,13 +153,16 @@
 	<body>
 		<script>writeHeader();</script>
 		<main>
+			<div id="log" class="pad20">
+			</div>
 			<div class="pad20">
-				<input type="text" id="font_name" placeholder="Font name" class="mnw200 pad10"> 
-				<select id="font_location" class="mnw200 pad10">
-					<option>Installed</option>
-					<option>Google</option>
-				</select>
-				<input type="button" value="Add new font" class="pad10" onclick="addFont();">
+				<input type="text" id="font_name" placeholder="Google font name" class="mnw200 pad10"> 
+				<input type="button" value="Add" class="pad10" onclick="addGoogleFont();">
+				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+				
+				<input id="add_fonts" type="file" accept=".ttf" onchange="addFontsFromFiles(this);" style="display:none;" multiple>
+				<button onclick="document.getElementById('add_fonts').click();" class="pad10">Browse fonts</button> Fonts must be already installed on this system.
+				
 			</div>
 			<h1 class="padleft20">Fonts</h1>
 			<div id="fonts" class="padleft50"></div>
