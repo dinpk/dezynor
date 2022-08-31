@@ -256,7 +256,7 @@ function duplicateSection() {
 		selectSection(section_number);
 		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
 		selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
-		reAlignSectionHandles();
+		//reAlignSectionHandles();
 	}, 100);
 
 
@@ -982,6 +982,30 @@ function setShape(value) {
 	document.getElementById("clip_path").value = value;
 }
 
+function splitOnSpaces() {
+	if (!(selected_section)) return;
+	
+	let text_array = selected_section.innerText.split(" ");
+	let section_width = parseInt(document.getElementById("width").value);
+	let section_left = parseInt(document.getElementById("left").value) + section_width;
+	let each_width = parseInt(section_width / text_array.length);
+	
+	for (i = 0; i < text_array.length; i++) {
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = selected_section.cloneNode(true);
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		document.getElementById("wrapper").appendChild(section);
+		let new_section = document.getElementById(section_id)
+		new_section.innerText = text_array[i];
+		new_section.style.width = each_width + "px";
+		section_left = section_left - each_width;
+		new_section.style.left = section_left + "px";
+	}
+}
+
+
 function setZIndex(element) {
 	if (parseInt(element.value) < 0) return;
 	selected_section.style.zIndex = element.value;
@@ -1181,15 +1205,23 @@ function styleWrapper() {
 }
 
 function setRandomWrapperColor() {
-	let r = getRandomNumber(150, 240);
-	let g = getRandomNumber(150, 240);
-	let b = getRandomNumber(150, 240);
+	let random_range = document.getElementById("wrapper_random_range").value;
+	let min, max;
+	if (random_range == "light") {
+		min = 170;
+		max = 240;
+	} else if (random_range == "medium") {
+		min = 100;
+		max = 170;
+	} else if (random_range == "dark") {
+		min = 40;
+		max = 100;
+	}
+	let r = getRandomNumber(min, max);
+	let g = getRandomNumber(min, max);
+	let b = getRandomNumber(min, max);
 	document.getElementById("wrapper").style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
-}
-function setBorderSameAsWrapperColor() {
-	console.log(document.getElementById("wrapper_background_color").style.BackgroundColor);
-	document.getElementById("wrapper_border_color").value = document.getElementById("wrapper_background_color").value;
 }
 
 function styleWrapperSameColor() {
@@ -1330,6 +1362,13 @@ function styleRemoveBackgroundColor() {
 	document.getElementById("background_color").value = "#000001";
 	selected_section.style.backgroundColor = "";
 }
+
+function styleBackgroundColorSameAsWrapper() {
+	let element = document.getElementById("background_color");
+	element.value = document.getElementById("wrapper_background_color").value;
+	element.onchange();
+}
+
 
 function styleRandomBackgroundColor() {
 	let r = Math.floor((Math.random() * 200));

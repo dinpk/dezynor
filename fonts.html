@@ -17,21 +17,20 @@
 			function addGoogleFont() {
 			
 				let font_name = document.getElementById("font_name").value.trim();
-				let font_location = document.getElementById("font_location").value;
 				
 				if (font_name.trim().length == 0) return;
 				
 				idbGetItem("dezynor_settings", "fonts").then(function(result) {
 					
 					let fonts = result;
-					let index = fonts.indexOf(font_name + "|" + font_location);
+					let index = fonts.indexOf(font_name + "|Google");
 					if (index > -1) {
 						alert("A font with the name '" + font_name + "' already exists.");
 						document.getElementById("font_name").value = "";
 						document.getElementById("font_name").focus();
 						return;
 					} else {
-						fonts.push(font_name + "|" + font_location);
+						fonts.push(font_name + "|Google");
 					}
 					idbPutItem("dezynor_settings", {setting_key:"fonts", value:fonts});
 					document.getElementById("font_name").value = "";
@@ -48,35 +47,41 @@
 				idbGetItem("dezynor_settings", "fonts").then(function(result) {
 					let fonts = result;
 					fonts.sort();
-					let fonts_html = "";
+					let google_fonts = "";
+					let installed_fonts = "";
 					for (let i = 0; i < fonts.length; i++) {
 						let font_name = fonts[i].split("|")[0];
 						let font_location = fonts[i].split("|")[1];
 						if (font_location == "Google") {
-							font_location = " <span class='google'>(" + font_location + ")</span>";
+							google_fonts = google_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
 						} else {
-							font_location = " <span class='installed'>(" + font_location + ")</span>";
+							installed_fonts = installed_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
 						}
 						
-						fonts_html = fonts_html + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + font_location + "</div>";
+						
 					}
-					document.getElementById("fonts").innerHTML = fonts_html;
+					document.getElementById("installed_fonts").innerHTML = installed_fonts;
+					document.getElementById("google_fonts").innerHTML = google_fonts;
 					document.getElementById("font_name").focus();
 				});
 			}
 
 			function deleteFont(font_name) {
+			
+			
 				if (font_name == "Anton|Google") {
 					alert("The 'Anton' font can not be deleted.");
 					return;
 				}
+
+				if (!confirm("Do you really want to delete font '" + font_name.split("|")[0] + "'?")) return;
 
 				idbGetItem("dezynor_settings", "fonts").then(function(result) {
 					let fonts = result;
 					let index = fonts.indexOf(font_name);
 					if (index > -1) {
 						fonts.splice(index, 1);
-						showMessage("'" + font_name + "' deleted successfully", "Red");
+						showMessage("'" + font_name.split("|")[0] + "' deleted successfully", "Red");
 					} else {
 						alert("'" + font_name + "' does not exist");
 						return;
@@ -147,6 +152,25 @@
 				padding-right:10px;
 				color:red;
 			}
+			
+			table {
+				border-collapse:collapse;
+				margin-left:50px;
+			}
+			
+			th {
+				color:Chocolate;
+				font-weight:normal;
+				font-size:150%;
+				text-align:left;
+				padding-bottom:10px;
+			}
+			
+			td {
+				vertical-align:top;
+				line-height:170%;
+				padding-right:40px;
+			}
 		
 		</style>
 	</head>
@@ -165,7 +189,17 @@
 				
 			</div>
 			<h1 class="padleft20">Fonts</h1>
-			<div id="fonts" class="padleft50"></div>
+			<table class="padleft50">
+				<tr>
+					<th>Installed</th>
+					<th>Google</th>
+				</tr>
+				<tr>
+					<td id="installed_fonts"></td>
+					<td id="google_fonts"></td>
+				</tr>
+			</table>
+			<br><br>
 		</main>
 	</body>
 </html>

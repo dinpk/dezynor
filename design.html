@@ -110,6 +110,11 @@
 							<td>
 								<input id="wrapper_background_color" type="color" onchange="styleWrapper();"> 
 								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Choose background color">🚥</button> 
+								<select id="wrapper_random_range" onchange="styleWrapper();">
+									<option>light</option>
+									<option>medium</option>
+									<option>dark</option>
+								</select>
 								<button onclick="setRandomWrapperColor();styleWrapper();" title="Random background color">↻</button>
 								<button id="remove_wrapper_background_color" onclick="styleRemoveWrapperBackgroundColor();styleWrapper();">x</button> 
 							</td>
@@ -200,6 +205,12 @@
 							<td>Layer order</td>
 							<td>
 								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Split</td>
+							<td>
+								<button onclick="splitOnSpaces();">☐☐☐</button> 
 							</td>
 						</tr>
 					</table>
@@ -379,7 +390,9 @@
 								<span onclick="setShape('polygon(0% 0%, 0px 100%, 25% 75%, 25% 35%, 5% 5%, 95% 5%, 75% 35%, 75% 75%, 100% 100%, 100% 0%)');"><img loading="lazy" src="images/shapes/shape86.png"></span> 
 								<span onclick="setShape('polygon(10% 0px, 90% 0px, 93% 30%, 100% 50%, 93% 70%, 90% 100%, 10% 100%, 7% 70%, 0px 50%, 7% 30%)');"><img loading="lazy" src="images/shapes/shape87.png"></span> 
 								<span onclick="setShape('polygon(10% 50%, 5% 5%, 20% 12%, 50% 0px, 80% 12%, 95% 5%, 90% 50%, 95% 95%, 80% 88%, 50% 100%, 20% 88%, 5% 95%)');"><img loading="lazy" src="images/shapes/shape88.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 90% 10%, 100% 25%, 100% 75%, 90% 90%, 50% 100%, 10% 90%, 0px 75%, 0px 25%, 10% 10%)');"><img loading="lazy" src="images/shapes/shape88.png"></span> 
+								<span onclick="setShape('polygon(50% 0%, 90% 10%, 100% 25%, 100% 75%, 90% 90%, 50% 100%, 10% 90%, 0px 75%, 0px 25%, 10% 10%)');"><img loading="lazy" src="images/shapes/shape89.png"></span> 
+								<span onclick="setShape('polygon(0 0, 100% 30%, 95% 80%, 5% 80%, 0 100%)');"><img loading="lazy" src="images/shapes/shape90.png"></span> 
+								<span onclick="setShape('polygon(0 30%, 100% 0, 100% 100%, 95% 80%, 5% 80%)');"><img loading="lazy" src="images/shapes/shape91.png"></span> 
 							</td>
 						</tr>
 						<tr>
@@ -481,6 +494,7 @@
 								<input id="background_color" type="color" onchange="styleBackgroundColor(this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="styleRandomBackgroundColor();">↻</button> 
+								<button onclick="styleBackgroundColorSameAsWrapper();">s</button> 
 								<button id="remove_background_color" onclick="styleRemoveBackgroundColor();">x</button> 
 							</td>
 						</tr>
