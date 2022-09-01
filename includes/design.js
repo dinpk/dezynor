@@ -1317,7 +1317,7 @@ function styleBorderWidthPreset(width) {
 }
 function styleColumnCount(element) {selected_section.style.columnCount = element.value;}
 function styleColumnGap(element) {selected_section.style.columnGap = element.value + "px";}
-function styleDirection(element) {selected_section.style.direction = element.value;}
+function styleDirection(value) {selected_section.style.direction = value;}
 function styleFontFamily(element) {selected_section.style.fontFamily = element.value;}
 function styleFontSize(element) {selected_section.style.fontSize = element.value + "px";}
 function styleColor(element) {selected_section.style.color = element.value;}
@@ -1332,7 +1332,7 @@ function styleWordSpacing(element) {selected_section.style.wordSpacing = element
 function styleLetterSpacing(element) {selected_section.style.letterSpacing = element.value + "px";}
 function styleTextIndent(element) {selected_section.style.textIndent = element.value + "px";}
 function styleLineHeight(element) {selected_section.style.lineHeight = element.value + "px";}
-function styleTextAlign(element) {selected_section.style.textAlign = element.value;}
+function styleTextAlign(value) {selected_section.style.textAlign = value;}
 
 function setColorableElement(control_id, element_id, color_style) {
 	colorable_control = document.getElementById(control_id);
@@ -1666,7 +1666,6 @@ function setSectionDefaultStyles(section) {
 function loadSectionStyles() {
 	document.getElementById("top").value = selected_section.style.top.replace("px", "");
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
-	document.getElementById("direction").value = selected_section.style.direction;
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
 	document.getElementById("font_size").value = selected_section.style.fontSize.replace("px", "");
 	document.getElementById("color").value = rgb2hex(selected_section.style.color);
@@ -1679,7 +1678,6 @@ function loadSectionStyles() {
 	document.getElementById("letter_spacing").value = selected_section.style.letterSpacing.replace("px", "");
 	document.getElementById("text_indent").value = selected_section.style.textIndent.replace("px", "");
 	document.getElementById("line_height").value = selected_section.style.lineHeight.replace("px", "");
-	document.getElementById("text_align").value = selected_section.style.textAlign;
 	let text_shadow = selected_section.style.textShadow;
 	if (text_shadow == "") {
 		document.getElementById("text_shadow_h").value = "0";
@@ -1994,6 +1992,7 @@ document.onkeydown = function(e){
 		|| 	(key >= 112 && key <= 123) // function keys
 		|| 	(e.ctrlKey && key == keyCode.HOME) 
 		|| 	(e.ctrlKey && key == keyCode.END) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_W) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_R) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_L) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_E) 
@@ -2049,21 +2048,13 @@ document.onkeyup = function(e) {
 		element.value = "ltr";
 		element.onchange();
 	} else if (e.ctrlKey && key == keyCode.KEY_R) {
-		let element = document.getElementById("text_align");
-		element.value = "right";
-		element.onchange();
+		styleTextAlign('right');
 	} else if (e.ctrlKey && key == keyCode.KEY_L) {
-		let element = document.getElementById("text_align");
-		element.value = "left";
-		element.onchange();
+		styleTextAlign('left');
 	} else if (e.ctrlKey && key == keyCode.KEY_E) {
-		let element = document.getElementById("text_align");
-		element.value = "center";
-		element.onchange();
+		styleTextAlign('center');
 	} else if (e.ctrlKey && key == keyCode.KEY_J) {
-		let element = document.getElementById("text_align");
-		element.value = "justify";
-		element.onchange();
+		styleTextAlign('justify');
 	} else if (e.ctrlKey && e.shiftKey && key == keyCode.CLOSE_BRACKET) {
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));

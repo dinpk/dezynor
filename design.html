@@ -108,22 +108,22 @@
 						<tr>
 							<td>Background</td>
 							<td>
-								<input id="wrapper_background_color" type="color" onchange="styleWrapper();"> 
-								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Choose background color">🚥</button> 
-								<select id="wrapper_random_range" onchange="styleWrapper();">
+								<input id="wrapper_background_color" type="color" onchange="styleWrapper();" title="Choose color"> 
+								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
+								<select id="wrapper_random_range" onchange="styleWrapper();" title="Random color type">
 									<option>light</option>
 									<option>medium</option>
 									<option>dark</option>
 								</select>
-								<button onclick="setRandomWrapperColor();styleWrapper();" title="Random background color">↻</button>
-								<button id="remove_wrapper_background_color" onclick="styleRemoveWrapperBackgroundColor();styleWrapper();">x</button> 
+								<button onclick="setRandomWrapperColor();styleWrapper();" title="Random color">↻</button>
+								<button id="remove_wrapper_background_color" onclick="styleRemoveWrapperBackgroundColor();styleWrapper();" title="Remove color">x</button> 
 							</td>
 						</tr>
 						<tr>
 							<td>Image URLs</td>
 							<td>
-								<input id="wrapper_bg_image1" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();"> 
-								<select id="wrapper_bg1_position" onchange="styleWrapper();">
+								<input id="wrapper_bg_image1" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" title="Image 1 URL"> 
+								<select id="wrapper_bg1_position" onchange="styleWrapper();" title="Image 1 position">
 									<option>top</option>
 									<option>bottom</option>
 									<option>left</option>
@@ -131,8 +131,8 @@
 								</select>
 								<button id="remove_wrapper_bg_image1" onclick="styleRemoveWrapperBackgroundImage1();" title="Remove image 1">x</button>
 								<br>
-								<input id="wrapper_bg_image2" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();">
-								<select id="wrapper_bg2_position" onchange="styleWrapper();">
+								<input id="wrapper_bg_image2" type="text" onchange="styleRemoveWrapperBackgroundColor();styleWrapper();" title="Image 2 URL">
+								<select id="wrapper_bg2_position" onchange="styleWrapper();" title="Image 2 position">
 									<option>top</option>
 									<option>bottom</option>
 									<option>left</option>
@@ -143,7 +143,7 @@
 						</tr>
 						<tr>
 							<td>Overflow</td>
-							<td><input id="wrapper_overflow" type="checkbox" onchange="styleWrapper();" checked></td>
+							<td><input id="wrapper_overflow" type="checkbox" onchange="styleWrapper();" title="Show items outside of page" checked></td>
 						</tr>
 					</table>
 				</div>
@@ -210,7 +210,7 @@
 						<tr>
 							<td>Split</td>
 							<td>
-								<button onclick="splitOnSpaces();">☐☐☐</button> 
+								<button onclick="splitOnSpaces();" title="Split on spaces">☐☐☐</button> 
 							</td>
 						</tr>
 					</table>
@@ -407,23 +407,14 @@
 					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
 					<table class="section_table">
 						<tr>
-							<td>Direction</td>
-							<td>
-								<select id="direction" onchange="styleDirection(this);" title="Ctrl + &lt; / Ctrl + &gt;">
-									<option value="ltr">left to right</option>
-									<option value="rtl">right to left</option>
-								</select> 
-							</td>
-						</tr>
-						<tr>
 							<td>Alignment</td>
 							<td>
-								<select id="text_align" onchange="styleTextAlign(this);">
-									<option>left</option>
-									<option>center</option>
-									<option>right</option>
-									<option>justify</option>
-								</select>
+								<img src="images/icon_align_left.png" onclick="styleTextAlign('left')"> 
+								<img src="images/icon_align_center.png" onclick="styleTextAlign('center')"> 
+								<img src="images/icon_align_right.png" onclick="styleTextAlign('right')"> 
+								<img src="images/icon_align_justify.png" onclick="styleTextAlign('justify')"> 
+								<img src="images/icon_direction_ltr.png" onclick="styleDirection('ltr')" title="Direction Left-to-Right"> 
+								<img src="images/icon_direction_rtl.png" onclick="styleDirection('rtl')" title="Direction Right-to-Left"> 
 							</td>
 						</tr>
 						<tr>
