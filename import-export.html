@@ -152,6 +152,26 @@
 				return new Blob([u8arr], {type:mime});
 			}			
 
+			function deleteDatabase() {
+				
+				if (!confirm("This will delete all the data of this application.\nDo you want to continue?")) return;
+				
+				let request = window.indexedDB.deleteDatabase("dezynordb");
+				request.onblocked = function(event) {
+					alert("Error message: Database in blocked state. ");
+				};
+				request.onerror = function(event) {
+				  console.log("Error deleting database.");
+				};
+
+				request.onsuccess = function(event) {
+				  console.log("Database deleted successfully");
+
+				  console.log(request.result); // should be null
+				};			
+			}
+
+
 		</script>
 
 		<style>
@@ -174,9 +194,13 @@
 			<input type="button" value="Export data" onclick="exportData();">
 			<br><br>
 			<br><br>
+			<input type="button" value="Clear database" onclick="deleteDatabase();">
+			<br><br>
 			<br><br>
 			<input type="file" name="import_files" id="import_files" accept=".backup,.png" onchange="importData();" multiple style="display:none;">
 			<input type="button" value="Import data" onclick="document.getElementById('import_files').click();">
+			
+			
 		</div>
 
 	</body>
