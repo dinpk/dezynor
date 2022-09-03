@@ -11,8 +11,6 @@ connection.onupgradeneeded = function(e) {
 		case 0:
 			console.log("Case 0: Adding database, stores and settings");
 			let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
-			dezynor_designs.createIndex('createdIndex', 'created', { unique: false });
-			dezynor_designs.createIndex('modifiedIndex', 'modified', { unique: false });		
 			let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
 			let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
@@ -114,12 +112,10 @@ async function idbGetAllItems(store) {
 	let db = connection.result;
 	let transaction = db.transaction(store, "readonly");
 	object_store = transaction.objectStore(store);
-	// let idx = object_store.index("modifiedIndex");
     return new Promise(function(resolve, reject) {
 		let all_items = object_store.getAll();
 		all_items.onsuccess = function(e) {
 			resolve(all_items.result);
-			console.log(all_items.result);
 		}
     });	
 }

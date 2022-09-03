@@ -256,7 +256,7 @@ function duplicateSection() {
 		selectSection(section_number);
 		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
 		selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
-		//reAlignSectionHandles();
+		reAlignSectionHandles();
 	}, 100);
 
 
@@ -2040,21 +2040,17 @@ document.onkeyup = function(e) {
 	} else if (key == keyCode.F9) {
 		saveDezyn();
 	} else if (e.ctrlKey && key == keyCode.COMMA) {
-		let element = document.getElementById("direction");
-		element.value = "rtl";
-		element.onchange();
+		styleDirection("rtl");
 	} else if (e.ctrlKey && key == keyCode.PERIOD) {
-		let element = document.getElementById("direction");
-		element.value = "ltr";
-		element.onchange();
+		styleDirection("ltr");
 	} else if (e.ctrlKey && key == keyCode.KEY_R) {
-		styleTextAlign('right');
+		//styleTextAlign('right');
 	} else if (e.ctrlKey && key == keyCode.KEY_L) {
-		styleTextAlign('left');
+		//styleTextAlign('left');
 	} else if (e.ctrlKey && key == keyCode.KEY_E) {
-		styleTextAlign('center');
+		//styleTextAlign('center');
 	} else if (e.ctrlKey && key == keyCode.KEY_J) {
-		styleTextAlign('justify');
+		//styleTextAlign('justify');
 	} else if (e.ctrlKey && e.shiftKey && key == keyCode.CLOSE_BRACKET) {
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));

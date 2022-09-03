@@ -33,6 +33,7 @@
 				document.getElementById("loader").style.display ="inline";
 				
 				let all_designs = await idbGetAllItems("dezynor_designs");
+				
 
 				let searched_designs = "";
 				for (i = 0; i < all_designs.length; i++) {
@@ -192,6 +193,12 @@
 				idbGetAllItems("dezynor_designs").then(async function(result) {
 					
 					let all_designs = result;
+
+					all_designs.sort(function(a, b) {
+						let date_a = new Date(a.value.modified),
+							date_b = new Date(b.value.modified);
+						return date_b - date_a;
+					});
 					
 					let folder_designs = "";
 					for (i = 0; i < all_designs.length; i++) {
