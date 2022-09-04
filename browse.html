@@ -202,11 +202,11 @@
 					
 					let folder_designs = "";
 					for (i = 0; i < all_designs.length; i++) {
-						let design_key = all_designs[i].design_key;
 						let object = all_designs[i].value;
 						let design_folder = object.folder;
-						let data = object.data;
 						if (folder == design_folder) {
+							let design_key = all_designs[i].design_key;
+							let data = object.data;
 							let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
 							item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
 							if (localStorage.getItem("show_background_images") == "false") item = item.replace(/((background-image: url\(.*?\);))/g, '');

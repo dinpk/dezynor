@@ -74,7 +74,7 @@ header #menu_items a:hover {
 
 
 #loader {
-	max-width:30px;
+	max-height:12px;
 	display:none;
 	vertical-align:middle;
 }
