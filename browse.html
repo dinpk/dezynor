@@ -29,7 +29,7 @@
 				let search = document.getElementById("search").value.trim();
 				if (search.length == 0) return;
 
-				document.getElementById("folder_label").innerHTML = "";
+				document.getElementById("folder_heading").innerHTML = "";
 				document.getElementById("loader").style.display ="inline";
 				
 				let all_designs = await idbGetAllItems("dezynor_designs");
@@ -51,7 +51,7 @@
 				document.getElementById("designs").innerHTML = searched_designs;
 
 				let folder_label = "Search results for '" + search + "' ";
-				document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+				document.getElementById("folder_heading").innerHTML = "<div>" + folder_label + "</div>";
 				
 				document.getElementById("loader").style.display ="none";
 				
@@ -111,7 +111,7 @@
 						await idbPutItem("dezynor_settings", {setting_key:"folders", value:folders});
 						loadFolders();
 						showMessage("Folder '" + folder_name + "' deleted successfully", "Red");
-						document.getElementById("folder_label").innerHTML = "";
+						document.getElementById("folder_heading").innerHTML = "";
 					}
 				}
 
@@ -187,7 +187,7 @@
 				localStorage.setItem("current_folder", folder);
 				
 				document.getElementById("search").value = "";
-				document.getElementById("folder_label").innerHTML = "";
+				document.getElementById("folder_heading").innerHTML = "";
 				document.getElementById("loader").style.display = "inline";
 				
 				idbGetAllItems("dezynor_designs").then(async function(result) {
@@ -217,10 +217,13 @@
 					
 					document.getElementById("designs").innerHTML = folder_designs;
 
-					let folder_label = "<b>" + folder + "</b> ";
-					folder_label = folder_label + " <span id='delete_folder' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>" + "D</span>";
-					folder_label = folder_label + " <span id='rename_folder' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>" + "R</span>";	
-					document.getElementById("folder_label").innerHTML = "<div>" + folder_label + "</div>";
+					let folder_label = folder;
+					
+					let folder_icons = " <img src='images/icon_delete_folder.png' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>";
+					folder_icons = folder_icons + " <img src='images/icon_rename_folder.png' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>";	
+					folder_icons = folder_icons + " <input type='file' name='import_file' id='import_file' accept='.backup' onchange='importDezyn();' style='display:none;'>";	
+					folder_icons = folder_icons + " <img src='images/icon_import_single.png' onclick=\"document.getElementById('import_file').click();\" title='Import design'>";	
+					document.getElementById("folder_heading").innerHTML = "<div id='folder_label'>" + folder_label + "</div><div id='folder_icons'>" + folder_icons + "</div>";
 					
 					
 					document.getElementById("loader").style.display = "none";
@@ -249,6 +252,25 @@
 				}
 			}
 
+		
+			function importDezyn() {
+				let file = document.getElementById("import_file").files[0];
+				if (file.length == 0) return;
+				let reader = new FileReader();
+				reader.onload = async function(e) {
+					let file_data = e.target.result;
+					let key = "dezyn-" + new Date().getTime();
+					let object = JSON.parse(file_data);
+					let folder_name = localStorage.getItem("current_folder");
+					object.folder = folder_name;
+					if (await idbPutItem("dezynor_designs", {design_key:key, value:object})) {
+						showFolderDezyns(folder_name);
+						showMessage("Design imported successfully.", "Green");
+						
+					}						
+				}
+				reader.readAsText(file);						
+			}
 
 
 		</script>
@@ -274,40 +296,28 @@
 				width:140px;
 			}
 			
-			#folder_label {
+			#folder_heading {
 				width:100%;
 				position:fixed;
 				margin-top:2px;
 				z-index:2000;
 				background-color:lightblue;
+				display:flex;
 			}
-
-			#folder_label div {
+			
+			#folder_heading div {
 				padding:5px 10px 5px 10px;
 			}
+			
+			#folder_heading img {
+				cursor:pointer;
+			}
 
-			#folder_label b {
+			#folder_label {
 				font-size:170%;
-				margin-right:10px;
+				margin-right:30px;
 			}
 
-			#folder_label #delete_folder {
-				background-color:#cae6ef;
-				color:rgb(120,0,0);
-				padding:1px 3px 1px 3px;
-				cursor:pointer;
-				font-weight:bold;
-				font-size:90%;
-			}
-
-			#folder_label #rename_folder {
-				background-color:#cae6ef;
-				color:rgb(0,120,0);
-				padding:1px 3px 1px 3px;
-				cursor:pointer;
-				font-weight:bold;
-				font-size:90%;
-			}
 
 			#folders {
 				margin-top:10px;
@@ -397,8 +407,8 @@
 					<div id="folders"></div>
 				</td>
 				<td id="designs_wrapper">
-					<div id="folder_label"></div>
-					<div  id="designs"></div>
+					<div id="folder_heading"></div>
+					<div id="designs"></div>
 				</td>
 			</tr>
 		</table>		

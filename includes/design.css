@@ -66,25 +66,60 @@ body {
 	visibility:hidden;
 	position:absolute;
 	background-color:orange;
-	padding:5px;
-	border-radius:20px;
 	border:2px solid navy;
+	border-radius:20px;
 	cursor:move;
+	width:16px;
+	height:16px;
 	z-index:11000;
 }
 
 #wrapper .resize {
 	visibility:hidden;
 	position:absolute;
-	padding-top:1px;
 	background-color:black;
-	line-height:13px;
-	color:white;
 	border-radius:20px;
 	cursor:move;
 	z-index:10000;
+	width:14px;
+	height:14px;
+	border:2px solid white;
 }
 
+/*
+#resize_bottom_right {
+	bottom:0;
+	right:0;
+}
+#resize_top_right {
+	top:0;
+	right:0;
+}
+#resize_top_left {
+	top:0;
+	left:0;
+}
+#resize_bottom_left {
+	bottom:0;
+	left:0;
+}
+#resize_center_right {
+	top:50%;
+	right:0;
+}
+#resize_center_left {
+	top:50%;
+	left:0;
+}
+#resize_center_top {
+	top:0;
+	left:50%;
+}
+#resize_center_bottom {
+	bottom:0;
+	left:50%;
+}
+*/
 /*
 #wrapper section::-webkit-resizer {
   border-radius:15px;

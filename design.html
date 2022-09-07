@@ -7,6 +7,8 @@
 		<script src="includes/indexeddb.js"></script>
 		<script src="includes/common.js"></script>
 		<script src="includes/design.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>			
 		<style>
 			
 			@font-face {font-family:'editserifarabic';font-style:normal;font-weight:400;font-display:swap;src:local('editserifarabic'),url(fonts/editserifarabic.ttf) format('truetype');}
@@ -77,6 +79,9 @@
 						</tr>
 						<tr>
 							<td><span onclick="duplicateDezyn();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</span></td>
+						</tr>
+						<tr>
+							<td><span onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_duplicate.png"> Export</span></td>
 						</tr>
 						<tr>
 							<td><span onclick="deleteDezyn();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</span></td>
