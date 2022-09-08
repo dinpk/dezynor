@@ -414,6 +414,13 @@
 					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
 					<table class="section_table">
 						<tr>
+							<td>Pre-formatted</td>
+							<td>
+								<select id="select_formatted_elements" onchange="setFormattedElement();"></select> &nbsp; 
+								<button onclick="saveFormattedElement();" title="Save selected box as a new formatting">Save</button> 
+							</td>
+						</tr>
+						<tr>
 							<td>Alignment</td>
 							<td>
 								<img src="images/icon_align_left.png" onclick="styleTextAlign('left')"> 

@@ -1,6 +1,5 @@
 window.onload = function() {
-	loadSelectFolders();
-	loadSelectFonts();
+	loadSelectValues();
 	loadDezyn();
 	setRandomWrapperColor();
 	showSectionPanel('box_section');
@@ -8,7 +7,7 @@ window.onload = function() {
 
 let design_id = generateDeisgnId();
 let design_object;
-
+let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5"];
 let section_number = 0;
 let selected_section;
 let move;
@@ -1163,7 +1162,27 @@ async function loadDezyn() {
 }
 
 
-async function loadSelectFolders() {
+function saveFormattedElement() {
+	let selected_formatting_label = document.getElementById("select_formatted_elements").value;
+	if (selected_formatting_label.length = "" || !selected_formatting_label) return;
+	selected_formatting = selected_formatting_label.replaceAll(" ", "_").toLowerCase();
+	localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
+	showMessage("Selected box saved as a new formatting: " + selected_formatting_label, "Green");
+}
+
+function setFormattedElement() {
+	let selected_formatting = document.getElementById("select_formatted_elements").value;
+	if (selected_formatting.length = "" || !selected_section) return;
+	selected_formatting = selected_formatting.replaceAll(" ", "_").toLowerCase();
+	if (selected_formatting in localStorage) {
+		selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
+		reAlignSectionHandles();
+	}
+}
+
+async function loadSelectValues() {
+
+	// ------------------------- folders
 	let select_folders = document.getElementById("select_folders");
 	let folders = await idbGetItem("dezynor_settings", "folders");
 	folders.sort();
@@ -1172,10 +1191,8 @@ async function loadSelectFolders() {
 		option.text = folders[i].trim();
 		select_folders.add(option);
 	}
-}
 
-async function loadSelectFonts() {
-
+	// ------------------------- fonts
 	let google_fonts = "";
 	let installed_fonts = "";
 	
@@ -1200,6 +1217,13 @@ async function loadSelectFonts() {
 	
 	document.getElementById("google_fonts").innerHTML = google_fonts;
 	document.getElementById("installed_fonts").innerHTML = installed_fonts;
+
+	// ------------------------- formatted elements
+	let formatted_elements_options = "";
+	for (i = 0; i < formatted_elements.length; i++) {
+		formatted_elements_options = formatted_elements_options + "<option>" + formatted_elements[i] + "</option>";
+	}
+	document.getElementById("select_formatted_elements").innerHTML = formatted_elements_options;
 
 }
 
