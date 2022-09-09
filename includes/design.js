@@ -10,6 +10,7 @@ let design_object;
 let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5"];
 let section_number = 0;
 let selected_section;
+let last_selected_section;
 let move;
 let resize_bottom_right;
 let resize_top_right;
@@ -200,6 +201,8 @@ function getNewSectionNumber() {
 
 function selectSection(counter) {
 
+	last_selected_section = selected_section;
+
 	let new_selected_id = "section" + counter;
 
 	if (selected_section && selected_section.id == new_selected_id && section_number > 1) {
@@ -225,6 +228,7 @@ function selectSection(counter) {
 	loadSectionStyles();
 	reAlignSectionHandles();
 	showHandles();
+	document.getElementById("select_formatted_elements").value = "";
 }
 
 function duplicateSection() {
@@ -638,158 +642,312 @@ function rotatedRectangle(x, y, half_width, half_height, angle) {
 }
 
 function styleResizeFullWidth() {
-	selected_section.style.width = document.getElementById("wrapper").style.width;
-	selected_section.style.left = document.getElementById("wrapper").style.left;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.width = document.getElementById("wrapper").style.width;
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+	} else {
+		selected_section.style.width = last_selected_section.style.width;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleResizeFullHeight() {
-	selected_section.style.height = document.getElementById("wrapper").style.height;
-	selected_section.style.top = document.getElementById("wrapper").style.top;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.height = document.getElementById("wrapper").style.height;
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+	} else {
+		selected_section.style.height = last_selected_section.style.height;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleResizeHalfWidth() {
-	selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
-	selected_section.style.height = document.getElementById("wrapper").style.height;
-	selected_section.style.top = document.getElementById("wrapper").style.top;
-	selected_section.style.left = document.getElementById("wrapper").style.left;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
+		selected_section.style.height = document.getElementById("wrapper").style.height;
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+	} else {
+		selected_section.style.width = (parseInt(last_selected_section.style.width.replace("px", "")) / 2) + "px";
+		selected_section.style.height = last_selected_section.style.height;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleResizeHalfHeight() {
-	selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
-	selected_section.style.width = document.getElementById("wrapper").style.width;
-	selected_section.style.left = document.getElementById("wrapper").style.left;
-	selected_section.style.top = document.getElementById("wrapper").style.top;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
+		selected_section.style.width = document.getElementById("wrapper").style.width;
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+	} else {
+		selected_section.style.height = (parseInt(last_selected_section.style.height.replace("px", "")) / 2) + "px";
+		selected_section.style.width = last_selected_section.style.width;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleResizeQuarter() {
-	selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
-	selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
-	selected_section.style.left = document.getElementById("wrapper").style.left;
-	selected_section.style.top = document.getElementById("wrapper").style.top;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
+		selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+	} else {
+		selected_section.style.width = (parseInt(last_selected_section.style.width.replace("px", "")) / 2) + "px";
+		selected_section.style.height = (parseInt(last_selected_section.style.height.replace("px", "")) / 2) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 
 function styleAlignTopLeft() {
-	selected_section.style.top = document.getElementById("wrapper").style.top;
-	selected_section.style.left = document.getElementById("wrapper").style.left;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+	} else {
+		selected_section.style.top = last_selected_section.style.top;
+		selected_section.style.left = last_selected_section.style.left;
+	}
+
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignTopRight() {
-	selected_section.style.top = document.getElementById("wrapper").style.top;
-	let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
-	selected_section.style.left = parseInt(new_left) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+	} else {
+		selected_section.style.top = last_selected_section.style.top;
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let last_selected_section_width = parseInt(last_selected_section.style.width.replace("px", ""));
+		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomLeft() {
-	selected_section.style.left = document.getElementById("wrapper").style.left;
-	let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+		let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		selected_section.style.left = last_selected_section.style.left;
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let last_selected_section_height = parseInt(last_selected_section.style.height.replace("px", ""));
+		let new_top = (last_selected_section_top + last_selected_section_height) - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomRight() {
-	let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
-	selected_section.style.left = parseInt(new_left) + "px";
-	let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+		let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let last_selected_section_width = parseInt(last_selected_section.style.width.replace("px", ""));
+		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let last_selected_section_height = parseInt(last_selected_section.style.height.replace("px", ""));
+		let new_top = (last_selected_section_top + last_selected_section_height) - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignTopCenter() {
-	selected_section.style.top = document.getElementById("wrapper").style.top;
-	let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
-	selected_section.style.left = parseInt(new_left) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	} else {
+		selected_section.style.top = last_selected_section.style.top;
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignRightCenter() {
-	let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
-	selected_section.style.left = parseInt(new_left) + "px";
-	let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+		let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let last_selected_section_width = parseInt(last_selected_section.style.width.replace("px", ""));
+		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignLeftCenter() {
-	selected_section.style.left = document.getElementById("wrapper").style.left;
-	let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+		let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		selected_section.style.left = last_selected_section.style.left;
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomCenter() {
-	let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
-	selected_section.style.left = parseInt(new_left) + "px";
-	let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+		let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let last_selected_section_height = parseInt(last_selected_section.style.height.replace("px", ""));
+		let new_top = last_selected_section_top + last_selected_section_height - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignCenterCenter() {
-	let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
-	selected_section.style.left = parseInt(new_left) + "px";
-	let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+		let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		selected_section.style.left = last_selected_section.style.left;
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHCenter() {
-	let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
-	selected_section.style.left = parseInt(new_left) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	} else {
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHLeft() {
-	selected_section.style.left = document.getElementById("wrapper").style.left;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.left = document.getElementById("wrapper").style.left;
+	} else {
+		selected_section.style.left = last_selected_section.style.left;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHRight() {
-	let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", ""))  -   parseInt(selected_section.style.width.replace("px", ""));
-	selected_section.style.left = parseInt(new_left) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", ""))  -   parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+	} else {
+		let last_selected_section_left = parseInt(last_selected_section.style.left.replace("px", ""));
+		let last_selected_section_width = parseInt(last_selected_section.style.width.replace("px", ""));
+		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
+		selected_section.style.left = parseInt(new_left) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVCenter() {
-	let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVTop() {
-	selected_section.style.top = document.getElementById("wrapper").style.top;
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		selected_section.style.top = document.getElementById("wrapper").style.top;
+	} else {
+		selected_section.style.top = last_selected_section.style.top;
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVBottom() {
-	let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
-	selected_section.style.top = parseInt(new_top) + "px";
+	let align_to = document.getElementById("align_to").value;
+	if (align_to == "page" || !last_selected_section) {
+		let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	} else {
+		let last_selected_section_top = parseInt(last_selected_section.style.top.replace("px", ""));
+		let last_selected_section_height = parseInt(last_selected_section.style.height.replace("px", ""));
+		let new_top = last_selected_section_top + last_selected_section_height - parseInt(selected_section.style.height.replace("px", ""));
+		selected_section.style.top = parseInt(new_top) + "px";
+	}
 	reAlignSectionHandles();
 	loadSectionStyles();
 }

@@ -173,6 +173,15 @@
 							</td>
 						</tr>
 						<tr>
+							<td>According to</td>
+							<td>
+								<select id="align_to">
+									<option value="page">Page</option>
+									<option value="section">Previous box</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td>Resize</td>
 							<td>
 								<img src="images/resize_full_width.png" id="resize_full_width" onclick="styleResizeFullWidth();" title="Full width (Alt + Numpad Subtract)"> 
@@ -195,7 +204,8 @@
 								<img src="images/align_left_center.png" id="align_left_center" onclick="styleAlignLeftCenter();" title="Align left center">
 								<img src="images/align_right_center.png" id="align_right_center" onclick="styleAlignRightCenter();" title="Align right center">
 
-								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Align center center"><br>
+								<img src="images/align_center_center.png" id="align_center_center" onclick="styleAlignCenterCenter();" title="Align center center">
+								<br>
 
 								<img src="images/align_h_left.png" id="align_h_left" onclick="styleAlignHLeft();" title="Align left horizontally (Ctrl + Alt + LeftArrow)"> 
 								<img src="images/align_h_center.png" id="align_h_center" onclick="styleAlignHCenter();" title="Align center horizontally (Ctrl + Alt + RightArrow/LeftArrow)"> 
@@ -203,11 +213,10 @@
 								<img src="images/align_v_top.png" id="align_v_top" onclick="styleAlignVTop();" title="Align top vertically (Ctrl + Alt + UpArrow)"> 
 								<img src="images/align_v_center.png" id="align_v_center" onclick="styleAlignVCenter();" title="Align center vertically (Ctrl + Alt + UpArrow/DownArrow"> 
 								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="styleAlignVBottom();" title="Align bottom vertically (Ctrl + Alt + DownArrow)">
-
 							</td>
 						</tr>
 						<tr>
-							<td>Layer order</td>
+							<td>Layer</td>
 							<td>
 								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
 							</td>
