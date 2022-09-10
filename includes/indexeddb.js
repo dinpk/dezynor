@@ -75,6 +75,8 @@ async function idbGetItem(store, key) {
 			// if (request.result.value == e.target.result.value) console.log("same");
 			if (request.result != undefined) {
 				resolve(request.result.value);
+			} else {
+				resolve(false);
 			}
         }
     });

@@ -221,8 +221,8 @@
 					
 					let folder_icons = " <img src='images/icon_delete_folder.png' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>";
 					folder_icons = folder_icons + " <img src='images/icon_rename_folder.png' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>";	
-					folder_icons = folder_icons + " <input type='file' name='import_file' id='import_file' accept='.backup' onchange='importDezyn();' style='display:none;'>";	
-					folder_icons = folder_icons + " <img src='images/icon_import_single.png' onclick=\"document.getElementById('import_file').click();\" title='Import design'>";	
+					folder_icons = folder_icons + " <input type='file' name='import_files' id='import_files' accept='.backup' onchange='importDezyn();' multiple style='display:none;'>";	
+					folder_icons = folder_icons + " <img src='images/icon_import_single.png' onclick=\"document.getElementById('import_files').click();\" title='Import design'>";	
 					document.getElementById("folder_heading").innerHTML = "<div id='folder_label'>" + folder_label + "</div><div id='folder_icons'>" + folder_icons + "</div>";
 					
 					
@@ -252,26 +252,32 @@
 				}
 			}
 
-		
-			function importDezyn() {
-				let file = document.getElementById("import_file").files[0];
-				if (file.length == 0) return;
-				let reader = new FileReader();
-				reader.onload = async function(e) {
-					let file_data = e.target.result;
-					let key = "dezyn-" + new Date().getTime();
-					let object = JSON.parse(file_data);
-					let folder_name = localStorage.getItem("current_folder");
-					object.folder = folder_name;
-					if (await idbPutItem("dezynor_designs", {design_key:key, value:object})) {
-						showFolderDezyns(folder_name);
-						showMessage("Design imported successfully.", "Green");
-						
-					}						
-				}
-				reader.readAsText(file);						
-			}
 
+			function importDezyn() {
+				let import_files = document.getElementById("import_files").files;
+				if (import_files.length == 0) return;
+				Array.from(import_files).forEach(file => {
+					let reader = new FileReader();
+					reader.onload = async function(e) {
+						let file_name = file.name;
+						let file_type = file.type;
+						if (file_name.indexOf("dezyn-") == 0) {
+							let file_data = e.target.result;
+							let key = "dezyn-" + new Date().getTime();
+							let object = JSON.parse(file_data);
+							object.folder = localStorage.getItem("current_folder");							
+							await idbPutItem("dezynor_designs", {design_key:key, value:object});
+						} else if (file_name.indexOf("image-") == 0) {
+							let image_key = file_name.replace(".backup", "");
+							let blob = new Blob([file],{type: file_type}); // pass original file, not file reader's result
+							await idbPutItem("dezynor_images", {image_key:image_key, value:blob})
+						}
+						showFolderDezyns(localStorage.getItem("current_folder"));
+					}
+					reader.readAsText(file);
+				});						
+			}
+		
 
 		</script>
 		

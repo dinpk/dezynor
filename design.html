@@ -7,8 +7,8 @@
 		<script src="includes/indexeddb.js"></script>
 		<script src="includes/common.js"></script>
 		<script src="includes/design.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>			
+		<script src="includes/jszip_min_3_7_1.js"></script>
+		<script src="includes/filesaver_min_2_0_0.js"></script>
 		<style>
 			
 			@font-face {font-family:'editserifarabic';font-style:normal;font-weight:400;font-display:swap;src:local('editserifarabic'),url(fonts/editserifarabic.ttf) format('truetype');}
@@ -423,10 +423,11 @@
 					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
 					<table class="section_table">
 						<tr>
-							<td>Pre-formatted</td>
+							<td>Presets</td>
 							<td>
 								<select id="select_formatted_elements" onchange="setFormattedElement();"></select> &nbsp; 
-								<button onclick="saveFormattedElement();" title="Save selected box as a new formatting">Save</button> 
+								<input type="radio" id="formatting_apply" name="formatting_apply_save" checked> Apply 
+								<input type="radio" id="formatting_save" name="formatting_apply_save"> Save 
 							</td>
 						</tr>
 						<tr>

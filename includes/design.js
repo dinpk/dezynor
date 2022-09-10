@@ -7,7 +7,7 @@ window.onload = function() {
 
 let design_id = generateDeisgnId();
 let design_object;
-let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5"];
+let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
 let section_number = 0;
 let selected_section;
 let last_selected_section;
@@ -1242,24 +1242,48 @@ function duplicateDezyn() {
 	alert("Duplicated successfully!");
 }
 
-function exportDezyn() {
+async function exportDezyn() {
 
+	let zip_items = new JSZip();
+	// design
 	let data = document.getElementById("container").innerHTML;
-
+	let folder = document.getElementById("select_folders").value;
 	let created = new Date().getTime();
 	let modified = created;
 	let new_object = {
 		created:created,
 		modified:modified,
-		folder:"",
+		folder:folder,
 		data:data,
 		keywords:""
 	}
+	zip_items.file(design_id + ".backup", JSON.stringify(new_object));
+
+	let valid_image_keys = [];
+	// images
+	let all_sections = document.querySelectorAll("section");
+	for (i = 0; i < all_sections.length; i++) {
+		
+		let section = all_sections[i];
+		let image_key = section.dataset.image_key;
+		if (image_key && image_key != "") {
+			let image_blob = await idbGetItem("dezynor_images", image_key);
+			if (image_blob && section) {
+				zip_items.file(image_key + ".backup", image_blob);		
+			}
+		}
+	}
+
 	
-	data = JSON.stringify(new_object);
-	
-	var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-	saveAs(blob, design_id + ".backup");	
+	let file_name = "dezynor-single-design-backup-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+	zip_items.generateAsync({type:"blob",
+		compression: "DEFLATE",
+		compressionOptions: {
+			level: 9 /* 1 (best speed) to 9 (best compression) */
+		}}).then(function(content) {
+			saveAs(content, file_name + ".zip");
+		});
+		console.log(4);
 }
 
 async function deleteDezyn() {
@@ -1299,7 +1323,7 @@ async function loadDezyn() {
 		}).then(function() { // add new object URLs to sections
 
 			let all_sections = document.querySelectorAll("section");
-			for (i = 0; i < all_sections.length; i++) { 
+			for (i = 0; i < all_sections.length; i++) {
 				let section = all_sections[i];
 				let image_key = section.dataset.image_key;
 				if (image_key && image_key != "") {
@@ -1319,22 +1343,23 @@ async function loadDezyn() {
 
 }
 
-
-function saveFormattedElement() {
-	let selected_formatting_label = document.getElementById("select_formatted_elements").value;
-	if (selected_formatting_label.length = "" || !selected_formatting_label) return;
-	selected_formatting = selected_formatting_label.replaceAll(" ", "_").toLowerCase();
-	localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
-	showMessage("Selected box saved as a new formatting: " + selected_formatting_label, "Green");
-}
-
 function setFormattedElement() {
+	if (!selected_section) return;
+
 	let selected_formatting = document.getElementById("select_formatted_elements").value;
-	if (selected_formatting.length = "" || !selected_section) return;
 	selected_formatting = selected_formatting.replaceAll(" ", "_").toLowerCase();
-	if (selected_formatting in localStorage) {
-		selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
-		reAlignSectionHandles();
+	if (document.getElementById("formatting_save").checked) {
+		let selected_formatting_label = document.getElementById("select_formatted_elements").value;
+		if (selected_formatting_label.length = "" || !selected_formatting_label) return;
+		localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
+		showMessage("Saved as: " + selected_formatting_label, "Green");
+	} else {
+		if (selected_formatting.length == 0) {
+			loadSectionStyles();
+		} else if (selected_formatting in localStorage) {
+			selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
+			reAlignSectionHandles();
+		}
 	}
 }
 
