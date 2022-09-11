@@ -1157,6 +1157,7 @@ function hidePopupPanel() {
 
 function setShape(value) {
 	if (!(selected_section)) return;
+	value = value.replace("clip-path:", "");
 	selected_section.style.clipPath = value;
 	document.getElementById("clip_path").value = value;
 }
@@ -1195,6 +1196,7 @@ async function saveDezyn() {
 
 	let modified = new Date().getTime();
 	let folder = document.getElementById("select_folders").value;
+	localStorage.setItem("current_folder", folder);
 	let data = document.getElementById("container").innerHTML;
 
 	if (design_object) { // set in loadDezyn()
@@ -1344,22 +1346,17 @@ async function loadDezyn() {
 }
 
 function setFormattedElement() {
-	if (!selected_section) return;
-
 	let selected_formatting = document.getElementById("select_formatted_elements").value;
+	if (!selected_section || selected_formatting.length == 0) return;
+	let selected_formatting_label = selected_formatting;
 	selected_formatting = selected_formatting.replaceAll(" ", "_").toLowerCase();
+
 	if (document.getElementById("formatting_save").checked) {
-		let selected_formatting_label = document.getElementById("select_formatted_elements").value;
-		if (selected_formatting_label.length = "" || !selected_formatting_label) return;
 		localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
 		showMessage("Saved as: " + selected_formatting_label, "Green");
-	} else {
-		if (selected_formatting.length == 0) {
-			loadSectionStyles();
-		} else if (selected_formatting in localStorage) {
-			selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
-			reAlignSectionHandles();
-		}
+	} else if (selected_formatting in localStorage) {
+		selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
+		reAlignSectionHandles();
 	}
 }
 

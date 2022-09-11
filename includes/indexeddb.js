@@ -24,8 +24,8 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("font_size_change", "3");
 			localStorage.setItem("line_height_change", "3");
 			localStorage.setItem("word_spacing_change", "1");
-			localStorage.setItem("max_upload_width", "1200");
-			localStorage.setItem("max_upload_height", "1200");
+			localStorage.setItem("max_upload_width", "1280");
+			localStorage.setItem("max_upload_height", "1280");
 			localStorage.setItem("current_folder", "default");
 		case 1:
 		case 2:

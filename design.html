@@ -81,7 +81,7 @@
 							<td><span onclick="duplicateDezyn();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</span></td>
 						</tr>
 						<tr>
-							<td><span onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_duplicate.png"> Export</span></td>
+							<td><span onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_export_single.png"> Export</span></td>
 						</tr>
 						<tr>
 							<td><span onclick="deleteDezyn();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</span></td>
@@ -316,99 +316,104 @@
 						<tr>
 							<td style="display:none;">Shapes</td>
 							<td colspan="2">
+							<footer style="max-height:50vh;overflow:auto;line-height:200%;">
 								<span onclick="setShape('');"><img loading="lazy" src="images/shapes/shape0.png"></span> 
-								<span onclick="setShape('polygon(0% 25%, 50% 25%, 50% 0%, 100% 50%, 50% 100%, 50% 75%, 0% 75%)');"><img loading="lazy" src="images/shapes/shape1.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 50% 25%, 100% 25%, 100% 75%, 50% 75%, 50% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape2.png"></span> 
-								<span onclick="setShape('polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%)');"><img loading="lazy" src="images/shapes/shape3.png"></span> 
-								<span onclick="setShape('polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%)');"><img loading="lazy" src="images/shapes/shape4.png"></span> 
-								<span onclick="setShape('polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)');"><img loading="lazy" src="images/shapes/shape5.png"></span> 
-								<span onclick="setShape('ellipse(98% 50% at 1% 50%)');"><img loading="lazy" src="images/shapes/shape6.png"></span> 
-								<span onclick="setShape('ellipse(98% 50% at 99% 50%)');"><img loading="lazy" src="images/shapes/shape7.png"></span> 
-								<span onclick="setShape('ellipse(50% 99% at 50% 0%)');"><img loading="lazy" src="images/shapes/shape8.png"></span> 
-								<span onclick="setShape('ellipse(50% 99% at 50% 100%)');"><img loading="lazy" src="images/shapes/shape9.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 0% 20%, 80% 100%, 100% 100%, 100% 80%, 20% 0px)');"><img loading="lazy" src="images/shapes/shape10.png"></span> 
-								<span onclick="setShape('polygon(0px 80%, 0px 100%, 20% 100%, 100% 20%, 100% 0px, 80% 0%)');"><img loading="lazy" src="images/shapes/shape11.png"></span> 
-								<span onclick="setShape('polygon(100% 0px, 35% 75%, 100% 100%, 0px 100%, 0px 0px)');"><img loading="lazy" src="images/shapes/shape12.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 65% 75%, 0px 100%, 100% 100%, 100% 0px)');"><img loading="lazy" src="images/shapes/shape13.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)');"><img loading="lazy" src="images/shapes/shape14.png"></span> 
-								<span onclick="setShape('polygon(50% 0px, 100% 100%, 0px 100%, 0px 0px)');"><img loading="lazy" src="images/shapes/shape15.png"></span> 
-								<span onclick="setShape('polygon(100% 0px, 100% 100%, 0px 100%, 50% 0px)');"><img loading="lazy" src="images/shapes/shape16.png"></span> 
-								<span onclick="setShape('ellipse(25% 40% at 50% 50%)');"><img loading="lazy" src="images/shapes/shape17.png"></span> 
-								<span onclick="setShape('polygon(0% 0%, 0% 100%, 25% 100%, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 100%, 100% 100%, 100% 0%)');"><img loading="lazy" src="images/shapes/shape18.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)');"><img loading="lazy" src="images/shapes/shape19.png"></span> 
-								<span onclick="setShape('polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape20.png"></span> 
-								<span onclick="setShape('polygon(50% 0%,70% 15%,70% 2%,90% 2%,90% 30%,100% 40%,100% 100%,65% 100%,65% 65%,35% 65%,35% 100%,0% 100%,0% 40%)');"><img loading="lazy" src="images/shapes/shape21.png"></span> 
-								<span onclick="setShape('polygon(25% 0%,70% 0%,40% 35%,95% 35%,20% 100%,40% 55%,0% 55%)');"><img loading="lazy" src="images/shapes/shape22.png"></span> 
-								<span onclick="setShape('polygon(5% 5%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%)');"><img loading="lazy" src="images/shapes/shape23.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%)');"><img loading="lazy" src="images/shapes/shape24.png"></span> 
-								<span onclick="setShape('polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)');"><img loading="lazy" src="images/shapes/shape25.png"></span> 
-								<span onclick="setShape('polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape26.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)');"><img loading="lazy" src="images/shapes/shape27.png"></span> 
-								<span onclick="setShape('polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape28.png"></span> 
-								<span onclick="setShape('polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape29.png"></span> 
-								<span onclick="setShape('polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)');"><img loading="lazy" src="images/shapes/shape30.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape31.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)');"><img loading="lazy" src="images/shapes/shape32.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)');"><img loading="lazy" src="images/shapes/shape33.png"></span> 
-								<span onclick="setShape('polygon(0px 100%, 100% 0px, 0px 0px)');"><img loading="lazy" src="images/shapes/shape34.png"></span> 
-								<span onclick="setShape('polygon(100% 100%, 100% 0px, 0px 0px)');"><img loading="lazy" src="images/shapes/shape35.png"></span> 
-								<span onclick="setShape('polygon(100% 100%, 0px 0px, 0px 100%)');"><img loading="lazy" src="images/shapes/shape36.png"></span> 
-								<span onclick="setShape('polygon(100% 0px, 0px 100%, 100% 100%)');"><img loading="lazy" src="images/shapes/shape37.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 0px 100%, 100% 50%)');"><img loading="lazy" src="images/shapes/shape38.png"></span> 
-								<span onclick="setShape('polygon(0px 50%, 100% 100%, 100% 0px)');"><img loading="lazy" src="images/shapes/shape39.png"></span> 
-								<span onclick="setShape('polygon(100% 0px, 0px 0px, 50% 100%)');"><img loading="lazy" src="images/shapes/shape40.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 0% 100%, 100% 100%)');"><img loading="lazy" src="images/shapes/shape41.png"></span> 
-								<span onclick="setShape('polygon(23% 0%, 77% 0%, 100% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape42.png"></span> 
-								<span onclick="setShape('polygon(0 0, 100% 0, 77% 100%, 23% 100%)');"><img loading="lazy" src="images/shapes/shape43.png"></span> 
-								<span onclick="setShape('polygon(0 0, 100% 50%, 100% 100%, 0 50%)');"><img loading="lazy" src="images/shapes/shape44.png"></span> 
-								<span onclick="setShape('polygon(0 50%, 100% 0, 100% 50%, 0 100%)');"><img loading="lazy" src="images/shapes/shape45.png"></span> 
-								<span onclick="setShape('polygon(50% 100%, 0 0, 50% 0, 100% 100%)');"><img loading="lazy" src="images/shapes/shape46.png"></span> 
-								<span onclick="setShape('polygon(0 100%, 50% 0, 100% 0, 50% 100%)');"><img loading="lazy" src="images/shapes/shape47.png"></span> 
-								<span onclick="setShape('polygon(20% 100%, 4% 0, 0 0, 0 100%, 100% 100%, 100% 0, 32% 0, 48% 100%)');"><img loading="lazy" src="images/shapes/shape48.png"></span> 
-								<span onclick="setShape('polygon(0 20%, 0 45%, 100% 35%, 100% 100%, 50% 100%, 0 100%, 0 0, 100% 0, 100% 10%)');"><img loading="lazy" src="images/shapes/shape49.png"></span> 
-								<span onclick="setShape('polygon(100% 0, 0 0, 80% 100%)');"><img loading="lazy" src="images/shapes/shape50.png"></span> 
-								<span onclick="setShape('polygon(100% 0, 0 0, 20% 100%)');"><img loading="lazy" src="images/shapes/shape51.png"></span> 
-								<span onclick="setShape('polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape52.png"></span> 
-								<span onclick="setShape('polygon(50% 25%, 100% 0, 100% 100%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape53.png"></span> 
-								<span onclick="setShape('polygon(50% 20%, 100% 0, 100% 100%, 50% 80%, 0 100%, 0 0)');"><img loading="lazy" src="images/shapes/shape54.png"></span> 
-								<span onclick="setShape('polygon(10% 0px, 0px 10%, 0px 100%, 10% 30%, 19% 15%, 50% 2%, 80% 15%, 90% 30%, 100% 100%, 100% 10%, 90% 0px, 50% 0px)');"><img loading="lazy" src="images/shapes/shape55.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 10% 100%, 10% 25%, 90% 25%, 90% 100%, 100% 0px)');"><img loading="lazy" src="images/shapes/shape56.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 100% 0px, 20% 40%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape57.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 100% 0px, 100% 100%, 80% 40%)');"><img loading="lazy" src="images/shapes/shape58.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 75% 0px, 100% 60%, 60% 100%, 0px 75%)');"><img loading="lazy" src="images/shapes/shape59.png"></span> 
-								<span onclick="setShape('polygon(25% 0px, 100% 0px, 100% 75%, 40% 100%, 0px 60%)');"><img loading="lazy" src="images/shapes/shape60.png"></span> 
-								<span onclick="setShape('polygon(60% 0, 100% 40%, 75% 100%, 0 100%, 0 25%)');"><img loading="lazy" src="images/shapes/shape61.png"></span> 
-								<span onclick="setShape('polygon(40% 0px, 100% 25%, 100% 100%, 25% 100%, 0px 40%)');"><img loading="lazy" src="images/shapes/shape62.png"></span> 
-								<span onclick="setShape('polygon(100% 0px, 100% 100%, 0px 77%, 0px 23%)');"><img loading="lazy" src="images/shapes/shape63.png"></span> 
-								<span onclick="setShape('polygon(100% 23%, 100% 77%, 0px 100%, 0px 0px)');"><img loading="lazy" src="images/shapes/shape64.png"></span> 
-								<span onclick="setShape('polygon(2% 2%, 2% 98%, 5% 98%, 5% 5%, 95% 5%, 95% 95%, 5% 95%, 5% 98%, 98% 98%, 98% 2%)');"><img loading="lazy" src="images/shapes/shape65.png"></span> 
-								<span onclick="setShape('polygon(5% 20%, 0px 30%, 10% 60%, 0px 95%, 5% 100%, 50% 90%, 95% 100%, 100% 95%, 90% 60%, 100% 30%, 95% 20%, 50% 0px)');"><img loading="lazy" src="images/shapes/shape66.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape67.png"></span> 
-								<span onclick="setShape('polygon(0px 0px, 100% 0%, 100% 75%, 50% 100%, 0px 75%)');"><img loading="lazy" src="images/shapes/shape68.png"></span> 
-								<span onclick="setShape('polygon(0px 25%, 50% 0px, 100% 25%, 100% 100%, 0px 100%)');"><img loading="lazy" src="images/shapes/shape69.png"></span> 
-								<span onclick="setShape('polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%)');"><img loading="lazy" src="images/shapes/shape70.png"></span> 
-								<span onclick="setShape('polygon(25% 0%, 75% 0%, 100% 25%, 50% 100%, 0% 25%)');"><img loading="lazy" src="images/shapes/shape71.png"></span> 
-								<span onclick="setShape('polygon(30% 0%, 50% 15%, 70% 0%, 90% 10%, 100% 35%, 80% 70%, 50% 100%, 20% 70%, 0% 35%, 10% 10%)');"><img loading="lazy" src="images/shapes/shape72.png"></span> 
-								<span onclick="setShape('polygon(51% 0px, 85% 0px, 100% 15%, 90% 100%, 90% 30%, 10% 30%, 10% 100%, 0px 15%, 15% 0px)');"><img loading="lazy" src="images/shapes/shape73.png"></span> 
-								<span onclick="setShape('polygon(100% 0, 94% 50%, 100% 100%, 0 100%, 6% 50%, 0 0)');"><img loading="lazy" src="images/shapes/shape74.png"></span> 
-								<span onclick="setShape('polygon(100% 0%, 0% 0%, 3% 13%, 0% 24%, 3% 36%, 0% 48%, 3% 59%, 0% 71%, 3% 85%, 0% 100%, 100% 100%, 97% 89%, 100% 76%, 97% 66%, 100% 52%, 97% 40%, 100% 25%, 97% 14%)');"><img loading="lazy" src="images/shapes/shape75.png"></span> 
-								<span onclick="setShape('polygon(0 50%, 100% 0, 100% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape76.png"></span> 
-								<span onclick="setShape('polygon(0 0%, 100% 50%, 100% 100%, 0% 100%)');"><img loading="lazy" src="images/shapes/shape77.png"></span> 
-								<span onclick="setShape('polygon(0 0, 100% 0, 95% 10%, 95% 70%, 50% 100%, 5% 70%, 5% 10%)');"><img loading="lazy" src="images/shapes/shape78.png"></span> 
-								<span onclick="setShape('polygon(50% 0, 95% 30%, 95% 90%, 100% 100%, 0 100%, 5% 90%, 5% 30%)');"><img loading="lazy" src="images/shapes/shape79.png"></span> 
-								<span onclick="setShape('polygon(85% 6%, 70% 15%, 30% 15%, 15% 5%, 0% 25%, 10% 45%, 10% 75%, 25% 90%, 40% 95%, 60% 95%, 75% 91%, 90% 75%, 90% 45%, 100% 25%)');"><img loading="lazy" src="images/shapes/shape80.png"></span> 
-								<span onclick="setShape('polygon(15% 100%, 10% 90%, 0% 85%, 5% 50%, 0% 15%, 10% 10%, 15% 0%, 50% 5%, 85% 0%, 90% 10%, 100% 15%, 95% 50%,100% 85%, 90% 90%, 85% 100%, 50% 95%)');"><img loading="lazy" src="images/shapes/shape82.png"></span> 
-								<span onclick="setShape('polygon(45% 95%, 5% 95%, 5% 55%, 0% 50%, 5% 44%, 4% 5%, 45% 5%, 50% 0%, 55% 5%, 95% 5%, 95% 45%, 100% 50%, 95% 55%, 95% 95%, 55% 95%, 50% 100%)');"><img loading="lazy" src="images/shapes/shape83.png"></span> 
-								<span onclick="setShape('polygon(10% 0, 90% 0, 100% 100%, 50% 75%, 0 100%)');"><img loading="lazy" src="images/shapes/shape84.png"></span> 
-								<span onclick="setShape('polygon(10% 50%, 0px 20%, 30% 20%, 50% 0px, 70% 20%, 100% 20%, 90% 50%, 100% 80%, 70% 80%, 50% 100%, 30% 80%, 0px 80%)');"><img loading="lazy" src="images/shapes/shape85.png"></span> 
-								<span onclick="setShape('polygon(0% 0%, 0px 100%, 25% 75%, 25% 35%, 5% 5%, 95% 5%, 75% 35%, 75% 75%, 100% 100%, 100% 0%)');"><img loading="lazy" src="images/shapes/shape86.png"></span> 
-								<span onclick="setShape('polygon(10% 0px, 90% 0px, 93% 30%, 100% 50%, 93% 70%, 90% 100%, 10% 100%, 7% 70%, 0px 50%, 7% 30%)');"><img loading="lazy" src="images/shapes/shape87.png"></span> 
-								<span onclick="setShape('polygon(10% 50%, 5% 5%, 20% 12%, 50% 0px, 80% 12%, 95% 5%, 90% 50%, 95% 95%, 80% 88%, 50% 100%, 20% 88%, 5% 95%)');"><img loading="lazy" src="images/shapes/shape88.png"></span> 
-								<span onclick="setShape('polygon(50% 0%, 90% 10%, 100% 25%, 100% 75%, 90% 90%, 50% 100%, 10% 90%, 0px 75%, 0px 25%, 10% 10%)');"><img loading="lazy" src="images/shapes/shape89.png"></span> 
-								<span onclick="setShape('polygon(0 0, 100% 30%, 95% 80%, 5% 80%, 0 100%)');"><img loading="lazy" src="images/shapes/shape90.png"></span> 
-								<span onclick="setShape('polygon(0 30%, 100% 0, 100% 100%, 95% 80%, 5% 80%)');"><img loading="lazy" src="images/shapes/shape91.png"></span> 
-								<span onclick="setShape('polygon(7% 17%, 0 17%, 7% 0, 93% 0, 100% 17%, 93% 17%, 83% 100%, 17% 100%)');"><img loading="lazy" src="images/shapes/shape92.png"></span> 
-								<span onclick="setShape('polygon(15% 75%, 0 50%, 15% 15%, 50% 0%, 85% 15%, 100% 50%, 85% 75%, 85% 80%, 97% 80%, 100% 100%, 0 100%, 3% 80%, 15% 80%)');"><img loading="lazy" src="images/shapes/shape93.png"></span> 
+								<span class="shape" style="clip-path:polygon(0% 25%, 50% 25%, 50% 0%, 100% 50%, 50% 100%, 50% 75%, 0% 75%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 50% 25%, 100% 25%, 100% 75%, 50% 75%, 50% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%, 25% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:ellipse(98% 50% at 1% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:ellipse(98% 50% at 99% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:ellipse(50% 99% at 50% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:ellipse(50% 99% at 50% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 0% 20%, 80% 100%, 100% 100%, 100% 80%, 20% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 80%, 0px 100%, 20% 100%, 100% 20%, 100% 0px, 80% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0px, 35% 75%, 100% 100%, 0px 100%, 0px 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 65% 75%, 0px 100%, 100% 100%, 100% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0px, 100% 100%, 0px 100%, 0px 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0px, 100% 100%, 0px 100%, 50% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:ellipse(25% 40% at 50% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 25% 100%, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 100%, 100% 100%, 100% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%,70% 15%,70% 2%,90% 2%,90% 30%,100% 40%,100% 100%,65% 100%,65% 65%,35% 65%,35% 100%,0% 100%,0% 40%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0%,70% 0%,40% 35%,95% 35%,20% 100%,40% 55%,0% 55%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(5% 5%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 100%, 100% 0px, 0px 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 100%, 100% 0px, 0px 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 100%, 0px 0px, 0px 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0px, 0px 100%, 100% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 0px 100%, 100% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 50%, 100% 100%, 100% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0px, 0px 0px, 50% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 0% 100%, 100% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(23% 0%, 77% 0%, 100% 100%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 0, 100% 0, 77% 100%, 23% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 0, 100% 50%, 100% 100%, 0 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 50%, 100% 0, 100% 50%, 0 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 100%, 0 0, 50% 0, 100% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 100%, 50% 0, 100% 0, 50% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(20% 100%, 4% 0, 0 0, 0 100%, 100% 100%, 100% 0, 32% 0, 48% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 20%, 0 45%, 100% 35%, 100% 100%, 50% 100%, 0 100%, 0 0, 100% 0, 100% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0, 0 0, 80% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0, 0 0, 20% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 25%, 100% 0, 100% 100%, 0 100%, 0 0)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 20%, 100% 0, 100% 100%, 50% 80%, 0 100%, 0 0)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 0px, 0px 10%, 0px 100%, 10% 30%, 19% 15%, 50% 2%, 80% 15%, 90% 30%, 100% 100%, 100% 10%, 90% 0px, 50% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 10% 100%, 10% 25%, 90% 25%, 90% 100%, 100% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 100% 0px, 20% 40%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 100% 0px, 100% 100%, 80% 40%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 75% 0px, 100% 60%, 60% 100%, 0px 75%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0px, 100% 0px, 100% 75%, 40% 100%, 0px 60%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(60% 0, 100% 40%, 75% 100%, 0 100%, 0 25%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(40% 0px, 100% 25%, 100% 100%, 25% 100%, 0px 40%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0px, 100% 100%, 0px 77%, 0px 23%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 23%, 100% 77%, 0px 100%, 0px 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(2% 2%, 2% 98%, 5% 98%, 5% 5%, 95% 5%, 95% 95%, 5% 95%, 5% 98%, 98% 98%, 98% 2%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(5% 20%, 0px 30%, 10% 60%, 0px 95%, 5% 100%, 50% 90%, 95% 100%, 100% 95%, 90% 60%, 100% 30%, 95% 20%, 50% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 0px, 100% 0%, 100% 75%, 50% 100%, 0px 75%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0px 25%, 50% 0px, 100% 25%, 100% 100%, 0px 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(25% 0%, 75% 0%, 100% 25%, 50% 100%, 0% 25%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(30% 0%, 50% 15%, 70% 0%, 90% 10%, 100% 35%, 80% 70%, 50% 100%, 20% 70%, 0% 35%, 10% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(51% 0px, 85% 0px, 100% 15%, 90% 100%, 90% 30%, 10% 30%, 10% 100%, 0px 15%, 15% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0, 94% 50%, 100% 100%, 0 100%, 6% 50%, 0 0)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0%, 0% 0%, 3% 13%, 0% 24%, 3% 36%, 0% 48%, 3% 59%, 0% 71%, 3% 85%, 0% 100%, 100% 100%, 97% 89%, 100% 76%, 97% 66%, 100% 52%, 97% 40%, 100% 25%, 97% 14%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 50%, 100% 0, 100% 100%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 0%, 100% 50%, 100% 100%, 0% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 0, 100% 0, 95% 10%, 95% 70%, 50% 100%, 5% 70%, 5% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0, 95% 30%, 95% 90%, 100% 100%, 0 100%, 5% 90%, 5% 30%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(85% 6%, 70% 15%, 30% 15%, 15% 5%, 0% 25%, 10% 45%, 10% 75%, 25% 90%, 40% 95%, 60% 95%, 75% 91%, 90% 75%, 90% 45%, 100% 25%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(15% 100%, 10% 90%, 0% 85%, 5% 50%, 0% 15%, 10% 10%, 15% 0%, 50% 5%, 85% 0%, 90% 10%, 100% 15%, 95% 50%,100% 85%, 90% 90%, 85% 100%, 50% 95%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(45% 95%, 5% 95%, 5% 55%, 0% 50%, 5% 44%, 4% 5%, 45% 5%, 50% 0%, 55% 5%, 95% 5%, 95% 45%, 100% 50%, 95% 55%, 95% 95%, 55% 95%, 50% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 0, 90% 0, 100% 100%, 50% 75%, 0 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 50%, 0px 20%, 30% 20%, 50% 0px, 70% 20%, 100% 20%, 90% 50%, 100% 80%, 70% 80%, 50% 100%, 30% 80%, 0px 80%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0% 0%, 0px 100%, 25% 75%, 25% 35%, 5% 5%, 95% 5%, 75% 35%, 75% 75%, 100% 100%, 100% 0%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 0px, 90% 0px, 93% 30%, 100% 50%, 93% 70%, 90% 100%, 10% 100%, 7% 70%, 0px 50%, 7% 30%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(10% 50%, 5% 5%, 20% 12%, 50% 0px, 80% 12%, 95% 5%, 90% 50%, 95% 95%, 80% 88%, 50% 100%, 20% 88%, 5% 95%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(50% 0%, 90% 10%, 100% 25%, 100% 75%, 90% 90%, 50% 100%, 10% 90%, 0px 75%, 0px 25%, 10% 10%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 0, 100% 30%, 95% 80%, 5% 80%, 0 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 30%, 100% 0, 100% 100%, 95% 80%, 5% 80%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(7% 17%, 0 17%, 7% 0, 93% 0, 100% 17%, 93% 17%, 83% 100%, 17% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(15% 75%, 0 50%, 15% 15%, 50% 0%, 85% 15%, 100% 50%, 85% 75%, 85% 80%, 97% 80%, 100% 100%, 0 100%, 3% 80%, 15% 80%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(0 30%, 10% 25%, 10% 0, 50% 60%, 90% 0, 90% 25%, 100% 30%, 50% 100%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 15%, 55% 45%, 100% 100%, 0px 70%, 25% 55%, 0% 0px)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+								<span class="shape" style="clip-path:polygon(100% 0%, 75% 55%, 100% 70%, 0px 100%, 55% 45%, 0px 15%)" onclick="setShape(this.getAttribute('style'));">&nbsp;</span> 
+							</footer>
 							</td>
 						</tr>
 						<tr>
