@@ -10,8 +10,9 @@ connection.onupgradeneeded = function(e) {
 	switch (e.oldVersion) {
 		case 0:
 			console.log("Case 0: Adding database, stores and settings");
-			let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
 			let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
+			let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
+			let dezynor_fonts = db.createObjectStore("dezynor_fonts", {keyPath: "font_key"});
 			let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
 			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});

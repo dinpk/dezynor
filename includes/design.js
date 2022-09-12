@@ -1374,24 +1374,35 @@ async function loadSelectValues() {
 
 	// ------------------------- fonts
 	let google_fonts = "";
-	let installed_fonts = "";
-	
-	let fonts = await idbGetItem("dezynor_settings", "fonts");
-	fonts.sort();
-	let fonts_list = "";
-	for (i = 0; i < fonts.length; i++) {
-		let storage_font_name = fonts[i].split("|")[0];
-		let storage_font_location = fonts[i].split("|")[1];
+	let online_fonts = await idbGetItem("dezynor_settings", "fonts");
+	online_fonts.sort();
+	let online_fonts_list = "";
+	for (i = 0; i < online_fonts.length; i++) {
+		let storage_font_name = online_fonts[i].split("|")[0];
+		let storage_font_location = online_fonts[i].split("|")[1];
 		if (storage_font_location == "Google") {
-			fonts_list = fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
+			online_fonts_list = online_fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
 			google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
 		} else if (storage_font_location == "Installed") {
-			installed_fonts = installed_fonts + "<option>" + storage_font_name + "</option>";
+			
 		}
 	}
 
+// try uploaded_fonts_list with fontface and objecturl
+	let uploaded_fonts_list = "";
+	let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
+	let installed_fonts = "";
+	for (i = 0; i < uploaded_fonts.length; i++) {
+		let font_key = uploaded_fonts[i].font_key;
+		let font = uploaded_fonts[i].value;
+		font_name = font_key.replaceAll("_", " ");
+		uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
+		installed_fonts = installed_fonts + "<option value='" + font_key + "'>" + font_name + "</option>";
+	}
+
+
 	let style = document.createElement("style");
-	let fonts_node = document.createTextNode(fonts_list);
+	let fonts_node = document.createTextNode(online_fonts_list + uploaded_fonts_list);
 	style.appendChild(fonts_node);
 	document.getElementsByTagName("head")[0].appendChild(style);
 	

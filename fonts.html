@@ -48,25 +48,36 @@
 					let fonts = result;
 					fonts.sort();
 					let google_fonts = "";
-					let installed_fonts = "";
 					for (let i = 0; i < fonts.length; i++) {
 						let font_name = fonts[i].split("|")[0];
 						let font_location = fonts[i].split("|")[1];
 						if (font_location == "Google") {
-							google_fonts = google_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
-						} else {
-							installed_fonts = installed_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
+							google_fonts = google_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteGoogleFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
 						}
-						
-						
+					}
+					document.getElementById("google_fonts").innerHTML = google_fonts;
+				});
+				
+				idbGetAllItems("dezynor_fonts").then(async function(result) {
+					let all_fonts = result;
+					let installed_fonts = "";
+					for (i = 0; i < all_fonts.length; i++) {
+						let font_key = all_fonts[i].font_key;
+						font_name = font_key.replaceAll("_", " ");
+						installed_fonts = installed_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteUploadedFont('" + font_key + "');\">" + "x</span> " + font_name + "</div>";
 					}
 					document.getElementById("installed_fonts").innerHTML = installed_fonts;
-					document.getElementById("google_fonts").innerHTML = google_fonts;
-					document.getElementById("font_name").focus();
 				});
 			}
 
-			function deleteFont(font_name) {
+			async function deleteUploadedFont(font_key) {
+				if (!confirm("Do you really want to delete font '" + font_key.split("|")[0] + "'?")) return;
+				await idbRemoveItem("dezynor_fonts", font_key);
+				showMessage("Deleted successfully", "Red");	
+				loadFonts();				
+			}
+
+			function deleteGoogleFont(font_name) {
 			
 			
 				if (font_name == "Anton|Google") {
@@ -94,40 +105,22 @@
 			}
 			
 						
-			async function addFontsFromFiles(element) {
-			
+			function addFontsFromFiles(element) {
+
 				let font_files = element.files;
-
-				let fonts = await idbGetItem("dezynor_settings", "fonts");
-				
-				let counter = 0;
-				let log = "";
-				for (i = 0; i < font_files.length; i++) {
-					let font_name = baseName(font_files[i].name).trim();
-					console.log(font_name);
-					if (font_name.trim().length == 0) continue;
-					let index = fonts.indexOf(font_name + "|Installed");
-					if (index > -1) {
-						log = log + "<div>A font with the name '" + font_name + "' already exists.</div>";
-					} else {
-						counter++;
-						fonts.push(font_name + "|Installed");
-					}
-				}
-				
-				await idbPutItem("dezynor_settings", {setting_key:"fonts", value:fonts});
-				document.getElementById("log").innerHTML = "<div>Added " + counter + " of " + font_files.length + " fonts.</div><hr>" + log;
+				if (font_files.length == 0) return;
+				Array.from(font_files).forEach(async function(file) {
+					let font_key = file.name.toLowerCase();
+					font_key = font_key.replaceAll(" ", "_");
+					font_key = font_key.replaceAll("-", "_");
+					font_key = font_key.replaceAll(".ttf", "");
+					let file_type = file.type;
+					let blob = new Blob([file],{type: file_type});
+					await idbPutItem("dezynor_fonts", {font_key:font_key, value:blob});
+				});
 				loadFonts();
-
 			}
 			
-			
-		function baseName(str) {
-		   var base = new String(str).substring(str.lastIndexOf('/') + 1); 
-			if(base.lastIndexOf(".") != -1)       
-				base = base.substring(0, base.lastIndexOf("."));
-		   return base;
-		}			
 		</script>
 		<style>
 
@@ -159,6 +152,7 @@
 			}
 			
 			th {
+				min-width:150px;
 				color:Chocolate;
 				font-weight:normal;
 				font-size:150%;
@@ -185,13 +179,13 @@
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 				
 				<input id="add_fonts" type="file" accept=".ttf" onchange="addFontsFromFiles(this);" style="display:none;" multiple>
-				<button onclick="document.getElementById('add_fonts').click();" class="pad10">Browse fonts</button> Fonts must be already installed on this system.
+				<button onclick="document.getElementById('add_fonts').click();" class="pad10">Browse fonts</button>
 				
 			</div>
 			<h1 class="padleft20">Fonts</h1>
 			<table class="padleft50">
 				<tr>
-					<th>Installed</th>
+					<th>Uploaded</th>
 					<th>Google</th>
 				</tr>
 				<tr>
