@@ -175,9 +175,10 @@
 				
 				let folders = await idbGetItem("dezynor_settings", "folders");
 				folders.sort();
-				let folders_html = "";
+				let folders_html = "<div><a onclick=\"showFolderDezyns('default');\"> <img src='images/icon_folder.png'>default</a></div>";
 				for (let i = 0; i < folders.length; i++) {
 					let folder_name = folders[i].trim();
+					if (folder_name == "default") continue;
 					folders_html = folders_html + "<div><a onclick=\"showFolderDezyns('" + folder_name + "');\"> <img src='images/icon_folder.png'>" + folder_name + "</a></div>";
 				}
 				folders_html = folders_html + "<img id='icon_folder_new' src='images/icon_folder_new.png' onclick='addFolder();'>";

@@ -1166,7 +1166,10 @@ function splitOnSpaces() {
 	if (!(selected_section)) return;
 	
 	let text_array = selected_section.innerText.split(" ");
+	let direction = selected_section.style.direction;
+	let section_top = parseInt(document.getElementById("top").value);
 	let section_width = parseInt(document.getElementById("width").value);
+	let section_height = parseInt(document.getElementById("height").value);
 	let section_left = parseInt(document.getElementById("left").value) + section_width;
 	let each_width = parseInt(section_width / text_array.length);
 	
@@ -1177,12 +1180,19 @@ function splitOnSpaces() {
 		section.setAttribute("id", section_id);
 		section.setAttribute("onclick", "selectSection('" + section_number + "');");
 		document.getElementById("wrapper").appendChild(section);
-		let new_section = document.getElementById(section_id)
-		new_section.innerText = text_array[i];
+		let new_section = document.getElementById(section_id);
+		if (direction == "rtl") {
+			new_section.innerText = text_array[i];
+		} else {
+			new_section.innerText = text_array[text_array.length-i-1];
+		}
 		new_section.style.width = each_width + "px";
 		section_left = section_left - each_width;
 		new_section.style.left = section_left + "px";
 	}
+	
+	selected_section.style.top = section_top + section_height + "px";
+	reAlignSectionHandles();
 }
 
 
@@ -1364,11 +1374,16 @@ async function loadSelectValues() {
 
 	// ------------------------- folders
 	let select_folders = document.getElementById("select_folders");
+	let option = document.createElement("option");
+	option.text = "default";
+	select_folders.add(option);	
 	let folders = await idbGetItem("dezynor_settings", "folders");
 	folders.sort();
 	for (i = 0; i < folders.length; i++) {
+		let folder_name = folders[i].trim();
+		if (folder_name == "default") continue;
 		let option = document.createElement("option");
-		option.text = folders[i].trim();
+		option.text = folder_name;
 		select_folders.add(option);
 	}
 
@@ -1465,13 +1480,13 @@ function setRandomWrapperColor() {
 	let random_range = document.getElementById("wrapper_random_range").value;
 	let min, max;
 	if (random_range == "light") {
-		min = 170;
-		max = 240;
+		min = 180;
+		max = 255;
 	} else if (random_range == "medium") {
 		min = 100;
-		max = 170;
+		max = 180;
 	} else if (random_range == "dark") {
-		min = 40;
+		min = 1;
 		max = 100;
 	}
 	let r = getRandomNumber(min, max);
@@ -1479,12 +1494,6 @@ function setRandomWrapperColor() {
 	let b = getRandomNumber(min, max);
 	document.getElementById("wrapper").style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
-}
-
-function styleWrapperSameColor() {
-	document.getElementById("wrapper_gradient_color2").value = document.getElementById("wrapper_gradient_color1").value;
-	document.getElementById("wrapper_gradient_color3").value = document.getElementById("wrapper_gradient_color1").value;
-	document.getElementById("wrapper_gradient_color4").value = document.getElementById("wrapper_gradient_color1").value;
 }
 
 function styleRemoveWrapperBackgroundColor() {
@@ -1508,18 +1517,6 @@ function loadWrapperStyles() {
 	document.getElementById("wrapper_height").value = wrapper.style.height.replace("px", "");
 
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
-
-	background_image = wrapper.style.backgroundImage;
-	if (background_image.indexOf("gradient") > -1) {
-		gradient_type = background_image.indexOf("linear") > -1 ? "linear-gradient" : "radial-gradient";
-		// add missing default value
-		background_image = background_image.replace("linear-gradient(", "").replace("radial-gradient(", "").replace("))", ")");
-		if (gradient_type == "linear-gradient" && background_image.indexOf("rgb") == 0) {
-			background_image = "to bottom, " + background_image;
-		} else if (gradient_type == "radial-gradient" && background_image.indexOf("rgb") == 0) {
-			background_image = "ellipse, " + background_image;
-		}
-	}
 
 	let wrapper_bg1 = document.getElementById("wrapper_bg1");
 	let wrapper_bg2 = document.getElementById("wrapper_bg2");
@@ -1579,9 +1576,21 @@ function styleFontFamily(element) {selected_section.style.fontFamily = element.v
 function styleFontSize(element) {selected_section.style.fontSize = element.value + "px";}
 function styleColor(element) {selected_section.style.color = element.value;}
 function styleRandomTextColor() {
-	let r = Math.floor((Math.random() * 200));
-	let g = Math.floor((Math.random() * 200));
-	let b = Math.floor((Math.random() * 200));
+	let random_range = document.getElementById("random_color_range").value;
+	let min, max;
+	if (random_range == "light") {
+		min = 180;
+		max = 255;
+	} else if (random_range == "medium") {
+		min = 100;
+		max = 180;
+	} else if (random_range == "dark") {
+		min = 1;
+		max = 100;
+	}
+	let r = getRandomNumber(min, max);
+	let g = getRandomNumber(min, max);
+	let b = getRandomNumber(min, max);	
 	selected_section.style.color = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
@@ -1628,45 +1637,39 @@ function styleBackgroundColorSameAsWrapper() {
 
 
 function styleRandomBackgroundColor() {
-	let r = Math.floor((Math.random() * 200));
-	let g = Math.floor((Math.random() * 200));
-	let b = Math.floor((Math.random() * 200));
+	let random_range = document.getElementById("random_color_range").value;
+	let min, max;
+	if (random_range == "light") {
+		min = 180;
+		max = 255;
+	} else if (random_range == "medium") {
+		min = 100;
+		max = 180;
+	} else if (random_range == "dark") {
+		min = 1;
+		max = 100;
+	}
+	let r = getRandomNumber(min, max);
+	let g = getRandomNumber(min, max);
+	let b = getRandomNumber(min, max);	
 	selected_section.style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
 	document.getElementById("background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
 
 
 
-function styleBackgroundImage(type = "") {
+function styleBackgroundImage() {
+		
+	idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
+		if (!result) {
+			console.log("Image not found");
+			return;
+		}				
+		
+		let image = URL.createObjectURL(result);
+		selected_section.style.backgroundImage = "url(" + image + ")";
 
-	if (type == "gradient") {
-		let gradient_type = document.getElementById("gradient_type").value;
-		let gradient_direction = document.getElementById("gradient_direction").value;
-		let color1 = document.getElementById("gradient_color1").value;
-		if (document.getElementById("gradient_alpha1").checked) color1 = color1 + "00"; // #FFAADD00
-		let color2 = document.getElementById("gradient_color2").value;
-		if (document.getElementById("gradient_alpha2").checked) color2 = color2 + "00";
-		let color3 = document.getElementById("gradient_color3").value;
-		if (document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
-		let color4 = document.getElementById("gradient_color4").value;
-		if (document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
-		selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
-	} else if (selected_section.dataset.image_key) {
-		
-		
-		idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
-			if (!result) {
-				console.log("Image not found");
-				return;
-			}				
-			
-			let image = URL.createObjectURL(result);
-			selected_section.style.backgroundImage = "url(" + image + ")";
-
-		});
-		
-	}
-	
+	});
 	
 	selected_section.style.backgroundSize = document.getElementById("background_size").value;
 	selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
@@ -1677,6 +1680,51 @@ function styleBackgroundImage(type = "") {
 		selected_section.style.backgroundRepeat = "no-repeat";
 	}
 	
+}
+
+function styleBackgroundGradients() {
+	let gradient_type = document.getElementById("gradient_type").value;
+	let gradient_direction = document.getElementById("gradient_direction").value;
+	let color1 = document.getElementById("gradient_color1").value;
+	if (!document.getElementById("gradient_alpha1").checked) color1 = color1 + "00"; // #FFAADD00
+	let color2 = document.getElementById("gradient_color2").value;
+	if (!document.getElementById("gradient_alpha2").checked) color2 = color2 + "00";
+	let color3 = document.getElementById("gradient_color3").value;
+	if (!document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
+	let color4 = document.getElementById("gradient_color4").value;
+	if (!document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
+	selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
+}
+
+function setRandomGradientColors() {
+	let random_range = document.getElementById("random_color_range").value;
+	let min, max;
+	if (random_range == "light") {
+		min = 180;
+		max = 255;
+	} else if (random_range == "medium") {
+		min = 100;
+		max = 180;
+	} else if (random_range == "dark") {
+		min = 1;
+		max = 100;
+	}
+	let r = getRandomNumber(min, max);
+	let g = getRandomNumber(min, max);
+	let b = getRandomNumber(min, max);
+	document.getElementById("gradient_color1").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	r = getRandomNumber(min, max);
+	g = getRandomNumber(min, max);
+	b = getRandomNumber(min, max);
+	document.getElementById("gradient_color2").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	r = getRandomNumber(min, max);
+	g = getRandomNumber(min, max);
+	b = getRandomNumber(min, max);
+	document.getElementById("gradient_color3").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	r = getRandomNumber(min, max);
+	g = getRandomNumber(min, max);
+	b = getRandomNumber(min, max);
+	document.getElementById("gradient_color4").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
 
 
@@ -1752,7 +1800,7 @@ function styleAddImageURL() {
 	selected_section.style.backgroundImage = "url(" + image_url + ")";
 }
 
-function styleBackgroundImageSameColor() {
+function styleBackgroundGradientsSameColor() {
 	document.getElementById("gradient_color2").value = document.getElementById("gradient_color1").value;
 	document.getElementById("gradient_color3").value = document.getElementById("gradient_color1").value;
 	document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
@@ -1997,10 +2045,10 @@ function loadSectionStyles() {
 		document.getElementById("gradient_color3").value = hex3.substring(0, 7);
 		document.getElementById("gradient_color4").value = hex4.substring(0, 7);
 
-		document.getElementById("gradient_alpha1").checked = (hex1.length == 9) ? true : false;
-		document.getElementById("gradient_alpha2").checked = (hex2.length == 9) ? true : false;
-		document.getElementById("gradient_alpha3").checked = (hex3.length == 9) ? true : false;
-		document.getElementById("gradient_alpha4").checked = (hex4.length == 9) ? true : false;
+		document.getElementById("gradient_alpha1").checked = (hex1.length == 9) ? false : true;
+		document.getElementById("gradient_alpha2").checked = (hex2.length == 9) ? false : true;
+		document.getElementById("gradient_alpha3").checked = (hex3.length == 9) ? false : true;
+		document.getElementById("gradient_alpha4").checked = (hex4.length == 9) ? false : true;
 
 	} else {
 		document.getElementById("background_size").value = selected_section.style.backgroundSize;

@@ -500,11 +500,21 @@
 					<h4 id="color_heading" onclick="hideSectionPanel('color_section');">Color and Gradient</h4>
 					<table class="section_table">
 						<tr>
+							<td>Random color</td>
+							<td>
+								<select id="random_color_range" title="Random color type">
+									<option>light</option>
+									<option>medium</option>
+									<option>dark</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td>Text</td>
 							<td>
 								<input id="color" type="color" onchange="styleColor(this);"> 
 								<button onclick="setColorableElement('color', selected_section.id, 'color');showPopupPanel('color_pallette');">🚥</button>
-								<button onclick="styleRandomTextColor();">↻</button> 
+								<button onclick="styleRandomTextColor();" title="Random color">↻</button> 
 							</td>
 						</tr>
 						<tr>
@@ -512,7 +522,7 @@
 							<td>
 								<input id="background_color" type="color" onchange="styleBackgroundColor(this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
-								<button onclick="styleRandomBackgroundColor();">↻</button> 
+								<button onclick="styleRandomBackgroundColor();" title="Random color">↻</button> 
 								<button onclick="styleBackgroundColorSameAsWrapper();">s</button> 
 								<button id="remove_background_color" onclick="styleRemoveBackgroundColor();">x</button> 
 							</td>
@@ -520,22 +530,24 @@
 						<tr>
 							<td>Background gradient</td>
 							<td>
-								<input id="gradient_color1" type="color" onchange="styleBackgroundImage('gradient');"> 
-								<input id="gradient_color2" type="color" onchange="styleBackgroundImage('gradient');"> 
-								<input id="gradient_color3" type="color" onchange="styleBackgroundImage('gradient');"> 
-								<input id="gradient_color4" type="color" onchange="styleBackgroundImage('gradient');"> 
-								<button onclick="styleBackgroundImageSameColor();styleBackgroundImage('gradient');">Same</button><br>
-								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundImage('gradient');" checked>
-								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
-								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundImage('gradient');" checked> 
-								<input id="gradient_alpha4" type="checkbox" onchange="styleBackgroundImage('gradient');" checked><br>
+								<input id="gradient_color1" type="color" onchange="styleBackgroundGradients();"> 
+								<input id="gradient_color2" type="color" onchange="styleBackgroundGradients();"> 
+								<input id="gradient_color3" type="color" onchange="styleBackgroundGradients();"> 
+								<input id="gradient_color4" type="color" onchange="styleBackgroundGradients();"> 
+								<button onclick="styleBackgroundGradientsSameColor();styleBackgroundGradients();">＝</button>
+								<button onclick="setRandomGradientColors();styleBackgroundGradients();" title="Random gradient colors">↻</button><br>
+								 
+								<input id="gradient_alpha1" type="checkbox" onchange="styleBackgroundGradients();"> &nbsp; 
+								<input id="gradient_alpha2" type="checkbox" onchange="styleBackgroundGradients();"> &nbsp;  
+								<input id="gradient_alpha3" type="checkbox" onchange="styleBackgroundGradients();">  &nbsp; 
+								<input id="gradient_alpha4" type="checkbox" onchange="styleBackgroundGradients();"><br>
 
-								<select id="gradient_type" onchange="setGradientDirection();styleBackgroundImage('gradient');">
+								<select id="gradient_type" onchange="setGradientDirection();styleBackgroundGradients();">
 									<option value="linear-gradient">linear</option>
 									<option value="radial-gradient">radial</option>
 									<option value="conic-gradient">conic</option>
 								</select> 
-								<select id="gradient_direction" onchange="styleBackgroundImage('gradient');">
+								<select id="gradient_direction" onchange="styleBackgroundGradients();">
 									<optgroup label="Linear">
 										<option>to top</option>
 										<option>to bottom</option>
