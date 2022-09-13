@@ -28,31 +28,23 @@
 				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items, please wait...</div>";
 
 				let zip_items = new JSZip();
-				
-				// db images
-				for (i = 0; i < all_images.length; i++) {
-					let image_key = all_images[i].image_key;
-					let image_blob = all_images[i].value;
-					zip_items.file(image_key + ".backup", image_blob)
-				}
 
-				// db settings
 				zip_items.file("settings.backup", JSON.stringify(all_settings));
 
-				// local storage
 				zip_items.file("localstorage.backup", JSON.stringify(localStorage));
 			
-				// db designs
 				for (i = 0; i < all_designs.length; i++) {
 					zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
 				}
 
-				// db fonts
+				for (i = 0; i < all_images.length; i++) {
+					zip_items.file(all_images[i].image_key + ".backup", all_images[i].value);
+				}
+
 				for (i = 0; i < all_fonts.length; i++) {
-					zip_items.file("font-" + all_fonts[i].font_key + ".backup", JSON.stringify(all_fonts[i].value));
+					zip_items.file("font-" + all_fonts[i].font_key + ".backup", all_fonts[i].value);
 				}
 				
-				// create zip
 				let file_name = "dezynor-backup-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 				zip_items.generateAsync({type:"blob",
 					compression: "DEFLATE",

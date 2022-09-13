@@ -134,6 +134,7 @@ function hideHandles() {
 
 function showHandles() {
 	
+	/*
 	let transform1 = parseInt(document.getElementById("transform_degree1").value);
 	let transform2 = parseInt(document.getElementById("transform_degree2").value);
 	if (transform1 > 0 || transform2 > 0) {
@@ -146,6 +147,7 @@ function showHandles() {
 		selected_section.style.resize = "none";
 		selected_section.style.overflow = "visible";
 	}
+	*/
 	
 		
 	
@@ -1271,11 +1273,9 @@ async function exportDezyn() {
 	}
 	zip_items.file(design_id + ".backup", JSON.stringify(new_object));
 
-	let valid_image_keys = [];
-	// images
+	let font_keys = [];
 	let all_sections = document.querySelectorAll("section");
 	for (i = 0; i < all_sections.length; i++) {
-		
 		let section = all_sections[i];
 		let image_key = section.dataset.image_key;
 		if (image_key && image_key != "") {
@@ -1284,8 +1284,18 @@ async function exportDezyn() {
 				zip_items.file(image_key + ".backup", image_blob);		
 			}
 		}
+		
+		let font_key = section.style.fontFamily;
+		if (await idbKeyExists("dezynor_fonts", font_key)) {
+			font_keys.push(font_key);
+		}
 	}
 
+	for (f = 0; f < font_keys.length; f++) {
+		let font_key = font_keys[f];
+		let font_blob = await idbGetItem("dezynor_fonts", font_key);
+		zip_items.file("font-" + font_key + ".backup", font_blob);
+	}
 	
 	let file_name = "dezynor-single-design-backup-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 	zip_items.generateAsync({type:"blob",

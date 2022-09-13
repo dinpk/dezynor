@@ -9,8 +9,6 @@
 		<script src="includes/common.js"></script>
 		<script>
 
-
-
 			document.addEventListener('visibilitychange', function(ev) { 
 				let current_folder = localStorage.getItem("current_folder");
 				if (current_folder != "" && document.visibilityState == "visible") {
@@ -272,8 +270,13 @@
 							await idbPutItem("dezynor_designs", {design_key:key, value:object});
 						} else if (file_name.indexOf("image-") == 0) {
 							let image_key = file_name.replace(".backup", "");
-							let blob = new Blob([file],{type: file_type}); // pass original file, not file reader's result
-							await idbPutItem("dezynor_images", {image_key:image_key, value:blob})
+							let blob = new Blob([file],{type: file_type});
+							await idbPutItem("dezynor_images", {image_key:image_key, value:blob});
+						} else if (file_name.indexOf("font-") == 0) {
+							let font_key = file_name.replace(".backup", "");
+							font_key = font_key.replace("font-", "");
+							let blob = new Blob([file],{type: file_type});
+							await idbPutItem("dezynor_fonts", {font_key:font_key, value:blob});
 						}
 						showFolderDezyns(localStorage.getItem("current_folder"));
 					}
