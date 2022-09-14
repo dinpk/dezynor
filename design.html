@@ -221,12 +221,6 @@
 								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
 							</td>
 						</tr>
-						<tr>
-							<td>Split</td>
-							<td>
-								<button onclick="splitOnSpaces();" title="Split on spaces">☐☐☐</button> 
-							</td>
-						</tr>
 					</table>
 				</div>
 
@@ -764,6 +758,14 @@
 								<input id="table_border_color" type="color" value="#999999">
 							</td>
 						</tr>
+						<tr>
+							<td>Headings</td>
+							<td><input id="table_headings" type="checkbox" checked></td>
+						</tr>
+						<tr>
+							<td>Caption</td>
+							<td><input id="table_caption" type="checkbox"></td>
+						</tr>
 					</table>
 				</div>
 
@@ -786,6 +788,20 @@
 							<td>
 								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1" title="Alt + Numpad Divide / Alt + Numpad Multiply"> 
 								<input id="transform_degree2" type="number" onchange="styleTransform();" step="1">
+							</td>
+						</tr>
+						<tr>
+							<td>Split</td>
+							<td>
+								<button onclick="splitOnSpaces();" title="Split on spaces">…</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Duplicate<br>Circular</td>
+							<td>
+								<button onclick="duplicateCircular();" title="Duplicate Circular">◌</button><br> 
+								<input id="duplicate_circular_copies" type="number" step="1" value="10"> Copies<br>
+								<input id="duplicate_circular_radius" type="number" step="1" value="300"> Radius<br>
 							</td>
 						</tr>
 					</table>

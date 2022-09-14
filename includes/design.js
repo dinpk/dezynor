@@ -1197,6 +1197,38 @@ function splitOnSpaces() {
 	reAlignSectionHandles();
 }
 
+function duplicateCircular() {
+	if (!(selected_section)) return;
+	
+	let text_array = selected_section.innerText.split(" ");
+	let direction = selected_section.style.direction;
+	let section_top = parseInt(document.getElementById("top").value);
+	let section_width = parseInt(document.getElementById("width").value);
+	let section_height = parseInt(document.getElementById("height").value);
+	let section_left = parseInt(document.getElementById("left").value);
+	
+	let center_x = section_left;
+	let center_y = section_top;
+	console.log("x:" + center_x + " y:" + center_y);
+	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let radius = parseInt(document.getElementById("duplicate_circular_radius").value);
+    let slice = 2 * Math.PI / copies;
+    for (i = 0; i < copies; i++) {
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = selected_section.cloneNode(true);
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		document.getElementById("wrapper").appendChild(section);
+        let angle = slice * i;
+        let new_x = parseInt(center_x + radius * Math.cos(angle));
+        let new_y = parseInt(center_y + radius * Math.sin(angle));
+		section.style.left = new_x + "px";
+		section.style.top = new_y + "px";
+        console.log(new_x, new_y);
+    }	
+}
+
 
 function setZIndex(element) {
 	if (parseInt(element.value) < 0) return;
@@ -1883,12 +1915,29 @@ function styleTable() {
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
+	let table_headings = document.getElementById("table_headings").checked;
+	let table_caption = document.getElementById("table_caption").checked;
 	
 	let border_width = parseInt(document.getElementById("table_border_width").value);
 	let border_style = document.getElementById("table_border_style").value;
 	let border_color = document.getElementById("table_border_color").value;
 	let cell_style = "border:" + border_width + "px " + border_style + " " + border_color + ";";
-	let table = "<table><caption>Caption</caption>";
+
+	let caption = "";
+	if (table_caption) {
+		caption = "<caption>Caption</caption>";
+	}
+	
+	let headings = "";
+	if (table_headings) {
+		headings = "<tr>";
+		for (col = 0; col < table_columns; col++) {
+			headings = headings + "<th style='" + cell_style + "'>&nbsp;</th>";
+		}
+		headings = headings + "</tr>";
+	}
+
+	let table = "";
 	for (row = 0;row < table_rows; row++) {
 		table = table + "<tr>";
 		for (col = 0; col < table_columns; col++) {
@@ -1896,7 +1945,7 @@ function styleTable() {
 		}
 		table = table + "</tr>";
 	}
-	table = table + "</table>";
+	table = "<table>" + caption + headings + table + "</table>";
 	selected_section.innerHTML = table;
 }
 
