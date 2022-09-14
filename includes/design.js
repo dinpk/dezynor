@@ -1875,6 +1875,31 @@ function styleBoxShadow() {
 	}
 }
 
+function styleTable() {
+	if (!selected_section) return;
+	if (selected_section.querySelector("table")) {
+		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;
+	}
+	
+	let table_columns = parseInt(document.getElementById("table_columns").value);
+	let table_rows = parseInt(document.getElementById("table_rows").value);
+	
+	let border_width = parseInt(document.getElementById("table_border_width").value);
+	let border_style = document.getElementById("table_border_style").value;
+	let border_color = document.getElementById("table_border_color").value;
+	let cell_style = "border:" + border_width + "px " + border_style + " " + border_color + ";";
+	let table = "<table><caption>Caption</caption>";
+	for (row = 0;row < table_rows; row++) {
+		table = table + "<tr>";
+		for (col = 0; col < table_columns; col++) {
+			table = table + "<td style='" + cell_style + "'>&nbsp;</td>";
+		}
+		table = table + "</tr>";
+	}
+	table = table + "</table>";
+	selected_section.innerHTML = table;
+}
+
 function styleTransform() {
 	let transform_type = document.getElementById("transform_type").value;
 	let transform_degree1 = document.getElementById("transform_degree1").value;

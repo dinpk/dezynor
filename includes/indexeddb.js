@@ -15,7 +15,7 @@ connection.onupgradeneeded = function(e) {
 			let dezynor_fonts = db.createObjectStore("dezynor_fonts", {keyPath: "font_key"});
 			let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
-			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google", "Arial|Installed", "Verdana|Installed"]});
+			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google"]});
 			localStorage.setItem("copied_section", "");
 			localStorage.setItem("show_background_image", "1");
 			localStorage.setItem("duplicate_offset_x", "10");

@@ -14,7 +14,7 @@
 				loadFonts();
 			}
 
-			function addGoogleFont() {
+			function addOnlineFont() {
 			
 				let font_name = document.getElementById("font_name").value.trim();
 				
@@ -52,7 +52,7 @@
 						let font_name = fonts[i].split("|")[0];
 						let font_location = fonts[i].split("|")[1];
 						if (font_location == "Google") {
-							google_fonts = google_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteGoogleFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
+							google_fonts = google_fonts + "<div><span title='Delete Font' class='delete' onclick=\"deleteOnlineFont('" + fonts[i] + "');\">" + "x</span> " + font_name + "</div>";
 						}
 					}
 					document.getElementById("google_fonts").innerHTML = google_fonts;
@@ -77,7 +77,7 @@
 				loadFonts();				
 			}
 
-			function deleteGoogleFont(font_name) {
+			function deleteOnlineFont(font_name) {
 			
 			
 				if (font_name == "Anton|Google") {
@@ -105,19 +105,25 @@
 			}
 			
 						
-			function addFontsFromFiles(element) {
-
+			async function addFontsFromFiles(element) {
+				document.getElementById("log").innerHTML = "<div style='color:chocolate;'>Adding fonts, please wait ...</div>";
+				let counter = 0;
+				let log = "";
 				let font_files = element.files;
 				if (font_files.length == 0) return;
-				Array.from(font_files).forEach(async function(file) {
+				for (i = 0; i < font_files.length; i++) {
+					let file = font_files[i];
 					let font_key = file.name.toLowerCase();
 					font_key = font_key.replaceAll(" ", "_");
 					font_key = font_key.replaceAll("-", "_");
 					font_key = font_key.replaceAll(".ttf", "");
 					let file_type = file.type;
 					let blob = new Blob([file],{type: file_type});
+					document.getElementById("log").innerHTML = "<div>Adding " + font_key + " ...</div>";					
 					await idbPutItem("dezynor_fonts", {font_key:font_key, value:blob});
-				});
+					counter++;
+				}
+				document.getElementById("log").innerHTML = "<div style='color:green;'>Added " + counter + " of " + font_files.length + " fonts.</div><hr>";
 				loadFonts();
 			}
 			
@@ -175,7 +181,7 @@
 			</div>
 			<div class="pad20">
 				<input type="text" id="font_name" placeholder="Google font name" class="mnw200 pad10"> 
-				<input type="button" value="Add" class="pad10" onclick="addGoogleFont();">
+				<input type="button" value="Add" class="pad10" onclick="addOnlineFont();">
 				&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
 				
 				<input id="add_fonts" type="file" accept=".ttf" onchange="addFontsFromFiles(this);" style="display:none;" multiple>

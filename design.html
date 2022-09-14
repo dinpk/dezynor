@@ -52,6 +52,7 @@
 					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
 					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text shadow">
 					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box shadow">
+					<img src="images/menu_icon_table.png" onclick="showSectionPanel('table_section');" title="Table">
 					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
 					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
 					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
@@ -735,6 +736,37 @@
 						</tr>
 					</table>
 				</div>
+
+				<div id="table_section">
+					<h4 id="table_heading" onclick="hideSectionPanel('table_section');">Table</h4>
+					<table class="section_table">
+						<tr>
+							<td></td>
+							<td><button onclick="styleTable();">Generate table</button></td>
+						</tr>
+						<tr>
+							<td>Size</td>
+							<td>
+								<input id="table_columns" type="number" step="1" value="4"> Columns<br>
+								<input id="table_rows" type="number" step="1" value="4"> Rows<br>
+								
+							</td>
+						</tr>
+						<tr>
+							<td>Border</td>
+							<td>
+								<input id="table_border_width" type="number" step="1" value="1">
+								<select id="table_border_style">
+									<option>solid</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select>
+								<input id="table_border_color" type="color" value="#999999">
+							</td>
+						</tr>
+					</table>
+				</div>
+
 
 				<div id="transform_section">
 					<h4 id="transform_heading" onclick="hideSectionPanel('transform_section');">Transform</h4>

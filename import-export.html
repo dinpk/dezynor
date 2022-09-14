@@ -25,7 +25,7 @@
 				let all_fonts = await idbGetAllItems("dezynor_fonts");
 				total_files = all_images.length + all_designs.length + all_fonts.length + all_settings.length;
 				
-				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items, please wait...</div>";
+				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items (designs, images, fonts, settings etc.), please wait...</div>";
 
 				let zip_items = new JSZip();
 
@@ -53,7 +53,7 @@
 					}}).then(function(content) {
 						saveAs(content, file_name + ".zip");
 						progress_bar.style.visibility = "hidden";
-						document.getElementById("message").innerHTML = "<div class='pad20'>Exported " + total_files + " items successfully.</div>";
+						document.getElementById("message").innerHTML = "<div class='pad20'>Exported " + total_files + " items successfully, please wait for the zip file to be downloaded.</div>";
 					});
 				
 			}
