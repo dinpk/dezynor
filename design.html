@@ -9,14 +9,6 @@
 		<script src="includes/design.js"></script>
 		<script src="includes/jszip_min_3_7_1.js"></script>
 		<script src="includes/filesaver_min_2_0_0.js"></script>
-		<style>
-			@font-face {font-family:'editserifarabic';font-style:normal;font-weight:400;font-display:swap;src:local('editserifarabic'),url(fonts/editserifarabic.ttf) format('truetype');}
-			@font-face {font-family:'mehr';font-style:normal;font-weight:400;font-display:swap;src:local('mehr'),url(fonts/mehr.ttf) format('truetype');}
-			@font-face {font-family:'nafeesnaskh';font-style:normal;font-weight:400;font-display:swap;src:local('nafeesnaskh'),url(fonts/nafeesnaskh.ttf) format('truetype');}
-			@font-face {font-family:'ptboldheading';font-style:normal;font-weight:400;font-display:swap;src:local('ptboldheading'),url(fonts/ptboldheading.ttf) format('truetype');}
-			@font-face {font-family:'uthmantahanaskh';font-style:normal;font-weight:400;font-display:swap;src:local('uthmantahanaskh'),url(fonts/uthmantahanaskh.ttf) format('truetype');}
-			@font-face {font-family:'zafar';font-style:normal;font-weight:400;font-display:swap;src:local('zafar'),url(fonts/zafar.ttf) format('truetype');}
-		</style>
 	</head>
 	<body>
 
@@ -445,15 +437,7 @@
 							<td>
 								<select id="font_family" onchange="styleFontFamily(this);">
 									<optgroup id="google_fonts" label="Google fonts"></optgroup>
-									<optgroup id="installed_fonts" label="Installed fonts"></optgroup>
-									<optgroup id="included_fonts" label="Included fonts">
-										<option value="editserifarabic">Edit Serif Arabic Regular</option>
-										<option value="mehr">Mehr Nastaleeq</option>
-										<option value="nafeesnaskh">Nafees Naskh</option>
-										<option value="ptboldheading">PT Bold Heading</option>
-										<option value="uthmantahanaskh">Uthman Taha Naskh</option>
-										<option value="zafar">Zafar</option>
-									</optgroup>
+									<optgroup id="uploaded_fonts" label="Uploaded fonts"></optgroup>
 								</select> 
 							</td>
 						</tr>
@@ -741,8 +725,8 @@
 						<tr>
 							<td>Size</td>
 							<td>
-								<input id="table_columns" type="number" step="1" value="4"> Columns<br>
-								<input id="table_rows" type="number" step="1" value="4"> Rows<br>
+								<input id="table_columns" type="number" step="1" min="1" value="4"> Columns<br>
+								<input id="table_rows" type="number" step="1" min="1" value="4"> Rows<br>
 								
 							</td>
 						</tr>

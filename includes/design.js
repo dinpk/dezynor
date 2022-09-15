@@ -303,9 +303,17 @@ function unselectSections() {
 }
 
 function pasteText(e) {
+	// if (e.clipboardData.files.length > 0) return; // image
 	e.preventDefault();
-	var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+	// let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+	let text = (e.originalEvent || e).clipboardData.getData('text/html');
+	text = text.replaceAll("</p>","\n");	
+	text = text.replaceAll("</div>","\n");	
+	text = text.replace(/(<([^>]+)>)/gi, "");
+	text = text.replaceAll("\n", "</div><div>");
+	text = "<div>" + text;
 	document.execCommand("insertHTML", false, text); 
+	
 }
 
 function onMouseDown4Move(counter) {
@@ -1038,20 +1046,20 @@ function styleLayout(parameters) {
 		let attributes = boxes[k].split("|");
 		
 		if (gutter == "no") {
-			var x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 2);
-			var y = (attributes[1] * wrapper_height / 100) - (gutter_y / 2);
-			var width = (attributes[2] * wrapper_width / 100) + (gutter_x);
-			var height = (attributes[3] * wrapper_height / 100) + (gutter_y);
+			let x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 2);
+			let y = (attributes[1] * wrapper_height / 100) - (gutter_y / 2);
+			let width = (attributes[2] * wrapper_width / 100) + (gutter_x);
+			let height = (attributes[3] * wrapper_height / 100) + (gutter_y);
 		} else if (gutter == "min") {
-			var x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 3.5);
-			var y = (attributes[1] * wrapper_height / 100) - (gutter_y / 3.5);
-			var width = (attributes[2] * wrapper_width / 100) + (gutter_x / 2);
-			var height = (attributes[3] * wrapper_height / 100) + (gutter_y / 2);
+			let x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 3.5);
+			let y = (attributes[1] * wrapper_height / 100) - (gutter_y / 3.5);
+			let width = (attributes[2] * wrapper_width / 100) + (gutter_x / 2);
+			let height = (attributes[3] * wrapper_height / 100) + (gutter_y / 2);
 		} else if (gutter == "max") {
-			var x = (attributes[0].trim() * wrapper_width / 100);
-			var y = (attributes[1] * wrapper_height / 100);
-			var width = (attributes[2] * wrapper_width / 100);
-			var height = (attributes[3] * wrapper_height / 100);
+			let x = (attributes[0].trim() * wrapper_width / 100);
+			let y = (attributes[1] * wrapper_height / 100);
+			let width = (attributes[2] * wrapper_width / 100);
+			let height = (attributes[3] * wrapper_height / 100);
 		}
 
 		let section_id = section_ids.splice(0, 1);
@@ -1430,7 +1438,7 @@ async function loadSelectValues() {
 	}
 
 	// ------------------------- fonts
-	let google_fonts = "";
+	let google_fonts_options = "";
 	let online_fonts = await idbGetItem("dezynor_settings", "fonts");
 	online_fonts.sort();
 	let online_fonts_list = "";
@@ -1439,7 +1447,7 @@ async function loadSelectValues() {
 		let storage_font_location = online_fonts[i].split("|")[1];
 		if (storage_font_location == "Google") {
 			online_fonts_list = online_fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
-			google_fonts = google_fonts + "<option>" + storage_font_name + "</option>";
+			google_fonts_options = google_fonts_options + "<option>" + storage_font_name + "</option>";
 		} else if (storage_font_location == "Installed") {
 			
 		}
@@ -1448,13 +1456,13 @@ async function loadSelectValues() {
 // try uploaded_fonts_list with fontface and objecturl
 	let uploaded_fonts_list = "";
 	let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
-	let installed_fonts = "";
+	let uploaded_fonts_options = "";
 	for (i = 0; i < uploaded_fonts.length; i++) {
 		let font_key = uploaded_fonts[i].font_key;
 		let font = uploaded_fonts[i].value;
 		font_name = font_key.replaceAll("_", " ");
 		uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
-		installed_fonts = installed_fonts + "<option value='" + font_key + "'>" + font_name + "</option>";
+		uploaded_fonts_options = uploaded_fonts_options + "<option value='" + font_key + "'>" + font_name + "</option>";
 	}
 
 
@@ -1463,8 +1471,8 @@ async function loadSelectValues() {
 	style.appendChild(fonts_node);
 	document.getElementsByTagName("head")[0].appendChild(style);
 	
-	document.getElementById("google_fonts").innerHTML = google_fonts;
-	document.getElementById("installed_fonts").innerHTML = installed_fonts;
+	document.getElementById("google_fonts").innerHTML = google_fonts_options;
+	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
 
 	// ------------------------- formatted elements
 	let formatted_elements_options = "";
@@ -2232,7 +2240,7 @@ function rgba2hex(orig) {
 
 /* -------------- BOXES PANEL SORT ---------------------- */
 
-var _el;
+let _el;
 
 function dragOver(e) {
   if (isBefore(_el, e.target))
@@ -2255,7 +2263,7 @@ function dragEnd(e) {
 
 function isBefore(el1, el2) {
   if (el2.parentNode === el1.parentNode)
-	 for (var cur = el1.previousSibling; cur && cur.nodeType !== 9; cur = cur.previousSibling)
+	 for (let cur = el1.previousSibling; cur && cur.nodeType !== 9; cur = cur.previousSibling)
 		if (cur === el2)
 		  return true;
   return false;
