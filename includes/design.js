@@ -1208,18 +1208,10 @@ function splitOnSpaces() {
 function duplicateCircular() {
 	if (!(selected_section)) return;
 	
-	let text_array = selected_section.innerText.split(" ");
-	let direction = selected_section.style.direction;
-	let section_top = parseInt(document.getElementById("top").value);
-	let section_width = parseInt(document.getElementById("width").value);
-	let section_height = parseInt(document.getElementById("height").value);
-	let section_left = parseInt(document.getElementById("left").value);
-	
-	let center_x = section_left;
-	let center_y = section_top;
-	console.log("x:" + center_x + " y:" + center_y);
+	let center_x = parseInt(document.getElementById("left").value);
+	let center_y = parseInt(document.getElementById("top").value);
 	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
-	let radius = parseInt(document.getElementById("duplicate_circular_radius").value);
+	let radius = parseInt(document.getElementById("duplicate_circular_radius").value) / 2;
     let slice = 2 * Math.PI / copies;
     for (i = 0; i < copies; i++) {
 		section_number = getNewSectionNumber();
@@ -1233,7 +1225,6 @@ function duplicateCircular() {
         let new_y = parseInt(center_y + radius * Math.sin(angle));
 		section.style.left = new_x + "px";
 		section.style.top = new_y + "px";
-        console.log(new_x, new_y);
     }	
 }
 
@@ -1546,17 +1537,17 @@ function setRandomWrapperColor() {
 	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
 }
 
-function styleRemoveWrapperBackgroundColor() {
+function removeWrapperBackgroundColor() {
 	document.getElementById("wrapper_background_color").value = "#000001";
 	document.getElementById("wrapper").style.backgroundColor = "rgb(0, 0, 1)";
 }
 
-function styleRemoveWrapperBackgroundImage1() {
+function removeWrapperBackgroundImage1() {
 	document.getElementById("wrapper_bg_image1").value = "";
 	styleWrapper();
 }
 
-function styleRemoveWrapperBackgroundImage2() {
+function removeWrapperBackgroundImage2() {
 	document.getElementById("wrapper_bg_image2").value = "";
 	styleWrapper();
 }
@@ -1674,7 +1665,7 @@ function useColorPallette(color) {
 
 function styleBackgroundColor(element) {selected_section.style.backgroundColor = element.value;}
 
-function styleRemoveBackgroundColor() {
+function removeBackgroundColor() {
 	document.getElementById("background_color").value = "#000001";
 	selected_section.style.backgroundColor = "";
 }
@@ -1786,7 +1777,7 @@ async function styleUploadImage(element) {
 	const image_file = element.files[0];
 
 	if (document.getElementById("delete_image").checked) {
-		styleRemoveImage();
+		removeImage();
 	}
 
 	const reader = new FileReader();
@@ -1844,7 +1835,7 @@ function styleAddImageURL() {
 	if (!image_url || image_url.trim().length == 0) return;
 	
 	if (document.getElementById("delete_image").checked) {
-		styleRemoveImage();
+		removeImage();
 	}
 	
 	selected_section.style.backgroundImage = "url(" + image_url + ")";
@@ -1856,7 +1847,7 @@ function styleBackgroundGradientsSameColor() {
 	document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
 }
 
-async function styleRemoveImage() {
+async function removeImage() {
 	selected_section.style.backgroundImage = "";
 	if (selected_section.dataset.image_key) {
 		let image_key = selected_section.dataset.image_key;
@@ -1879,7 +1870,7 @@ function styleClipText() {
 	selected_section.setAttribute("class", "clip_text");
 }
 
-function styleRemoveClipText() {
+function removeClipText() {
 	selected_section.removeAttribute("class", "clip_text");
 }
 
@@ -1973,7 +1964,7 @@ function styleTransform() {
 }
 
 
-function styleRemoveBorder() {
+function removeBorder() {
 	selected_section.style.borderWidth = "0";
 	selected_section.style.borderStyle = "solid";
 	selected_section.style.borderColor = "rgb(255,255,255)";
@@ -1982,7 +1973,7 @@ function styleRemoveBorder() {
 	document.getElementById("border_color").value = "#FFFFFF";
 }
 
-function styleRemoveBorderRadius() {
+function removeBorderRadius() {
 	selected_section.style.borderTopLeftRadius = "0";
 	selected_section.style.borderTopRightRadius = "0";
 	selected_section.style.borderBottomLeftRadius = "0";
@@ -1993,7 +1984,7 @@ function styleRemoveBorderRadius() {
 	document.getElementById("border_radius4").value =  "0";
 }
 
-function styleRemoveTransform() {
+function removeTransform() {
 	document.getElementById("transform_type").value = "skew";
 	document.getElementById("transform_degree1").value = "0";
 	document.getElementById("transform_degree2").value = "0";
@@ -2001,7 +1992,8 @@ function styleRemoveTransform() {
 	selected_section.style.transform = "skew(0deg, 0deg)";
 }
 
-function styleRemoveTextShadow() {
+function removeTextShadow() {
+	alert("hello");
 	selected_section.style.textShadow = "0px 0px 0px #000000";
 	document.getElementById("text_shadow_count").value = "0";
 	document.getElementById("text_shadow_h").value = "0";
@@ -2010,7 +2002,7 @@ function styleRemoveTextShadow() {
 	document.getElementById("text_shadow_color").value = "#000000";;
 }
 
-function styleRemoveBoxShadow() {
+function removeBoxShadow() {
 	selected_section.style.filter = "none";
 	selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
 	document.getElementById("box_shadow_h").value = "0";
