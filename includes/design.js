@@ -303,17 +303,32 @@ function unselectSections() {
 }
 
 function pasteText(e) {
+
 	// if (e.clipboardData.files.length > 0) return; // image
-	e.preventDefault();
-	// let text = (e.originalEvent || e).clipboardData.getData('text/plain');
-	let text = (e.originalEvent || e).clipboardData.getData('text/html');
-	text = text.replaceAll("</p>","\n");	
-	text = text.replaceAll("</div>","\n");	
-	text = text.replace(/(<([^>]+)>)/gi, "");
-	text = text.replaceAll("\n", "</div><div>");
-	text = "<div>" + text;
-	document.execCommand("insertHTML", false, text); 
 	
+	let data = (e.originalEvent || e).clipboardData;
+
+	let paste_result = localStorage.getItem("paste_result");
+	let text = "";
+	if (paste_result == "plain") {
+		e.preventDefault();
+		text = data.getData('text/plain').replaceAll("\n", "");
+	} else if (paste_result == "plain_with_lines") {
+		e.preventDefault();
+		text = data.getData('text/html');
+		text = text.replaceAll("</p>","\n");	
+		text = text.replaceAll("</div>","\n");	
+		text = text.replace(/(<([^>]+)>)/gi, "");
+		text = text.replaceAll("\n", "</div><div>");
+		text = "<div>" + text;
+	} else if (paste_result == "html_without_styles") {
+		e.preventDefault();
+		text = data.getData('text/html');
+		// remove styles here
+	}
+	if (text.indexOf("\n") > -1) console.log("contains line breaks");
+	
+	document.execCommand("insertHTML", false, text); 
 }
 
 function onMouseDown4Move(counter) {
@@ -1135,7 +1150,7 @@ function hideSectionPanels() {
 
 
 function showSectionPanel(panel) {
-	hideSectionPanels();
+	if (localStorage.getItem("show_multiple_dash_panels") == "false") hideSectionPanels();
 	setTimeout(function () {
 		let opacity = document.getElementById(panel).style.opacity;
 		document.getElementById(panel).style.opacity = "1";
@@ -1993,7 +2008,6 @@ function removeTransform() {
 }
 
 function removeTextShadow() {
-	alert("hello");
 	selected_section.style.textShadow = "0px 0px 0px #000000";
 	document.getElementById("text_shadow_count").value = "0";
 	document.getElementById("text_shadow_h").value = "0";

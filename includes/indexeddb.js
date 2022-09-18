@@ -17,7 +17,7 @@ connection.onupgradeneeded = function(e) {
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
 			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google","Noto Kufi Arabic|Google","Noto Naskh Arabic|Google","Noto Nastaliq Urdu|Google","Nabla|Google","Bungee Spice|Google","Lobster|Google","Great Vibes|Google","Kaushan Script|Google","Creepster|Google","DynaPuff|Google"]});
 			localStorage.setItem("copied_section", "");
-			localStorage.setItem("show_background_image", "1");
+			localStorage.setItem("show_background_images", "true");
 			localStorage.setItem("duplicate_offset_x", "10");
 			localStorage.setItem("duplicate_offset_y", "0");
 			localStorage.setItem("move_offset", "2");
@@ -28,6 +28,8 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("max_upload_width", "1280");
 			localStorage.setItem("max_upload_height", "1280");
 			localStorage.setItem("current_folder", "default");
+			localStorage.setItem("paste_result", "plain");
+			localStorage.setItem("show_multiple_dash_panels", "false");
 		case 1:
 		case 2:
 		case 3:

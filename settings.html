@@ -17,7 +17,7 @@
 
 				localStorage.setItem("max_upload_width", document.getElementById("max_upload_width").value);
 				localStorage.setItem("max_upload_height", document.getElementById("max_upload_height").value);
-
+				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
 				localStorage.setItem("duplicate_offset_x", document.getElementById("duplicate_offset_x").value);
 				localStorage.setItem("duplicate_offset_y", document.getElementById("duplicate_offset_y").value);
 				localStorage.setItem("move_offset", document.getElementById("move_offset").value);
@@ -25,8 +25,8 @@
 				localStorage.setItem("font_size_change", document.getElementById("font_size_change").value);
 				localStorage.setItem("line_height_change", document.getElementById("line_height_change").value);
 				localStorage.setItem("word_spacing_change", document.getElementById("word_spacing_change").value);
-				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
-				
+				localStorage.setItem("paste_result", document.getElementById("paste_result").value);
+				localStorage.setItem("show_multiple_dash_panels", JSON.stringify(document.getElementById("show_multiple_dash_panels").checked));
 
 				showMessage("Saved", "DarkGreen");
 			}
@@ -34,7 +34,7 @@
 			async function loadSettings() {
 				document.getElementById("max_upload_width").value = localStorage.getItem("max_upload_width");
 				document.getElementById("max_upload_height").value = localStorage.getItem("max_upload_height");
-
+				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 				document.getElementById("duplicate_offset_x").value = localStorage.getItem("duplicate_offset_x");
 				document.getElementById("duplicate_offset_y").value = localStorage.getItem("duplicate_offset_y");
 				document.getElementById("move_offset").value = localStorage.getItem("move_offset");
@@ -42,8 +42,9 @@
 				document.getElementById("font_size_change").value = localStorage.getItem("font_size_change");
 				document.getElementById("line_height_change").value = localStorage.getItem("line_height_change");
 				document.getElementById("word_spacing_change").value = localStorage.getItem("word_spacing_change");
+				document.getElementById("paste_result").value = localStorage.getItem("paste_result");
+				if (localStorage.getItem("show_multiple_dash_panels") == "true") document.getElementById("show_multiple_dash_panels").checked = true;
 				
-				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 			}
 			
 		</script>
@@ -86,11 +87,26 @@
 				<form onsubmit="event.preventDefault();saveSettings();">
 				<table>
 					<tr>
-						<td>Max upload size</td>
+						<td>Paste result</td>
+						<td>
+							<select id="paste_result">
+								<option value="plain">Plain text</option>
+								<option value="plain_with_lines">Plain text with line breaks</option>
+								<option value="html_without_styles">HTML without styles</option>
+								<option value="as_it_is">As it is</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Max image upload size</td>
 						<td>
 							<input type="number" id="max_upload_width" value="1000" min="200" required> width<br>
 							<input type="number" id="max_upload_height" value="1000" min="200" required> height
 						</td>
+					</tr>
+					<tr>
+						<td>Show background images</td>
+						<td><input type="checkbox" id="show_background_images"></td>
 					</tr>
 					<tr>
 						<td>Duplicate offset</td>
@@ -119,11 +135,11 @@
 						<td>Word spacing</td>
 						<td><input type="number" id="word_spacing_change" value="1" required></td>
 					</tr>
-
 					<tr>
-						<td>Show background images</td>
-						<td><input type="checkbox" id="show_background_images"></td>
+						<td>Show multiple dash panels</td>
+						<td><input type="checkbox" id="show_multiple_dash_panels"></td>
 					</tr>
+
 					
 				</table>
 				<p>
