@@ -310,6 +310,23 @@ h4#transform_heading {background-color:SaddleBrown;}
 	cursor:pointer;
 }
 
+.section_table td .border_shape {
+	display:inline-block;
+	border:2px solid #0090fa;
+	width:20px;
+	height:16px;
+	margin:2px;
+	cursor:pointer;
+}
+
+.section_table td .border_width {
+	background-color:#0090fa;
+	display:inline-block;
+	cursor:pointer;
+	width:20px;
+	vertical-align:middle;
+}
+
 /*
 td .colors {
 	max-width:280px;

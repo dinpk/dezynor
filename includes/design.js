@@ -1406,6 +1406,7 @@ async function loadDezyn() {
 	} else {
 		styleWrapper();
 		addHandles();
+		addSection();
 	}
 
 
@@ -1612,6 +1613,12 @@ function styleBorderWidthPreset(width) {
 	document.getElementById("border_width").value = width;
 	selected_section.style.borderWidth = width + "px";
 }
+function styleRandomBorderColor() {
+	let random_color = getRandomRGBColor("any");
+	selected_section.style.borderColor = random_color;
+	document.getElementById("border_color").value = rgb2hex(random_color);
+}
+
 function styleColumnCount(element) {selected_section.style.columnCount = element.value;}
 function styleColumnGap(element) {selected_section.style.columnGap = element.value + "px";}
 function styleDirection(value) {selected_section.style.direction = value;}
@@ -1663,6 +1670,12 @@ function styleBackgroundColorSameAsWrapper() {
 	let element = document.getElementById("background_color");
 	element.value = document.getElementById("wrapper_background_color").value;
 	element.onchange();
+}
+
+function styleBackgroundColorSameAsLastSection() {
+	if (selected_section && last_selected_section) {
+		selected_section.style.backgroundColor = last_selected_section.style.backgroundColor;
+	}
 }
 
 

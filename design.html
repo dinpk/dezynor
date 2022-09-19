@@ -91,13 +91,13 @@
 					<h4 id="wrapper_heading" onclick="hideSectionPanel('wrapper_section');">Page</h4>
 					<table class="section_table">
 						<tr>
-							<td>Width</td>
+							<td>Page width</td>
 							<td>
 								<input id="wrapper_width" type="number" onchange="styleWrapper();" value="1000" step="50"> 
 							</td>
 						</tr>
 						<tr>
-							<td>Height</td>
+							<td>Page height</td>
 							<td>
 								<input id="wrapper_height" type="number" onchange="styleWrapper();" value="500" step="50"> 
 							</td>
@@ -152,17 +152,27 @@
 					<h4 id="size_heading" onclick="hideSectionPanel('size_section');">Size and Position</h4>
 					<table class="section_table">
 						<tr>
-							<td>Size</td>
+							<td>Width</td>
+							<td><input id="width" type="number" onchange="styleWidth(this);" step="10.0"></td>
+						</tr>
+						<tr>
+							<td>Height</td>
+							<td><input id="height" type="number" onchange="styleHeight(this);" step="10.0"></td>
+						</tr>
+						<tr>
+							<td>Top</td>
 							<td>
-								Width <input id="width" type="number" onchange="styleWidth(this);" step="10.0"> 
-								Height <input id="height" type="number" onchange="styleHeight(this);" step="10.0"> 
+								<button onclick="styleMoveDown()">▼</button> 
+								<input id="top" type="number" onchange="styleTop(this);" step="10.0">
+								<button onclick="styleMoveUp()">▲</button> 
 							</td>
 						</tr>
 						<tr>
-							<td>Position</td>
+							<td>Left</td>
 							<td>
-								Left <input id="left" type="number" onchange="styleLeft(this);" step="10.0"> 
-								Top <input id="top" type="number" onchange="styleTop(this);" step="10.0"> 
+								<button onclick="styleMoveLeft()">◄</button> 
+								<input id="left" type="number" onchange="styleLeft(this);" step="10.0">
+								<button onclick="styleMoveRight()">►</button>
 							</td>
 						</tr>
 						<tr>
@@ -518,7 +528,8 @@
 								<input id="background_color" type="color" onchange="styleBackgroundColor(this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="styleRandomBackgroundColor();" title="Random color">↻</button> 
-								<button onclick="styleBackgroundColorSameAsWrapper();" title="Same as page background color">s</button> 
+								<button onclick="styleBackgroundColorSameAsWrapper();" title="Page color">p</button> 
+								<button onclick="styleBackgroundColorSameAsLastSection();" title="Last section color">s</button> 
 								<button id="remove_background_color" onclick="removeBackgroundColor();">x</button> 
 							</td>
 						</tr>
@@ -642,6 +653,7 @@
 								</select>
 								<input id="border_color" type="color" onchange="styleBorderColor(this);">
 								<button onclick="setColorableElement('border_color', selected_section.id, 'border');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="styleRandomBorderColor();" title="Random color">↻</button> 
 								<button id="remove_border" onclick="removeBorder();" title="Remove Border">x</button>
 							</td>
 						</tr>
@@ -660,32 +672,32 @@
 							<td>Presets </td>
 							<td>
 								<b>Shape</b><br>
-								<img src="images/borders/border01.png" onclick="styleBorderRadiusPreset('0', '0', '0', '0');"> 
-								<img src="images/borders/border02.png" onclick="styleBorderRadiusPreset('200', '200', '200', '200');">
-								<img src="images/borders/border03.png" onclick="styleBorderRadiusPreset('100', '100', '100', '100');">
-								<img src="images/borders/border04.png" onclick="styleBorderRadiusPreset('50', '50', '50', '50');">
-								<img src="images/borders/border05.png" onclick="styleBorderRadiusPreset('20', '20', '20', '20');">
-								<img src="images/borders/border06.png" onclick="styleBorderRadiusPreset('0', '0', '200', '200');">
-								<img src="images/borders/border07.png" onclick="styleBorderRadiusPreset('200', '200', '0', '0');">
-								<img src="images/borders/border08.png" onclick="styleBorderRadiusPreset('200', '0', '200', '0');">
-								<img src="images/borders/border09.png" onclick="styleBorderRadiusPreset('0', '200', '0', '200');">
-								<img src="images/borders/border10.png" onclick="styleBorderRadiusPreset('200', '0', '0', '200');">
-								<img src="images/borders/border11.png" onclick="styleBorderRadiusPreset('0', '200', '200', '0');">
-								<img src="images/borders/border12.png" onclick="styleBorderRadiusPreset('0', '200', '200', '200');">
-								<img src="images/borders/border13.png" onclick="styleBorderRadiusPreset('200', '0', '200', '200');">
-								<img src="images/borders/border14.png" onclick="styleBorderRadiusPreset('200', '200', '0', '200');">
-								<img src="images/borders/border15.png" onclick="styleBorderRadiusPreset('200', '200', '200', '0');">
+								<span class="border_shape" style="border-radius:0 0 0 0;" onclick="styleBorderRadiusPreset('0', '0', '0', '0');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:2px 2px 2px 2px;" onclick="styleBorderRadiusPreset('10', '10', '10', '10');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:3px 3px 3px 3px;" onclick="styleBorderRadiusPreset('30', '30', '30', '30');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:4px 4px 4px 4px;" onclick="styleBorderRadiusPreset('50', '50', '50', '50');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:5px 5px 5px 5px;" onclick="styleBorderRadiusPreset('100', '100', '100', '100');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:10px 10px 10px 10px;" onclick="styleBorderRadiusPreset('500', '500', '500', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:0 0 500px 500px;" onclick="styleBorderRadiusPreset('0', '0', '500', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 500px 0 0;" onclick="styleBorderRadiusPreset('500', '500', '0', '0');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 0 0 500px;" onclick="styleBorderRadiusPreset('500', '0', '500', '0');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:0 500px 500px 0;" onclick="styleBorderRadiusPreset('0', '500', '0', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 0 500px 0;" onclick="styleBorderRadiusPreset('500', '0', '0', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:0 500px 0 500px;" onclick="styleBorderRadiusPreset('0', '500', '500', '0');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:0 500px 500px 500px;" onclick="styleBorderRadiusPreset('0', '500', '500', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 0 500px 500px;" onclick="styleBorderRadiusPreset('500', '0', '500', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 500px 500px 0;" onclick="styleBorderRadiusPreset('500', '500', '0', '500');">&nbsp;</span>
+								<span class="border_shape" style="border-radius:500px 500px 0 500px;" onclick="styleBorderRadiusPreset('500', '500', '500', '0');">&nbsp;</span>
 								<br>
 								<b>Width</b><br>
-								<img src="images/borders/border_width01.png" onclick="styleBorderWidthPreset('1');"> 
-								<img src="images/borders/border_width02.png" onclick="styleBorderWidthPreset('2');"> 
-								<img src="images/borders/border_width03.png" onclick="styleBorderWidthPreset('4');"> 
-								<img src="images/borders/border_width04.png" onclick="styleBorderWidthPreset('8');"> 
-								<img src="images/borders/border_width05.png" onclick="styleBorderWidthPreset('15');"> 
-								<img src="images/borders/border_width06.png" onclick="styleBorderWidthPreset('30');"> 
-								<img src="images/borders/border_width07.png" onclick="styleBorderWidthPreset('50');"> 
-								<img src="images/borders/border_width08.png" onclick="styleBorderWidthPreset('100');">
-								<br>
+								<span class="border_width" style="height:2px;" onclick="styleBorderWidthPreset('1');">&nbsp;</span>
+								<span class="border_width" style="height:4px;" onclick="styleBorderWidthPreset('2');">&nbsp;</span>
+								<span class="border_width" style="height:6px;" onclick="styleBorderWidthPreset('4');">&nbsp;</span>
+								<span class="border_width" style="height:8px;" onclick="styleBorderWidthPreset('8');">&nbsp;</span>
+								<span class="border_width" style="height:10px;" onclick="styleBorderWidthPreset('15');">&nbsp;</span>
+								<span class="border_width" style="height:12px;" onclick="styleBorderWidthPreset('30');">&nbsp;</span>
+								<span class="border_width" style="height:14px;" onclick="styleBorderWidthPreset('50');">&nbsp;</span>
+								<span class="border_width" style="height:20px;" onclick="styleBorderWidthPreset('100');">&nbsp;</span>
 							</td>
 						</tr>
 					</table>
