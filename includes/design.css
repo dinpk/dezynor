@@ -304,8 +304,8 @@ h4#transform_heading {background-color:SaddleBrown;}
 .section_table td .shape {
 	display:inline-block;
 	background-color:#0090fa;
-	width:35px;
-	height:25px;
+	width:30px;
+	height:20px;
 	margin:4px;
 	cursor:pointer;
 }

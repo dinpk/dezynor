@@ -108,7 +108,8 @@
 								<input id="wrapper_background_color" type="color" onchange="styleWrapper();" title="Choose color"> 
 								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
 								<select id="wrapper_random_range" onchange="styleWrapper();" title="Random color type">
-									<option>light</option>
+									<option>any</option>
+									<option selected>light</option>
 									<option>medium</option>
 									<option>dark</option>
 								</select>
@@ -302,7 +303,7 @@
 						<tr>
 							<td style="display:none;">Shapes</td>
 							<td colspan="2">
-							<footer style="max-height:50vh;overflow:auto;line-height:200%;">
+							<footer style="line-height:200%;">
 								<p onclick="setShape('');" style="font-size:120%;cursor:pointer;padding:5px;">Remove</p> 
 								<span class="shape" style="clip-path:polygon(0 60%, 0 40%, 100% 40%, 100% 60%)" onclick="setShape('polygon(0 52%, 0 48%, 100% 48%, 100% 52%)');">&nbsp;</span> 
 								<span class="shape" style="clip-path:polygon(40% 0, 60% 0, 60% 100%, 40% 100%)" onclick="setShape('polygon(48% 0, 52% 0, 52% 100%, 48% 100%)');">&nbsp;</span> 
@@ -496,6 +497,7 @@
 							<td>Random color</td>
 							<td>
 								<select id="random_color_range" title="Random color type">
+									<option>any</option>
 									<option>light</option>
 									<option>medium</option>
 									<option>dark</option>
@@ -516,7 +518,7 @@
 								<input id="background_color" type="color" onchange="styleBackgroundColor(this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="styleRandomBackgroundColor();" title="Random color">↻</button> 
-								<button onclick="styleBackgroundColorSameAsWrapper();">s</button> 
+								<button onclick="styleBackgroundColorSameAsWrapper();" title="Same as page background color">s</button> 
 								<button id="remove_background_color" onclick="removeBackgroundColor();">x</button> 
 							</td>
 						</tr>

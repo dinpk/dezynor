@@ -1533,24 +1533,11 @@ function styleWrapper() {
 }
 
 function setRandomWrapperColor() {
-	let random_range = document.getElementById("wrapper_random_range").value;
-	let min, max;
-	if (random_range == "light") {
-		min = 180;
-		max = 255;
-	} else if (random_range == "medium") {
-		min = 100;
-		max = 180;
-	} else if (random_range == "dark") {
-		min = 1;
-		max = 100;
-	}
-	let r = getRandomNumber(min, max);
-	let g = getRandomNumber(min, max);
-	let b = getRandomNumber(min, max);
-	document.getElementById("wrapper").style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
-	document.getElementById("wrapper_background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	let random_color = getRandomRGBColor(document.getElementById("wrapper_random_range").value);
+	document.getElementById("wrapper").style.backgroundColor = random_color;
+	document.getElementById("wrapper_background_color").value = rgb2hex(random_color);
 }
+
 
 function removeWrapperBackgroundColor() {
 	document.getElementById("wrapper_background_color").value = "#000001";
@@ -1633,22 +1620,9 @@ function styleFontSize(element) {selected_section.style.fontSize = element.value
 function styleColor(element) {selected_section.style.color = element.value;}
 function styleRandomTextColor() {
 	let random_range = document.getElementById("random_color_range").value;
-	let min, max;
-	if (random_range == "light") {
-		min = 180;
-		max = 255;
-	} else if (random_range == "medium") {
-		min = 100;
-		max = 180;
-	} else if (random_range == "dark") {
-		min = 1;
-		max = 100;
-	}
-	let r = getRandomNumber(min, max);
-	let g = getRandomNumber(min, max);
-	let b = getRandomNumber(min, max);	
-	selected_section.style.color = "rgb(" + r + ", " + g + ", " + b + ")";
-	document.getElementById("color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	let random_color = getRandomRGBColor(random_range);
+	selected_section.style.color = random_color;
+	document.getElementById("color").value = rgb2hex(random_color);
 }
 function styleWordSpacing(element) {selected_section.style.wordSpacing = element.value + "px";}
 function styleLetterSpacing(element) {selected_section.style.letterSpacing = element.value + "px";}
@@ -1693,23 +1667,11 @@ function styleBackgroundColorSameAsWrapper() {
 
 
 function styleRandomBackgroundColor() {
+	if (!selected_section) return;
 	let random_range = document.getElementById("random_color_range").value;
-	let min, max;
-	if (random_range == "light") {
-		min = 180;
-		max = 255;
-	} else if (random_range == "medium") {
-		min = 100;
-		max = 180;
-	} else if (random_range == "dark") {
-		min = 1;
-		max = 100;
-	}
-	let r = getRandomNumber(min, max);
-	let g = getRandomNumber(min, max);
-	let b = getRandomNumber(min, max);	
-	selected_section.style.backgroundColor = "rgb(" + r + ", " + g + ", " + b + ")";
-	document.getElementById("background_color").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	let random_color = getRandomRGBColor(random_range);
+	selected_section.style.backgroundColor = random_color;
+	document.getElementById("background_color").value = rgb2hex(random_color);
 }
 
 
@@ -1754,33 +1716,14 @@ function styleBackgroundGradients() {
 
 function setRandomGradientColors() {
 	let random_range = document.getElementById("random_color_range").value;
-	let min, max;
-	if (random_range == "light") {
-		min = 180;
-		max = 255;
-	} else if (random_range == "medium") {
-		min = 100;
-		max = 180;
-	} else if (random_range == "dark") {
-		min = 1;
-		max = 100;
-	}
-	let r = getRandomNumber(min, max);
-	let g = getRandomNumber(min, max);
-	let b = getRandomNumber(min, max);
-	document.getElementById("gradient_color1").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
-	r = getRandomNumber(min, max);
-	g = getRandomNumber(min, max);
-	b = getRandomNumber(min, max);
-	document.getElementById("gradient_color2").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
-	r = getRandomNumber(min, max);
-	g = getRandomNumber(min, max);
-	b = getRandomNumber(min, max);
-	document.getElementById("gradient_color3").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
-	r = getRandomNumber(min, max);
-	g = getRandomNumber(min, max);
-	b = getRandomNumber(min, max);
-	document.getElementById("gradient_color4").value = rgb2hex("rgb(" + r + ", " + g + ", " + b + ")");
+	let random_color = getRandomRGBColor(random_range);
+	document.getElementById("gradient_color1").value = rgb2hex(random_color);
+	random_color = getRandomRGBColor(random_range);
+	document.getElementById("gradient_color2").value = rgb2hex(random_color);
+	random_color = getRandomRGBColor(random_range);
+	document.getElementById("gradient_color3").value = rgb2hex(random_color);
+	random_color = getRandomRGBColor(random_range);
+	document.getElementById("gradient_color4").value = rgb2hex(random_color);
 }
 
 
@@ -2567,6 +2510,23 @@ document.onkeyup = function(e) {
 };
 
 
-function getRandomNumber(min, max) { 
-    return Math.floor(Math.random() * (max - min) + min);
+function getRandomRGBColor(random_range) {
+	let min, max;
+	if (random_range == "any") {
+		min = 1;
+		max = 255;
+	} else if (random_range == "light") {
+		min = 180;
+		max = 255;
+	} else if (random_range == "medium") {
+		min = 100;
+		max = 180;
+	} else if (random_range == "dark") {
+		min = 1;
+		max = 100;
+	}
+	let r = Math.floor(Math.random() * (max - min) + min);
+	let g = Math.floor(Math.random() * (max - min) + min);
+	let b = Math.floor(Math.random() * (max - min) + min);
+	return "rgb(" + r + ", " + g + ", " + b + ")";
 }
