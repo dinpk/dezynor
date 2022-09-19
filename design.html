@@ -824,11 +824,18 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Duplicate<br>Circular</td>
+							<td>Duplicate</td>
 							<td>
-								<button onclick="duplicateCircular();" title="Duplicate Circular">◌</button><br> 
+								
 								<input id="duplicate_circular_copies" type="number" step="1" value="10"> Copies<br>
-								<input id="duplicate_circular_radius" type="number" step="1" value="300"> Radius<br>
+								
+								Radius <input id="duplicate_circular_radius" type="number" step="1" value="300"> 
+								<button onclick="duplicateCircular();" title="Duplicate Circular">☼</button><br>
+								
+								x <input id="duplicate_linear_x_distance" type="number" step="1" value="10">  
+								y <input id="duplicate_linear_y_distance" type="number" step="1" value="10"> 
+								<button onclick="duplicateLinear();" title="Duplicate linear">...</button>
+								
 							</td>
 						</tr>
 					</table>

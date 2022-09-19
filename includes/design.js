@@ -1243,6 +1243,31 @@ function duplicateCircular() {
     }	
 }
 
+function duplicateLinear() {
+	if (!selected_section) return;
+	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let left = parseInt(document.getElementById("left").value);
+	let top = parseInt(document.getElementById("top").value);
+	let x_distance = parseInt(document.getElementById("duplicate_linear_x_distance").value);
+	let y_distance = parseInt(document.getElementById("duplicate_linear_y_distance").value);
+
+	let new_left = left;
+	let new_top = top;
+    for (i = 0; i < copies; i++) {
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = selected_section.cloneNode(true);
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		document.getElementById("wrapper").appendChild(section);
+		new_left = new_left + x_distance;
+		new_top = new_top + y_distance;
+		section.style.left = new_left + "px";
+		section.style.top = new_top + "px";
+    }
+	reAlignSectionHandles();
+	
+}
 
 function setZIndex(element) {
 	if (parseInt(element.value) < 0) return;
