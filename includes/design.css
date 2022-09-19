@@ -223,6 +223,13 @@ h4#text_shadow_heading {background-color:SlateBlue;}
 h4#box_shadow_heading {background-color:Indigo;}
 h4#transform_heading {background-color:SaddleBrown;}
 
+h5 {
+	font-size:100%;
+	text-align:center;
+	margin:2px 0 2px 0;
+	background-color:white;
+}
+
 #dash_panel > div {
 	overflow:hidden;
 	opacity:0;
@@ -301,12 +308,19 @@ h4#transform_heading {background-color:SaddleBrown;}
 	cursor:pointer;
 }
 
+.section_table td .shape_wrapper {
+	display:inline-block;
+	cursor:pointer;
+	width:25px;
+	height:25px;
+	margin:4px 2px 4px 2px;
+}
+
 .section_table td .shape {
 	display:inline-block;
 	background-color:#0090fa;
-	width:30px;
-	height:20px;
-	margin:4px;
+	width:100%;
+	height:100%;
 	cursor:pointer;
 }
 
