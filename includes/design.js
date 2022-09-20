@@ -20,6 +20,18 @@ let resize_center_right;
 let resize_center_left;
 let resize_center_top;
 let resize_center_bottom;
+let revert_states = [];
+
+
+function saveCurrentState() {
+	revert_states.push(document.getElementById("container").innerHTML);
+}
+
+function revertToLastState() {
+	if (revert_states.length > 0) {
+		document.getElementById("container").innerHTML = revert_states.pop();
+	}
+}
 
 setInterval(function () {
 	saveDezyn("no");
@@ -237,9 +249,9 @@ function selectSection(counter) {
 }
 
 function duplicateSection() {
-
+	
 	if (!(selected_section)) return;
-
+	
 	section_number = getNewSectionNumber();
 
 	let section_id = "section" + section_number;
@@ -1224,7 +1236,10 @@ function splitOnSpaces() {
 }
 
 function duplicateCircular() {
+	
 	if (!(selected_section)) return;
+	
+	saveCurrentState();
 	
 	let center_x = parseInt(document.getElementById("left").value);
 	let center_y = parseInt(document.getElementById("top").value);
@@ -1248,6 +1263,7 @@ function duplicateCircular() {
 
 function duplicateLinear() {
 	if (!selected_section) return;
+	saveCurrentState();
 	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
@@ -1274,6 +1290,7 @@ function duplicateLinear() {
 
 function duplicateLinearBothSides() {
 	if (!selected_section) return;
+	saveCurrentState();
 	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
