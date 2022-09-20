@@ -4,6 +4,12 @@ window.onload = function() {
 	setRandomWrapperColor();
 	showSectionPanel('box_section');
 }
+window.onbeforeunload = function () {
+	console.log("hello");
+	if(confirm('Do you want to save the design before closing?')) {
+		saveDezyn();
+	}
+};
 
 let design_id = generateDeisgnId();
 let design_object;
@@ -1269,6 +1275,49 @@ function duplicateLinear() {
 	
 }
 
+function duplicateLinearBothSides() {
+	if (!selected_section) return;
+	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let left = parseInt(document.getElementById("left").value);
+	let top = parseInt(document.getElementById("top").value);
+	let x_distance = parseInt(document.getElementById("duplicate_linear_x_distance").value);
+	let y_distance = parseInt(document.getElementById("duplicate_linear_y_distance").value);
+
+	let new_left = left;
+	let new_top = top;
+    for (i = 0; i < copies/2; i++) {
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = selected_section.cloneNode(true);
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		document.getElementById("wrapper").appendChild(section);
+		new_left = new_left + x_distance;
+		new_top = new_top + y_distance;
+		section.style.left = new_left + "px";
+		section.style.top = new_top + "px";
+    }
+
+	new_left = left;
+	new_top = top;
+    for (i = 0; i < copies/2; i++) {
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = selected_section.cloneNode(true);
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		document.getElementById("wrapper").appendChild(section);
+		new_left = new_left - x_distance;
+		new_top = new_top - y_distance;
+		section.style.left = new_left + "px";
+		section.style.top = new_top + "px";
+    }
+
+
+	
+}
+
+
 function setZIndex(element) {
 	if (parseInt(element.value) < 0) return;
 	selected_section.style.zIndex = element.value;
@@ -1965,9 +2014,9 @@ function styleTransform() {
 	let transform_degree2 = document.getElementById("transform_degree2").value;
 	if (transform_type == "rotate") {
 		selected_section.style.transform = "rotate(" + transform_degree1 + "deg)";
-		document.getElementById("transform_degree2").style.visibility = "hidden";
+		document.getElementById("transform_degree2").style.display = "none";
 	} else if (transform_type == "skew") {
-		document.getElementById("transform_degree2").style.visibility = "visible";
+		document.getElementById("transform_degree2").style.display = "inline";
 		selected_section.style.transform = "skew(" + transform_degree1 + "deg, " + transform_degree2 + "deg)";
 	} else if (transform_type == "scale") {
 		selected_section.style.transform = "scale(" + transform_degree1 + ", " + transform_degree2 + ")";

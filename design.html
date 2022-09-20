@@ -809,34 +809,30 @@
 									<option>rotate</option>
 									<option>skew</option>
 								</select>
-								<button id="remove_transform" onclick="removeTransform();" title="Remove Transform">x</button>
-							</td>
-						</tr>
-						<tr>
-							<td>Degree</td>
-							<td>
 								<input id="transform_degree1" type="number" onchange="styleTransform();" step="1" title="Alt + Numpad Divide / Alt + Numpad Multiply"> 
 								<input id="transform_degree2" type="number" onchange="styleTransform();" step="1">
+								<button id="remove_transform" onclick="removeTransform();" title="Remove Transform">x</button>
 							</td>
 						</tr>
 						<tr>
 							<td>Split</td>
 							<td>
-								<button onclick="splitOnSpaces();" title="Split on spaces">…</button> 
+								<button onclick="splitOnSpaces();" title="Split on spaces">ooo</button> 
 							</td>
 						</tr>
 						<tr>
 							<td>Duplicate</td>
 							<td>
 								
-								<input id="duplicate_circular_copies" type="number" step="1" value="10"> Copies<br>
+								<input id="duplicate_circular_copies" type="number" step="1" value="40"> Copies<br>
 								
 								Radius <input id="duplicate_circular_radius" type="number" step="1" value="300"> 
-								<button onclick="duplicateCircular();" title="Duplicate Circular">☼</button><br>
+								<button onclick="duplicateCircular();" title="Duplicate Circular">O</button><br>
 								
-								x <input id="duplicate_linear_x_distance" type="number" step="1" value="10">  
-								y <input id="duplicate_linear_y_distance" type="number" step="1" value="10"> 
-								<button onclick="duplicateLinear();" title="Duplicate linear">...</button>
+								x <input id="duplicate_linear_x_distance" type="number" step="1" value="100">  
+								y <input id="duplicate_linear_y_distance" type="number" step="1" value="0"> 
+								<button onclick="duplicateLinear();" title="Duplicate linear">|oo</button>
+								<button onclick="duplicateLinearBothSides();" title="Duplicate linear both sides">o|o</button>
 								
 							</td>
 						</tr>
