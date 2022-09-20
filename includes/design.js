@@ -4,12 +4,6 @@ window.onload = function() {
 	setRandomWrapperColor();
 	showSectionPanel('box_section');
 }
-window.onbeforeunload = function () {
-	console.log("hello");
-	if(confirm('Do you want to save the design before closing?')) {
-		saveDezyn();
-	}
-};
 
 let design_id = generateDeisgnId();
 let design_object;
@@ -27,11 +21,14 @@ let resize_center_left;
 let resize_center_top;
 let resize_center_bottom;
 
+setInterval(function () {
+	saveDezyn("no");
+}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
+
 
 function generateDeisgnId() {
 	return "dezyn-" + new Date().getTime();
 }
-
 
 async function addHandles() {
 
@@ -1324,7 +1321,7 @@ function setZIndex(element) {
 }
 
 
-async function saveDezyn() {
+async function saveDezyn(show_message = "yes") {
 
 	let modified = new Date().getTime();
 	let folder = document.getElementById("select_folders").value;
@@ -1343,7 +1340,7 @@ async function saveDezyn() {
 		}
 		await idbPutItem("dezynor_designs", {design_key:design_id, value:updated_object});
 		design_object = updated_object;
-		showMessage("Updated design", "Green");
+		if (show_message == "yes") showMessage("Updated design", "Green");
 
 	} else {
 
@@ -1357,7 +1354,7 @@ async function saveDezyn() {
 		}
 		await idbPutItem("dezynor_designs", {design_key:design_id, value:new_object});
 		design_object = new_object;
-		showMessage("Saved design", "Green");
+		if (show_message == "yes") showMessage("Saved design", "Green");
 	}
 }
 
