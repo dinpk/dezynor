@@ -1885,6 +1885,14 @@ function styleTextShadow() {
 	selected_section.style.textShadow = text_shadow;
 }
 
+function styleRandomTextShadowColor() {
+	let random_color = getRandomRGBColor("any");
+	let text_shadow_color = document.getElementById("text_shadow_color");
+	text_shadow_color.value = rgb2hex(random_color);
+	text_shadow_color.onchange();
+}
+
+
 function styleBoxShadow() {
 	let h = document.getElementById("box_shadow_h").value;
 	let y = document.getElementById("box_shadow_y").value;
@@ -1900,6 +1908,13 @@ function styleBoxShadow() {
 		selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
 		selected_section.style.filter = "none";
 	}
+}
+
+function styleRandomBoxShadowColor() {
+	let random_color = getRandomRGBColor("any");
+	let box_shadow_color = document.getElementById("box_shadow_color");
+	box_shadow_color.value = rgb2hex(random_color);
+	box_shadow_color.onchange();
 }
 
 function styleTable() {

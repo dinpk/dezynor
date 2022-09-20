@@ -724,6 +724,7 @@
 							<td>
 								<input id="text_shadow_color" type="color" onchange="styleTextShadow();"> 
 								<button onclick="setColorableElement('text_shadow_color', selected_section.id, 'textshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="styleRandomTextShadowColor();" title="Random color">↻</button> 
 								<button onclick="removeTextShadow();" title="Remove Text Shadow">x</button>
 								<br>
 								H <input id="text_shadow_h" type="number" onchange="styleTextShadow();" step="1">
@@ -745,6 +746,7 @@
 							<td>
 								H <input id="box_shadow_h" type="number" onchange="styleBoxShadow();" step="1">
 								V <input id="box_shadow_y" type="number" onchange="styleBoxShadow();" step="1"> 
+								<button onclick="styleRandomBoxShadowColor();" title="Random color">↻</button> 
 								<button id="remove_box_shadow" onclick="removeBoxShadow();" title="Remove Box Shadow">x</button>
 								<br>
 								<input id="box_shadow_color" type="color" onchange="styleBoxShadow();">
@@ -763,7 +765,7 @@
 					<table class="section_table">
 						<tr>
 							<td></td>
-							<td><button onclick="styleTable();">Generate table</button></td>
+							<td><button onclick="styleTable();">Add table</button></td>
 						</tr>
 						<tr>
 							<td>Size</td>

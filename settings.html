@@ -54,13 +54,13 @@
 				max-width:70px;
 			}
 			
-			tr:nth-child(even) {
+			#settings tr:nth-child(odd) {
 				background-color:#EEE;
 			}
-			td:first-child {
+			#settings td:first-child {
 				vertical-align:top;
 			}
-			td {
+			#settings td {
 				padding:5px;
 			}
 		
@@ -72,20 +72,20 @@
 			<div class="padleft50">
 			</div>
 			
-			<div id="settings" class="pad50 mxw500">
+			<div class="pad50 mxw500">
 				<div id="space_usage"></div>
 				<table>
 					<tr>
 						<td class="padright10"><img src="images/icon_caution.png"></td>
-						<td>Dezynor saves all the data in browser's storage (IndexedDB and localStorage). If you use some performance
-							and tunning application such as <strong>CCleaner</strong>, please make sure it does not clear out this browser's storage.
+						<td>Dezynor saves most of the data in browser's storage (IndexedDB and localStorage). If you use some performance
+							and tunning application such as <strong>CCleaner</strong>, make sure it does not clear out this browser's storage.
 						</td>
 					</tr>
 				</table>
 				<hr>
 				<h1>Settings</h1>
 				<form onsubmit="event.preventDefault();saveSettings();">
-				<table>
+				<table id="settings">
 					<tr>
 						<td>Paste result</td>
 						<td>
