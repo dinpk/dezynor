@@ -30,6 +30,13 @@ function saveCurrentState() {
 function revertToLastState() {
 	if (revert_states.length > 0) {
 		document.getElementById("container").innerHTML = revert_states.pop();
+		let all_sections = document.querySelectorAll("section");
+		if (all_sections.length > 0) {
+			let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
+			selectSection(last_section_number);
+			section_number = last_section_number;
+			unselectSections();
+		}
 	}
 }
 
@@ -1235,6 +1242,19 @@ function splitOnSpaces() {
 	reAlignSectionHandles();
 }
 
+function duplicateTransform() {
+	let duplicate_type = document.getElementById("duplicate_type").value;
+	if (duplicate_type == "circular") {
+		duplicateCircular();
+	} else if (duplicate_type == "linear_one_sided") {
+		duplicateLinearOneSided();
+	} else if (duplicate_type == "linear_two_sided") {
+		duplicateLinearTwoSided();
+	} else if (duplicate_type == "linear_rows_columns") {
+		duplicateLinearRowsColumns();
+	}
+}
+
 function duplicateCircular() {
 	
 	if (!(selected_section)) return;
@@ -1243,7 +1263,7 @@ function duplicateCircular() {
 	
 	let center_x = parseInt(document.getElementById("left").value);
 	let center_y = parseInt(document.getElementById("top").value);
-	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let radius = parseInt(document.getElementById("duplicate_circular_radius").value) / 2;
     let slice = 2 * Math.PI / copies;
     for (i = 0; i < copies; i++) {
@@ -1261,10 +1281,10 @@ function duplicateCircular() {
     }	
 }
 
-function duplicateLinear() {
+function duplicateLinearOneSided() {
 	if (!selected_section) return;
 	saveCurrentState();
-	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
 	let x_distance = parseInt(document.getElementById("duplicate_linear_x_distance").value);
@@ -1288,10 +1308,10 @@ function duplicateLinear() {
 	
 }
 
-function duplicateLinearBothSides() {
+function duplicateLinearTwoSided() {
 	if (!selected_section) return;
 	saveCurrentState();
-	let copies = parseInt(document.getElementById("duplicate_circular_copies").value);
+	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
 	let x_distance = parseInt(document.getElementById("duplicate_linear_x_distance").value);
@@ -1328,6 +1348,39 @@ function duplicateLinearBothSides() {
     }
 
 
+	
+}
+
+
+function duplicateLinearRowsColumns() {
+	console.log("hello");
+	if (!selected_section) return;
+	saveCurrentState();
+	let x_copies = parseInt(document.getElementById("duplicate_x_copies").value);
+	let y_copies = parseInt(document.getElementById("duplicate_y_copies").value);
+	let left = parseInt(document.getElementById("left").value);
+	let top = parseInt(document.getElementById("top").value);
+	let x_distance = parseInt(document.getElementById("duplicate_linear_x_distance").value);
+	let y_distance = parseInt(document.getElementById("duplicate_linear_y_distance").value);
+
+	let new_left = left;
+	let new_top = top - y_distance;
+    for (i = 0; i < y_copies; i++) {
+		new_left = left - x_distance;
+		new_top = new_top + y_distance;
+		for (k = 0; k < x_copies; k++) {
+			section_number = getNewSectionNumber();
+			let section_id = "section" + section_number;
+			let section = selected_section.cloneNode(true);
+			section.setAttribute("id", section_id);
+			section.setAttribute("onclick", "selectSection('" + section_number + "');");
+			document.getElementById("wrapper").appendChild(section);
+			new_left = new_left + x_distance;
+			section.style.left = new_left + "px";
+			section.style.top = new_top + "px";
+		}
+    }
+	reAlignSectionHandles();
 	
 }
 

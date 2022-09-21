@@ -803,7 +803,7 @@
 					<h4 id="transform_heading" onclick="hideSectionPanel('transform_section');">Transform</h4>
 					<table class="section_table">
 						<tr>
-							<td>Type</td>
+							<td>Transform</td>
 							<td>
 								<select id="transform_type" onchange="styleTransform();">
 									<option>rotate</option>
@@ -823,16 +823,22 @@
 						<tr>
 							<td>Duplicate</td>
 							<td>
+								<select id="duplicate_type">
+									<option value="circular">Circular</option>
+									<option value="linear_one_sided">Linear - one sided</option>
+									<option value="linear_two_sided">Linear - two sided</option>
+									<option value="linear_rows_columns">Linear - rows and columns</option>
+								</select> 
+								<button onclick="duplicateTransform();">Go</button>
+								<br>
 								
-								<input id="duplicate_circular_copies" type="number" step="1" value="40"> Copies<br>
+								Copies x <input id="duplicate_x_copies" type="number" step="1" value="20"><br>
+								Copies y <input id="duplicate_y_copies" type="number" step="1" value="20"><br>
 								
-								Radius <input id="duplicate_circular_radius" type="number" step="1" value="300"> 
-								<button onclick="duplicateCircular();" title="Duplicate Circular">O</button><br>
+								Radius <input id="duplicate_circular_radius" type="number" step="1" value="300"><br>
 								
-								x <input id="duplicate_linear_x_distance" type="number" step="1" value="100">  
+								x <input id="duplicate_linear_x_distance" type="number" step="1" value="50">  
 								y <input id="duplicate_linear_y_distance" type="number" step="1" value="0"> 
-								<button onclick="duplicateLinear();" title="Duplicate linear">|oo</button>
-								<button onclick="duplicateLinearBothSides();" title="Duplicate linear both sides">o|o</button>
 							</td>
 						</tr>
 						<tr>
