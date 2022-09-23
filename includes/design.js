@@ -1242,7 +1242,44 @@ function splitOnSpaces() {
 	reAlignSectionHandles();
 }
 
+function duplicateTransformEnables() {
+
+	let duplicate_x_copies = document.getElementById("duplicate_x_copies");
+	let duplicate_y_copies = document.getElementById("duplicate_y_copies");
+	let duplicate_circular_radius = document.getElementById("duplicate_circular_radius");
+	let duplicate_linear_x_distance = document.getElementById("duplicate_linear_x_distance");
+	let duplicate_linear_y_distance = document.getElementById("duplicate_linear_y_distance");
+	
+	duplicate_x_copies.setAttribute("disabled", "");
+	duplicate_y_copies.setAttribute("disabled", "");
+	duplicate_circular_radius.setAttribute("disabled", "");
+	duplicate_linear_x_distance.setAttribute("disabled", "");
+	duplicate_linear_y_distance.setAttribute("disabled", "");
+
+	let duplicate_type = document.getElementById("duplicate_type").value;
+	if (duplicate_type == "circular") {
+		duplicate_x_copies.removeAttribute("disabled");
+		duplicate_circular_radius.removeAttribute("disabled");
+	} else if (duplicate_type == "linear_one_sided") {
+		duplicate_x_copies.removeAttribute("disabled");
+		duplicate_linear_x_distance.removeAttribute("disabled");
+		duplicate_linear_y_distance.removeAttribute("disabled");
+	} else if (duplicate_type == "linear_two_sided") {
+		duplicate_x_copies.removeAttribute("disabled");
+		duplicate_linear_x_distance.removeAttribute("disabled");
+		duplicate_linear_y_distance.removeAttribute("disabled");
+	} else if (duplicate_type == "linear_rows_columns") {
+		duplicate_x_copies.removeAttribute("disabled");
+		duplicate_y_copies.removeAttribute("disabled");
+		duplicate_y_copies.removeAttribute("disabled");
+		duplicate_linear_x_distance.removeAttribute("disabled");
+		duplicate_linear_y_distance.removeAttribute("disabled");
+	}
+	
+}
+
 function duplicateTransform() {
+	
 	let duplicate_type = document.getElementById("duplicate_type").value;
 	if (duplicate_type == "circular") {
 		duplicateCircular();
