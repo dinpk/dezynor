@@ -27,6 +27,7 @@
 				localStorage.setItem("word_spacing_change", document.getElementById("word_spacing_change").value);
 				localStorage.setItem("paste_result", document.getElementById("paste_result").value);
 				localStorage.setItem("automatically_save_after", document.getElementById("automatically_save_after").value);
+				localStorage.setItem("automatically_save", JSON.stringify(document.getElementById("automatically_save").checked));
 				localStorage.setItem("show_multiple_dash_panels", JSON.stringify(document.getElementById("show_multiple_dash_panels").checked));
 
 				showMessage("Saved", "DarkGreen");
@@ -45,6 +46,7 @@
 				document.getElementById("word_spacing_change").value = localStorage.getItem("word_spacing_change");
 				document.getElementById("paste_result").value = localStorage.getItem("paste_result");
 				document.getElementById("automatically_save_after").value = localStorage.getItem("automatically_save_after");
+				if (localStorage.getItem("automatically_save") == "true") document.getElementById("automatically_save").checked = true;
 				if (localStorage.getItem("show_multiple_dash_panels") == "true") document.getElementById("show_multiple_dash_panels").checked = true;
 				
 			}
@@ -102,6 +104,7 @@
 					<tr>
 						<td>Save design every</td>
 						<td>
+							<input type="checkbox" id="automatically_save"> 
 							<input type="number" id="automatically_save_after" value="30" min="10" required> seconds<br>
 						</td>
 					</tr>

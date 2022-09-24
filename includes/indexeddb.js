@@ -30,6 +30,7 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("current_folder", "default");
 			localStorage.setItem("paste_result", "plain");
 			localStorage.setItem("show_multiple_dash_panels", "false");
+			localStorage.setItem("automatically_save", "false");
 			localStorage.setItem("automatically_save_after", "30");
 		case 1:
 		case 2:

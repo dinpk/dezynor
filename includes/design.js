@@ -3,6 +3,13 @@ window.onload = function() {
 	loadDezyn();
 	setRandomWrapperColor();
 	showSectionPanel('box_section');
+
+	if (localStorage.getItem("automatically_save") == "true") {
+		setInterval(function () {
+			saveDezyn("no");
+		}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
+	}
+	
 }
 
 let design_id = generateDeisgnId();
@@ -39,10 +46,6 @@ function revertToLastState() {
 		}
 	}
 }
-
-setInterval(function () {
-	saveDezyn("no");
-}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
 
 
 function generateDeisgnId() {
