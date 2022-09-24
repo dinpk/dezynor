@@ -7,6 +7,7 @@ window.onload = function() {
 	if (localStorage.getItem("automatically_save") == "true") {
 		setInterval(function () {
 			saveDezyn("no");
+			console.log("saving");
 		}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
 	}
 	
@@ -328,32 +329,31 @@ function unselectSections() {
 }
 
 function pasteText(e) {
-
 	// if (e.clipboardData.files.length > 0) return; // image
-	
-	let data = (e.originalEvent || e).clipboardData;
-
-	let paste_result = localStorage.getItem("paste_result");
-	let text = "";
-	if (paste_result == "plain") {
-		e.preventDefault();
-		text = data.getData('text/plain').replaceAll("\n", "");
-	} else if (paste_result == "plain_with_lines") {
-		e.preventDefault();
-		text = data.getData('text/html');
-		text = text.replaceAll("</p>","\n");	
-		text = text.replaceAll("</div>","\n");	
-		text = text.replace(/(<([^>]+)>)/gi, "");
-		text = text.replaceAll("\n", "</div><div>");
-		text = "<div>" + text;
-	} else if (paste_result == "html_without_styles") {
-		e.preventDefault();
-		text = data.getData('text/html');
-		// remove styles here
+	e.preventDefault();
+	let data = (e.clipboardData || window.clipboardData).getData('text/html');
+	let selection = window.getSelection();
+	if (!selection.rangeCount) {
+		return false;
 	}
-	if (text.indexOf("\n") > -1) console.log("contains line breaks");
-	
-	document.execCommand("insertHTML", false, text); 
+	let paste_result = localStorage.getItem("paste_result");
+	if (paste_result == "plain") {
+		data = data.replace(/(<([^>]+)>)/gi, "");
+	} else if (paste_result == "plain_with_lines") {
+		data = data.replaceAll("</p>","\n");	
+		data = data.replaceAll("</div>","\n");	
+		data = data.replaceAll("</td>","\n");	
+		data = data.replaceAll("<br>","\n");	
+		data = data.replace(/(<([^>]+)>)/gi, "");
+		data = data.replaceAll("\n", "</div><div>");
+		data = "<div>" + data + "</div>";
+	} else if (paste_result == "html_without_styles") {
+		data = data.replace(/(<[^>]+) style=".*?"/ig, '$1');
+	}
+	let data_element = document.createElement("article");
+	data_element.innerHTML = data;
+	selection.deleteFromDocument();
+	selection.getRangeAt(0).insertNode(data_element);
 }
 
 function onMouseDown4Move(counter) {
@@ -1593,13 +1593,13 @@ async function loadDezyn() {
 
 }
 
-function setFormattedElement() {
+function setFormattedElement(action) {
 	let selected_formatting = document.getElementById("select_formatted_elements").value;
 	if (!selected_section || selected_formatting.length == 0) return;
 	let selected_formatting_label = selected_formatting;
 	selected_formatting = selected_formatting.replaceAll(" ", "_").toLowerCase();
 
-	if (document.getElementById("formatting_save").checked) {
+	if (action == "save") {
 		localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
 		showMessage("Saved as: " + selected_formatting_label, "Green");
 	} else if (selected_formatting in localStorage) {

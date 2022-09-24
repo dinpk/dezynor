@@ -461,9 +461,9 @@
 						<tr>
 							<td>Presets</td>
 							<td>
-								<select id="select_formatted_elements" onchange="setFormattedElement();"></select> &nbsp; 
-								<input type="radio" id="formatting_apply" name="formatting_apply_save" checked> Apply 
-								<input type="radio" id="formatting_save" name="formatting_apply_save"> Save 
+								<select id="select_formatted_elements"></select> &nbsp; 
+								<button onclick="setFormattedElement('save');">Save</button> 
+								<button onclick="setFormattedElement('apply');">Apply</button> 
 							</td>
 						</tr>
 						<tr>
