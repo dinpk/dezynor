@@ -45,16 +45,16 @@ body {
 	background-size:100% 100%;
 }
 
-.wrapper_bg_left {
+.bg_show_left {
   -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
 }
-.wrapper_bg_right {
+.bg_show_right {
   -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
-.wrapper_bg_top {
+.bg_show_top {
   -webkit-mask-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
-.wrapper_bg_bottom {
+.bg_show_bottom {
   -webkit-mask-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
 }
 

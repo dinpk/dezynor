@@ -1174,18 +1174,20 @@ function hideSectionPanels() {
 }
 
 
-function showSectionPanel(panel) {
+function showSectionPanel(panel_id) {
 	if (localStorage.getItem("show_multiple_dash_panels") == "false") hideSectionPanels();
 	setTimeout(function () {
-		let opacity = document.getElementById(panel).style.opacity;
-		document.getElementById(panel).style.opacity = "1";
-		document.getElementById(panel).style.maxHeight = "1000px";
+		let panel = document.getElementById(panel_id);
+		panel.scrollIntoView();
+		panel.style.opacity = "1";
+		panel.style.maxHeight = "1000px";
 	}, 100);
 }
 
-function hideSectionPanel(panel) {
-	document.getElementById(panel).style.opacity = "0";
-	document.getElementById(panel).style.maxHeight = "0";
+function hideSectionPanel(panel_id) {
+	let panel = document.getElementById(panel_id);
+	panel.style.opacity = "0";
+	panel.style.maxHeight = "0";
 }
 
 
@@ -1693,25 +1695,6 @@ function styleWrapper() {
 	wrapper.style.backgroundImage = "";
 	wrapper.style.backgroundColor = document.getElementById("wrapper_background_color").value;
 
-	if (wrapper.style.backgroundColor == "rgb(0, 0, 1)") { // fake color for transparent, set by background removal function
-
-		let bg_image1 = document.getElementById("wrapper_bg_image1").value;
-		let bg_image2 = document.getElementById("wrapper_bg_image2").value;
-		let bg_image1_position = document.getElementById("wrapper_bg1_position").value;
-		let bg_image2_position = document.getElementById("wrapper_bg2_position").value;
-		if (bg_image1.length > 0 || bg_image2.length > 0) {
-
-			document.getElementById("wrapper_bg1").style.backgroundImage = "url(" + document.getElementById("wrapper_bg_image1").value + ")";
-			document.getElementById("wrapper_bg1").className = "";
-			document.getElementById("wrapper_bg1").classList.add("wrapper_bg_" + bg_image1_position);
-			document.getElementById("wrapper_bg2").style.backgroundImage = "url(" + document.getElementById("wrapper_bg_image2").value + ")";
-			document.getElementById("wrapper_bg2").className = "";
-			document.getElementById("wrapper_bg2").classList.add("wrapper_bg_" + bg_image2_position);
-		} else {
-			document.getElementById("wrapper_bg1").style.backgroundImage = "";
-			document.getElementById("wrapper_bg2").style.backgroundImage = "";
-		}
-	}
 }
 
 function setRandomWrapperColor() {
@@ -1742,13 +1725,6 @@ function loadWrapperStyles() {
 	document.getElementById("wrapper_height").value = wrapper.style.height.replace("px", "");
 
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
-
-	let wrapper_bg1 = document.getElementById("wrapper_bg1");
-	let wrapper_bg2 = document.getElementById("wrapper_bg2");
-	document.getElementById("wrapper_bg_image1").value = wrapper_bg1.style.backgroundImage.replace("url(\"", "").replace("\")", "");
-	document.getElementById("wrapper_bg_image2").value = wrapper_bg2.style.backgroundImage.replace("url(\"", "").replace("\")", "");
-	document.getElementById("wrapper_bg1_position").value = wrapper_bg1.className.replace("wrapper_bg_", "");
-	document.getElementById("wrapper_bg2_position").value = wrapper_bg2.className.replace("wrapper_bg_", "");
 }
 
 function styleTop(element) {
@@ -2017,6 +1993,13 @@ function setGradientDirection() {
 	}
 }
 
+function styleShowBackgroundSide(side) {
+	selected_section.classList.remove("bg_show_left");
+	selected_section.classList.remove("bg_show_right");
+	selected_section.classList.remove("bg_show_top");
+	selected_section.classList.remove("bg_show_bottom");
+	selected_section.classList.add("bg_show_" + side);
+}
 
 function styleClipText() {
 	selected_section.setAttribute("class", "clip_text");
@@ -2352,6 +2335,7 @@ function loadSectionStyles() {
 		if (transform_degree[1]) document.getElementById("transform_degree2").value = transform_degree[1].replace("deg)", "");
 		document.getElementById("transform_degree2").style.visibility = "visible";
 	}
+	
 
 	document.getElementById("clip_path").value = selected_section.style.clipPath;
 }

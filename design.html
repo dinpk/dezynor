@@ -118,28 +118,6 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Image URLs</td>
-							<td>
-								<input id="wrapper_bg_image1" type="text" onchange="removeWrapperBackgroundColor();styleWrapper();" title="Image 1 URL"> 
-								<select id="wrapper_bg1_position" onchange="styleWrapper();" title="Image 1 position">
-									<option>top</option>
-									<option>bottom</option>
-									<option>left</option>
-									<option>right</option>
-								</select>
-								<button id="remove_wrapper_bg_image1" onclick="removeWrapperBackgroundImage1();" title="Remove image 1">x</button>
-								<br>
-								<input id="wrapper_bg_image2" type="text" onchange="removeWrapperBackgroundColor();styleWrapper();" title="Image 2 URL">
-								<select id="wrapper_bg2_position" onchange="styleWrapper();" title="Image 2 position">
-									<option>top</option>
-									<option>bottom</option>
-									<option>left</option>
-									<option>right</option>
-								</select> 
-								<button id="remove_wrapper_bg_image2" onclick="removeWrapperBackgroundImage2();" title="Remove image 2">x</button>
-							</td>
-						</tr>
-						<tr>
 							<td>Overflow</td>
 							<td><input id="wrapper_overflow" type="checkbox" onchange="styleWrapper();" title="Show items outside of page" checked></td>
 						</tr>
@@ -332,6 +310,8 @@
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0% 0%, 0px 100%, 25% 75%, 25% 35%, 5% 5%, 95% 5%, 75% 35%, 75% 75%, 100% 100%, 100% 0%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(30% 0px, 5% 70%, 50% 92%, 95% 70%, 70% 0px, 70% 0px, 100% 70%, 50% 100%, 0px 70%, 30% 0px)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(5% 30%, 30% 100%, 0 30%, 50% 0, 100% 30%, 70% 100%, 95% 30%, 50% 8%)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(50% 5%, 5% 37%, 5% 97%, 95% 97%, 95% 37%, 50% 5%, 50% 0px, 100% 35%, 100% 100%, 0px 100%, 0px 35%, 50% 0px)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0px 50%, 50% 100%, 50% 90%, 10% 50%, 50% 10%, 90% 50%, 50% 90%, 50% 100%, 100% 50%, 50% 0px)">&nbsp;</span></span>
 
 								<h5>Arrows</h5>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0px 0px, 0px 100%, 100% 50%)">&nbsp;</span></span>
@@ -350,6 +330,10 @@
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0px 0px, 100% 0%, 100% 75%, 50% 100%, 0px 75%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0px 25%, 50% 0px, 100% 25%, 100% 100%, 0px 100%)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(15% 0px, 100% 50%, 15% 100%, 0px 100%, 85% 50%, 0px 0px)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(100% 0px, 15% 50%, 100% 100%, 85% 100%, 0px 50%, 85% 0px)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(100% 100%, 50% 15%, 0px 100%, 0px 85%, 50% 0px, 100% 85%)">&nbsp;</span></span>
+								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(100% 15%, 50% 100%, 0 15%, 0 0, 50% 85%, 100% 0)">&nbsp;</span></span>
 
 								<h5>Corners</h5>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(0px 100%, 100% 0px, 0px 0px)">&nbsp;</span></span>
@@ -649,10 +633,20 @@
 							</td>
 						</tr>
 						<tr>
+							<td>Show side</td>
+							<td>
+								<button onclick="styleShowBackgroundSide('top');">Top</button> 
+								<button onclick="styleShowBackgroundSide('bottom');">Bottom</button> 
+								<button onclick="styleShowBackgroundSide('left');">Left</button> 
+								<button onclick="styleShowBackgroundSide('right');">Right</button> 
+								<button onclick="styleShowBackgroundSide('all');">x</button> 
+							</td>
+						</tr>
+						<tr>
 							<td>Clip text</td>
 							<td>
 								<button onclick="styleClipText();">Set</button> 
-								<button onclick="removeClipText();">Remove</button> 
+								<button onclick="removeClipText();">x</button> 
 							</td>
 						</tr>
 
