@@ -2083,7 +2083,8 @@ function styleTable() {
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
-	let table_headings = document.getElementById("table_headings").checked;
+	let table_header = document.getElementById("table_header").checked;
+	let table_footer = document.getElementById("table_footer").checked;
 	let table_caption = document.getElementById("table_caption").checked;
 	
 	let border_width = parseInt(document.getElementById("table_border_width").value);
@@ -2096,13 +2097,22 @@ function styleTable() {
 		caption = "<caption>Caption</caption>";
 	}
 	
-	let headings = "";
-	if (table_headings) {
-		headings = "<tr>";
+	let thead = "";
+	if (table_header) {
+		thead = "<thead><tr>";
 		for (col = 0; col < table_columns; col++) {
-			headings = headings + "<th style='" + cell_style + "'>&nbsp;</th>";
+			thead = thead + "<th style='" + cell_style + "'>&nbsp;</th>";
 		}
-		headings = headings + "</tr>";
+		thead = thead + "</tr></thead>";
+	}
+
+	let tfoot = "";
+	if (table_footer) {
+		tfoot = "<tfoot><tr>";
+		for (col = 0; col < table_columns; col++) {
+			tfoot = tfoot + "<td style='" + cell_style + "'>&nbsp;</td>";
+		}
+		tfoot = tfoot + "</tr></tfoot>";
 	}
 
 	let table = "";
@@ -2113,7 +2123,7 @@ function styleTable() {
 		}
 		table = table + "</tr>";
 	}
-	table = "<table>" + caption + headings + table + "</table>";
+	table = "<table>" + caption + thead + "<tbody>" + table + "</tbody>" + tfoot + "</table>";
 	selected_section.innerHTML = table;
 }
 
