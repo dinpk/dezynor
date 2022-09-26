@@ -497,8 +497,22 @@
 						<tr>
 							<td>Columns</td>
 							<td>
-								<input id="column_count" type="number" onchange="styleColumnCount(this);" step="1"> 
-								Gap <input id="column_gap" type="number" onchange="styleColumnGap(this);" step="10"> 
+								<input id="column_count" type="number" onchange="styleColumns();" step="1"> 
+								Gap <input id="column_gap" type="number" onchange="styleColumns();" step="10"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Columns rule</td>
+							<td>
+								<input id="column_rule_width" type="number" onchange="styleColumns();" value="0" step="1">
+								<select id="column_rule_style" onchange="styleColumns();">
+									<option>solid</option>
+									<option>double</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select> 
+								<input id="column_rule_color" type="color" onchange="styleColumns();"> 
+								<button onclick="setColorableElement('column_rule_color', selected_section.id, 'column');showPopupPanel('color_pallette');">🚥</button> 
 							</td>
 						</tr>
 					</table>
@@ -662,6 +676,7 @@
 								<input id="border_width" type="number" onchange="styleBorderWidth(this);" step="1">
 								<select id="border_style" onchange="styleBorderStyle(this);">
 									<option>solid</option>
+									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
 								</select>

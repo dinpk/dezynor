@@ -1780,8 +1780,17 @@ function styleRandomBorderColor() {
 	document.getElementById("border_color").value = rgb2hex(random_color);
 }
 
-function styleColumnCount(element) {selected_section.style.columnCount = element.value;}
-function styleColumnGap(element) {selected_section.style.columnGap = element.value + "px";}
+function styleColumns() {
+	selected_section.style.columnCount = document.getElementById("column_count").value;
+	selected_section.style.columnGap = document.getElementById("column_gap").value + "px";
+	let column_rule_width = parseInt(document.getElementById("column_rule_width").value);
+	let column_rule_style = document.getElementById("column_rule_style").value;
+	let column_rule_color = document.getElementById("column_rule_color").value;
+	if (column_rule_width > 0) {
+		selected_section.style.columnRule =  column_rule_width + "px " +  column_rule_style + column_rule_color;
+	}
+}
+
 function styleDirection(value) {selected_section.style.direction = value;}
 function styleFontFamily(element) {selected_section.style.fontFamily = element.value;}
 function styleFontSize(element) {selected_section.style.fontSize = element.value + "px";}
@@ -1811,6 +1820,8 @@ function useColorPallette(color) {
 		colorable_element.style.backgroundColor = color;
 	} else if (colorable_style == "border") {
 		colorable_element.style.borderColor = color;
+	} else if (colorable_style == "column") {
+		colorable_element.style.columnRuleColor = color;
 	} else if (colorable_style == "color") {
 		colorable_element.style.color = color;
 	} else if (colorable_style == "textshadow") {
@@ -2204,6 +2215,9 @@ function setSectionDefaultStyles(section) {
 	section.style.columnCount = "1";
 	section.style.columnGap = "10px";
 	section.style.columnFill = "auto";
+	section.style.columnRuleColor = "rgb(255,255,255)";
+	section.style.columnRuleWidth = "0";
+	section.style.columnRuleStyle = "solid";
 	section.style.transform = "skew(0deg, 0deg)";
 	section.style.transformOrigin = "center center";
 	section.style.clipPath = "";
@@ -2329,6 +2343,10 @@ function loadSectionStyles() {
 	
 	document.getElementById("column_count").value = selected_section.style.columnCount;
 	document.getElementById("column_gap").value = selected_section.style.columnGap.replace("px", "");
+	document.getElementById("column_rule_width").value = selected_section.style.columnRuleWidth.replace("px", "");
+	document.getElementById("column_rule_style").value = selected_section.style.columnRuleStyle;
+	document.getElementById("column_rule_color").value = rgb2hex(selected_section.style.columnRuleColor);
+	
 	let transform = selected_section.style.transform;
 	document.getElementById("transform_degree1").value = "0";
 	document.getElementById("transform_degree2").value = "0";
