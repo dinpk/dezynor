@@ -334,12 +334,16 @@ function pasteText(e) {
 	let data = (e.clipboardData || window.clipboardData).getData('text/html');
 	let selection = window.getSelection();
 	if (!selection.rangeCount) {
-		return false;
+		return;
 	}
+
 	let paste_result = localStorage.getItem("paste_result");
 	if (paste_result == "plain") {
 		data = data.replace(/(<([^>]+)>)/gi, "");
+		selection.getRangeAt(0).insertNode(document.createTextNode(data));
+		return;
 	} else if (paste_result == "plain_with_lines") {
+		data = data.replaceAll("\n","");
 		data = data.replaceAll("</p>","\n");	
 		data = data.replaceAll("</div>","\n");	
 		data = data.replaceAll("</td>","\n");	
@@ -348,9 +352,9 @@ function pasteText(e) {
 		data = data.replaceAll("\n", "</div><div>");
 		data = "<div>" + data + "</div>";
 	} else if (paste_result == "html_without_styles") {
-		data = data.replace(/(<[^>]+) style=".*?"/ig, '$1');
+		data = data.replace(/<\s*(\w+).*?>/ig, '<$1>');
 	}
-	let data_element = document.createElement("article");
+	let data_element = document.createElement("div");
 	data_element.innerHTML = data;
 	selection.deleteFromDocument();
 	selection.getRangeAt(0).insertNode(data_element);
@@ -1858,15 +1862,17 @@ function styleBackgroundImage() {
 		selected_section.style.backgroundImage = "url(" + image + ")";
 
 	});
+
+	if (document.getElementById("background_image_repeat").checked) {
+		selected_section.style.backgroundRepeat = "repeat";
+		document.getElementById("background_size").value = "auto";
+	} else {
+		selected_section.style.backgroundRepeat = "no-repeat";
+	}
 	
 	selected_section.style.backgroundSize = document.getElementById("background_size").value;
 	selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
 	selected_section.style.backgroundPositionY = document.getElementById("background_position_y").value;
-	if (document.getElementById("background_image_repeat").checked) {
-		selected_section.style.backgroundRepeat = "repeat";
-	} else {
-		selected_section.style.backgroundRepeat = "no-repeat";
-	}
 	
 }
 
@@ -1998,7 +2004,9 @@ function styleShowBackgroundSide(side) {
 	selected_section.classList.remove("bg_show_right");
 	selected_section.classList.remove("bg_show_top");
 	selected_section.classList.remove("bg_show_bottom");
-	selected_section.classList.add("bg_show_" + side);
+	if (background_show_side != "all") {
+		selected_section.classList.add("bg_show_" + side);
+	}
 }
 
 function styleClipText() {
