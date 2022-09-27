@@ -329,11 +329,54 @@ function unselectSections() {
 }
 
 function setContainerSection() {
+	
+	let dimensions = getSelectedSectionDimensions();
+	let top = dimensions.top
+	let bottom = dimensions.bottom
+	let left = dimensions.left
+	let right = dimensions.right
+	
+	let sections_list = "";
+	let all_sections = document.querySelectorAll("section");
+	for (i = 0; i < all_sections.length; i++) {
+		let this_section = all_sections[i];
+		if (this_section !== selected_section) {
+			let section_width = parseInt(this_section.style.width.replace("px", ""));
+			let section_height = parseInt(this_section.style.height.replace("px", ""));
+			let section_top = parseInt(this_section.style.top.replace("px", ""));
+			let section_left = parseInt(this_section.style.left.replace("px", ""));
+			let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
+			let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
+			if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
+				sections_list = sections_list + this_section.id + " ";
+			}
+		}
+	}	
+
 	if (document.getElementById("container_section").checked) {
-		selected_section.dataset.is_container = "true";
+		selected_section.dataset.contained_sections = sections_list;
 	} else {
-		delete selected_section.dataset.is_container;
+		delete selected_section.dataset.contained_sections;
 	}
+
+	
+}
+
+function getSelectedSectionDimensions() {
+	let width = parseInt(selected_section.style.width.replace("px", ""));
+	let height = parseInt(selected_section.style.height.replace("px", ""));
+	let top = parseInt(selected_section.style.top.replace("px", ""));
+	let bottom = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", ""));
+	let left = parseInt(selected_section.style.left.replace("px", ""));
+	let right = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", ""));
+	return {
+		top:top,
+		bottom:bottom,
+		left:left,
+		right:right,
+		width:width,
+		height:height
+	};
 }
 
 function pasteText(e) {
@@ -373,16 +416,22 @@ function onMouseDown4Move(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
 	
-	let top = parseInt(section.style.top.replace("px", ""));
-	let bottom = parseInt(section.style.top.replace("px", "")) + parseInt(section.style.height.replace("px", ""));
-	let left = parseInt(section.style.left.replace("px", ""));
-	let right = parseInt(section.style.left.replace("px", "")) + parseInt(section.style.width.replace("px", ""));
+	let top, bottom, left, right;
 	
 	function onMouseMove(event) {
+		top = parseInt(section.style.top.replace("px", ""));
+		bottom = parseInt(section.style.top.replace("px", "")) + parseInt(section.style.height.replace("px", ""));
+		left = parseInt(section.style.left.replace("px", ""));
+		right = parseInt(section.style.left.replace("px", "")) + parseInt(section.style.width.replace("px", ""));
+
 		move.style.left = (event.pageX - 25) + "px";
 		move.style.top = (event.pageY - 25) + "px";
 		section.style.left = (event.pageX - section.style.width.replace("px", "") / 2) - 25 + "px";
 		section.style.top = (event.pageY - section.style.height.replace("px", "") / 2) - 25 + "px";
+
+		if (section.dataset.contained_sections) {
+			moveContainedSections(top, left);
+		}		
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
@@ -390,35 +439,24 @@ function onMouseDown4Move(counter) {
 		showHandles();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
-		if (section.dataset.is_container) {
-			moveContainedSections(top, bottom, left, right);
-		}
+
 	};
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('mouseup', onMouseUp);
 }
 
-function moveContainedSections(top, bottom, left, right) {
-	let all_sections = document.querySelectorAll("section");
-	for (i = 0; i < all_sections.length; i++) {
-		let this_section = all_sections[i];
-		if (this_section !== selected_section) {
-			let section_width = parseInt(this_section.style.width.replace("px", ""));
-			let section_height = parseInt(this_section.style.height.replace("px", ""));
-			let section_top = parseInt(this_section.style.top.replace("px", ""));
-			let section_left = parseInt(this_section.style.left.replace("px", ""));
-			let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
-			let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
-			if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
-				let left_diff = section_left - left;
-				let top_diff = section_top - top;
-				let new_left = parseInt(selected_section.style.left.replace("px", ""));
-				let new_top = parseInt(selected_section.style.top.replace("px", ""));
-				this_section.style.left = new_left + left_diff + "px";
-				this_section.style.top = new_top + top_diff + "px";
-			}
-		}
-	}	
+function moveContainedSections(top, left) {
+	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
+	for (i = 0; i < contained_sections.length; i++) {
+		let this_section = document.getElementById(contained_sections[i]);
+		if (this_section === selected_section) continue;
+		let left_diff = parseInt(this_section.style.left.replace("px", "")) - left;
+		let top_diff = parseInt(this_section.style.top.replace("px", "")) - top;
+		let new_left = parseInt(selected_section.style.left.replace("px", ""));
+		let new_top = parseInt(selected_section.style.top.replace("px", ""));
+		this_section.style.left = new_left + left_diff + "px";
+		this_section.style.top = new_top + top_diff + "px";
+	}
 }
 
 
@@ -1045,34 +1083,46 @@ function styleAlignVBottom() {
 }
 
 function styleMoveRight() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let new_left = parseInt(selected_section.style.left.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("left");
 	element.value = new_left;
 	element.onchange();
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 }
 
 function styleMoveLeft() {
+	let dimensions = getSelectedSectionDimensions();
+	
 	let new_left = parseInt(selected_section.style.left.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("left");
 	element.value = new_left;
 	element.onchange();
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 }
 
 function styleMoveUp() {
+	let dimensions = getSelectedSectionDimensions();
+	
 	let new_top = parseInt(selected_section.style.top.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("top");
 	element.value = new_top;
 	element.onchange();
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 }
 
 function styleMoveDown() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let new_top = parseInt(selected_section.style.top.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("top");
 	element.value = new_top;
 	element.onchange();
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 }
 
@@ -2272,7 +2322,7 @@ function setSectionDefaultStyles(section) {
 }
 
 function loadSectionStyles() {
-	document.getElementById("container_section").checked = selected_section.dataset.is_container ? true : false;
+	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("top").value = selected_section.style.top.replace("px", "");
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
