@@ -328,6 +328,14 @@ function unselectSections() {
 	hideHandles();
 }
 
+function setContainerSection() {
+	if (document.getElementById("container_section").checked) {
+		selected_section.dataset.is_container = "true";
+	} else {
+		delete selected_section.dataset.is_container;
+	}
+}
+
 function pasteText(e) {
 	// if (e.clipboardData.files.length > 0) return; // image
 	e.preventDefault();
@@ -365,6 +373,11 @@ function onMouseDown4Move(counter) {
 	hideHandles();
 	let section = document.getElementById("section" + counter);
 	
+	let top = parseInt(section.style.top.replace("px", ""));
+	let bottom = parseInt(section.style.top.replace("px", "")) + parseInt(section.style.height.replace("px", ""));
+	let left = parseInt(section.style.left.replace("px", ""));
+	let right = parseInt(section.style.left.replace("px", "")) + parseInt(section.style.width.replace("px", ""));
+	
 	function onMouseMove(event) {
 		move.style.left = (event.pageX - 25) + "px";
 		move.style.top = (event.pageY - 25) + "px";
@@ -377,10 +390,35 @@ function onMouseDown4Move(counter) {
 		showHandles();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
-
+		if (section.dataset.is_container) {
+			moveContainedSections(top, bottom, left, right);
+		}
 	};
 	document.addEventListener('mousemove', onMouseMove);
 	document.addEventListener('mouseup', onMouseUp);
+}
+
+function moveContainedSections(top, bottom, left, right) {
+	let all_sections = document.querySelectorAll("section");
+	for (i = 0; i < all_sections.length; i++) {
+		let this_section = all_sections[i];
+		if (this_section !== selected_section) {
+			let section_width = parseInt(this_section.style.width.replace("px", ""));
+			let section_height = parseInt(this_section.style.height.replace("px", ""));
+			let section_top = parseInt(this_section.style.top.replace("px", ""));
+			let section_left = parseInt(this_section.style.left.replace("px", ""));
+			let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
+			let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
+			if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
+				let left_diff = section_left - left;
+				let top_diff = section_top - top;
+				let new_left = parseInt(selected_section.style.left.replace("px", ""));
+				let new_top = parseInt(selected_section.style.top.replace("px", ""));
+				this_section.style.left = new_left + left_diff + "px";
+				this_section.style.top = new_top + top_diff + "px";
+			}
+		}
+	}	
 }
 
 
@@ -2015,7 +2053,7 @@ function styleShowBackgroundSide(side) {
 	selected_section.classList.remove("bg_show_right");
 	selected_section.classList.remove("bg_show_top");
 	selected_section.classList.remove("bg_show_bottom");
-	if (background_show_side != "all") {
+	if (side != "all") {
 		selected_section.classList.add("bg_show_" + side);
 	}
 }
@@ -2234,6 +2272,7 @@ function setSectionDefaultStyles(section) {
 }
 
 function loadSectionStyles() {
+	document.getElementById("container_section").checked = selected_section.dataset.is_container ? true : false;
 	document.getElementById("top").value = selected_section.style.top.replace("px", "");
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
