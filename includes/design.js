@@ -435,7 +435,7 @@ function onMouseDown4Move(counter) {
 	}
 	function onMouseUp() {
 		reAlignSectionHandles();
-		loadSectionStyles();
+		loadSectionDimensions();
 		showHandles();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
@@ -446,6 +446,7 @@ function onMouseDown4Move(counter) {
 }
 
 function moveContainedSections(top, left) {
+	if (!selected_section.dataset.contained_sections) return;
 	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
 	for (i = 0; i < contained_sections.length; i++) {
 		let this_section = document.getElementById(contained_sections[i]);
@@ -481,9 +482,7 @@ function onMouseDown4ResizeTopRight(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -504,8 +503,7 @@ function onMouseDown4ResizeCenterRight(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -530,9 +528,7 @@ function onMouseDown4ResizeCenterLeft(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -557,9 +553,7 @@ function onMouseDown4ResizeCenterTop(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -581,9 +575,7 @@ function onMouseDown4ResizeCenterBottom(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -606,8 +598,7 @@ function onMouseDown4ResizeBottomRight(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -638,9 +629,7 @@ function onMouseDown4ResizeTopLeft(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -668,9 +657,7 @@ function onMouseDown4ResizeBottomLeft(counter) {
 	function onMouseUp() {
 		reAlignSectionHandles();
 		showHandles();
-		document.getElementById("left").value = section.style.left.replace("px", "");
-		document.getElementById("width").value = section.style.width.replace("px", "");
-		document.getElementById("height").value = section.style.height.replace("px", "");
+		loadSectionDimensions();
 		document.removeEventListener('mousemove', onMouseMove);
 		document.removeEventListener('mouseup', onMouseUp);
 	};
@@ -743,34 +730,6 @@ function reAlignSectionHandles() {
 }
 
 
-function rotatedRectangle(x, y, half_width, half_height, angle) {
-    let c = Math.cos(angle);
-    let s = Math.sin(angle);
-    let r1x = -half_width * c - half_height * s;
-    let r1y = -half_width * s + half_height * c;
-    let r2x =  half_width * c - half_height * s;
-    let r2y =  half_width * s + half_height * c;
-
-	let top_left_x = x + r1x;
-	let top_left_y = y + r1y;
-	
-	let top_right_x = x + r2x;
-	let top_right_y = y + r2y;
-	
-	let bottom_right_x = x - r1x;
-	let bottom_right_y = y - r1y;
-	
-	let bottom_left_x = x - r2x;
-	let bottom_left_y = y - r2y;
-
-    return {
-        top_left:{x:top_left_x, y:top_left_y},
-		top_right:{x:top_right_x, y:top_right_y},
-		bottom_right:{x:bottom_right_x, y:bottom_right_y},
-		bottom_left:{x:bottom_left_x, y:bottom_left_y}
-	};
-}
-
 function styleResizeFullWidth() {
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -780,7 +739,7 @@ function styleResizeFullWidth() {
 		selected_section.style.width = last_selected_section.style.width;
 	}
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleResizeFullHeight() {
@@ -792,7 +751,7 @@ function styleResizeFullHeight() {
 		selected_section.style.height = last_selected_section.style.height;
 	}
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleResizeHalfWidth() {
@@ -807,7 +766,7 @@ function styleResizeHalfWidth() {
 		selected_section.style.height = last_selected_section.style.height;
 	}
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleResizeHalfHeight() {
@@ -822,7 +781,7 @@ function styleResizeHalfHeight() {
 		selected_section.style.width = last_selected_section.style.width;
 	}
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleResizeQuarter() {
@@ -837,7 +796,7 @@ function styleResizeQuarter() {
 		selected_section.style.height = (parseInt(last_selected_section.style.height.replace("px", "")) / 2) + "px";
 	}
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleWidthDown() {
@@ -886,7 +845,7 @@ function styleAlignTopLeft() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignTopRight() {
@@ -906,7 +865,7 @@ function styleAlignTopRight() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignBottomLeft() {
@@ -926,7 +885,7 @@ function styleAlignBottomLeft() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignBottomRight() {
@@ -950,7 +909,7 @@ function styleAlignBottomRight() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignTopCenter() {
@@ -969,7 +928,7 @@ function styleAlignTopCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignRightCenter() {
@@ -992,7 +951,7 @@ function styleAlignRightCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignLeftCenter() {
@@ -1011,7 +970,7 @@ function styleAlignLeftCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignBottomCenter() {
@@ -1034,7 +993,7 @@ function styleAlignBottomCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignCenterCenter() {
@@ -1057,7 +1016,7 @@ function styleAlignCenterCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignHCenter() {
@@ -1074,7 +1033,7 @@ function styleAlignHCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignHLeft() {
@@ -1088,7 +1047,7 @@ function styleAlignHLeft() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignHRight() {
@@ -1106,7 +1065,7 @@ function styleAlignHRight() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignVCenter() {
@@ -1123,7 +1082,7 @@ function styleAlignVCenter() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignVTop() {
@@ -1137,7 +1096,7 @@ function styleAlignVTop() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleAlignVBottom() {
@@ -1155,7 +1114,7 @@ function styleAlignVBottom() {
 	}
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
-	loadSectionStyles();
+	loadSectionDimensions();
 }
 
 function styleMoveRight() {
@@ -1563,7 +1522,6 @@ function duplicateLinearTwoSided() {
 
 
 function duplicateLinearRowsColumns() {
-	console.log("hello");
 	if (!selected_section) return;
 	saveCurrentState();
 	let x_copies = parseInt(document.getElementById("duplicate_x_copies").value);
@@ -2390,17 +2348,23 @@ function setSectionDefaultStyles(section) {
 	section.style.columnGap = "10px";
 	section.style.columnFill = "auto";
 	section.style.columnRuleColor = "rgb(255,255,255)";
-	section.style.columnRuleWidth = "0";
+	section.style.columnRuleWidth = "1";
 	section.style.columnRuleStyle = "solid";
 	section.style.transform = "skew(0deg, 0deg)";
 	section.style.transformOrigin = "center center";
 	section.style.clipPath = "";
 }
 
-function loadSectionStyles() {
-	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
+function loadSectionDimensions() {
 	document.getElementById("top").value = selected_section.style.top.replace("px", "");
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
+	document.getElementById("width").value = selected_section.style.width.replace("px", "");
+	document.getElementById("height").value = selected_section.style.height.replace("px", "");
+	console.log("dimensions changed");
+}
+
+function loadSectionStyles() {
+	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
 	document.getElementById("font_size").value = selected_section.style.fontSize.replace("px", "");
 	document.getElementById("color").value = rgb2hex(selected_section.style.color);
@@ -2434,9 +2398,11 @@ function loadSectionStyles() {
 		}
 	}
 
-	document.getElementById("z_index").value = selected_section.style.zIndex;
+	document.getElementById("top").value = selected_section.style.top.replace("px", "");
+	document.getElementById("left").value = selected_section.style.left.replace("px", "");
 	document.getElementById("width").value = selected_section.style.width.replace("px", "");
 	document.getElementById("height").value = selected_section.style.height.replace("px", "");
+	document.getElementById("z_index").value = selected_section.style.zIndex;
 	document.getElementById("padding_top").value = selected_section.style.paddingTop.replace("px", "");
 	document.getElementById("padding_right").value = selected_section.style.paddingRight.replace("px", "");
 	document.getElementById("padding_bottom").value = selected_section.style.paddingBottom.replace("px", "");
