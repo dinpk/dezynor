@@ -20,6 +20,7 @@
 				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
 				localStorage.setItem("duplicate_offset_x", document.getElementById("duplicate_offset_x").value);
 				localStorage.setItem("duplicate_offset_y", document.getElementById("duplicate_offset_y").value);
+				localStorage.setItem("resize_offset", document.getElementById("resize_offset").value);
 				localStorage.setItem("move_offset", document.getElementById("move_offset").value);
 				localStorage.setItem("rotate_offset", document.getElementById("rotate_offset").value);
 				localStorage.setItem("font_size_change", document.getElementById("font_size_change").value);
@@ -39,6 +40,7 @@
 				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
 				document.getElementById("duplicate_offset_x").value = localStorage.getItem("duplicate_offset_x");
 				document.getElementById("duplicate_offset_y").value = localStorage.getItem("duplicate_offset_y");
+				document.getElementById("resize_offset").value = localStorage.getItem("resize_offset");
 				document.getElementById("move_offset").value = localStorage.getItem("move_offset");
 				document.getElementById("rotate_offset").value = localStorage.getItem("rotate_offset");
 				document.getElementById("font_size_change").value = localStorage.getItem("font_size_change");
@@ -125,6 +127,10 @@
 							<input type="number" id="duplicate_offset_x" value="10" required> x<br>
 							<input type="number" id="duplicate_offset_y" value="0" required> y
 						</td>
+					</tr>
+					<tr>
+						<td>Resize offset</td>
+						<td><input type="number" id="resize_offset" value="10" required></td>
 					</tr>
 					<tr>
 						<td>Move offset</td>

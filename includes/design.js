@@ -840,6 +840,38 @@ function styleResizeQuarter() {
 	loadSectionStyles();
 }
 
+function styleWidthDown() {
+	let new_width = parseInt(selected_section.style.width.replace("px", "")) -  parseInt(localStorage.getItem("resize_offset"));
+	let element = document.getElementById("width");
+	element.value = new_width;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleWidthUp() {
+	let new_width = parseInt(selected_section.style.width.replace("px", "")) +  parseInt(localStorage.getItem("resize_offset"));
+	let element = document.getElementById("width");
+	element.value = new_width;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleHeightUp() {
+	let new_height = parseInt(selected_section.style.height.replace("px", "")) -  parseInt(localStorage.getItem("resize_offset"));
+	let element = document.getElementById("height");
+	element.value = new_height;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
+function styleHeightDown() {
+	let new_height = parseInt(selected_section.style.height.replace("px", "")) +  parseInt(localStorage.getItem("resize_offset"));
+	let element = document.getElementById("height");
+	element.value = new_height;
+	element.onchange();
+	reAlignSectionHandles();
+}
+
 
 function styleAlignTopLeft() {
 	let dimensions = getSelectedSectionDimensions();

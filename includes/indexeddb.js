@@ -20,6 +20,7 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("show_background_images", "true");
 			localStorage.setItem("duplicate_offset_x", "10");
 			localStorage.setItem("duplicate_offset_y", "0");
+			localStorage.setItem("resize_offset", "10");
 			localStorage.setItem("move_offset", "2");
 			localStorage.setItem("rotate_offset", "1");
 			localStorage.setItem("font_size_change", "3");

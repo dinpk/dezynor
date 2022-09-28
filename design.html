@@ -131,11 +131,19 @@
 					<table class="section_table">
 						<tr>
 							<td>Width</td>
-							<td><input id="width" type="number" onchange="styleWidth(this);" step="10.0"></td>
+							<td>
+								<button onclick="styleWidthDown()">◄</button> 
+								<input id="width" type="number" onchange="styleWidth(this);" step="10.0">
+								<button onclick="styleWidthUp()">►</button> 
+							</td>
 						</tr>
 						<tr>
 							<td>Height</td>
-							<td><input id="height" type="number" onchange="styleHeight(this);" step="10.0"></td>
+							<td>
+								<button onclick="styleHeightDown()">▼</button> 
+								<input id="height" type="number" onchange="styleHeight(this);" step="10.0">
+								<button onclick="styleHeightUp()">▲</button> 
+							</td>
 						</tr>
 						<tr>
 							<td>Top</td>
