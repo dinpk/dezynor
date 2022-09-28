@@ -842,6 +842,8 @@ function styleResizeQuarter() {
 
 
 function styleAlignTopLeft() {
+	let dimensions = getSelectedSectionDimensions();
+	
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.top = document.getElementById("wrapper").style.top;
@@ -850,12 +852,14 @@ function styleAlignTopLeft() {
 		selected_section.style.top = last_selected_section.style.top;
 		selected_section.style.left = last_selected_section.style.left;
 	}
-
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignTopRight() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.top = document.getElementById("wrapper").style.top;
@@ -868,11 +872,14 @@ function styleAlignTopRight() {
 		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomLeft() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -885,11 +892,14 @@ function styleAlignBottomLeft() {
 		let new_top = (last_selected_section_top + last_selected_section_height) - parseInt(selected_section.style.height.replace("px", ""));
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomRight() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
@@ -906,11 +916,14 @@ function styleAlignBottomRight() {
 		let new_top = (last_selected_section_top + last_selected_section_height) - parseInt(selected_section.style.height.replace("px", ""));
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignTopCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.top = document.getElementById("wrapper").style.top;
@@ -922,11 +935,14 @@ function styleAlignTopCenter() {
 		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignRightCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
@@ -942,11 +958,14 @@ function styleAlignRightCenter() {
 		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignLeftCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -958,11 +977,14 @@ function styleAlignLeftCenter() {
 		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignBottomCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
@@ -978,11 +1000,14 @@ function styleAlignBottomCenter() {
 		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignCenterCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
@@ -998,11 +1023,14 @@ function styleAlignCenterCenter() {
 		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
@@ -1012,22 +1040,28 @@ function styleAlignHCenter() {
 		let new_left = last_selected_section_left + (parseInt(last_selected_section.style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHLeft() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.left = document.getElementById("wrapper").style.left;
 	} else {
 		selected_section.style.left = last_selected_section.style.left;
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignHRight() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", ""))  -   parseInt(selected_section.style.width.replace("px", ""));
@@ -1038,11 +1072,14 @@ function styleAlignHRight() {
 		let new_left =  (last_selected_section_left + last_selected_section_width) - parseInt(selected_section.style.width.replace("px", ""));
 		selected_section.style.left = parseInt(new_left) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVCenter() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
@@ -1052,22 +1089,28 @@ function styleAlignVCenter() {
 		let new_top = last_selected_section_top + (parseInt(last_selected_section.style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVTop() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		selected_section.style.top = document.getElementById("wrapper").style.top;
 	} else {
 		selected_section.style.top = last_selected_section.style.top;
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
 
 function styleAlignVBottom() {
+	let dimensions = getSelectedSectionDimensions();
+
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
 		let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
@@ -1078,6 +1121,7 @@ function styleAlignVBottom() {
 		let new_top = last_selected_section_top + last_selected_section_height - parseInt(selected_section.style.height.replace("px", ""));
 		selected_section.style.top = parseInt(new_top) + "px";
 	}
+	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 	loadSectionStyles();
 }
