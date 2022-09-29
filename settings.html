@@ -53,6 +53,33 @@
 				
 			}
 			
+			async function deleteUnusedImages() {
+				let all_images = await idbGetAllItems("dezynor_images");
+				let all_designs = await idbGetAllItems("dezynor_designs");
+				
+				let used;
+				let image_key;
+				for (i = 0; i < all_images.length; i++) {
+				
+					image_key = all_images[i].image_key;
+					used = false;
+					
+					for (d = 0; d < all_designs.length; d++) {
+						let design_data = all_designs[d].value.data;
+						if (design_data.toLowerCase().indexOf(image_key) > -1) {
+							used = true;
+							break;
+						}
+					}
+					
+					if (used == false) {
+						await idbRemoveItem("dezynor_images", image_key);
+					}
+					
+				}
+				showMessage("Unused images deleted successfully", "DarkGreen");
+			}
+			
 		</script>
 		<style>
 		
@@ -88,81 +115,93 @@
 						</td>
 					</tr>
 				</table>
+
+				<hr>
+
+				<br>
+				<button onclick="deleteUnusedImages();">Delete unused images</button>
+				<br>
+				<br>
+
 				<hr>
 				<h1>Settings</h1>
-				<form onsubmit="event.preventDefault();saveSettings();">
-				<table id="settings">
-					<tr>
-						<td>Paste result</td>
-						<td>
-							<select id="paste_result">
-								<option value="plain">Plain text</option>
-								<option value="plain_with_lines">Plain text with line breaks</option>
-								<option value="html_without_styles">HTML without styles</option>
-								<option value="as_it_is">As it is</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>Save design every</td>
-						<td>
-							<input type="checkbox" id="automatically_save"> 
-							<input type="number" id="automatically_save_after" value="30" min="10" required> seconds<br>
-						</td>
-					</tr>
-					<tr>
-						<td>Max image upload size</td>
-						<td>
-							<input type="number" id="max_upload_width" value="1000" min="200" required> width<br>
-							<input type="number" id="max_upload_height" value="1000" min="200" required> height
-						</td>
-					</tr>
-					<tr>
-						<td>Show background images</td>
-						<td><input type="checkbox" id="show_background_images"></td>
-					</tr>
-					<tr>
-						<td>Duplicate offset</td>
-						<td>
-							<input type="number" id="duplicate_offset_x" value="10" required> x<br>
-							<input type="number" id="duplicate_offset_y" value="0" required> y
-						</td>
-					</tr>
-					<tr>
-						<td>Resize offset</td>
-						<td><input type="number" id="resize_offset" value="10" required></td>
-					</tr>
-					<tr>
-						<td>Move offset</td>
-						<td><input type="number" id="move_offset" value="2" required></td>
-					</tr>
-					<tr>
-						<td>Rotate offset</td>
-						<td><input type="number" id="rotate_offset" value="2" required></td>
-					</tr>
-					<tr>
-						<td>Font size</td>
-						<td><input type="number" id="font_size_change" value="3" required></td>
-					</tr>
-					<tr>
-						<td>Line height</td>
-						<td><input type="number" id="line_height_change" value="3" required></td>
-					</tr>
-					<tr>
-						<td>Word spacing</td>
-						<td><input type="number" id="word_spacing_change" value="1" required></td>
-					</tr>
-					<tr>
-						<td>Show multiple dash panels</td>
-						<td><input type="checkbox" id="show_multiple_dash_panels"></td>
-					</tr>
 
+
+				<form onsubmit="event.preventDefault();saveSettings();">
 					
-				</table>
-				<p>
-					<input type="submit" value="Save">
-				</p>
+					<table id="settings">
+						<tr>
+							<td>Paste result</td>
+							<td>
+								<select id="paste_result">
+									<option value="plain">Plain text</option>
+									<option value="plain_with_lines">Plain text with line breaks</option>
+									<option value="html_without_styles">HTML without styles</option>
+									<option value="as_it_is">As it is</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Save design every</td>
+							<td>
+								<input type="checkbox" id="automatically_save"> 
+								<input type="number" id="automatically_save_after" value="30" min="10" required> seconds<br>
+							</td>
+						</tr>
+						<tr>
+							<td>Max image upload size</td>
+							<td>
+								<input type="number" id="max_upload_width" value="1000" min="200" required> width<br>
+								<input type="number" id="max_upload_height" value="1000" min="200" required> height
+							</td>
+						</tr>
+						<tr>
+							<td>Show background images</td>
+							<td><input type="checkbox" id="show_background_images"></td>
+						</tr>
+						<tr>
+							<td>Duplicate offset</td>
+							<td>
+								<input type="number" id="duplicate_offset_x" value="10" required> x<br>
+								<input type="number" id="duplicate_offset_y" value="0" required> y
+							</td>
+						</tr>
+						<tr>
+							<td>Resize offset</td>
+							<td><input type="number" id="resize_offset" value="10" required></td>
+						</tr>
+						<tr>
+							<td>Move offset</td>
+							<td><input type="number" id="move_offset" value="2" required></td>
+						</tr>
+						<tr>
+							<td>Rotate offset</td>
+							<td><input type="number" id="rotate_offset" value="2" required></td>
+						</tr>
+						<tr>
+							<td>Font size</td>
+							<td><input type="number" id="font_size_change" value="3" required></td>
+						</tr>
+						<tr>
+							<td>Line height</td>
+							<td><input type="number" id="line_height_change" value="3" required></td>
+						</tr>
+						<tr>
+							<td>Word spacing</td>
+							<td><input type="number" id="word_spacing_change" value="1" required></td>
+						</tr>
+						<tr>
+							<td>Show multiple dash panels</td>
+							<td><input type="checkbox" id="show_multiple_dash_panels"></td>
+						</tr>
+
+						
+					</table>
+					<p>
+						<input type="submit" value="Save">
+					</p>
 				</form>
+				<div id="temp"></div>
 			</div>
 		</main>
 	</body>
