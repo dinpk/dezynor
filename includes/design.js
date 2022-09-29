@@ -16,7 +16,6 @@ window.onload = function() {
 let design_id = generateDeisgnId();
 let design_object;
 let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
-let section_number = 0;
 let selected_section;
 let last_selected_section;
 let move;
@@ -211,18 +210,24 @@ function addSection() {
 }
 
 function getNewSectionNumber() {
-	let section_ids = [];
-	let all_sections = document.querySelectorAll("section");
-	for (let i = 0; i < all_sections.length; i++) {
-		section_ids.push(all_sections[i].id);
-	}
-
 	let new_section_number = 1;
-	if (section_ids.length > 0) {
-		section_ids.reverse();
-		new_section_number = section_ids[0].replace("section", "");
+	if (document.getElementById("wrapper").dataset.last_section) { // new way
+		new_section_number = parseInt(document.getElementById("wrapper").dataset.last_section);
 		new_section_number++;
+	} else { // old way
+		let section_ids = [];
+		let all_sections = document.querySelectorAll("section");
+		for (let i = 0; i < all_sections.length; i++) {
+			section_ids.push(all_sections[i].id);
+		}
+
+		if (section_ids.length > 0) {
+			section_ids.reverse();
+			new_section_number = section_ids[0].replace("section", "");
+			new_section_number++;
+		}
 	}
+	document.getElementById("wrapper").dataset.last_section = new_section_number;
 	return new_section_number;
 }
 
@@ -232,8 +237,8 @@ function selectSection(counter) {
 	last_selected_section = selected_section;
 
 	let new_selected_id = "section" + counter;
-
-	if (selected_section && selected_section.id == new_selected_id && section_number > 1) {
+	let section_count = document.querySelectorAll("section").length;
+	if (selected_section && selected_section.id == new_selected_id && section_count > 1) {
 		// console.log("selecting same session " + new_selected_id);
 		return;
 	}
@@ -1713,6 +1718,7 @@ async function loadDezyn() {
 		
 
 	} else {
+		document.getElementById("wrapper").dataset.last_section = "1";
 		styleWrapper();
 		addHandles();
 		addSection();
@@ -2360,7 +2366,6 @@ function loadSectionDimensions() {
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
 	document.getElementById("width").value = selected_section.style.width.replace("px", "");
 	document.getElementById("height").value = selected_section.style.height.replace("px", "");
-	console.log("dimensions changed");
 }
 
 function loadSectionStyles() {
