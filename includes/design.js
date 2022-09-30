@@ -268,22 +268,45 @@ function duplicateSection() {
 	
 	if (!(selected_section)) return;
 	
+	let original_section = selected_section;
+	
+	// duplicate section
 	section_number = getNewSectionNumber();
-
-	let section_id = "section" + section_number;
+	let duplicated_section_id = "section" + section_number;
+	let duplicated_section = selected_section.cloneNode(true);
+	duplicated_section.setAttribute("id", duplicated_section_id);
+	duplicated_section.setAttribute("onclick", "selectSection('" + section_number + "');");
+	document.getElementById("wrapper").appendChild(duplicated_section);
+	delay(500);
+	selectSection(section_number);
+	selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
+	selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
+	reAlignSectionHandles();
 	
-	let section = selected_section.cloneNode(true);
-	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_number + "');");
-	document.getElementById("wrapper").appendChild(section);
-	
-	setTimeout(function() { 
-		selectSection(section_number);
-		selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
-		selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
-		reAlignSectionHandles();
-	}, 100);
-
+	// duplicate contained sections
+	if (original_section.dataset.contained_sections) {
+		let contained_sections = original_section.dataset.contained_sections.trim().split(" ");
+		let top = parseInt(original_section.style.top.replace("px", ""));
+		let left = parseInt(original_section.style.left.replace("px", ""));
+		let sections_list = ""
+		for (i = 0; i < contained_sections.length; i++) {
+			let original_contained_section = document.getElementById(contained_sections[i]);
+			let this_section = original_contained_section.cloneNode(true);
+			let this_section_number = getNewSectionNumber();
+			let this_section_id = "section" + this_section_number;
+			this_section.setAttribute("id", this_section_id);
+			this_section.setAttribute("onclick", "selectSection('" + this_section_number + "');");
+			document.getElementById("wrapper").appendChild(this_section);			
+			let left_diff = parseInt(this_section.style.left.replace("px", "")) - left;
+			let top_diff = parseInt(this_section.style.top.replace("px", "")) - top;
+			let new_left = parseInt(selected_section.style.left.replace("px", ""));
+			let new_top = parseInt(selected_section.style.top.replace("px", ""));
+			this_section.style.left = new_left + left_diff + "px";
+			this_section.style.top = new_top + top_diff + "px";
+			sections_list = sections_list + this_section_id + " ";
+		}
+		selected_section.dataset.contained_sections = sections_list;
+	}
 
 }
 
@@ -455,7 +478,7 @@ function moveContainedSections(top, left) {
 	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
 	for (i = 0; i < contained_sections.length; i++) {
 		let this_section = document.getElementById(contained_sections[i]);
-		if (this_section === selected_section) continue;
+		if (!this_section || this_section === selected_section) continue;
 		let left_diff = parseInt(this_section.style.left.replace("px", "")) - left;
 		let top_diff = parseInt(this_section.style.top.replace("px", "")) - top;
 		let new_left = parseInt(selected_section.style.left.replace("px", ""));
@@ -1697,12 +1720,10 @@ async function loadDezyn() {
 				let first_section_number = all_sections[0].id.replace("section", "");
 				addHandles();
 				selectSection(first_section_number);
-				let last_section_number = all_sections[all_sections.length -1].id.replace("section", "");
-				section_number = last_section_number;
 			}
 			document.getElementById("select_folders").value = object.folder;
 			
-		}).then(function() { // add new object URLs to sections
+		}).then(function() { // add fresh object URLs to sections
 
 			let all_sections = document.querySelectorAll("section");
 			for (i = 0; i < all_sections.length; i++) {
