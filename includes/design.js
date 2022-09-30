@@ -277,14 +277,27 @@ function duplicateSection() {
 	duplicated_section.setAttribute("id", duplicated_section_id);
 	duplicated_section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	document.getElementById("wrapper").appendChild(duplicated_section);
-	delay(500);
+	//delay(500);
 	selectSection(section_number);
 	selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
 	selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
-	reAlignSectionHandles();
 	
+	moveDuplicatedContainedSections(original_section);
+
+	reAlignSectionHandles();
+
+}
+
+
+
+function moveDuplicatedContainedSections(original_section) {
 	// duplicate contained sections
 	if (original_section.dataset.contained_sections) {
+		
+		// move duplicated section out of original section to avoid contained sections confusion
+		selected_section.style.top = parseInt(original_section.style.top.replace("px", "")) + parseInt(original_section.style.height.replace("px", "")) + "px";
+		selected_section.style.left = parseInt(original_section.style.left.replace("px", "")) + "px";
+		
 		let contained_sections = original_section.dataset.contained_sections.trim().split(" ");
 		let top = parseInt(original_section.style.top.replace("px", ""));
 		let left = parseInt(original_section.style.left.replace("px", ""));
@@ -296,7 +309,7 @@ function duplicateSection() {
 			let this_section_id = "section" + this_section_number;
 			this_section.setAttribute("id", this_section_id);
 			this_section.setAttribute("onclick", "selectSection('" + this_section_number + "');");
-			document.getElementById("wrapper").appendChild(this_section);			
+			document.getElementById("wrapper").appendChild(this_section);
 			let left_diff = parseInt(this_section.style.left.replace("px", "")) - left;
 			let top_diff = parseInt(this_section.style.top.replace("px", "")) - top;
 			let new_left = parseInt(selected_section.style.left.replace("px", ""));
@@ -306,9 +319,22 @@ function duplicateSection() {
 			sections_list = sections_list + this_section_id + " ";
 		}
 		selected_section.dataset.contained_sections = sections_list;
-	}
 
+		
+		// update container sections width new list
+		let duplicated_contained_section_ids = sections_list.trim().split(" ");
+		console.log(duplicated_contained_section_ids);
+		for (k = 0; k < duplicated_contained_section_ids.length; k++) {
+			let duplicated_contained_section = document.getElementById(duplicated_contained_section_ids[k]);
+			console.log(duplicated_contained_section.id);
+			if (duplicated_contained_section.dataset.contained_sections) {
+				setContainerSection(duplicated_contained_section);
+			}
+		}
+
+	}
 }
+
 
 function removeSection() {
 	if (!(selected_section)) return;
@@ -356,9 +382,9 @@ function unselectSections() {
 	hideHandles();
 }
 
-function setContainerSection() {
+function setContainerSection(section) {
 	
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(section);
 	let top = dimensions.top
 	let bottom = dimensions.bottom
 	let left = dimensions.left
@@ -368,7 +394,7 @@ function setContainerSection() {
 	let all_sections = document.querySelectorAll("section");
 	for (i = 0; i < all_sections.length; i++) {
 		let this_section = all_sections[i];
-		if (this_section !== selected_section) {
+		if (this_section !== section) {
 			let section_width = parseInt(this_section.style.width.replace("px", ""));
 			let section_height = parseInt(this_section.style.height.replace("px", ""));
 			let section_top = parseInt(this_section.style.top.replace("px", ""));
@@ -382,21 +408,21 @@ function setContainerSection() {
 	}	
 
 	if (document.getElementById("container_section").checked) {
-		selected_section.dataset.contained_sections = sections_list;
+		section.dataset.contained_sections = sections_list;
 	} else {
-		delete selected_section.dataset.contained_sections;
+		delete section.dataset.contained_sections;
 	}
 
 	
 }
 
-function getSelectedSectionDimensions() {
-	let width = parseInt(selected_section.style.width.replace("px", ""));
-	let height = parseInt(selected_section.style.height.replace("px", ""));
-	let top = parseInt(selected_section.style.top.replace("px", ""));
-	let bottom = parseInt(selected_section.style.top.replace("px", "")) + parseInt(selected_section.style.height.replace("px", ""));
-	let left = parseInt(selected_section.style.left.replace("px", ""));
-	let right = parseInt(selected_section.style.left.replace("px", "")) + parseInt(selected_section.style.width.replace("px", ""));
+function getSectionDimensions(section) {
+	let width = parseInt(section.style.width.replace("px", ""));
+	let height = parseInt(section.style.height.replace("px", ""));
+	let top = parseInt(section.style.top.replace("px", ""));
+	let bottom = parseInt(section.style.top.replace("px", "")) + parseInt(section.style.height.replace("px", ""));
+	let left = parseInt(section.style.left.replace("px", ""));
+	let right = parseInt(section.style.left.replace("px", "")) + parseInt(section.style.width.replace("px", ""));
 	return {
 		top:top,
 		bottom:bottom,
@@ -861,7 +887,7 @@ function styleHeightDown() {
 
 
 function styleAlignTopLeft() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 	
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -877,7 +903,7 @@ function styleAlignTopLeft() {
 }
 
 function styleAlignTopRight() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -897,7 +923,7 @@ function styleAlignTopRight() {
 }
 
 function styleAlignBottomLeft() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -917,7 +943,7 @@ function styleAlignBottomLeft() {
 }
 
 function styleAlignBottomRight() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -941,7 +967,7 @@ function styleAlignBottomRight() {
 }
 
 function styleAlignTopCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -960,7 +986,7 @@ function styleAlignTopCenter() {
 }
 
 function styleAlignRightCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -983,7 +1009,7 @@ function styleAlignRightCenter() {
 }
 
 function styleAlignLeftCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1002,7 +1028,7 @@ function styleAlignLeftCenter() {
 }
 
 function styleAlignBottomCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1025,7 +1051,7 @@ function styleAlignBottomCenter() {
 }
 
 function styleAlignCenterCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1048,7 +1074,7 @@ function styleAlignCenterCenter() {
 }
 
 function styleAlignHCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1065,7 +1091,7 @@ function styleAlignHCenter() {
 }
 
 function styleAlignHLeft() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1079,7 +1105,7 @@ function styleAlignHLeft() {
 }
 
 function styleAlignHRight() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1097,7 +1123,7 @@ function styleAlignHRight() {
 }
 
 function styleAlignVCenter() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1114,7 +1140,7 @@ function styleAlignVCenter() {
 }
 
 function styleAlignVTop() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1128,7 +1154,7 @@ function styleAlignVTop() {
 }
 
 function styleAlignVBottom() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let align_to = document.getElementById("align_to").value;
 	if (align_to == "page" || !last_selected_section) {
@@ -1146,7 +1172,7 @@ function styleAlignVBottom() {
 }
 
 function styleMoveRight() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let new_left = parseInt(selected_section.style.left.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("left");
@@ -1157,7 +1183,7 @@ function styleMoveRight() {
 }
 
 function styleMoveLeft() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 	
 	let new_left = parseInt(selected_section.style.left.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("left");
@@ -1168,7 +1194,7 @@ function styleMoveLeft() {
 }
 
 function styleMoveUp() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 	
 	let new_top = parseInt(selected_section.style.top.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("top");
@@ -1179,7 +1205,7 @@ function styleMoveUp() {
 }
 
 function styleMoveDown() {
-	let dimensions = getSelectedSectionDimensions();
+	let dimensions = getSectionDimensions(selected_section);
 
 	let new_top = parseInt(selected_section.style.top.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
 	let element = document.getElementById("top");
