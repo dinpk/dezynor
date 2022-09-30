@@ -277,7 +277,6 @@ function duplicateSection() {
 	duplicated_section.setAttribute("id", duplicated_section_id);
 	duplicated_section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	document.getElementById("wrapper").appendChild(duplicated_section);
-	//delay(500);
 	selectSection(section_number);
 	selected_section.style.left = parseInt(selected_section.style.left.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_x")) + "px";
 	selected_section.style.top = parseInt(selected_section.style.top.replace("px", "")) + parseInt(localStorage.getItem("duplicate_offset_y")) + "px";
@@ -291,7 +290,7 @@ function duplicateSection() {
 
 
 function moveDuplicatedContainedSections(original_section) {
-	// duplicate contained sections
+
 	if (original_section.dataset.contained_sections) {
 		
 		// move duplicated section out of original section to avoid contained sections confusion
@@ -318,20 +317,24 @@ function moveDuplicatedContainedSections(original_section) {
 			this_section.style.top = new_top + top_diff + "px";
 			sections_list = sections_list + this_section_id + " ";
 		}
-		selected_section.dataset.contained_sections = sections_list;
+		selected_section.dataset.contained_sections = sections_list; // duplicated is now selected
 
-		
-		// update container sections width new list
-		let duplicated_contained_section_ids = sections_list.trim().split(" ");
-		console.log(duplicated_contained_section_ids);
-		for (k = 0; k < duplicated_contained_section_ids.length; k++) {
-			let duplicated_contained_section = document.getElementById(duplicated_contained_section_ids[k]);
-			console.log(duplicated_contained_section.id);
-			if (duplicated_contained_section.dataset.contained_sections) {
-				setContainerSection(duplicated_contained_section);
-			}
+		updateContainerSections();
+	}
+}
+
+function updateContainerSections() {
+	let section_ids = [];
+	let all_sections = document.querySelectorAll("section");
+	for (i = 0; i < all_sections.length; i++) {
+		section_ids.push(all_sections[i].id);
+	}
+	
+	for (k = 0; k < section_ids.length; k++) {
+		let section = document.getElementById(section_ids[k]);
+		if (section.dataset.contained_sections) {
+			setContainerSection(section);
 		}
-
 	}
 }
 
@@ -382,6 +385,16 @@ function unselectSections() {
 	hideHandles();
 }
 
+function toggleContainerSection() {
+	if (!selected_section) return;
+	
+	if (document.getElementById("container_section").checked) {
+		setContainerSection(selected_section);
+	} else {
+		delete selected_section.dataset.contained_sections;
+	}
+}
+
 function setContainerSection(section) {
 	
 	let dimensions = getSectionDimensions(section);
@@ -406,14 +419,8 @@ function setContainerSection(section) {
 			}
 		}
 	}	
+	section.dataset.contained_sections = sections_list;
 
-	if (document.getElementById("container_section").checked) {
-		section.dataset.contained_sections = sections_list;
-	} else {
-		delete section.dataset.contained_sections;
-	}
-
-	
 }
 
 function getSectionDimensions(section) {
