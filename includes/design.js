@@ -1272,22 +1272,22 @@ function styleLayout(parameters) {
 	let boxes = parameters.split(",");
 	for (let k = 0; k < boxes.length; k++) {
 		let attributes = boxes[k].split("|");
-		
+		let x, y, width, height;
 		if (gutter == "no") {
-			let x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 2);
-			let y = (attributes[1] * wrapper_height / 100) - (gutter_y / 2);
-			let width = (attributes[2] * wrapper_width / 100) + (gutter_x);
-			let height = (attributes[3] * wrapper_height / 100) + (gutter_y);
+			x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 2);
+			y = (attributes[1] * wrapper_height / 100) - (gutter_y / 2);
+			width = (attributes[2] * wrapper_width / 100) + (gutter_x);
+			height = (attributes[3] * wrapper_height / 100) + (gutter_y);
 		} else if (gutter == "min") {
-			let x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 3.5);
-			let y = (attributes[1] * wrapper_height / 100) - (gutter_y / 3.5);
-			let width = (attributes[2] * wrapper_width / 100) + (gutter_x / 2);
-			let height = (attributes[3] * wrapper_height / 100) + (gutter_y / 2);
+			x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 3.5);
+			y = (attributes[1] * wrapper_height / 100) - (gutter_y / 3.5);
+			width = (attributes[2] * wrapper_width / 100) + (gutter_x / 2);
+			height = (attributes[3] * wrapper_height / 100) + (gutter_y / 2);
 		} else if (gutter == "max") {
-			let x = (attributes[0].trim() * wrapper_width / 100);
-			let y = (attributes[1] * wrapper_height / 100);
-			let width = (attributes[2] * wrapper_width / 100);
-			let height = (attributes[3] * wrapper_height / 100);
+			x = (attributes[0].trim() * wrapper_width / 100);
+			y = (attributes[1] * wrapper_height / 100);
+			width = (attributes[2] * wrapper_width / 100);
+			height = (attributes[3] * wrapper_height / 100);
 		}
 
 		let section_id = section_ids.splice(0, 1);

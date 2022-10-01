@@ -305,7 +305,7 @@
 						<tr>
 							<td style="display:none;">Shapes</td>
 							<td colspan="2">
-							<footer style="line-height:200%;">
+							<footer style="line-height:200%;overflow:auto;max-height:70vh">
 								<p onclick="setShape('');" style="font-size:120%;cursor:pointer;padding:5px;">X</p> 
 								<textarea id="clip_path" type="text" onchange="styleClipPath(this);" placeholder="Clip path" style="width:100%;max-width:100%;padding:2px 4px 2px 4px;" title="Clip path"></textarea>
 								<h5>Lines</h5>
@@ -445,12 +445,13 @@
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(24% 0px, 0px 75%, 49.7% 100%, 49.7% 10%, 50.3% 10%, 50.3% 100%, 100% 75%, 76% 0px, 50.3% 10%, 49.7% 10%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(50% 0%,70% 15%,70% 2%,90% 2%,90% 30%,100% 40%,100% 100%,65% 100%,65% 65%,35% 65%,35% 100%,0% 100%,0% 40%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setShape(this.querySelector('span').getAttribute('style'));"><span class="shape" style="clip-path:polygon(25% 0%,70% 0%,40% 35%,95% 35%,20% 100%,40% 55%,0% 55%)">&nbsp;</span></span>
-								
+								<br><br><hr>
+								<p class="tip_note"><b>Note:</b> border and box-shadow features can not be used with shapes. Also set background color of the box first to see the effect.</p>
 							</footer>
 							</td>
 						</tr>
 					</table>
-					<p class="tip_note">Note: border and box-shadow features can not be used with shapes. Also set background color of the box first to see the effect.</p>
+					
 				</div>
 
 				<div id="font_section">
