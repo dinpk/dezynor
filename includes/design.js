@@ -1,7 +1,7 @@
 window.onload = function() {
 	loadSelectValues();
 	loadDezyn();
-	setRandomWrapperColor();
+	styleRandomWrapperBackgroundColor();
 	showSectionPanel('box_section');
 
 	if (localStorage.getItem("automatically_save") == "true") {
@@ -202,7 +202,7 @@ function addSection() {
 	setSectionDefaultStyles(document.getElementById(section_id));
 	selectSection(section_number);
 	document.getElementById(section_id).focus();
-	styleAlignCenterCenter();
+	alignSection('centerCenter');
 
 }
 
@@ -1078,52 +1078,44 @@ function alignSection(type) {
 }
 
 
-function moveSection(type) {}
+function shiftSection(type) {
+	if (!selected_section) return;
 
-
-function styleMoveRight() {
 	let dimensions = getSectionDimensions(selected_section);
+	let element, value;
 
-	let new_left = parseInt(selected_section.style.left.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
-	let element = document.getElementById("left");
-	element.value = new_left;
-	element.onchange();
-	moveContainedSections(dimensions.top, dimensions.left);
-	reAlignSectionHandles();
-}
+	switch (type) {
+		case "right":
+			value = parseInt(selected_section.style.left.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
+			element = document.getElementById("left");
+			element.value = value;
+			element.onchange();
+			break;
+		case "left":
+			value = parseInt(selected_section.style.left.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
+			element = document.getElementById("left");
+			element.value = value;
+			element.onchange();
+			break;
+		case "up":
+			value = parseInt(selected_section.style.top.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
+			element = document.getElementById("top");
+			element.value = value;
+			element.onchange();
+			break;
+		case "down":
+			value = parseInt(selected_section.style.top.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
+			element = document.getElementById("top");
+			element.value = value;
+			element.onchange();
+			break;
 
-function styleMoveLeft() {
-	let dimensions = getSectionDimensions(selected_section);
+	}	
 	
-	let new_left = parseInt(selected_section.style.left.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
-	let element = document.getElementById("left");
-	element.value = new_left;
-	element.onchange();
 	moveContainedSections(dimensions.top, dimensions.left);
 	reAlignSectionHandles();
 }
 
-function styleMoveUp() {
-	let dimensions = getSectionDimensions(selected_section);
-	
-	let new_top = parseInt(selected_section.style.top.replace("px", "")) -  parseInt(localStorage.getItem("move_offset"));
-	let element = document.getElementById("top");
-	element.value = new_top;
-	element.onchange();
-	moveContainedSections(dimensions.top, dimensions.left);
-	reAlignSectionHandles();
-}
-
-function styleMoveDown() {
-	let dimensions = getSectionDimensions(selected_section);
-
-	let new_top = parseInt(selected_section.style.top.replace("px", "")) +  parseInt(localStorage.getItem("move_offset"));
-	let element = document.getElementById("top");
-	element.value = new_top;
-	element.onchange();
-	moveContainedSections(dimensions.top, dimensions.left);
-	reAlignSectionHandles();
-}
 
 function styleRotateRight() {
 	document.getElementById("transform_type").value = "rotate";
@@ -1134,7 +1126,6 @@ function styleRotateRight() {
 	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) +  parseInt(localStorage.getItem("rotate_offset"));
 	element.value = new_rotate;
 	element.onchange();
-	showHandles();
 }
 
 function styleRotateLeft() {
@@ -1146,7 +1137,6 @@ function styleRotateLeft() {
 	let new_rotate = parseInt(transform_degree[0].replace("rotate(", "").replace("deg)", "")) -  parseInt(localStorage.getItem("rotate_offset"));
 	element.value = new_rotate;
 	element.onchange();
-	showHandles();
 }
 
 
@@ -1284,10 +1274,6 @@ function hidePopupPanel() {
 	for (let i = 0; i < sub_panels.length; i++) {
 		sub_panels[i].style.display = "none";
 	}
-}
-
-function removeSectionShape(){
-	document.getElementById("clip_path").value = "";
 }
 
 function splitSectionOnSpaces() {
@@ -1773,7 +1759,7 @@ function styleWrapper() {
 
 }
 
-function setRandomWrapperColor() {
+function styleRandomWrapperBackgroundColor() {
 	let random_color = getRandomRGBColor(document.getElementById("wrapper_random_range").value);
 	document.getElementById("wrapper").style.backgroundColor = random_color;
 	document.getElementById("wrapper_background_color").value = rgb2hex(random_color);
@@ -1783,16 +1769,6 @@ function setRandomWrapperColor() {
 function removeWrapperBackgroundColor() {
 	document.getElementById("wrapper_background_color").value = "#000001";
 	document.getElementById("wrapper").style.backgroundColor = "rgb(0, 0, 1)";
-}
-
-function removeWrapperBackgroundImage1() {
-	document.getElementById("wrapper_bg_image1").value = "";
-	styleWrapper();
-}
-
-function removeWrapperBackgroundImage2() {
-	document.getElementById("wrapper_bg_image2").value = "";
-	styleWrapper();
 }
 
 function loadWrapperStyles() {
@@ -1999,36 +1975,182 @@ function setSectionStyle(style, element, value = null) {
 			}
 			break;
 
-	} // switch
-} //setSectionStyle
-
-
-function removeSectionStyle() {}
-function setRandomSectionStyle() {}
-function setSectionClass() {}
-function removeSectionClass() {}
-
-
-
-function styleBackgroundColorSameAsWrapper() {
-	let element = document.getElementById("background_color");
-	element.value = document.getElementById("wrapper_background_color").value;
-	element.onchange();
-}
-
-function styleBackgroundColorSameAsLastSection() {
-	if (selected_section && last_selected_section) {
-		selected_section.style.backgroundColor = last_selected_section.style.backgroundColor;
 	}
 }
 
-function styleRandomBackgroundColor() {
+function setRandomSectionStyle(style) {
 	if (!selected_section) return;
-	let random_range = document.getElementById("random_color_range").value;
-	let random_color = getRandomRGBColor(random_range);
-	selected_section.style.backgroundColor = random_color;
-	document.getElementById("background_color").value = rgb2hex(random_color);
+	
+	let random_color, random_range;
+
+	switch (style) {
+		case "color":
+			random_range = document.getElementById("random_color_range").value;
+			random_color = getRandomRGBColor(random_range);
+			selected_section.style.color = random_color;
+			document.getElementById("color").value = rgb2hex(random_color);
+			break;
+		case "backgroundColor":
+			random_range = document.getElementById("random_color_range").value;
+			random_color = getRandomRGBColor(random_range);
+			selected_section.style.backgroundColor = random_color;
+			document.getElementById("background_color").value = rgb2hex(random_color);
+			break;
+		case "randomGradientColors":
+			random_range = document.getElementById("random_color_range").value;
+			random_color = getRandomRGBColor(random_range);
+			document.getElementById("gradient_color1").value = rgb2hex(random_color);
+			random_color = getRandomRGBColor(random_range);
+			document.getElementById("gradient_color2").value = rgb2hex(random_color);
+			random_color = getRandomRGBColor(random_range);
+			document.getElementById("gradient_color3").value = rgb2hex(random_color);
+			random_color = getRandomRGBColor(random_range);
+			document.getElementById("gradient_color4").value = rgb2hex(random_color);
+			break;
+		case "borderColor":
+			random_color = getRandomRGBColor("any");
+			selected_section.style.borderColor = random_color;
+			document.getElementById("border_color").value = rgb2hex(random_color);
+			break;
+		case "textShadow":
+			random_color = getRandomRGBColor("any");
+			text_shadow_color = document.getElementById("text_shadow_color");
+			text_shadow_color.value = rgb2hex(random_color);
+			text_shadow_color.onchange();
+			break;
+		case "boxShadow":
+			random_color = getRandomRGBColor("any");
+			let box_shadow_color = document.getElementById("box_shadow_color");
+			box_shadow_color.value = rgb2hex(random_color);
+			box_shadow_color.onchange();
+			break;
+	}	
+	
 }
+
+
+function setSameSectionStyle(type) {
+	if (!selected_section) return;
+	
+	switch (type) {
+		case "backgroundColorSameAsWrapper":
+			let element = document.getElementById("background_color");
+			element.value = document.getElementById("wrapper_background_color").value;
+			element.onchange();
+			break;
+		case "backgroundColorSameAsLastSection":
+			if (last_selected_section) {
+				selected_section.style.backgroundColor = last_selected_section.style.backgroundColor;
+			}
+			break;
+		case "textColorSameAsLastSection":
+			if (last_selected_section) {
+				let text_color = document.getElementById("color");
+				text_color.value = rgb2hex(last_selected_section.style.color);
+				text_color.onchange();
+			}
+			break;
+		case "backgroundGradientsSameColor":
+			document.getElementById("gradient_color2").value = document.getElementById("gradient_color1").value;
+			document.getElementById("gradient_color3").value = document.getElementById("gradient_color1").value;
+			document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
+			break;
+	}
+	
+}
+
+
+function removeSectionStyle(style) {
+
+	if (!selected_section) return;
+	
+	switch (style) {
+		case "backgroundColor":
+			document.getElementById("background_color").value = "#000001";
+			selected_section.style.backgroundColor = "";
+			break;
+		case "border":
+			selected_section.style.borderWidth = "0";
+			selected_section.style.borderStyle = "solid";
+			selected_section.style.borderColor = "rgb(255,255,255)";
+			document.getElementById("border_width").value = "0";
+			document.getElementById("border_style").value = "solid";
+			document.getElementById("border_color").value = "#FFFFFF";
+			break;
+		case "borderRadius":
+			selected_section.style.borderTopLeftRadius = "0";
+			selected_section.style.borderTopRightRadius = "0";
+			selected_section.style.borderBottomLeftRadius = "0";
+			selected_section.style.borderBottomRightRadius = "0";
+			document.getElementById("border_radius1").value = "0";
+			document.getElementById("border_radius2").value = "0";
+			document.getElementById("border_radius3").value =  "0";
+			document.getElementById("border_radius4").value =  "0";
+			break;
+		case "transform":
+			document.getElementById("transform_type").value = "skew";
+			document.getElementById("transform_degree1").value = "0";
+			document.getElementById("transform_degree2").value = "0";
+			document.getElementById("transform_degree2").style.visibility = "visible";
+			selected_section.style.transform = "skew(0deg, 0deg)";
+			break;
+		case "textShadow":
+			selected_section.style.textShadow = "0px 0px 0px #000000";
+			document.getElementById("text_shadow_count").value = "0";
+			document.getElementById("text_shadow_h").value = "0";
+			document.getElementById("text_shadow_y").value = "0";
+			document.getElementById("text_shadow_blur").value = "0";
+			document.getElementById("text_shadow_color").value = "#000000";;
+			break;
+		case "boxShadow":
+			selected_section.style.filter = "none";
+			selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
+			document.getElementById("box_shadow_h").value = "0";
+			document.getElementById("box_shadow_y").value = "0";
+			document.getElementById("box_shadow_blur").value = "0";
+			document.getElementById("box_shadow_spread").value = "0";
+			document.getElementById("box_shadow_color").value = "#000000";
+			document.getElementById("box_shadow_inset").checked = false;
+			break;
+		case "clipPath":
+			document.getElementById("clip_path").value = "";
+			break;
+			
+	}	
+	
+}
+
+function setSectionClass(value) {
+	if (!selected_section) return;
+	
+	switch (value) {
+		case "clipText":
+			selected_section.classList.add("clip_text");
+			break;
+		case "showSectionSide":
+			selected_section.classList.remove("show_left");
+			selected_section.classList.remove("show_right");
+			selected_section.classList.remove("show_top");
+			selected_section.classList.remove("show_bottom");
+			let show_side = document.getElementById("show_section_side").value;
+			if (show_side != "show_all") selected_section.classList.add(show_side);
+			break;
+	}
+}
+
+
+function removeSectionClass(value) {
+	if (!selected_section) return;
+	
+	switch (value) {
+		case "clipText":
+			selected_section.classList.remove("clip_text");
+			break;
+	}
+	
+}
+
+
 
 
 
@@ -2046,19 +2168,7 @@ function styleBorderWidthPreset(width) {
 	document.getElementById("border_width").value = width;
 	selected_section.style.borderWidth = width + "px";
 }
-function styleRandomBorderColor() {
-	let random_color = getRandomRGBColor("any");
-	selected_section.style.borderColor = random_color;
-	document.getElementById("border_color").value = rgb2hex(random_color);
-}
 
-function styleTextColorSameAsLastSection() {
-	if (selected_section && last_selected_section) {
-		let text_color = document.getElementById("color");
-		text_color.value = rgb2hex(last_selected_section.style.color);
-		text_color.onchange();
-	}
-}
 
 function styleSwitchTextBackgroundColors() {
 	let text_color = document.getElementById("color");
@@ -2070,12 +2180,6 @@ function styleSwitchTextBackgroundColors() {
 	background_color.onchange();
 }
 
-function styleRandomTextColor() {
-	let random_range = document.getElementById("random_color_range").value;
-	let random_color = getRandomRGBColor(random_range);
-	selected_section.style.color = random_color;
-	document.getElementById("color").value = rgb2hex(random_color);
-}
 
 function setColorableElement(control_id, element_id, color_style) {
 	colorable_control = document.getElementById(control_id);
@@ -2102,25 +2206,9 @@ function useColorPallette(color) {
 }
 
 
-function removeBackgroundColor() {
-	document.getElementById("background_color").value = "#000001";
-	selected_section.style.backgroundColor = "";
-}
 
 
 
-
-function setRandomGradientColors() {
-	let random_range = document.getElementById("random_color_range").value;
-	let random_color = getRandomRGBColor(random_range);
-	document.getElementById("gradient_color1").value = rgb2hex(random_color);
-	random_color = getRandomRGBColor(random_range);
-	document.getElementById("gradient_color2").value = rgb2hex(random_color);
-	random_color = getRandomRGBColor(random_range);
-	document.getElementById("gradient_color3").value = rgb2hex(random_color);
-	random_color = getRandomRGBColor(random_range);
-	document.getElementById("gradient_color4").value = rgb2hex(random_color);
-}
 
 
 async function uploadImage(element) {
@@ -2181,12 +2269,6 @@ async function uploadImage(element) {
 }
 
 
-function styleBackgroundGradientsSameColor() {
-	document.getElementById("gradient_color2").value = document.getElementById("gradient_color1").value;
-	document.getElementById("gradient_color3").value = document.getElementById("gradient_color1").value;
-	document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
-}
-
 
 function setGradientDirection() {
 	if (document.getElementById("gradient_type").value == "linear-gradient") {
@@ -2196,40 +2278,6 @@ function setGradientDirection() {
 	}
 }
 
-function styleShowBackgroundSide(side) {
-	selected_section.classList.remove("bg_show_left");
-	selected_section.classList.remove("bg_show_right");
-	selected_section.classList.remove("bg_show_top");
-	selected_section.classList.remove("bg_show_bottom");
-	if (side != "all") {
-		selected_section.classList.add("bg_show_" + side);
-	}
-}
-
-function styleClipText() {
-	selected_section.classList.add("clip_text");
-}
-
-function removeClipText() {
-	selected_section.classList.remove("clip_text");
-}
-
-
-function styleRandomTextShadowColor() {
-	let random_color = getRandomRGBColor("any");
-	let text_shadow_color = document.getElementById("text_shadow_color");
-	text_shadow_color.value = rgb2hex(random_color);
-	text_shadow_color.onchange();
-}
-
-
-
-function styleRandomBoxShadowColor() {
-	let random_color = getRandomRGBColor("any");
-	let box_shadow_color = document.getElementById("box_shadow_color");
-	box_shadow_color.value = rgb2hex(random_color);
-	box_shadow_color.onchange();
-}
 
 function styleTable() {
 	if (!selected_section) return;
@@ -2281,55 +2329,6 @@ function styleTable() {
 	}
 	table = "<table>" + caption + thead + "<tbody>" + table + "</tbody>" + tfoot + "</table>";
 	selected_section.innerHTML = table;
-}
-
-
-function removeBorder() {
-	selected_section.style.borderWidth = "0";
-	selected_section.style.borderStyle = "solid";
-	selected_section.style.borderColor = "rgb(255,255,255)";
-	document.getElementById("border_width").value = "0";
-	document.getElementById("border_style").value = "solid";
-	document.getElementById("border_color").value = "#FFFFFF";
-}
-
-function removeBorderRadius() {
-	selected_section.style.borderTopLeftRadius = "0";
-	selected_section.style.borderTopRightRadius = "0";
-	selected_section.style.borderBottomLeftRadius = "0";
-	selected_section.style.borderBottomRightRadius = "0";
-	document.getElementById("border_radius1").value = "0";
-	document.getElementById("border_radius2").value = "0";
-	document.getElementById("border_radius3").value =  "0";
-	document.getElementById("border_radius4").value =  "0";
-}
-
-function removeTransform() {
-	document.getElementById("transform_type").value = "skew";
-	document.getElementById("transform_degree1").value = "0";
-	document.getElementById("transform_degree2").value = "0";
-	document.getElementById("transform_degree2").style.visibility = "visible";
-	selected_section.style.transform = "skew(0deg, 0deg)";
-}
-
-function removeTextShadow() {
-	selected_section.style.textShadow = "0px 0px 0px #000000";
-	document.getElementById("text_shadow_count").value = "0";
-	document.getElementById("text_shadow_h").value = "0";
-	document.getElementById("text_shadow_y").value = "0";
-	document.getElementById("text_shadow_blur").value = "0";
-	document.getElementById("text_shadow_color").value = "#000000";;
-}
-
-function removeBoxShadow() {
-	selected_section.style.filter = "none";
-	selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
-	document.getElementById("box_shadow_h").value = "0";
-	document.getElementById("box_shadow_y").value = "0";
-	document.getElementById("box_shadow_blur").value = "0";
-	document.getElementById("box_shadow_spread").value = "0";
-	document.getElementById("box_shadow_color").value = "#000000";
-	document.getElementById("box_shadow_inset").checked = false;
 }
 
 function setSectionDefaultStyles(section) {
@@ -2789,17 +2788,17 @@ document.onkeyup = function(e) {
 		document.getElementById('upload_image').click();
 	} else if (e.altKey && key == keyCode.NUMPAD_1) {
 	} else if (e.altKey && key == keyCode.NUMPAD_2) {
-		styleMoveDown();
+		shiftSection('down');
 	} else if (e.altKey && key == keyCode.NUMPAD_3) {
 	} else if (e.altKey && key == keyCode.NUMPAD_4) {
-		styleMoveLeft();
+		shiftSection('left');
 	} else if (e.altKey && key == keyCode.NUMPAD_5) {
 	} else if (e.altKey && key == keyCode.NUMPAD_6) {
-		styleMoveRight();
+		shiftSection('right');
 	} else if (e.altKey && key == keyCode.NUMPAD_7) {
 		styleRotateLeft();
 	} else if (e.altKey && key == keyCode.NUMPAD_8) {
-		styleMoveUp();
+		shiftSection('up');
 	} else if (e.altKey && key == keyCode.NUMPAD_9) {
 		styleRotateRight();
 	} else if (e.altKey && key == keyCode.UP_ARROW) {
