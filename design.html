@@ -451,8 +451,8 @@
 							<td>Presets</td>
 							<td>
 								<select id="select_formatted_elements"></select> &nbsp; 
-								<button onclick="setFormattedElement('save');">Save</button> 
 								<button onclick="setFormattedElement('apply');">Apply</button> 
+								<button onclick="setFormattedElement('save');">Save</button> 
 							</td>
 						</tr>
 						<tr>
@@ -543,8 +543,8 @@
 								<input id="color" type="color" onchange="setSectionStyle('color',this);"> 
 								<button onclick="setColorableElement('color', selected_section.id, 'color');showPopupPanel('color_pallette');">🚥</button>
 								<button onclick="setRandomSectionStyle('color');" title="Random color">↻</button> 
-								<button onclick="setSameSectionStyle('textColorSameAsLastSection');" title="Last section color">s</button> 
-								<button onclick="styleSwitchTextBackgroundColors();" title="Switch colors">w</button> 
+								<button onclick="setSameSectionStyle('textColorSameAsLastSection');" title="Last section color">L</button> 
+								<button onclick="styleSwitchTextBackgroundColors();" title="Switch colors">S</button> 
 							</td>
 						</tr>
 						<tr>
@@ -553,8 +553,8 @@
 								<input id="background_color" type="color" onchange="setSectionStyle('backgroundColor',this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('backgroundColor');" title="Random color">↻</button> 
-								<button onclick="setSameSectionStyle('backgroundColorSameAsWrapper');" title="Page color">p</button> 
-								<button onclick="setSameSectionStyle('backgroundColorSameAsLastSection');" title="Last section color">s</button> 
+								<button onclick="setSameSectionStyle('backgroundColorSameAsWrapper');" title="Page color">P</button> 
+								<button onclick="setSameSectionStyle('backgroundColorSameAsLastSection');" title="Last section color">L</button> 
 								<button id="remove_background_color" onclick="removeSectionStyle('backgroundColor');">x</button> 
 							</td>
 						</tr>
@@ -688,10 +688,13 @@
 									<option>dashed</option>
 									<option>dotted</option>
 								</select>
+								<button id="remove_border" onclick="removeSectionStyle('border');">x</button>
+								<br>
 								<input id="border_color" type="color" onchange="setSectionStyle('borderColor',this);">
 								<button onclick="setColorableElement('border_color', selected_section.id, 'border');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('borderColor');" title="Random color">↻</button> 
-								<button id="remove_border" onclick="removeSectionStyle('border');">x</button>
+								<button onclick="setSameSectionStyle('borderColorSameAsTextColor');" title="Same as text color">T</button>
+								<button onclick="setSameSectionStyle('borderColorSameAsBackgroundColor');" title="Same as background color">B</button>
 							</td>
 						</tr>
 						<tr>

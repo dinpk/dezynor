@@ -346,28 +346,41 @@ function removeSection() {
 }
 
 function copySection() {
-	localStorage.setItem("copied_section", selected_section.outerHTML);
+	let copied_sections = selected_section.outerHTML;
+	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
+	for (i = 0; i < contained_sections.length; i++) {
+		let section_id = contained_sections[i];
+		copied_sections = copied_sections + "|" + document.getElementById(section_id).outerHTML;
+	}
+	localStorage.setItem("copied_section", copied_sections);
 }
 
 async function pasteSection() {
 
-	let copied_section_string = localStorage.getItem("copied_section");
-	let html = new DOMParser().parseFromString(copied_section_string, "text/html");
-	let sections = html.body.querySelectorAll("section");
-	let copied_section = sections[0];
+	let copied_sections = localStorage.getItem("copied_section").split("|");
+	let first_section_number;
+	for (i = 0; i < copied_sections.length; i++) {
+		let copied_section_string = copied_sections[i];
+		let html = new DOMParser().parseFromString(copied_section_string, "text/html");
+		let sections = html.body.querySelectorAll("section");
+		let copied_section = sections[0];
+		section_number = getNewSectionNumber();
+		let section_id = "section" + section_number;
+		let section = copied_section;
+		section.setAttribute("id", section_id);
+		section.setAttribute("onclick", "selectSection('" + section_number + "');");
+		section.setAttribute("onpaste", "pasteText(event);");
+		let contained_sections = copied_section_string.match(/\bdata-contained_sections=(['"])(.*?)\1/gi);
+		if (contained_sections) {
+			section.dataset.contained_sections = " ";
+		}
+		document.getElementById("wrapper").appendChild(section);
+		document.getElementById(section_id).style.zIndex = section_number;
+		if (i == 0) first_section_number = section_number;
+	}
 
-	section_number = getNewSectionNumber();
-
-	let section_id = "section" + section_number;
-	
-	let section = copied_section;
-	section.setAttribute("id", section_id);
-	section.setAttribute("onclick", "selectSection('" + section_number + "');");
-	section.setAttribute("onpaste", "pasteText(event);");
-	document.getElementById("wrapper").appendChild(section);
-	document.getElementById(section_id).style.zIndex = section_number;
-
-	selectSection(section_number);
+	updateContainerSections();
+	selectSection(first_section_number);
 	reAlignSectionHandles();
 
 }
@@ -1783,7 +1796,7 @@ function setSectionStyle(style, element, value = null) {
 	
 	if (!selected_section) return;
 	
-	if (!value) value = element.value;
+	if (element && !value) value = element.value;
 	
 	switch (style) {
 		case "top":
@@ -2032,9 +2045,11 @@ function setRandomSectionStyle(style) {
 function setSameSectionStyle(type) {
 	if (!selected_section) return;
 	
+	let element;
+	
 	switch (type) {
 		case "backgroundColorSameAsWrapper":
-			let element = document.getElementById("background_color");
+			element = document.getElementById("background_color");
 			element.value = document.getElementById("wrapper_background_color").value;
 			element.onchange();
 			break;
@@ -2054,6 +2069,16 @@ function setSameSectionStyle(type) {
 			document.getElementById("gradient_color2").value = document.getElementById("gradient_color1").value;
 			document.getElementById("gradient_color3").value = document.getElementById("gradient_color1").value;
 			document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
+			break;
+		case "borderColorSameAsTextColor":
+			element = document.getElementById("border_color");
+			element.value = document.getElementById("color").value;
+			element.onchange();
+			break;
+		case "borderColorSameAsBackgroundColor":
+			element = document.getElementById("border_color");
+			element.value = document.getElementById("background_color").value;
+			element.onchange();
 			break;
 	}
 	
@@ -2259,7 +2284,7 @@ async function uploadImage(element) {
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
 			selected_section.dataset.image_key = image_key;
 			document.getElementById("upload_image").value = "";
-			styleBackgroundImage();
+			setSectionStyle('backgroundImage', null, null);
 		}
 
 	}, false);
@@ -2503,7 +2528,7 @@ function loadSectionStyles() {
 	document.getElementById("column_gap").value = selected_section.style.columnGap.replace("px", "");
 	document.getElementById("column_rule_width").value = selected_section.style.columnRuleWidth.replace("px", "");
 	document.getElementById("column_rule_style").value = selected_section.style.columnRuleStyle;
-	document.getElementById("column_rule_color").value = rgb2hex(selected_section.style.columnRuleColor);
+	if (selected_section.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(selected_section.style.columnRuleColor);
 	
 	let transform = selected_section.style.transform;
 	document.getElementById("transform_degree1").value = "0";
@@ -2730,9 +2755,9 @@ document.onkeyup = function(e) {
 	} else if (key == keyCode.F9) {
 		saveDezyn();
 	} else if (e.ctrlKey && key == keyCode.COMMA) {
-		styleDirection("rtl");
+		setSectionStyle('direction', null, 'rtl');
 	} else if (e.ctrlKey && key == keyCode.PERIOD) {
-		styleDirection("ltr");
+		setSectionStyle('direction', null, 'ltr');
 	} else if (e.ctrlKey && key == keyCode.KEY_R) {
 		//styleTextAlign('right');
 	} else if (e.ctrlKey && key == keyCode.KEY_L) {
@@ -2778,7 +2803,7 @@ document.onkeyup = function(e) {
 	} else if (e.altKey && key == keyCode.ADD) {
 		resizeSection('fullHeight');
 	} else if (e.altKey && key == keyCode.ENTER) {
-		styleAlignHCenter();
+		alignSection('hCenter');
 	} else if (e.altKey && key == keyCode.DIVIDE) {
 	} else if (e.altKey && key == keyCode.MULTIPLY) {
 	} else if (e.altKey && key == keyCode.DECIMAL) {
@@ -2807,11 +2832,11 @@ document.onkeyup = function(e) {
 		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
 		let wrapper_bottom = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
 		if (section_top == wrapper_top) {
-			styleAlignVBottom();
+			alignSection('vBottom');
 		} else if (section_bottom == wrapper_bottom) {
-			styleAlignVCenter();
+			alignSection('vCenter');
 		} else {
-			styleAlignVTop();
+			alignSection('vTop');
 		}
 	} else if (e.altKey && key == keyCode.DOWN_ARROW) {
 		let section_top = parseInt(selected_section.style.top.replace("px", ""));
@@ -2819,11 +2844,11 @@ document.onkeyup = function(e) {
 		let wrapper_top = parseInt(document.getElementById("wrapper").style.top.replace("px", ""));
 		let wrapper_bottom = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
 		if (section_bottom == wrapper_bottom) {
-			styleAlignVTop();
+			alignSection('vTop');
 		} else if (section_top == wrapper_top) {
-			styleAlignVCenter();
+			alignSection('vCenter');
 		} else {
-			styleAlignVBottom();
+			alignSection('vBottom');
 		}
 	} else if (e.altKey && key == keyCode.RIGHT_ARROW) {
 		let section_left = parseInt(selected_section.style.left.replace("px", ""));
@@ -2831,11 +2856,11 @@ document.onkeyup = function(e) {
 		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));
 		let wrapper_right = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
 		if (section_right == wrapper_right) {
-			styleAlignHLeft();
+			alignSection('hLeft');
 		} else if (section_left == wrapper_left) {
-			styleAlignHCenter();
+			alignSection('hCenter');
 		} else {
-			styleAlignHRight();
+			alignSection('hRight');
 		}
 	} else if (e.altKey && key == keyCode.LEFT_ARROW) {
 		let section_left = parseInt(selected_section.style.left.replace("px", ""));
@@ -2843,11 +2868,11 @@ document.onkeyup = function(e) {
 		let wrapper_left = parseInt(document.getElementById("wrapper").style.left.replace("px", ""));
 		let wrapper_right = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
 		if (section_left == wrapper_left) {
-			styleAlignHRight();
+			alignSection('hRight');
 		} else if (section_right == wrapper_right) {
-			styleAlignHCenter();
+			alignSection('hCenter');
 		} else {
-			styleAlignHLeft();
+			alignSection('hLeft');
 		}
 	}
 	
