@@ -1661,7 +1661,7 @@ async function loadDezyn() {
 
 	} else {
 		document.getElementById("wrapper").dataset.last_section = "1";
-		styleWrapper();
+		setWrapperDefaultStyles();
 		addHandles();
 		addSection();
 	}
@@ -1757,6 +1757,19 @@ let colorable_control = "";
 let colorable_style = "";
 
 
+function setWrapperDefaultStyles() {
+	let wrapper = document.getElementById("wrapper");
+	let width = localStorage.getItem("page_width")
+	let height = localStorage.getItem("page_height");
+	wrapper.style.width = width + "px";
+	wrapper.style.height = height + "px";
+	wrapper.style.overflow = "visible";
+	setRandomWrapperBackgroundColor();
+	document.getElementById("wrapper_width").value = width;
+	document.getElementById("wrapper_height").value = height;
+}
+
+
 function setWrapperStyle(style, element) {
 	
 	let value = element.value;
@@ -1773,7 +1786,7 @@ function setWrapperStyle(style, element) {
 			wrapper.style.backgroundColor = value;
 			break;
 		case "overflow":
-			wrapper.style.overflow = value.checked ? "visible" : "hidden";
+			wrapper.style.overflow = element.checked ? "visible" : "hidden";
 			break;
 	}
 	
@@ -1783,12 +1796,6 @@ function setRandomWrapperBackgroundColor() {
 	let random_color = getRandomRGBColor(document.getElementById("wrapper_random_range").value);
 	document.getElementById("wrapper").style.backgroundColor = random_color;
 	document.getElementById("wrapper_background_color").value = rgb2hex(random_color);
-}
-
-
-function removeWrapperBackgroundColor() {
-	document.getElementById("wrapper_background_color").value = "#000001";
-	document.getElementById("wrapper").style.backgroundColor = "rgb(0, 0, 1)";
 }
 
 function loadWrapperStyles() {

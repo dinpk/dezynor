@@ -16,6 +16,8 @@ connection.onupgradeneeded = function(e) {
 			let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
 			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google","Noto Kufi Arabic|Google","Noto Naskh Arabic|Google","Noto Nastaliq Urdu|Google","Nabla|Google","Bungee Spice|Google","Lobster|Google","Great Vibes|Google","Kaushan Script|Google","Creepster|Google","DynaPuff|Google"]});
+			localStorage.setItem("page_width", "1000");
+			localStorage.setItem("page_height", "500");
 			localStorage.setItem("copied_section", "");
 			localStorage.setItem("show_background_images", "true");
 			localStorage.setItem("duplicate_offset_x", "10");

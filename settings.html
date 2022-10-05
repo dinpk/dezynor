@@ -15,6 +15,8 @@
 
 			async function saveSettings() {
 
+				localStorage.setItem("page_width", document.getElementById("page_width").value);
+				localStorage.setItem("page_height", document.getElementById("page_height").value);
 				localStorage.setItem("max_upload_width", document.getElementById("max_upload_width").value);
 				localStorage.setItem("max_upload_height", document.getElementById("max_upload_height").value);
 				localStorage.setItem("show_background_images", JSON.stringify(document.getElementById("show_background_images").checked));
@@ -35,6 +37,8 @@
 			}
 
 			async function loadSettings() {
+				document.getElementById("page_width").value = localStorage.getItem("page_width");
+				document.getElementById("page_height").value = localStorage.getItem("page_height");
 				document.getElementById("max_upload_width").value = localStorage.getItem("max_upload_width");
 				document.getElementById("max_upload_height").value = localStorage.getItem("max_upload_height");
 				if (localStorage.getItem("show_background_images") == "true") document.getElementById("show_background_images").checked = true;
@@ -146,6 +150,13 @@
 							<td>
 								<input type="checkbox" id="automatically_save"> 
 								<input type="number" id="automatically_save_after" value="30" min="10" required> seconds<br>
+							</td>
+						</tr>
+						<tr>
+							<td>Page default size</td>
+							<td>
+								<input type="number" id="page_width" value="1000" min="100" required> width<br>
+								<input type="number" id="page_height" value="1000" min="100" required> height
 							</td>
 						</tr>
 						<tr>
