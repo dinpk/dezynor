@@ -1,13 +1,12 @@
 window.onload = function() {
 	loadSelectValues();
 	loadDezyn();
-	styleRandomWrapperBackgroundColor();
+	setRandomWrapperBackgroundColor();
 	showSectionPanel('box_section');
 
 	if (localStorage.getItem("automatically_save") == "true") {
 		setInterval(function () {
 			saveDezyn("no");
-			console.log("saving");
 		}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
 	}
 	
@@ -346,13 +345,15 @@ function removeSection() {
 }
 
 function copySection() {
-	let copied_sections = selected_section.outerHTML;
-	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
-	for (i = 0; i < contained_sections.length; i++) {
-		let section_id = contained_sections[i];
-		copied_sections = copied_sections + "|" + document.getElementById(section_id).outerHTML;
+	let copied_section = selected_section.outerHTML;
+	if (selected_section.dataset.contained_sections) {
+		let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
+		for (i = 0; i < contained_sections.length; i++) {
+			let section_id = contained_sections[i];
+			copied_section = copied_section + "|" + document.getElementById(section_id).outerHTML;
+		}
 	}
-	localStorage.setItem("copied_section", copied_sections);
+	localStorage.setItem("copied_section", copied_section);
 }
 
 async function pasteSection() {
@@ -1152,9 +1153,7 @@ function styleRotateLeft() {
 	element.onchange();
 }
 
-
-
-function styleLayout(parameters) {
+function setLayout(parameters) {
 	
 	let wrapper_width = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
 	let wrapper_height = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
@@ -1757,22 +1756,30 @@ let colorable_element = "";
 let colorable_control = "";
 let colorable_style = "";
 
-function styleWrapper() {
-	let wrapper = document.getElementById("wrapper");
 
-	wrapper.style.zIndex = "0";
-	wrapper.style.top = "0";
-	wrapper.style.left = "0";
-	wrapper.style.width = document.getElementById("wrapper_width").value + "px";
-	wrapper.style.height = document.getElementById("wrapper_height").value + "px";
-	wrapper.style.overflow = document.getElementById("wrapper_overflow").checked ? "visible" : "hidden";
+function setWrapperStyle(style, element) {
 	
-	wrapper.style.backgroundImage = "";
-	wrapper.style.backgroundColor = document.getElementById("wrapper_background_color").value;
-
+	let value = element.value;
+	let wrapper = document.getElementById("wrapper");
+	
+	switch(style) {
+		case "width":
+			wrapper.style.width = value + "px";
+			break;
+		case "height":
+			wrapper.style.height = value + "px";
+			break;
+		case "backgroundColor":
+			wrapper.style.backgroundColor = value;
+			break;
+		case "overflow":
+			wrapper.style.overflow = value.checked ? "visible" : "hidden";
+			break;
+	}
+	
 }
 
-function styleRandomWrapperBackgroundColor() {
+function setRandomWrapperBackgroundColor() {
 	let random_color = getRandomRGBColor(document.getElementById("wrapper_random_range").value);
 	document.getElementById("wrapper").style.backgroundColor = random_color;
 	document.getElementById("wrapper_background_color").value = rgb2hex(random_color);
@@ -1792,7 +1799,7 @@ function loadWrapperStyles() {
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
 }
 
-function setSectionStyle(style, element, value = null) {
+function setSectionStyle(style, element, value) {
 	
 	if (!selected_section) return;
 	
@@ -1901,7 +1908,6 @@ function setSectionStyle(style, element, value = null) {
 			break;
 		case "clipPathStyle":
 			value = element.querySelector('span').getAttribute('style');
-			console.log(value);
 			value = value.replace("clip-path:", "");
 			selected_section.style.clipPath = value;
 			document.getElementById("clip_path").value = value;
@@ -2176,9 +2182,6 @@ function removeSectionClass(value) {
 }
 
 
-
-
-
 function styleBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 		document.getElementById("border_radius1").value = top_left;
 		document.getElementById("border_radius2").value = top_right;
@@ -2284,7 +2287,7 @@ async function uploadImage(element) {
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
 			selected_section.dataset.image_key = image_key;
 			document.getElementById("upload_image").value = "";
-			setSectionStyle('backgroundImage', null, null);
+			setSectionStyle('backgroundImage');
 		}
 
 	}, false);
@@ -2304,7 +2307,7 @@ function setGradientDirection() {
 }
 
 
-function styleTable() {
+function setTable() {
 	if (!selected_section) return;
 	if (selected_section.querySelector("table")) {
 		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;

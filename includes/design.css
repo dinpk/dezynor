@@ -31,7 +31,7 @@ body {
 #wrapper {
 	position:relative;
 	margin-bottom:50px;
-	box-sizing:content-box !important;
+	z-index:0;
 }
 
 #wrapper_bg1,
