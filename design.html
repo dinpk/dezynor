@@ -12,7 +12,7 @@
 	</head>
 	<body>
 
-		<div id="container">
+		<div id="cover">
 			<div id="wrapper"></div>
 		</div>
 		
@@ -300,6 +300,7 @@
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0px 0px, 0% 20%, 80% 100%, 100% 100%, 100% 80%, 20% 0px)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0px 80%, 0px 100%, 20% 100%, 100% 20%, 100% 0px, 80% 0%)">&nbsp;</span></span>
 								<h5>Borders</h5>
+								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 2% 100%, 2% 2%, 98% 2%, 98% 98%, 2% 98%, 2% 100%, 100% 100%, 100% 0%)">&nbsp;</span></span> 
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(2% 2%, 2% 98%, 5% 98%, 5% 5%, 95% 5%, 95% 95%, 5% 95%, 5% 98%, 98% 98%, 98% 2%)">&nbsp;</span></span> 
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 25% 100%, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 100%, 100% 100%, 100% 0%)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(51% 0px, 85% 0px, 100% 15%, 90% 100%, 90% 30%, 10% 30%, 10% 100%, 0px 15%, 15% 0px)">&nbsp;</span></span>
@@ -444,14 +445,6 @@
 					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
 					<table class="section_table">
 						<tr>
-							<td>Presets</td>
-							<td>
-								<select id="select_formatted_elements"></select> &nbsp; 
-								<button onclick="setFormattedElement('apply');">Apply</button> 
-								<button onclick="setFormattedElement('save');">Save</button> 
-							</td>
-						</tr>
-						<tr>
 							<td>Alignment</td>
 							<td>
 								<img src="images/icon_align_left.png" onclick="setSectionStyle('textAlign', this, 'left');"> 
@@ -514,6 +507,20 @@
 								</select> 
 								<input id="column_rule_color" type="color" onchange="setSectionStyle('columnRuleColor', this);"> 
 								<button onclick="setColorableElement('column_rule_color', selected_section.id, 'column');showPopupPanel('color_pallette');">🚥</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Presets</td>
+							<td>
+								<select id="select_formatted_elements" size="5"></select> 
+								<button onclick="setFormattedElement('apply');">Apply</button>
+								<button onclick="setFormattedElement('save');">Save</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Story</td>
+							<td>
+								<input id="story_section" type="checkbox" onchange="toggleStorySection();">
 							</td>
 						</tr>
 					</table>
@@ -614,13 +621,13 @@
 						<tr>
 							<td>Repeat</td>
 							<td>
-								<input id="background_image_repeat" type="checkbox" onchange="setSectionStyle('backgroundImage',this);">
+								<input id="background_image_repeat" type="checkbox" onchange="setSectionStyle('backgroundRepeat',this);">
 							</td>
 						</tr>
 						<tr>
 							<td>Size</td>
 							<td>
-								<select id="background_size" onchange="setSectionStyle('backgroundImage',this);">
+								<select id="background_size" onchange="setSectionStyle('backgroundSize',this);">
 									<option>auto</option>
 									<option>cover</option>
 									<option>contain</option>
@@ -631,7 +638,7 @@
 						<tr>
 							<td>Position X</td>
 							<td>
-								<select id="background_position_x" onchange="setSectionStyle('backgroundImage',this);">
+								<select id="background_position_x" onchange="setSectionStyle('backgroundPositionX',this);">
 									<option value="0%">left</option>
 									<option value="50%" selected>center</option>
 									<option value="100%">right</option>
@@ -641,7 +648,7 @@
 						<tr>
 							<td>Position Y</td>
 							<td>
-								<select id="background_position_y" onchange="setSectionStyle('backgroundImage',this);">
+								<select id="background_position_y" onchange="setSectionStyle('backgroundPositionY',this);">
 									<option value="0%">top</option>
 									<option value="50%"selected>center</option>
 									<option value="100%">bottom</option>

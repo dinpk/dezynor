@@ -16,6 +16,7 @@ let design_id = generateDeisgnId();
 let design_object;
 let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
 let selected_section;
+let selected_element;
 let last_selected_section;
 let move;
 let resize_bottom_right;
@@ -30,12 +31,12 @@ let revert_states = [];
 
 
 function saveCurrentState() {
-	revert_states.push(document.getElementById("container").innerHTML);
+	revert_states.push(document.getElementById("cover").innerHTML);
 }
 
 function revertToLastState() {
 	if (revert_states.length > 0) {
-		document.getElementById("container").innerHTML = revert_states.pop();
+		document.getElementById("cover").innerHTML = revert_states.pop();
 		let all_sections = document.querySelectorAll("section");
 		if (all_sections.length > 0) {
 			let first_section_number = all_sections[0].id.replace("section", "");
@@ -260,6 +261,29 @@ function selectSection(counter) {
 	document.getElementById("select_formatted_elements").value = "";
 }
 
+function setSelectedElement(event) { 
+    selected_element = event.target;
+	let block_elements = ["body", "p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td"];
+	let reached_element = false;
+	while (!reached_element) {
+		for (i = 0; i < block_elements.length; i++) {
+			let current_element = block_elements[i];
+			if (current_element == selected_element.localName) {
+				console.log(selected_element.localName);
+				reached_element = true;
+				break;
+			}
+		}
+
+		if (!reached_element && selected_element.parentNode) {
+			selected_element = selected_element.parentNode;
+		}
+	}
+
+}
+
+
+
 function duplicateSection() {
 	
 	if (!(selected_section)) return;
@@ -396,6 +420,17 @@ function unselectSections() {
 	hideHandles();
 }
 
+function toggleStorySection() {
+	if (!selected_section) return;
+	
+	if (document.getElementById("story_section").checked) {
+		selected_section.dataset.story_section = "1";
+	} else {
+		delete selected_section.dataset.story_section;
+	}
+}
+
+
 function toggleContainerSection() {
 	if (!selected_section) return;
 	
@@ -459,11 +494,12 @@ function pasteText(e) {
 	if (!selection.rangeCount) {
 		return;
 	}
+	data = data.replace(/\s/g, " "); // hard space
 
 	let paste_result = localStorage.getItem("paste_result");
 	if (paste_result == "plain") {
-		data = data.replace(/(<([^>]+)>)/gi, "");
-		selection.getRangeAt(0).insertNode(document.createTextNode(data));
+		let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+		document.execCommand("insertHTML", false, text); 
 		return;
 	} else if (paste_result == "plain_with_lines") {
 		data = data.replaceAll("\n","");
@@ -1513,7 +1549,7 @@ async function saveDezyn(show_message = "yes") {
 	let modified = new Date().getTime();
 	let folder = document.getElementById("select_folders").value;
 	localStorage.setItem("current_folder", folder);
-	let data = document.getElementById("container").innerHTML;
+	let data = document.getElementById("cover").innerHTML;
 
 	if (design_object) { // set in loadDezyn()
 		design_object = await idbGetItem("dezynor_designs", design_id);
@@ -1548,7 +1584,7 @@ async function saveDezyn(show_message = "yes") {
 function duplicateDezyn() {
 	let folder = document.getElementById("select_folders").value;
 	let new_design_id = generateDeisgnId();
-	let data = document.getElementById("container").innerHTML;
+	let data = document.getElementById("cover").innerHTML;
 	let object = {
 		created:new Date().getTime(),
 		modified:new Date().getTime(),
@@ -1564,7 +1600,7 @@ async function exportDezyn() {
 
 	let zip_items = new JSZip();
 	// design
-	let data = document.getElementById("container").innerHTML;
+	let data = document.getElementById("cover").innerHTML;
 	let folder = document.getElementById("select_folders").value;
 	let created = new Date().getTime();
 	let modified = created;
@@ -1616,7 +1652,7 @@ async function deleteDezyn() {
 	if (confirm("Do you really want to delete this design?")) {
 		await idbRemoveItem("dezynor_designs", design_id);
 		showMessage("Deleted successfully", "Red");
-		document.getElementById("container").innerHTML = "";
+		document.getElementById("cover").innerHTML = "";
 	}
 }
 
@@ -1633,7 +1669,7 @@ async function loadDezyn() {
 			
 			let data = object.data;
 			data = data.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls of sections
-			document.getElementById("container").innerHTML = data;
+			document.getElementById("cover").innerHTML = data;
 			design_id = current_design_key;
 			loadWrapperStyles();
 			let all_sections = document.querySelectorAll("section");
@@ -1761,6 +1797,8 @@ function setWrapperDefaultStyles() {
 	let wrapper = document.getElementById("wrapper");
 	let width = localStorage.getItem("page_width")
 	let height = localStorage.getItem("page_height");
+	wrapper.style.top = "0";
+	wrapper.style.left = "0";
 	wrapper.style.width = width + "px";
 	wrapper.style.height = height + "px";
 	wrapper.style.overflow = "visible";
@@ -1943,15 +1981,6 @@ function setSectionStyle(style, element, value) {
 				let image = URL.createObjectURL(result);
 				selected_section.style.backgroundImage = "url(" + image + ")";
 			});
-			if (document.getElementById("background_image_repeat").checked) {
-				selected_section.style.backgroundRepeat = "repeat";
-				document.getElementById("background_size").value = "auto";
-			} else {
-				selected_section.style.backgroundRepeat = "no-repeat";
-			}
-			selected_section.style.backgroundSize = document.getElementById("background_size").value;
-			selected_section.style.backgroundPositionX = document.getElementById("background_position_x").value;
-			selected_section.style.backgroundPositionY = document.getElementById("background_position_y").value;
 			break;
 		case "backgroundImageGradient":
 			let gradient_type = document.getElementById("gradient_type").value;
@@ -1970,6 +1999,24 @@ function setSectionStyle(style, element, value) {
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) return;
 			selected_section.style.backgroundImage = "url(" + image_url + ")";
+			break;
+		case "backgroundRepeat": 
+			if (element.checked) {
+				selected_section.style.backgroundRepeat = "repeat";
+				selected_section.style.backgroundSize = "auto";
+				document.getElementById("background_size").value = "auto";
+			} else {
+				selected_section.style.backgroundRepeat = "no-repeat";
+			}
+			break;
+		case "backgroundSize": 
+			selected_section.style.backgroundSize = value;
+			break;
+		case "backgroundPositionX": 
+			selected_section.style.backgroundPositionX = value;
+			break;
+		case "backgroundPositionY": 
+			selected_section.style.backgroundPositionY = value;
 			break;
 		case "textShadow":
 			let text_shadow_count = document.getElementById("text_shadow_count").value;
@@ -2390,7 +2437,7 @@ function setSectionDefaultStyles(section) {
 	section.style.backgroundRepeat = "no-repeat";
 	section.style.borderWidth = "0";
 	section.style.borderStyle = "solid";
-	section.style.borderColor = "rgb(255,255,255)";
+	section.style.borderColor = "rgb(100,100,100)";
 	section.style.borderTopLeftRadius = "0px";
 	section.style.borderTopRightRadius = "0px";
 	section.style.borderBottomLeftRadius = "0px";
@@ -2400,8 +2447,8 @@ function setSectionDefaultStyles(section) {
 	section.style.columnCount = "1";
 	section.style.columnGap = "10px";
 	section.style.columnFill = "auto";
-	section.style.columnRuleColor = "rgb(255,255,255)";
-	section.style.columnRuleWidth = "1";
+	section.style.columnRuleColor = "rgb(100,100,100)";
+	section.style.columnRuleWidth = "1px";
 	section.style.columnRuleStyle = "solid";
 	section.style.transform = "skew(0deg, 0deg)";
 	section.style.transformOrigin = "center center";
@@ -2417,6 +2464,7 @@ function loadSectionDimensions() {
 
 function loadSectionStyles() {
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
+	document.getElementById("story_section").checked = selected_section.dataset.story_section ? true : false;
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
 	document.getElementById("font_size").value = selected_section.style.fontSize.replace("px", "");
 	document.getElementById("color").value = rgb2hex(selected_section.style.color);

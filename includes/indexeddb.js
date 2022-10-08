@@ -10,10 +10,11 @@ connection.onupgradeneeded = function(e) {
 	switch (e.oldVersion) {
 		case 0:
 			console.log("Case 0: Adding database, stores and settings");
-			let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
 			let dezynor_designs = db.createObjectStore("dezynor_designs", {keyPath: "design_key"});
 			let dezynor_fonts = db.createObjectStore("dezynor_fonts", {keyPath: "font_key"});
 			let dezynor_images = db.createObjectStore("dezynor_images", {keyPath: "image_key"});
+			let dezynor_styles = db.createObjectStore("dezynor_styles", {keyPath: "style_key"});
+			let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
 			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google","Noto Kufi Arabic|Google","Noto Naskh Arabic|Google","Noto Nastaliq Urdu|Google","Nabla|Google","Bungee Spice|Google","Lobster|Google","Great Vibes|Google","Kaushan Script|Google","Creepster|Google","DynaPuff|Google"]});
 			localStorage.setItem("page_width", "1000");
@@ -36,10 +37,6 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("automatically_save", "false");
 			localStorage.setItem("automatically_save_after", "30");
 		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
 	}
 
 

@@ -9,6 +9,7 @@ function writeHeader() {
 			"<a href='design.html' target='_blank'>New Design</a> " + 
 			"<a href='browse.html'>Browse</a> " + 
 			"<a href='fonts.html'>Fonts</a> " + 
+			"<a href='styles.html'>Styles</a> " + 
 			"<a href='import-export.html'>Backup</a> " + 
 		"</div>" + 
 		"<div>" + 
