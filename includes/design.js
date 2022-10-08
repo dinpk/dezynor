@@ -2610,42 +2610,6 @@ function loadSectionStyles() {
 
 
 
-function rgb2hex(rgb) {
-	if (rgb.search("rgb") == -1) {
-		return rgb;
-	} else {
-		rgb = rgb.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?\)$/);
-		function hex(x) {
-			return ("0" + parseInt(x).toString(16)).slice(-2);
-		}
-		return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]); 
-	}
-}
-
-
-function rgba2hex(orig) {
-      let a, isPercent,
-        rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
-        alpha = (rgb && rgb[4] || "").trim(),
-        hex = rgb ? 
-        (rgb[1] | 1 << 8).toString(16).slice(1) +
-        (rgb[2] | 1 << 8).toString(16).slice(1) +
-        (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
-          if (alpha !== "") {
-            a = alpha;
-          } else {
-            a = 01;
-          }
-
-          a = Math.round(a * 100) / 100;
-            alpha = Math.round(a * 255);
-            let hexAlpha = (alpha + 0x10000).toString(16).substr(-2).toUpperCase();
-            hex = hex + hexAlpha;
-
-      return "#" + hex;
-}
-
-
 
 			
 /* -------------- SHORTCUTS ---------------------- */

@@ -9,22 +9,463 @@
 		<script src="includes/common.js"></script>
 		<script>
 
+			let selected_style_key;
+
+			window.onload = async function() {
+				await delay(500);
+				loadStyles();
+				let uploaded_fonts_list = "";
+				let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
+				let uploaded_fonts_options = "";
+				for (i = 0; i < uploaded_fonts.length; i++) {
+					let font_key = uploaded_fonts[i].font_key;
+					let font = uploaded_fonts[i].value;
+					font_name = font_key.replaceAll("_", " ");
+					uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
+					uploaded_fonts_options = uploaded_fonts_options + "<option value='" + font_key + "'>" + font_name + "</option>";
+				}
+				let style = document.createElement("style");
+				let fonts_node = document.createTextNode(uploaded_fonts_list);
+				style.appendChild(fonts_node);
+				document.getElementsByTagName("head")[0].appendChild(style);
+				document.getElementById("select_fonts").innerHTML = uploaded_fonts_options;
+				
+			}
+
+			function addStyle() {
+				let style_name = document.getElementById("style_name").value.trim();
+				let sample_text = document.getElementById("sample_text").value.trim();
+				
+				if (style_name.trim().length == 0 || sample_text.trim().length == 0) return;
+				let style_key = "style-" + new Date().getTime();
+				let style_object = {
+					style_name:style_name,
+					sample_text:sample_text,
+					style_code:""
+				};
+				idbPutItem("dezynor_styles", {style_key:style_key, value:style_object});
+				document.getElementById("style_name").value = "";
+				document.getElementById("sample_text").value = "";
+				document.getElementById("style_name").focus();
+				showMessage("'" + style_name + "' added", "Green");
+				loadStyles();
+					
+			}
+			
+			function loadStyles() {
+				idbGetAllItems("dezynor_styles").then(async function(result) {
+					let all_styles = result;
+					let styles = "";
+					for (i = 0; i < all_styles.length; i++) {
+						let record_object = all_styles[i];
+						let style_key = record_object.style_key;
+						let style_object = record_object.value;
+						style_name = style_object.style_name;
+						sample_text = style_object.sample_text;
+						style_code = style_object.style_code;
+						let id = "style" + i;
+						styles = styles + "<div id='" + id + "'  onclick=\"loadSample('" + id + "', '" + style_key + "');\"><span title='Delete Style' class='delete' onclick=\"deleteStyle('" + style_key + "');\">" + "x</span> " + style_name + "</div>";
+					}
+					document.getElementById("styles").innerHTML = styles;
+				});
+				
+			}
+			
+			
+			function loadSample(element_id, style_key) {
+			
+				idbGetItem("dezynor_styles", style_key).then(function(result) {
+					let object = result
+					let style_name = object.style_name;
+					let sample_text = object.sample_text;
+					let style_code = object.style_code;
+					document.getElementById("sample").innerHTML = "<div id='sample_element' style='" + style_code + "'>" + sample_text + "</div>";
+					selected_style_key = style_key;
+					loadSampleStyles();
+					
+				});				
+				
+				
+				let divs = document.querySelectorAll("#styles div");
+				for (i = 0; i < divs.length; i++){
+					divs[i].style.backgroundColor = "white";
+				}
+
+				document.getElementById(element_id).style.backgroundColor = "lightyellow";
+				
+			}
+			
+			async function saveStyle() {
+				if (!selected_style_key) return;
+				idbGetItem("dezynor_styles", selected_style_key).then(function(result) {
+					let object = result;
+					let style_code = document.getElementById("sample_element");
+					object.style_code = style_code.getAttribute("style");
+					idbPutItem("dezynor_styles", {style_key:selected_style_key, value:object});
+					loadStyles();
+					showMessage("Saved style successfully", "Green");
+				});
+			}
+			
+			function setSampleStyle(style, element, value) {
+				if (!selected_style_key) return;
+				
+				if (element && !value) {
+					value = element.value;
+				}
+				
+				let sample = document.getElementById("sample_element");
+				
+				switch (style) {
+					case "textAlign":
+						sample.style.textAlign = value;
+						break;
+					case "direction":
+						sample.style.direction = value;
+						break;
+					case "color":
+						sample.style.color = value;
+						break;
+					case "backgroundColor":
+						sample.style.backgroundColor = value;
+						break;
+					case "fontSize":
+						sample.style.fontSize = value + "px";
+						break;
+					case "lineHeight":
+						sample.style.lineHeight = value + "px";
+						break;
+					case "textIndent":
+						sample.style.textIndent = value + "px";
+						break;
+					case "wordSpacing":
+						sample.style.wordSpacing = value + "px";
+						break;
+					case "letterSpacing":
+						sample.style.letterSpacing = value + "px";
+						break;
+					case "paddingTop":
+						sample.style.paddingTop = value + "px";
+						break;
+					case "paddingBottom":
+						sample.style.paddingBottom = value + "px";
+						break;
+					case "paddingLeft":
+						sample.style.paddingLeft = value + "px";
+						break;
+					case "paddingRight":
+						sample.style.paddingRight = value + "px";
+						break;
+					case "columnCount":
+						sample.style.columnCount = value;
+						break;
+					case "columnGap":
+						sample.style.columnGap = value + "px";
+						break;
+					case "columnRuleWidth":
+						sample.style.columnRuleWidth = value + "px";
+						break;
+					case "columnRuleStyle":
+						sample.style.columnRuleStyle = value;
+						break;
+					case "columnRuleColor":
+						sample.style.columnRuleColor = value;
+						break;
+					case "borderWidth":
+						sample.style.borderWidth = value + "px";
+						break;
+					case "borderStyle":
+						sample.style.borderStyle = value;
+						break;
+					case "borderColor":
+						sample.style.borderColor = value;
+						break;
+					case "borderTopLeftRadius":
+						sample.style.borderTopLeftRadius = value + "px";
+						break;
+					case "borderTopRightRadius":
+						sample.style.borderTopRightRadius = value + "px";
+						break;
+					case "borderBottomLeftRadius":
+						sample.style.borderBottomLeftRadius = value + "px";
+						break;
+					case "borderBottomRightRadius":
+						sample.style.borderBottomRightRadius = value + "px";
+						break;
+				}
+			}
+
+			
+			function loadSampleStyles() {
+				if (!selected_style_key) return;
+				
+				setSampleDefaultStyles();
+
+				let sample_element = document.getElementById("sample_element");
+			
+				if (sample_element.style.fontFamily) document.getElementById("select_fonts").value = sample_element.style.fontFamily.toString().replace('"', "").replace('"', "");
+				if (sample_element.style.fontSize) document.getElementById("font_size").value = sample_element.style.fontSize.replace("px", "");
+				if (sample_element.style.color) document.getElementById("color").value = rgb2hex(sample_element.style.color);
+				if (sample_element.style.backgroundColor == "") {
+					document.getElementById("background_color").value = "#000001";
+				} else {
+					document.getElementById("background_color").value = rgb2hex(sample_element.style.backgroundColor);
+				}
+				if (sample_element.style.wordSpacing) document.getElementById("word_spacing").value = sample_element.style.wordSpacing.replace("px", "");
+				if (sample_element.style.letterSpacing) document.getElementById("letter_spacing").value = sample_element.style.letterSpacing.replace("px", "");
+				if (sample_element.style.textIndent) document.getElementById("text_indent").value = sample_element.style.textIndent.replace("px", "");
+				if (sample_element.style.lineHeight) document.getElementById("line_height").value = sample_element.style.lineHeight.replace("px", "");
+
+				if (sample_element.style.paddingTop) document.getElementById("padding_top").value = sample_element.style.paddingTop.replace("px", "");
+				if (sample_element.style.paddingRight) document.getElementById("padding_right").value = sample_element.style.paddingRight.replace("px", "");
+				if (sample_element.style.paddingBottom) document.getElementById("padding_bottom").value = sample_element.style.paddingBottom.replace("px", "");
+				if (sample_element.style.paddingLeft) document.getElementById("padding_left").value = sample_element.style.paddingLeft.replace("px", "");
+
+				if (sample_element.style.borderWidth) document.getElementById("border_width").value = sample_element.style.borderWidth.replace("px", "");
+				if (sample_element.style.borderStyle) document.getElementById("border_style").value = sample_element.style.borderStyle;
+				if (sample_element.style.borderColor) document.getElementById("border_color").value = rgb2hex(sample_element.style.borderColor);
+				if (sample_element.style.borderTopLeftRadius) document.getElementById("border_radius1").value = sample_element.style.borderTopLeftRadius.replace("px", "");
+				if (sample_element.style.borderTopRightRadius) document.getElementById("border_radius2").value = sample_element.style.borderTopRightRadius.replace("px", "");
+				if (sample_element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = sample_element.style.borderBottomLeftRadius.replace("px", "");
+				if (sample_element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = sample_element.style.borderBottomRightRadius.replace("px", "");
+				
+				if (sample_element.style.columnCount) document.getElementById("column_count").value = sample_element.style.columnCount;
+				if (sample_element.style.columnGap) document.getElementById("column_gap").value = sample_element.style.columnGap.replace("px", "");
+				if (sample_element.style.columnRuleWidth) document.getElementById("column_rule_width").value = sample_element.style.columnRuleWidth.replace("px", "");
+				if (sample_element.style.columnRuleStyle) document.getElementById("column_rule_style").value = sample_element.style.columnRuleStyle;
+				if (sample_element.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(sample_element.style.columnRuleColor);
+			}			
+			
+			
+			
+			function setSampleDefaultStyles() {
+			
+				document.getElementById("select_fonts").value = "";
+				document.getElementById("font_size").value = "14";
+				document.getElementById("color").value = "#000000";
+				document.getElementById("background_color").value = "#000000";
+				document.getElementById("word_spacing").value = "0";
+				document.getElementById("letter_spacing").value = "0";
+				document.getElementById("text_indent").value = "0";
+				document.getElementById("line_height").value = "0";
+				document.getElementById("padding_top").value = "0";
+				document.getElementById("padding_right").value = "0";
+				document.getElementById("padding_bottom").value = "0";
+				document.getElementById("padding_left").value = "0";
+				document.getElementById("border_width").value = "0";
+				document.getElementById("border_style").value = "solid";
+				document.getElementById("border_color").value = "#000000";
+				document.getElementById("border_radius1").value = "0";
+				document.getElementById("border_radius2").value = "0";
+				document.getElementById("border_radius3").value = "0";
+				document.getElementById("border_radius4").value = "0";
+				
+				document.getElementById("column_count").value = "1";
+				document.getElementById("column_gap").value = "30";
+				document.getElementById("column_rule_width").value = "2";
+				document.getElementById("column_rule_style").value = "solid";
+				document.getElementById("column_rule_color").value = "#000000";
+			}
+			
 		</script>
 	
 
 		<style>
+		
+			#styles_table {
+				width:95%;
+				margin:0 auto;
+				background:none;
+			}
 			
+			table tr > th {
+				font-size:150%;
+				background-color:#EEE;
+				border:1px solid #EEE;
+			}
+			
+			#styles,
+			#formatting,
+			#sample {
+				width:33%;
+				vertical-align:top;
+				padding:10px;
+				border:1px solid #DDD;
+			}
+			
+			#formatting {
+				padding:0;
+			}
+			
+			#styles > div {
+				line-height:200%;
+				cursor:pointer;
+				margin-bottom:5px;
+			}
+			
+	
+			
+			table table {
+				border-collapse:collapse;
+				width:100%;
+			}
+			
+			table table td:first-child {
+				background-color:#EEE;
+			}
+			
+			table table td {
+				font-size:90%;
+				line-height:170%;
+				border:2px solid #FFF;
+			}
+			
+			table table td input {
+				max-width:50px;
+				font-size:90%;
+			}
+			
+			table table td input[type=color] {
+				max-height:20px;
+				max-width:30px;
+				padding:0;
+			}
+			
+			.delete {
+				color:red;
+				cursor:pointer;
+				margin:0 15px 0 5px;
+				padding:5px;
+				background-color:white;
+			}
+			
+			.selected_style {
+				background-color:lightyellow;
+			}
 		</style>
 	</head>
 	<body>
 
 		<script>writeHeader();</script>
+
+		<div class="pad20">
+			<input id="style_name" type="text" placeholder="Style name" autofocus required> 
+			<input id="sample_text" type="text" placeholder="Sample text" required> 
+			<button onclick="addStyle();">Add</button>
+		</div>
 		
-		<table id="styles_table">
+		<table id="styles_table" class="pad20">
+			<tr>
+				<th>Styles</th>
+				<th>Formatting</th>
+				<th>Sample</th>
+			</tr>
+		
 			<tr>
 				<td id="styles">
 				</td>
-				<td id="formating">
+				<td id="formatting">
+					<table>
+						<tr>
+							<td colspan="2" style="padding:15px;text-align:center;"><button onclick="saveStyle();">Save Style</button></td>
+						</tr>
+						<tr>
+							<td>Alignment</td>
+							<td>
+								<img src="images/icon_align_left.png" onclick="setSampleStyle('textAlign', this, 'left');"> 
+								<img src="images/icon_align_center.png" onclick="setSampleStyle('textAlign', this, 'center');"> 
+								<img src="images/icon_align_right.png" onclick="setSampleStyle('textAlign', this, 'right');"> 
+								<img src="images/icon_align_justify.png" onclick="setSampleStyle('textAlign', this, 'justify');"> 
+								<img src="images/icon_direction_ltr.png" onclick="setSampleStyle('direction', this, 'ltr');" title="Direction Left-to-Right"> 
+								<img src="images/icon_direction_rtl.png" onclick="setSampleStyle('direction', this, 'rtl');" title="Direction Right-to-Left"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Color</td>
+							<td>
+								Text <input id="color" type="color" onchange="setSampleStyle('color',this);"> 
+								Background <input id="background_color" type="color" onchange="setSampleStyle('backgroundColor',this);"> 
+								<button id="remove_background_color" onclick="removeSampleStyle('backgroundColor');">x</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Font</td>
+							<td>
+								<select id="select_fonts" onchange="setSampleStyle('fontFamily',this);">
+								</select> 
+							</td>
+						</tr>
+						<tr>
+							<td>Font size</td>
+							<td>
+								<input id="font_size" type="number" onchange="setSampleStyle('fontSize',this);" step="1" min="5" max="500" value="14">
+							</td>
+						</tr>
+						<tr>
+							<td>Spacing</td>
+							<td>
+								<input id="line_height" type="number" onchange="setSampleStyle('lineHeight',this);" min="0" step="1" max="300" value="18"> Lines<br>
+								<input id="text_indent" type="number" onchange="setSampleStyle('textIndent',this);" min="0" step="1" value="0"> Indent<br>
+								<input id="word_spacing" type="number" onchange="setSampleStyle('wordSpacing',this);" min="0" step="1" value="0"> Words<br>
+								<input id="letter_spacing" type="number" onchange="setSampleStyle('letterSpacing',this);" min="0" step="1" value="0"> Letters<br>
+							</td>
+						</tr>
+						<tr>
+							<td>Padding</td>
+							<td>
+								Top <input id="padding_top" type="number" onchange="setSampleStyle('paddingTop', this);" min="0" step="2" value="5">  
+								Bottom <input id="padding_bottom" type="number" onchange="setSampleStyle('paddingBottom', this);" min="0" step="2" value="5"><br>
+								Left <input id="padding_left" type="number" onchange="setSampleStyle('paddingLeft', this);" min="0" step="2" value="5">  
+								Right <input id="padding_right" type="number" onchange="setSampleStyle('paddingRight', this);" min="0" step="2" value="5"><br>
+							</td>
+						</tr>
+						<tr>
+							<td>Columns</td>
+							<td>
+								<input id="column_count" type="number" onchange="setSampleStyle('columnCount', this);" min="1" step="1" value="1"> 
+								Gap <input id="column_gap" type="number" onchange="setSampleStyle('columnGap', this);" min="0" step="10" value="30"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Columns rule</td>
+							<td>
+								<input id="column_rule_width" type="number" onchange="setSampleStyle('columnRuleWidth', this);" min="0" value="2" step="1">
+								<select id="column_rule_style" onchange="setSampleStyle('columnRuleStyle', this);">
+									<option></option>
+									<option>solid</option>
+									<option>double</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select> 
+								<input id="column_rule_color" type="color" onchange="setSampleStyle('columnRuleColor', this);"> 
+							</td>
+						</tr>
+						<tr>
+							<td>Border</td>
+							<td>
+								<input id="border_width" type="number" onchange="setSampleStyle('borderWidth',this);" min="0" value="0" step="1">
+								<select id="border_style" onchange="setSampleStyle('borderStyle',this);">
+									<option></option>
+									<option>solid</option>
+									<option>double</option>
+									<option>dashed</option>
+									<option>dotted</option>
+								</select>
+								<input id="border_color" type="color" onchange="setSampleStyle('borderColor',this);">
+								<button id="remove_border" onclick="removeSectionStyle('border');">x</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Border radius</td>
+							<td>
+								<input id="border_radius1" type="number" onchange="setSampleStyle('borderTopLeftRadius',this);" min="0" value="0" title="Top left radius"> 
+								<input id="border_radius2" type="number" onchange="setSampleStyle('borderTopRightRadius',this);" min="0" value="0" title="Top right radius">
+								<br>
+								<input id="border_radius3" type="number" onchange="setSampleStyle('borderBottomLeftRadius',this);" min="0" value="0" title="Bottom left radius">
+								<input id="border_radius4" type="number" onchange="setSampleStyle('borderBottomRightRadius',this);" min="0" value="0" title="Bottom right radius">
+							</td>
+						</tr>
+					</table>				
 				</td>
 				<td id="sample">
 				</td>
