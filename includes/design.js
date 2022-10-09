@@ -14,7 +14,7 @@ window.onload = function() {
 
 let design_id = generateDeisgnId();
 let design_object;
-let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
+//let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
 let selected_section;
 let selected_element;
 let last_selected_section;
@@ -188,6 +188,7 @@ function showHandles() {
 }
 
 function addSection() {
+	let wrapper = document.getElementById("wrapper");
 	section_number = getNewSectionNumber();
 	let section_id = "section" + section_number;
 	let section = document.createElement("section");
@@ -197,9 +198,11 @@ function addSection() {
 	section.setAttribute("onclick", "selectSection('" + section_number + "');");
 	section.setAttribute("onpaste", "pasteText(event);");
 	section.setAttribute("contenteditable", "true");
-	document.getElementById("wrapper").appendChild(section);
+	wrapper.appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_number;
 	setSectionDefaultStyles(document.getElementById(section_id));
+	section.style.width = (parseInt(wrapper.style.width) * 0.7) + "px";
+	section.style.height = (parseInt(wrapper.style.height) * 0.5) + "px";
 	selectSection(section_number);
 	document.getElementById(section_id).focus();
 	alignSection('centerCenter');
@@ -258,7 +261,7 @@ function selectSection(counter) {
 	loadSectionStyles();
 	reAlignSectionHandles();
 	showHandles();
-	document.getElementById("select_formatted_elements").value = "";
+	//document.getElementById("select_formatted_elements").value = "";
 }
 
 function setSelectedElement(event) { 
@@ -1706,18 +1709,32 @@ async function loadDezyn() {
 }
 
 function setFormattedElement(action) {
-	let selected_formatting = document.getElementById("select_formatted_elements").value;
-	if (!selected_section || selected_formatting.length == 0) return;
-	let selected_formatting_label = selected_formatting;
-	selected_formatting = selected_formatting.replaceAll(" ", "_").toLowerCase();
-
-	if (action == "save") {
-		localStorage.setItem(selected_formatting, selected_section.getAttribute("style"));
-		showMessage("Saved as: " + selected_formatting_label, "Green");
-	} else if (selected_formatting in localStorage) {
-		selected_section.setAttribute("style", localStorage.getItem(selected_formatting));
-		reAlignSectionHandles();
+	let selected_styles = document.getElementById("select_styles").value.split(";");
+	if (!selected_section || selected_styles.length == 0) return;
+	setSectionDefaultStyles(selected_section);
+	for (i = 0; i < selected_styles.length; i++) {
+		let style = selected_styles[i].split(":");
+		let rule_name = style[0];
+		let rule_code = style[1];
+		let new_rule_name = "";
+		let rule_name_parts = rule_name.split("-");
+		for (k = 0; k < rule_name_parts.length; k++) {
+			if (k == 0) {
+				new_rule_name = rule_name_parts[k];
+			} else {
+				let temp = rule_name_parts[k];
+				let first_letter = temp.substring(0, 1).toUpperCase();
+				let rest_of_name = temp.substring(1, temp.length);
+				let full_part = first_letter + rest_of_name;
+				new_rule_name = new_rule_name + full_part;
+			}
+		}
+		new_rule_name = new_rule_name.trim();
+		if (new_rule_name.length != 0) {
+			setSectionStyle(new_rule_name.trim(), null, rule_code);
+		}
 	}
+	reAlignSectionHandles();
 }
 
 async function loadSelectValues() {
@@ -1753,7 +1770,6 @@ async function loadSelectValues() {
 		}
 	}
 
-// try uploaded_fonts_list with fontface and objecturl
 	let uploaded_fonts_list = "";
 	let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
 	let uploaded_fonts_options = "";
@@ -1775,11 +1791,17 @@ async function loadSelectValues() {
 	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
 
 	// ------------------------- formatted elements
-	let formatted_elements_options = "";
-	for (i = 0; i < formatted_elements.length; i++) {
-		formatted_elements_options = formatted_elements_options + "<option>" + formatted_elements[i] + "</option>";
+	let styles = await idbGetAllItems("dezynor_styles");
+	let styles_options = "";
+	for (i = 0; i < styles.length; i++) {
+		let record_object = styles[i];
+		let style_key = record_object.style_key;
+		let style_object = record_object.value;
+		let style_name = style_object.style_name;
+		let style_code = style_object.style_code;
+		styles_options = styles_options + "<option value='" + style_code + "'>" + style_name + "</option>";
 	}
-	document.getElementById("select_formatted_elements").innerHTML = formatted_elements_options;
+	document.getElementById("select_styles").innerHTML = styles_options;
 
 }
 
@@ -2426,8 +2448,6 @@ function setSectionDefaultStyles(section) {
 	section.style.lineHeight = "35px";
 	section.style.textAlign = "center";
 	section.style.textShadow = "0px 0px 0px #000000";
-	section.style.width = (parseInt(document.getElementById("wrapper").style.width) * 0.7) + "px";
-	section.style.height = (parseInt(document.getElementById("wrapper").style.height) * 0.5) + "px";
 	section.style.padding = "0";
 	section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
 	section.style.backgroundPositionX = "center";
