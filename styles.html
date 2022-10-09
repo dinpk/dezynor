@@ -106,7 +106,7 @@
 						sample_text = style_object.sample_text;
 						style_code = style_object.style_code;
 						let id = "style" + i;
-						styles = styles + "<div id='" + id + "'  onclick=\"loadSample('" + id + "', '" + style_key + "');\"><span title='Delete Style' class='delete' onclick=\"deleteStyle('" + style_key + "');\">" + "x</span> " + style_name + "</div>";
+						styles = styles + "<div id='" + id + "'  onclick=\"loadSample('" + id + "', '" + style_key + "');\"><span title='Delete Style' class='delete' onclick=\"deleteStyle('" + style_key + "', '" + style_name + "');\">" + "x</span> " + style_name + "</div>";
 					}
 					document.getElementById("styles").innerHTML = styles;
 				});
@@ -342,7 +342,15 @@
 						
 				}	
 				
-			}			
+			}
+			
+			async function deleteStyle(style_key, style_name) {
+				if (!confirm("Do you really want to delete style '" + style_name + "'?")) return;
+				await idbRemoveItem("dezynor_styles", style_key);
+				showMessage("Deleted successfully", "Red");	
+				loadStyles();
+			}
+			
 		</script>
 	
 

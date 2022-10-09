@@ -101,6 +101,7 @@
 									<option>dark</option>
 								</select>
 								<button onclick="setRandomWrapperBackgroundColor();" title="Random color">↻</button>
+								<button onclick="console.log(selected_element.localName)">Name</button>
 							</td>
 						</tr>
 						<tr>
@@ -292,7 +293,7 @@
 							<td style="display:none;">Shapes</td>
 							<td colspan="2">
 							<footer style="line-height:200%;overflow:auto;max-height:70vh">
-								<p onclick="removeSectionShape();" style="font-size:120%;cursor:pointer;padding:5px;">X</p> 
+								<p onclick="removeSectionStyle('clipPath');" style="font-size:120%;cursor:pointer;padding:5px;">X</p> 
 								<textarea id="clip_path" type="text" onchange="setSectionStyle('clipPath', this, value)" placeholder="Clip path" style="width:100%;max-width:100%;padding:2px 4px 2px 4px;" title="Clip path"></textarea>
 								<h5>Lines</h5>
 								<span class="shape_wrapper" onclick="setSectionStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0 60%, 0 40%, 100% 40%, 100% 60%)">&nbsp;</span></span>
@@ -621,7 +622,7 @@
 								<input id="upload_image" type="file" accept="image/*" onchange="uploadImage(this);" style="display:none;">
 								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> or 
 								<button onclick="setSectionStyle('backgroundImageURL',this);" title="Alt + Numpad .">URL</button> 
-								<button id="remove_image" onclick="removeImage();">x</button>
+								<button id="remove_image" onclick="removeSectionStyle('backgroundImage');">x</button>
 							</td>
 						</tr>
 						<tr>

@@ -17,6 +17,8 @@ let design_object;
 let selected_section;
 let selected_element;
 let last_selected_section;
+let revert_states = [];
+let short_style_rules = ["padding", "borderRadius"];
 let move;
 let resize_bottom_right;
 let resize_top_right;
@@ -26,7 +28,6 @@ let resize_center_right;
 let resize_center_left;
 let resize_center_top;
 let resize_center_bottom;
-let revert_states = [];
 
 
 function saveCurrentState() {
@@ -171,8 +172,6 @@ function showHandles() {
 	}
 	*/
 	
-		
-	
 	assignHandles();
 		
 	move.style.visibility = "visible";
@@ -205,7 +204,7 @@ function addSection() {
 	selectSection(section_number);
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
-	alignSection('centerCenter');
+	alignSection('pageCenter');
 
 }
 
@@ -261,9 +260,10 @@ function selectSection(counter) {
 
 	selected_section.style.outline = "4px dashed yellow"
 	colorable_element = selected_section;
-	loadSectionStyles();
+	loadSectionValues();
 	reAlignSectionHandles();
 	showHandles();
+
 }
 
 function setSelectedElement() { 
@@ -1117,8 +1117,11 @@ function alignSection(type) {
 				selected_section.style.top = parseInt(new_top) + "px";
 			}
 			break;
-		case "":
-		
+		case "pageCenter":
+			let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
+			selected_section.style.left = parseInt(new_left) + "px";
+			let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
+			selected_section.style.top = parseInt(new_top) + "px";
 			break;
 		case "":
 		
@@ -1729,13 +1732,21 @@ function applyStyle() {
 		}
 		new_rule_name = new_rule_name.trim();
 		
-		if (new_rule_name.length != 0) {
-			rule_code = rule_code.replaceAll("px", "");
-			setSectionStyle(new_rule_name, null, rule_code);
+		if (new_rule_name.length == 0) continue;
+
+		let is_short_rule = false;
+		for (s = 0; s < short_style_rules.length; s++) {
+			if (new_rule_name == short_style_rules[s]) is_short_rule = true;
 		}
+		if (!is_short_rule) rule_code = rule_code.replaceAll("px", "");
+
+		setSectionStyle(new_rule_name, null, rule_code);
 	}
-	reAlignSectionHandles();
+	loadSectionValues();
+	//reAlignSectionHandles();
 }
+
+
 
 async function loadSelectValues() {
 
@@ -1892,6 +1903,9 @@ function setSectionStyle(style, element, value) {
 			selected_section.style.height = value + "px";
 			reAlignSectionHandles();		
 			break;
+		case "padding":
+			selected_element.style.padding = value;
+			break;
 		case "paddingTop":
 			selected_element.style.paddingTop = value + "px";
 			break;
@@ -1945,6 +1959,9 @@ function setSectionStyle(style, element, value) {
 			break;
 		case "borderColor":
 			selected_element.style.borderColor = value;
+			break;
+		case "borderRadius":
+			selected_element.style.borderRadius = value;
 			break;
 		case "borderTopLeftRadius":
 			selected_element.style.borderTopLeftRadius = value + "px";
@@ -2178,21 +2195,21 @@ function removeSectionStyle(style) {
 	switch (style) {
 		case "backgroundColor":
 			document.getElementById("background_color").value = "#000001";
-			selected_section.style.backgroundColor = "";
+			selected_element.style.backgroundColor = "";
 			break;
 		case "border":
-			selected_section.style.borderWidth = "0";
-			selected_section.style.borderStyle = "solid";
-			selected_section.style.borderColor = "rgb(255,255,255)";
+			selected_element.style.borderWidth = "0";
+			selected_element.style.borderStyle = "solid";
+			selected_element.style.borderColor = "rgb(255,255,255)";
 			document.getElementById("border_width").value = "0";
 			document.getElementById("border_style").value = "solid";
 			document.getElementById("border_color").value = "#FFFFFF";
 			break;
 		case "borderRadius":
-			selected_section.style.borderTopLeftRadius = "0";
-			selected_section.style.borderTopRightRadius = "0";
-			selected_section.style.borderBottomLeftRadius = "0";
-			selected_section.style.borderBottomRightRadius = "0";
+			selected_element.style.borderTopLeftRadius = "0";
+			selected_element.style.borderTopRightRadius = "0";
+			selected_element.style.borderBottomLeftRadius = "0";
+			selected_element.style.borderBottomRightRadius = "0";
 			document.getElementById("border_radius1").value = "0";
 			document.getElementById("border_radius2").value = "0";
 			document.getElementById("border_radius3").value =  "0";
@@ -2203,19 +2220,19 @@ function removeSectionStyle(style) {
 			document.getElementById("transform_degree1").value = "0";
 			document.getElementById("transform_degree2").value = "0";
 			document.getElementById("transform_degree2").style.visibility = "visible";
-			selected_section.style.transform = "skew(0deg, 0deg)";
+			selected_element.style.transform = "skew(0deg, 0deg)";
 			break;
 		case "textShadow":
-			selected_section.style.textShadow = "0px 0px 0px #000000";
+			selected_element.style.textShadow = "0px 0px 0px #000000";
 			document.getElementById("text_shadow_count").value = "0";
 			document.getElementById("text_shadow_h").value = "0";
 			document.getElementById("text_shadow_y").value = "0";
 			document.getElementById("text_shadow_blur").value = "0";
-			document.getElementById("text_shadow_color").value = "#000000";;
+			document.getElementById("text_shadow_color").value = "#000000";
 			break;
 		case "boxShadow":
-			selected_section.style.filter = "none";
-			selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
+			selected_element.style.filter = "none";
+			selected_element.style.boxShadow = "0px 0px 0px 0px #000000";
 			document.getElementById("box_shadow_h").value = "0";
 			document.getElementById("box_shadow_y").value = "0";
 			document.getElementById("box_shadow_blur").value = "0";
@@ -2223,7 +2240,10 @@ function removeSectionStyle(style) {
 			document.getElementById("box_shadow_color").value = "#000000";
 			document.getElementById("box_shadow_inset").checked = false;
 			break;
+		case "backgroundImage":
+			selected_section.style.backgroundImage = "";
 		case "clipPath":
+			selected_element.style.clipPath = "";
 			document.getElementById("clip_path").value = "";
 			break;
 			
@@ -2480,6 +2500,7 @@ function setSectionDefaultStyles(section) {
 	section.style.columnRuleColor = "rgb(100,100,100)";
 	section.style.columnRuleWidth = "1px";
 	section.style.columnRuleStyle = "solid";
+	section.style.orphans = "0";
 	section.style.transform = "skew(0deg, 0deg)";
 	section.style.transformOrigin = "center center";
 	section.style.clipPath = "";
@@ -2492,14 +2513,18 @@ function loadSectionDimensions() {
 	document.getElementById("height").value = selected_section.style.height.replace("px", "");
 }
 
-function loadSectionStyles() {
+function loadSectionValues() {
 
 	if (!selected_element) return;
+
+	loadSectionDefaultValues();
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
 	
-	if (!selected_element.getAttribute("style")) selected_element = selected_section;
+	if (!selected_section.dataset.inner_styles) {
+		selected_element = selected_section;
+	}
 	
 	if (selected_element.style.fontFamily) document.getElementById("font_family").value = selected_element.style.fontFamily.toString().replace('"', "").replace('"', "");
 	if (selected_element.style.fontSize) document.getElementById("font_size").value = selected_element.style.fontSize.replace("px", "");
@@ -2644,6 +2669,74 @@ function loadSectionStyles() {
 }
 
 
+
+
+function loadSectionDefaultValues() {
+	document.getElementById("font_family").value = "Smooch";
+	document.getElementById("font_size").value = "25";
+	document.getElementById("line_height").value = "35";
+	document.getElementById("word_spacing").value = "0";
+	document.getElementById("letter_spacing").value = "0";
+	document.getElementById("text_indent").value = "0";
+	document.getElementById("color").value = "#000000";
+	document.getElementById("background_color").value = "#000001";
+	document.getElementById("text_shadow_count").value = "0";
+	document.getElementById("text_shadow_h").value = "0";
+	document.getElementById("text_shadow_y").value = "0";
+	document.getElementById("text_shadow_blur").value = "0";
+	document.getElementById("text_shadow_color").value = "#000000";;
+
+	/*
+	document.getElementById("top").value = selected_element.style.top.replace("px", "");
+	document.getElementById("left").value = selected_element.style.left.replace("px", "");
+	document.getElementById("width").value = selected_element.style.width.replace("px", "");
+	document.getElementById("height").value = selected_element.style.height.replace("px", "");
+	document.getElementById("z_index").value = selected_element.style.zIndex;
+	*/
+	
+	document.getElementById("padding_top").value = "0";
+	document.getElementById("padding_right").value = "0";
+	document.getElementById("padding_bottom").value = "0";
+	document.getElementById("padding_left").value = "0";
+	document.getElementById("gradient_type").value = "linear";
+	document.getElementById("gradient_direction").value = "to top";
+	document.getElementById("gradient_color1").value = "#FFFFFF";
+	document.getElementById("gradient_color2").value = "#FFFFFF";
+	document.getElementById("gradient_color3").value = "#FFFFFF";
+	document.getElementById("gradient_color4").value = "#FFFFFF";
+	document.getElementById("gradient_alpha1").checked = false;
+	document.getElementById("gradient_alpha2").checked = false;
+	document.getElementById("gradient_alpha3").checked = false;
+	document.getElementById("gradient_alpha4").checked = false;
+	document.getElementById("background_size").value = "stretch";
+	document.getElementById("background_position_x").value = "center";
+	document.getElementById("background_position_y").value = "center";
+	document.getElementById("background_image_repeat").checked = false;
+	document.getElementById("opacity").value = "1";
+	document.getElementById("border_width").value = "0";
+	document.getElementById("border_style").value = "solid";
+	document.getElementById("border_color").value = "#707070";
+	document.getElementById("border_radius1").value = "0";
+	document.getElementById("border_radius2").value = "0";
+	document.getElementById("border_radius3").value = "0";
+	document.getElementById("border_radius4").value = "0";
+	document.getElementById("box_shadow_h").value = "0";
+	document.getElementById("box_shadow_y").value = "0";
+	document.getElementById("box_shadow_blur").value = "0";
+	document.getElementById("box_shadow_spread").value = "0";
+	document.getElementById("box_shadow_color").value = "#000000";
+	document.getElementById("box_shadow_inset").checked = false;
+	document.getElementById("column_count").value = "1";
+	document.getElementById("column_gap").value = "10";
+	document.getElementById("column_rule_width").value = "1";
+	document.getElementById("column_rule_style").value = "solid";
+	document.getElementById("column_rule_color").value = "#707070";
+	document.getElementById("transform_type").value = "skew";
+	document.getElementById("transform_degree1").value = "0";
+	document.getElementById("transform_degree2").value = "0";
+	document.getElementById("transform_degree2").style.visibility = "visible";
+	document.getElementById("clip_path").value = "";
+}
 
 
 
