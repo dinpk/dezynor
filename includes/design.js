@@ -236,12 +236,15 @@ function selectSection(counter) {
 
 	last_selected_section = selected_section;
 
+	setSelectedElement();
+	
 	let new_selected_id = "section" + counter;
 	let section_count = document.querySelectorAll("section").length;
 	if (selected_section && selected_section.id == new_selected_id && section_count > 1) {
-		// console.log("selecting same session " + new_selected_id);
+		// console.log("selecting same section " + new_selected_id);
 		return;
 	}
+	
 	
 	unselectSections();
 	selected_section = document.getElementById(new_selected_id);
@@ -264,28 +267,26 @@ function selectSection(counter) {
 	//document.getElementById("select_formatted_elements").value = "";
 }
 
-function setSelectedElement(event) { 
-    selected_element = event.target;
-	let block_elements = ["body", "p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td"];
+function setSelectedElement() { 
+	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
+	//selected_text = selection.toString();
+	if (!selection.anchorNode) return;
+	selected_element = selection.anchorNode.parentNode;
+	let block_elements = ["p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td"];
 	let reached_element = false;
 	while (!reached_element) {
 		for (i = 0; i < block_elements.length; i++) {
 			let current_element = block_elements[i];
 			if (current_element == selected_element.localName) {
-				console.log(selected_element.localName);
 				reached_element = true;
 				break;
 			}
 		}
-
 		if (!reached_element && selected_element.parentNode) {
 			selected_element = selected_element.parentNode;
 		}
 	}
-
 }
-
-
 
 function duplicateSection() {
 	
@@ -423,13 +424,13 @@ function unselectSections() {
 	hideHandles();
 }
 
-function toggleStorySection() {
+function toggleInnerStyles() {
 	if (!selected_section) return;
 	
-	if (document.getElementById("story_section").checked) {
-		selected_section.dataset.story_section = "1";
+	if (document.getElementById("inner_styles").checked) {
+		selected_section.dataset.inner_styles = "1";
 	} else {
-		delete selected_section.dataset.story_section;
+		delete selected_section.dataset.inner_styles;
 	}
 }
 
@@ -1663,7 +1664,6 @@ async function loadDezyn() {
 
 	let current_design_key = document.location.search.replace(/^.*?\=/, '');
 	if (current_design_key != "") {
-		
 	
 		idbGetItem("dezynor_designs", current_design_key).then(function(result) {
 
@@ -1696,7 +1696,6 @@ async function loadDezyn() {
 				}
 			}
 		});
-		
 
 	} else {
 		document.getElementById("wrapper").dataset.last_section = "1";
@@ -1704,14 +1703,12 @@ async function loadDezyn() {
 		addHandles();
 		addSection();
 	}
-
-
 }
 
-function setFormattedElement(action) {
+function applyStyle() {
 	let selected_styles = document.getElementById("select_styles").value.split(";");
 	if (!selected_section || selected_styles.length == 0) return;
-	setSectionDefaultStyles(selected_section);
+
 	for (i = 0; i < selected_styles.length; i++) {
 		let style = selected_styles[i].split(":");
 		let rule_name = style[0];
@@ -1731,7 +1728,7 @@ function setFormattedElement(action) {
 		}
 		new_rule_name = new_rule_name.trim();
 		if (new_rule_name.length != 0) {
-			setSectionStyle(new_rule_name.trim(), null, rule_code);
+			setSectionStyle(new_rule_name, null, rule_code);
 		}
 	}
 	reAlignSectionHandles();
@@ -1869,114 +1866,116 @@ function loadWrapperStyles() {
 function setSectionStyle(style, element, value) {
 	
 	if (!selected_section) return;
-	
+
 	if (element && !value) value = element.value;
+	
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	
 	switch (style) {
 		case "top":
-			selected_section.style.top = value + "px";
+			selected_element.style.top = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "left":
-			selected_section.style.left = value + "px";
+			selected_element.style.left = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "width":
-			selected_section.style.width = value + "px";
+			selected_element.style.width = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "height":
-			selected_section.style.height = value + "px";
+			selected_element.style.height = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "paddingTop":
-			selected_section.style.paddingTop = value + "px";
+			selected_element.style.paddingTop = value + "px";
 			break;
 		case "paddingRight":
-			selected_section.style.paddingRight = value + "px";
+			selected_element.style.paddingRight = value + "px";
 			break;
 		case "paddingBottom":
-			selected_section.style.paddingBottom = value + "px";
+			selected_element.style.paddingBottom = value + "px";
 			break;
 		case "paddingLeft":
-			selected_section.style.paddingLeft = value + "px";
+			selected_element.style.paddingLeft = value + "px";
 			break;
 		case "direction":
-			selected_section.style.direction = value;
+			selected_element.style.direction = value;
 			break;
 		case "fontFamily":
-			selected_section.style.fontFamily = value;
+			selected_element.style.fontFamily = value;
 			break;
 		case "fontSize":
-			selected_section.style.fontSize = value + "px";
+			selected_element.style.fontSize = value + "px";
 			break;
 		case "color":
-			selected_section.style.color = value;
+			selected_element.style.color = value;
 			break;
 		case "backgroundColor":
-			selected_section.style.backgroundColor = value;
+			selected_element.style.backgroundColor = value;
 			break;
 		case "wordSpacing":
-			selected_section.style.wordSpacing = value + "px";
+			selected_element.style.wordSpacing = value + "px";
 			break;
 		case "letterSpacing":
-			selected_section.style.letterSpacing = value + "px";
+			selected_element.style.letterSpacing = value + "px";
 			break;
 		case "textIndent":
-			selected_section.style.textIndent = value + "px";
+			selected_element.style.textIndent = value + "px";
 			break;
 		case "lineHeight":
-			selected_section.style.lineHeight = value + "px";
+			selected_element.style.lineHeight = value + "px";
 			break;
 		case "textAlign":
-			selected_section.style.textAlign = value;
+			selected_element.style.textAlign = value;
 			break;
 		case "opacity":
-			selected_section.style.opacity = value;
+			selected_element.style.opacity = value;
 			break;
 		case "borderWidth":
-			selected_section.style.borderWidth = value + "px";
+			selected_element.style.borderWidth = value + "px";
 			break;
 		case "borderStyle":
-			selected_section.style.borderStyle = value;
+			selected_element.style.borderStyle = value;
 			break;
 		case "borderColor":
-			selected_section.style.borderColor = value;
+			selected_element.style.borderColor = value;
 			break;
 		case "borderTopLeftRadius":
-			selected_section.style.borderTopLeftRadius = value + "px";
+			selected_element.style.borderTopLeftRadius = value + "px";
 			break;
 		case "borderTopRightRadius":
-			selected_section.style.borderTopRightRadius = value + "px";
+			selected_element.style.borderTopRightRadius = value + "px";
 			break;
 		case "borderBottomLeftRadius":
-			selected_section.style.borderBottomLeftRadius = value + "px";
+			selected_element.style.borderBottomLeftRadius = value + "px";
 			break;
 		case "borderBottomRightRadius":
-			selected_section.style.borderBottomRightRadius = value + "px";
+			selected_element.style.borderBottomRightRadius = value + "px";
 			break;
 		case "columnCount":
-			selected_section.style.columnCount = value;
+			selected_element.style.columnCount = value;
 			break;
 		case "columnGap":
-			selected_section.style.columnGap = value + "px";
+			selected_element.style.columnGap = value + "px";
 			break;
 		case "columnRuleWidth":
-			selected_section.style.columnRuleWidth = value + "px";
+			selected_element.style.columnRuleWidth = value + "px";
 			break;
 		case "columnRuleStyle":
-			selected_section.style.columnRuleStyle = value;
+			selected_element.style.columnRuleStyle = value;
 			break;
 		case "columnRuleColor":
-			selected_section.style.columnRuleColor = value;
+			selected_element.style.columnRuleColor = value;
 			break;
 		case "clipPath":
-			selected_section.style.clipPath = value;
+			selected_element.style.clipPath = value;
 			break;
 		case "clipPathStyle":
 			value = element.querySelector('span').getAttribute('style');
 			value = value.replace("clip-path:", "");
-			selected_section.style.clipPath = value;
+			selected_element.style.clipPath = value;
 			document.getElementById("clip_path").value = value;
 			break;
 		case "transform":
@@ -1984,24 +1983,24 @@ function setSectionStyle(style, element, value) {
 			let transform_degree1 = document.getElementById("transform_degree1").value;
 			let transform_degree2 = document.getElementById("transform_degree2").value;
 			if (transform_type == "rotate") {
-				selected_section.style.transform = "rotate(" + transform_degree1 + "deg)";
+				selected_element.style.transform = "rotate(" + transform_degree1 + "deg)";
 				document.getElementById("transform_degree2").style.display = "none";
 			} else if (transform_type == "skew") {
 				document.getElementById("transform_degree2").style.display = "inline";
-				selected_section.style.transform = "skew(" + transform_degree1 + "deg, " + transform_degree2 + "deg)";
+				selected_element.style.transform = "skew(" + transform_degree1 + "deg, " + transform_degree2 + "deg)";
 			} else if (transform_type == "scale") {
-				selected_section.style.transform = "scale(" + transform_degree1 + ", " + transform_degree2 + ")";
+				selected_element.style.transform = "scale(" + transform_degree1 + ", " + transform_degree2 + ")";
 			}
 			break;
 		case "backgroundImage":
-			if (!selected_section.dataset.image_key) return;
-			idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
+			if (!selected_element.dataset.image_key) return;
+			idbGetItem("dezynor_images", selected_element.dataset.image_key).then(function(result) {
 				if (!result) {
 					console.log("Image not found");
 					return;
 				}				
 				let image = URL.createObjectURL(result);
-				selected_section.style.backgroundImage = "url(" + image + ")";
+				selected_element.style.backgroundImage = "url(" + image + ")";
 			});
 			break;
 		case "backgroundImageGradient":
@@ -2015,30 +2014,30 @@ function setSectionStyle(style, element, value) {
 			if (!document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
 			let color4 = document.getElementById("gradient_color4").value;
 			if (!document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
-			selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
+			selected_element.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
 			break;
 		case "backgroundImageURL":
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) return;
-			selected_section.style.backgroundImage = "url(" + image_url + ")";
+			selected_element.style.backgroundImage = "url(" + image_url + ")";
 			break;
 		case "backgroundRepeat": 
 			if (element.checked) {
-				selected_section.style.backgroundRepeat = "repeat";
-				selected_section.style.backgroundSize = "auto";
+				selected_element.style.backgroundRepeat = "repeat";
+				selected_element.style.backgroundSize = "auto";
 				document.getElementById("background_size").value = "auto";
 			} else {
-				selected_section.style.backgroundRepeat = "no-repeat";
+				selected_element.style.backgroundRepeat = "no-repeat";
 			}
 			break;
 		case "backgroundSize": 
-			selected_section.style.backgroundSize = value;
+			selected_element.style.backgroundSize = value;
 			break;
 		case "backgroundPositionX": 
-			selected_section.style.backgroundPositionX = value;
+			selected_element.style.backgroundPositionX = value;
 			break;
 		case "backgroundPositionY": 
-			selected_section.style.backgroundPositionY = value;
+			selected_element.style.backgroundPositionY = value;
 			break;
 		case "textShadow":
 			let text_shadow_count = document.getElementById("text_shadow_count").value;
@@ -2051,7 +2050,7 @@ function setSectionStyle(style, element, value) {
 				text_shadow += h + "px " + y + "px " + blur + "px " + color;
 				if (i != text_shadow_count) text_shadow += ",";
 			}
-			selected_section.style.textShadow = text_shadow;
+			selected_element.style.textShadow = text_shadow;
 			break;
 		case "boxShadow":
 			let h = document.getElementById("box_shadow_h").value;
@@ -2061,12 +2060,12 @@ function setSectionStyle(style, element, value) {
 			let color = document.getElementById("box_shadow_color").value;
 			let inset = document.getElementById("box_shadow_inset").checked ? "inset " : "";
 			
-			if (selected_section.dataset.image_key && inset.length == 0) {
-				selected_section.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
-				selected_section.style.boxShadow = "none";
+			if (selected_element.dataset.image_key && inset.length == 0) {
+				selected_element.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
+				selected_element.style.boxShadow = "none";
 			} else {
-				selected_section.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
-				selected_section.style.filter = "none";
+				selected_element.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
+				selected_element.style.filter = "none";
 			}
 			break;
 
@@ -2435,6 +2434,12 @@ function setTable() {
 	selected_section.innerHTML = table;
 }
 
+function setElementDefaultStyles() {
+	if (selected_element) {
+		selected_element.setAttribute("style", "");
+	}
+}
+
 function setSectionDefaultStyles(section) {
 	section.style.outline = "1px dashed gray";
 	section.style.direction = "ltr";
@@ -2484,7 +2489,7 @@ function loadSectionDimensions() {
 
 function loadSectionStyles() {
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
-	document.getElementById("story_section").checked = selected_section.dataset.story_section ? true : false;
+	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
 	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
 	document.getElementById("font_size").value = selected_section.style.fontSize.replace("px", "");
 	document.getElementById("color").value = rgb2hex(selected_section.style.color);

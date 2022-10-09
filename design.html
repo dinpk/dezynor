@@ -510,16 +510,23 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Styles</td>
+							<td>Default</td>
 							<td>
-								<select id="select_styles" size="5"></select> 
-								<button onclick="setFormattedElement();">Apply</button>
+								<button onclick="setSectionDefaultStyles(selected_section);">Box Styles</button> 
+								<button onclick="setElementDefaultStyles();">Element Styles</button> 
 							</td>
 						</tr>
 						<tr>
-							<td>Story</td>
+							<td>Styles</td>
 							<td>
-								<input id="story_section" type="checkbox" onchange="toggleStorySection();">
+								<select id="select_styles" size="5"></select> 
+								<button onclick="applyStyle();">Apply</button>
+							</td>
+						</tr>
+						<tr>
+							<td>Inner Styles</td>
+							<td>
+								<input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();">
 							</td>
 						</tr>
 					</table>
