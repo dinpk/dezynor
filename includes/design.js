@@ -14,7 +14,6 @@ window.onload = function() {
 
 let design_id = generateDeisgnId();
 let design_object;
-//let formatted_elements = ["","Heading 1","Heading 2","Heading 3","Heading 4","Heading 5","Paragraph 1","Paragraph 2","Paragraph 3","Paragraph 4","Paragraph 5", "Label 1", "Label 2", "Label 3", "Label 4", "Label 5"];
 let selected_section;
 let selected_element;
 let last_selected_section;
@@ -204,6 +203,7 @@ function addSection() {
 	section.style.width = (parseInt(wrapper.style.width) * 0.7) + "px";
 	section.style.height = (parseInt(wrapper.style.height) * 0.5) + "px";
 	selectSection(section_number);
+	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
 	alignSection('centerCenter');
 
@@ -264,7 +264,6 @@ function selectSection(counter) {
 	loadSectionStyles();
 	reAlignSectionHandles();
 	showHandles();
-	//document.getElementById("select_formatted_elements").value = "";
 }
 
 function setSelectedElement() { 
@@ -1709,6 +1708,8 @@ function applyStyle() {
 	let selected_styles = document.getElementById("select_styles").value.split(";");
 	if (!selected_section || selected_styles.length == 0) return;
 
+	setSelectedElement();
+
 	for (i = 0; i < selected_styles.length; i++) {
 		let style = selected_styles[i].split(":");
 		let rule_name = style[0];
@@ -1727,7 +1728,9 @@ function applyStyle() {
 			}
 		}
 		new_rule_name = new_rule_name.trim();
+		
 		if (new_rule_name.length != 0) {
+			rule_code = rule_code.replaceAll("px", "");
 			setSectionStyle(new_rule_name, null, rule_code);
 		}
 	}
@@ -1869,23 +1872,24 @@ function setSectionStyle(style, element, value) {
 
 	if (element && !value) value = element.value;
 	
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	let inner_styles = selected_section.dataset.inner_styles;
+	if (!inner_styles) selected_element = selected_section;
 	
 	switch (style) {
 		case "top":
-			selected_element.style.top = value + "px";
+			selected_section.style.top = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "left":
-			selected_element.style.left = value + "px";
+			selected_section.style.left = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "width":
-			selected_element.style.width = value + "px";
+			selected_section.style.width = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "height":
-			selected_element.style.height = value + "px";
+			selected_section.style.height = value + "px";
 			reAlignSectionHandles();		
 			break;
 		case "paddingTop":
@@ -1993,14 +1997,14 @@ function setSectionStyle(style, element, value) {
 			}
 			break;
 		case "backgroundImage":
-			if (!selected_element.dataset.image_key) return;
-			idbGetItem("dezynor_images", selected_element.dataset.image_key).then(function(result) {
+			if (!selected_section.dataset.image_key) break;
+			idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
 				if (!result) {
 					console.log("Image not found");
 					return;
 				}				
 				let image = URL.createObjectURL(result);
-				selected_element.style.backgroundImage = "url(" + image + ")";
+				selected_section.style.backgroundImage = "url(" + image + ")";
 			});
 			break;
 		case "backgroundImageGradient":
@@ -2014,30 +2018,31 @@ function setSectionStyle(style, element, value) {
 			if (!document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
 			let color4 = document.getElementById("gradient_color4").value;
 			if (!document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
-			selected_element.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
+			selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
 			break;
 		case "backgroundImageURL":
+			if (inner_styles) break;
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) return;
-			selected_element.style.backgroundImage = "url(" + image_url + ")";
+			selected_section.style.backgroundImage = "url(" + image_url + ")";
 			break;
 		case "backgroundRepeat": 
 			if (element.checked) {
-				selected_element.style.backgroundRepeat = "repeat";
-				selected_element.style.backgroundSize = "auto";
+				selected_section.style.backgroundRepeat = "repeat";
+				selected_section.style.backgroundSize = "auto";
 				document.getElementById("background_size").value = "auto";
 			} else {
-				selected_element.style.backgroundRepeat = "no-repeat";
+				selected_section.style.backgroundRepeat = "no-repeat";
 			}
 			break;
 		case "backgroundSize": 
-			selected_element.style.backgroundSize = value;
+			selected_section.style.backgroundSize = value;
 			break;
 		case "backgroundPositionX": 
-			selected_element.style.backgroundPositionX = value;
+			selected_section.style.backgroundPositionX = value;
 			break;
 		case "backgroundPositionY": 
-			selected_element.style.backgroundPositionY = value;
+			selected_section.style.backgroundPositionY = value;
 			break;
 		case "textShadow":
 			let text_shadow_count = document.getElementById("text_shadow_count").value;
@@ -2435,7 +2440,7 @@ function setTable() {
 }
 
 function setElementDefaultStyles() {
-	if (selected_element) {
+	if (selected_element && selected_element.localName != "section") {
 		selected_element.setAttribute("style", "");
 	}
 }
@@ -2488,21 +2493,27 @@ function loadSectionDimensions() {
 }
 
 function loadSectionStyles() {
+
+	if (!selected_element) return;
+
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
-	document.getElementById("font_family").value = selected_section.style.fontFamily.toString().replace('"', "").replace('"', "");
-	document.getElementById("font_size").value = selected_section.style.fontSize.replace("px", "");
-	document.getElementById("color").value = rgb2hex(selected_section.style.color);
-	if (selected_section.style.backgroundColor == "") {
+	
+	if (!selected_element.getAttribute("style")) selected_element = selected_section;
+	
+	if (selected_element.style.fontFamily) document.getElementById("font_family").value = selected_element.style.fontFamily.toString().replace('"', "").replace('"', "");
+	if (selected_element.style.fontSize) document.getElementById("font_size").value = selected_element.style.fontSize.replace("px", "");
+	if (selected_element.style.color) document.getElementById("color").value = rgb2hex(selected_element.style.color);
+	if (selected_element.style.backgroundColor == "") {
 		document.getElementById("background_color").value = "#000001";
 	} else {
-		document.getElementById("background_color").value = rgb2hex(selected_section.style.backgroundColor);
+		document.getElementById("background_color").value = rgb2hex(selected_element.style.backgroundColor);
 	}
-	document.getElementById("word_spacing").value = selected_section.style.wordSpacing.replace("px", "");
-	document.getElementById("letter_spacing").value = selected_section.style.letterSpacing.replace("px", "");
-	document.getElementById("text_indent").value = selected_section.style.textIndent.replace("px", "");
-	document.getElementById("line_height").value = selected_section.style.lineHeight.replace("px", "");
-	let text_shadow = selected_section.style.textShadow;
+	if (selected_element.style.wordSpacing) document.getElementById("word_spacing").value = selected_element.style.wordSpacing.replace("px", "");
+	if (selected_element.style.letterSpacing) document.getElementById("letter_spacing").value = selected_element.style.letterSpacing.replace("px", "");
+	if (selected_element.style.textIndent) document.getElementById("text_indent").value = selected_element.style.textIndent.replace("px", "");
+	if (selected_element.style.lineHeight) document.getElementById("line_height").value = selected_element.style.lineHeight.replace("px", "");
+	let text_shadow = selected_element.style.textShadow;
 	if (text_shadow == "") {
 		document.getElementById("text_shadow_h").value = "0";
 		document.getElementById("text_shadow_y").value = "0";
@@ -2517,24 +2528,24 @@ function loadSectionStyles() {
 		document.getElementById("text_shadow_blur").value = text_shadow[5].replace("px", "").replace(",", "");
 		if (text_shadow[5].replace("px", "").replace(",", "") == "0") {
 			document.getElementById("text_shadow_count").value = "0";
-			selected_section.style.textShadow = "";		
+			selected_element.style.textShadow = "";		
 		} else {
 			document.getElementById("text_shadow_count").value = text_shadow_count;
 		}
 	}
 
-	document.getElementById("top").value = selected_section.style.top.replace("px", "");
-	document.getElementById("left").value = selected_section.style.left.replace("px", "");
-	document.getElementById("width").value = selected_section.style.width.replace("px", "");
-	document.getElementById("height").value = selected_section.style.height.replace("px", "");
-	document.getElementById("z_index").value = selected_section.style.zIndex;
-	document.getElementById("padding_top").value = selected_section.style.paddingTop.replace("px", "");
-	document.getElementById("padding_right").value = selected_section.style.paddingRight.replace("px", "");
-	document.getElementById("padding_bottom").value = selected_section.style.paddingBottom.replace("px", "");
-	document.getElementById("padding_left").value = selected_section.style.paddingLeft.replace("px", "");
+	if (selected_element.style.top) document.getElementById("top").value = selected_element.style.top.replace("px", "");
+	if (selected_element.style.left) document.getElementById("left").value = selected_element.style.left.replace("px", "");
+	if (selected_element.style.width) document.getElementById("width").value = selected_element.style.width.replace("px", "");
+	if (selected_element.style.height) document.getElementById("height").value = selected_element.style.height.replace("px", "");
+	if (selected_element.style.zIndex) document.getElementById("z_index").value = selected_element.style.zIndex;
+	if (selected_element.style.paddingTop) document.getElementById("padding_top").value = selected_element.style.paddingTop.replace("px", "");
+	if (selected_element.style.paddingRight) document.getElementById("padding_right").value = selected_element.style.paddingRight.replace("px", "");
+	if (selected_element.style.paddingBottom) document.getElementById("padding_bottom").value = selected_element.style.paddingBottom.replace("px", "");
+	if (selected_element.style.paddingLeft) document.getElementById("padding_left").value = selected_element.style.paddingLeft.replace("px", "");
 	
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients
-	let background_image = selected_section.style.backgroundImage;
+	let background_image = selected_element.style.backgroundImage;
 
 	if (background_image.indexOf("gradient") > -1) {
 		gradient_type = background_image.indexOf("linear") > -1 ? "linear-gradient" : "radial-gradient";
@@ -2570,66 +2581,66 @@ function loadSectionStyles() {
 		document.getElementById("gradient_alpha2").checked = (hex2.length == 9) ? false : true;
 		document.getElementById("gradient_alpha3").checked = (hex3.length == 9) ? false : true;
 		document.getElementById("gradient_alpha4").checked = (hex4.length == 9) ? false : true;
-
-	} else {
-		document.getElementById("background_size").value = selected_section.style.backgroundSize;
-		
-	}
-
-	document.getElementById("background_position_x").value = selected_section.style.backgroundPositionX;
-	document.getElementById("background_position_y").value = selected_section.style.backgroundPositionY;
-	document.getElementById("background_image_repeat").checked = (selected_section.style.backgroundRepeat == "repeat") ? true : false;
-
-	document.getElementById("opacity").value = selected_section.style.opacity;
-	document.getElementById("border_width").value = selected_section.style.borderWidth.replace("px", "");
-	document.getElementById("border_style").value = selected_section.style.borderStyle;
-	document.getElementById("border_color").value = rgb2hex(selected_section.style.borderColor);
-	document.getElementById("border_radius1").value = selected_section.style.borderTopLeftRadius.replace("px", "");
-	document.getElementById("border_radius2").value = selected_section.style.borderTopRightRadius.replace("px", "");
-	document.getElementById("border_radius3").value = selected_section.style.borderBottomLeftRadius.replace("px", "");
-	document.getElementById("border_radius4").value = selected_section.style.borderBottomRightRadius.replace("px", "");
-	let filter_drop_shadow = selected_section.style.filter;
-	let box_shadow = selected_section.style.boxShadow;
-	if (filter_drop_shadow.length > 5) { // none
-		filter_drop_shadow = filter_drop_shadow.split(" ");
-		document.getElementById("box_shadow_color").value = rgb2hex((filter_drop_shadow[0].replace("drop-shadow(", "") + filter_drop_shadow[1] + filter_drop_shadow[2]));
-		document.getElementById("box_shadow_h").value = filter_drop_shadow[3].replace("px", "");
-		document.getElementById("box_shadow_y").value = filter_drop_shadow[4].replace("px", "");
-		document.getElementById("box_shadow_blur").value = filter_drop_shadow[5].replace("px)", "");
-		document.getElementById("box_shadow_spread").value = "0";
-	} 	else if (box_shadow != "none") {
-		box_shadow = box_shadow.split(" ");
-		document.getElementById("box_shadow_color").value = rgb2hex((box_shadow[0] + box_shadow[1] + box_shadow[2]));
-		document.getElementById("box_shadow_h").value = box_shadow[3].replace("px", "");
-		document.getElementById("box_shadow_y").value = box_shadow[4].replace("px", "");
-		document.getElementById("box_shadow_blur").value = box_shadow[5].replace("px", "");
-		document.getElementById("box_shadow_spread").value = box_shadow[6].replace("px", "");
-		document.getElementById("box_shadow_inset").checked = box_shadow.indexOf("inset") > -1 ? true : false;
 	}
 	
-	document.getElementById("column_count").value = selected_section.style.columnCount;
-	document.getElementById("column_gap").value = selected_section.style.columnGap.replace("px", "");
-	document.getElementById("column_rule_width").value = selected_section.style.columnRuleWidth.replace("px", "");
-	document.getElementById("column_rule_style").value = selected_section.style.columnRuleStyle;
-	if (selected_section.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(selected_section.style.columnRuleColor);
-	
-	let transform = selected_section.style.transform;
-	document.getElementById("transform_degree1").value = "0";
-	document.getElementById("transform_degree2").value = "0";
-	document.getElementById("transform_type").value = transform.substr(0, transform.indexOf("("));
-	if (transform.indexOf("rotate") > -1) {
-		let transform_degree = transform.split(", ");
-		document.getElementById("transform_degree1").value = transform_degree[0].replace("rotate(", "").replace("deg)", "");
-		document.getElementById("transform_degree2").style.visibility = "hidden";
-	} else if (transform.indexOf("skew") > -1) {
-		let transform_degree = transform.split(", ");
-		if (transform_degree[0]) document.getElementById("transform_degree1").value = transform_degree[0].replace("skew(", "").replace("deg", "").replace(")", "");
-		if (transform_degree[1]) document.getElementById("transform_degree2").value = transform_degree[1].replace("deg)", "");
-		document.getElementById("transform_degree2").style.visibility = "visible";
+	if (selected_element.style.backgroundSize) document.getElementById("background_size").value = selected_element.style.backgroundSize;
+	if (selected_element.style.backgroundPositionX) document.getElementById("background_position_x").value = selected_element.style.backgroundPositionX;
+	if (selected_element.style.backgroundPositionY) document.getElementById("background_position_y").value = selected_element.style.backgroundPositionY;
+	if (selected_element.style.backgroundRepeat) {
+		document.getElementById("background_image_repeat").checked = (selected_element.style.backgroundRepeat == "repeat") ? true : false;
 	}
+	if (selected_element.style.opacity) document.getElementById("opacity").value = selected_element.style.opacity;
+	if (selected_element.style.borderWidth) document.getElementById("border_width").value = selected_element.style.borderWidth.replace("px", "");
+	if (selected_element.style.borderStyle) document.getElementById("border_style").value = selected_element.style.borderStyle;
+	if (selected_element.style.borderColor) document.getElementById("border_color").value = rgb2hex(selected_element.style.borderColor);
+	if (selected_element.style.borderTopLeftRadius) document.getElementById("border_radius1").value = selected_element.style.borderTopLeftRadius.replace("px", "");
+	if (selected_element.style.borderTopRightRadius) document.getElementById("border_radius2").value = selected_element.style.borderTopRightRadius.replace("px", "");
+	if (selected_element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = selected_element.style.borderBottomLeftRadius.replace("px", "");
+	if (selected_element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = selected_element.style.borderBottomRightRadius.replace("px", "");
+	let filter_drop_shadow = selected_element.style.filter;
+	if (filter_drop_shadow) {
+		let box_shadow = selected_element.style.boxShadow;
+		if (filter_drop_shadow.length > 5) { // none
+			filter_drop_shadow = filter_drop_shadow.split(" ");
+			document.getElementById("box_shadow_color").value = rgb2hex((filter_drop_shadow[0].replace("drop-shadow(", "") + filter_drop_shadow[1] + filter_drop_shadow[2]));
+			document.getElementById("box_shadow_h").value = filter_drop_shadow[3].replace("px", "");
+			document.getElementById("box_shadow_y").value = filter_drop_shadow[4].replace("px", "");
+			document.getElementById("box_shadow_blur").value = filter_drop_shadow[5].replace("px)", "");
+			document.getElementById("box_shadow_spread").value = "0";
+		} 	else if (box_shadow != "none") {
+			box_shadow = box_shadow.split(" ");
+			document.getElementById("box_shadow_color").value = rgb2hex((box_shadow[0] + box_shadow[1] + box_shadow[2]));
+			document.getElementById("box_shadow_h").value = box_shadow[3].replace("px", "");
+			document.getElementById("box_shadow_y").value = box_shadow[4].replace("px", "");
+			document.getElementById("box_shadow_blur").value = box_shadow[5].replace("px", "");
+			document.getElementById("box_shadow_spread").value = box_shadow[6].replace("px", "");
+			document.getElementById("box_shadow_inset").checked = box_shadow.indexOf("inset") > -1 ? true : false;
+		}
+	}
+	if (selected_element.style.columnCount) document.getElementById("column_count").value = selected_element.style.columnCount;
+	if (selected_element.style.columnGap) document.getElementById("column_gap").value = selected_element.style.columnGap.replace("px", "");
+	if (selected_element.style.columnRuleWidth) document.getElementById("column_rule_width").value = selected_element.style.columnRuleWidth.replace("px", "");
+	if (selected_element.style.columnRuleStyle) document.getElementById("column_rule_style").value = selected_element.style.columnRuleStyle;
+	if (selected_element.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(selected_element.style.columnRuleColor);
 	
+	let transform = selected_element.style.transform;
+	if (transform) {
+		document.getElementById("transform_degree1").value = "0";
+		document.getElementById("transform_degree2").value = "0";
+		document.getElementById("transform_type").value = transform.substr(0, transform.indexOf("("));
+		if (transform.indexOf("rotate") > -1) {
+			let transform_degree = transform.split(", ");
+			document.getElementById("transform_degree1").value = transform_degree[0].replace("rotate(", "").replace("deg)", "");
+			document.getElementById("transform_degree2").style.visibility = "hidden";
+		} else if (transform.indexOf("skew") > -1) {
+			let transform_degree = transform.split(", ");
+			if (transform_degree[0]) document.getElementById("transform_degree1").value = transform_degree[0].replace("skew(", "").replace("deg", "").replace(")", "");
+			if (transform_degree[1]) document.getElementById("transform_degree2").value = transform_degree[1].replace("deg)", "");
+			document.getElementById("transform_degree2").style.visibility = "visible";
+		}
+	}
 
-	document.getElementById("clip_path").value = selected_section.style.clipPath;
+	if (selected_element.style.clipPath) document.getElementById("clip_path").value = selected_element.style.clipPath;
 }
 
 
