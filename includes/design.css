@@ -288,6 +288,7 @@ h5 {
 	border-top:1px solid white;
 	padding:0 2px 0 2px;
 	vertical-align:middle;
+	text-align:left;
 }
 
 .section_table td:first-child {
@@ -295,6 +296,7 @@ h5 {
 	color:white;
 	padding-top:3px;
 	padding-bottom:3px;
+	
 }
 
 .section_table td:last-child {

@@ -260,10 +260,10 @@ function selectSection(counter) {
 
 	selected_section.style.outline = "4px dashed yellow"
 	colorable_element = selected_section;
-	loadSectionValues();
 	reAlignSectionHandles();
 	showHandles();
-
+	loadSectionValues(selected_section);
+	if (selected_element) loadSectionValues(selected_element);
 }
 
 function setSelectedElement() { 
@@ -271,7 +271,7 @@ function setSelectedElement() {
 	//selected_text = selection.toString();
 	if (!selection.anchorNode) return;
 	selected_element = selection.anchorNode.parentNode;
-	let block_elements = ["p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td"];
+	let block_elements = ["p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
 	let reached_element = false;
 	while (!reached_element) {
 		for (i = 0; i < block_elements.length; i++) {
@@ -1742,7 +1742,7 @@ function applyStyle() {
 
 		setSectionStyle(new_rule_name, null, rule_code);
 	}
-	loadSectionValues();
+	loadSectionValues(selected_element);
 	//reAlignSectionHandles();
 }
 
@@ -2097,19 +2097,21 @@ function setSectionStyle(style, element, value) {
 function setRandomSectionStyle(style) {
 	if (!selected_section) return;
 	
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	
 	let random_color, random_range;
 
 	switch (style) {
 		case "color":
 			random_range = document.getElementById("random_color_range").value;
 			random_color = getRandomRGBColor(random_range);
-			selected_section.style.color = random_color;
+			selected_element.style.color = random_color;
 			document.getElementById("color").value = rgb2hex(random_color);
 			break;
 		case "backgroundColor":
 			random_range = document.getElementById("random_color_range").value;
 			random_color = getRandomRGBColor(random_range);
-			selected_section.style.backgroundColor = random_color;
+			selected_element.style.backgroundColor = random_color;
 			document.getElementById("background_color").value = rgb2hex(random_color);
 			break;
 		case "randomGradientColors":
@@ -2125,7 +2127,7 @@ function setRandomSectionStyle(style) {
 			break;
 		case "borderColor":
 			random_color = getRandomRGBColor("any");
-			selected_section.style.borderColor = random_color;
+			selected_element.style.borderColor = random_color;
 			document.getElementById("border_color").value = rgb2hex(random_color);
 			break;
 		case "textShadow":
@@ -2145,52 +2147,12 @@ function setRandomSectionStyle(style) {
 }
 
 
-function setSameSectionStyle(type) {
-	if (!selected_section) return;
-	
-	let element;
-	
-	switch (type) {
-		case "backgroundColorSameAsWrapper":
-			element = document.getElementById("background_color");
-			element.value = document.getElementById("wrapper_background_color").value;
-			element.onchange();
-			break;
-		case "backgroundColorSameAsLastSection":
-			if (last_selected_section) {
-				selected_section.style.backgroundColor = last_selected_section.style.backgroundColor;
-			}
-			break;
-		case "textColorSameAsLastSection":
-			if (last_selected_section) {
-				let text_color = document.getElementById("color");
-				text_color.value = rgb2hex(last_selected_section.style.color);
-				text_color.onchange();
-			}
-			break;
-		case "backgroundGradientsSameColor":
-			document.getElementById("gradient_color2").value = document.getElementById("gradient_color1").value;
-			document.getElementById("gradient_color3").value = document.getElementById("gradient_color1").value;
-			document.getElementById("gradient_color4").value = document.getElementById("gradient_color1").value;
-			break;
-		case "borderColorSameAsTextColor":
-			element = document.getElementById("border_color");
-			element.value = document.getElementById("color").value;
-			element.onchange();
-			break;
-		case "borderColorSameAsBackgroundColor":
-			element = document.getElementById("border_color");
-			element.value = document.getElementById("background_color").value;
-			element.onchange();
-			break;
-	}
-	
-}
-
 
 function removeSectionStyle(style) {
 
 	if (!selected_section) return;
+	
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	
 	switch (style) {
 		case "backgroundColor":
@@ -2283,18 +2245,23 @@ function removeSectionClass(value) {
 
 
 function styleBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
-		document.getElementById("border_radius1").value = top_left;
-		document.getElementById("border_radius2").value = top_right;
-		document.getElementById("border_radius3").value = bottom_left;
-		document.getElementById("border_radius4").value = bottom_right;
-		selected_section.style.borderTopLeftRadius = top_left + "px";
-		selected_section.style.borderTopRightRadius = top_right + "px";
-		selected_section.style.borderBottomLeftRadius = bottom_left + "px";
-		selected_section.style.borderBottomRightRadius = bottom_right + "px";
+	if (!selected_section) return;
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	document.getElementById("border_radius1").value = top_left;
+	document.getElementById("border_radius2").value = top_right;
+	document.getElementById("border_radius3").value = bottom_left;
+	document.getElementById("border_radius4").value = bottom_right;
+	selected_element.style.borderTopLeftRadius = top_left + "px";
+	selected_element.style.borderTopRightRadius = top_right + "px";
+	selected_element.style.borderBottomLeftRadius = bottom_left + "px";
+	selected_element.style.borderBottomRightRadius = bottom_right + "px";
 }
+
 function styleBorderWidthPreset(width) {
+	if (!selected_section) return;
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;	
 	document.getElementById("border_width").value = width;
-	selected_section.style.borderWidth = width + "px";
+	selected_element.style.borderWidth = width + "px";
 }
 
 
@@ -2513,32 +2480,33 @@ function loadSectionDimensions() {
 	document.getElementById("height").value = selected_section.style.height.replace("px", "");
 }
 
-function loadSectionValues() {
+function loadSectionValues(element) {
 
-	if (!selected_element) return;
+	//loadSectionDefaultValues();
 
-	loadSectionDefaultValues();
+	if (!selected_section) return;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
 	
-	if (!selected_section.dataset.inner_styles) {
-		selected_element = selected_section;
+	if (!selected_section.dataset.inner_styles || !element.getAttribute("style")) {
+		element = selected_section;
 	}
 	
-	if (selected_element.style.fontFamily) document.getElementById("font_family").value = selected_element.style.fontFamily.toString().replace('"', "").replace('"', "");
-	if (selected_element.style.fontSize) document.getElementById("font_size").value = selected_element.style.fontSize.replace("px", "");
-	if (selected_element.style.color) document.getElementById("color").value = rgb2hex(selected_element.style.color);
-	if (selected_element.style.backgroundColor == "") {
+	
+	if (element.style.fontFamily) document.getElementById("font_family").value = element.style.fontFamily.toString().replace('"', "").replace('"', "");
+	if (element.style.fontSize) document.getElementById("font_size").value = element.style.fontSize.replace("px", "");
+	if (element.style.color) document.getElementById("color").value = rgb2hex(element.style.color);
+	if (element.style.backgroundColor == "") {
 		document.getElementById("background_color").value = "#000001";
 	} else {
-		document.getElementById("background_color").value = rgb2hex(selected_element.style.backgroundColor);
+		document.getElementById("background_color").value = rgb2hex(element.style.backgroundColor);
 	}
-	if (selected_element.style.wordSpacing) document.getElementById("word_spacing").value = selected_element.style.wordSpacing.replace("px", "");
-	if (selected_element.style.letterSpacing) document.getElementById("letter_spacing").value = selected_element.style.letterSpacing.replace("px", "");
-	if (selected_element.style.textIndent) document.getElementById("text_indent").value = selected_element.style.textIndent.replace("px", "");
-	if (selected_element.style.lineHeight) document.getElementById("line_height").value = selected_element.style.lineHeight.replace("px", "");
-	let text_shadow = selected_element.style.textShadow;
+	if (element.style.wordSpacing) document.getElementById("word_spacing").value = element.style.wordSpacing.replace("px", "");
+	if (element.style.letterSpacing) document.getElementById("letter_spacing").value = element.style.letterSpacing.replace("px", "");
+	if (element.style.textIndent) document.getElementById("text_indent").value = element.style.textIndent.replace("px", "");
+	if (element.style.lineHeight) document.getElementById("line_height").value = element.style.lineHeight.replace("px", "");
+	let text_shadow = element.style.textShadow;
 	if (text_shadow == "") {
 		document.getElementById("text_shadow_h").value = "0";
 		document.getElementById("text_shadow_y").value = "0";
@@ -2553,24 +2521,24 @@ function loadSectionValues() {
 		document.getElementById("text_shadow_blur").value = text_shadow[5].replace("px", "").replace(",", "");
 		if (text_shadow[5].replace("px", "").replace(",", "") == "0") {
 			document.getElementById("text_shadow_count").value = "0";
-			selected_element.style.textShadow = "";		
+			element.style.textShadow = "";		
 		} else {
 			document.getElementById("text_shadow_count").value = text_shadow_count;
 		}
 	}
 
-	if (selected_element.style.top) document.getElementById("top").value = selected_element.style.top.replace("px", "");
-	if (selected_element.style.left) document.getElementById("left").value = selected_element.style.left.replace("px", "");
-	if (selected_element.style.width) document.getElementById("width").value = selected_element.style.width.replace("px", "");
-	if (selected_element.style.height) document.getElementById("height").value = selected_element.style.height.replace("px", "");
-	if (selected_element.style.zIndex) document.getElementById("z_index").value = selected_element.style.zIndex;
-	if (selected_element.style.paddingTop) document.getElementById("padding_top").value = selected_element.style.paddingTop.replace("px", "");
-	if (selected_element.style.paddingRight) document.getElementById("padding_right").value = selected_element.style.paddingRight.replace("px", "");
-	if (selected_element.style.paddingBottom) document.getElementById("padding_bottom").value = selected_element.style.paddingBottom.replace("px", "");
-	if (selected_element.style.paddingLeft) document.getElementById("padding_left").value = selected_element.style.paddingLeft.replace("px", "");
+	if (element.style.top) document.getElementById("top").value = element.style.top.replace("px", "");
+	if (element.style.left) document.getElementById("left").value = element.style.left.replace("px", "");
+	if (element.style.width) document.getElementById("width").value = element.style.width.replace("px", "");
+	if (element.style.height) document.getElementById("height").value = element.style.height.replace("px", "");
+	if (element.style.zIndex) document.getElementById("z_index").value = element.style.zIndex;
+	if (element.style.paddingTop) document.getElementById("padding_top").value = element.style.paddingTop.replace("px", "");
+	if (element.style.paddingRight) document.getElementById("padding_right").value = element.style.paddingRight.replace("px", "");
+	if (element.style.paddingBottom) document.getElementById("padding_bottom").value = element.style.paddingBottom.replace("px", "");
+	if (element.style.paddingLeft) document.getElementById("padding_left").value = element.style.paddingLeft.replace("px", "");
 	
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients
-	let background_image = selected_element.style.backgroundImage;
+	let background_image = element.style.backgroundImage;
 
 	if (background_image.indexOf("gradient") > -1) {
 		gradient_type = background_image.indexOf("linear") > -1 ? "linear-gradient" : "radial-gradient";
@@ -2608,23 +2576,23 @@ function loadSectionValues() {
 		document.getElementById("gradient_alpha4").checked = (hex4.length == 9) ? false : true;
 	}
 	
-	if (selected_element.style.backgroundSize) document.getElementById("background_size").value = selected_element.style.backgroundSize;
-	if (selected_element.style.backgroundPositionX) document.getElementById("background_position_x").value = selected_element.style.backgroundPositionX;
-	if (selected_element.style.backgroundPositionY) document.getElementById("background_position_y").value = selected_element.style.backgroundPositionY;
-	if (selected_element.style.backgroundRepeat) {
-		document.getElementById("background_image_repeat").checked = (selected_element.style.backgroundRepeat == "repeat") ? true : false;
+	if (element.style.backgroundSize) document.getElementById("background_size").value = element.style.backgroundSize;
+	if (element.style.backgroundPositionX) document.getElementById("background_position_x").value = element.style.backgroundPositionX;
+	if (element.style.backgroundPositionY) document.getElementById("background_position_y").value = element.style.backgroundPositionY;
+	if (element.style.backgroundRepeat) {
+		document.getElementById("background_image_repeat").checked = (element.style.backgroundRepeat == "repeat") ? true : false;
 	}
-	if (selected_element.style.opacity) document.getElementById("opacity").value = selected_element.style.opacity;
-	if (selected_element.style.borderWidth) document.getElementById("border_width").value = selected_element.style.borderWidth.replace("px", "");
-	if (selected_element.style.borderStyle) document.getElementById("border_style").value = selected_element.style.borderStyle;
-	if (selected_element.style.borderColor) document.getElementById("border_color").value = rgb2hex(selected_element.style.borderColor);
-	if (selected_element.style.borderTopLeftRadius) document.getElementById("border_radius1").value = selected_element.style.borderTopLeftRadius.replace("px", "");
-	if (selected_element.style.borderTopRightRadius) document.getElementById("border_radius2").value = selected_element.style.borderTopRightRadius.replace("px", "");
-	if (selected_element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = selected_element.style.borderBottomLeftRadius.replace("px", "");
-	if (selected_element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = selected_element.style.borderBottomRightRadius.replace("px", "");
-	let filter_drop_shadow = selected_element.style.filter;
+	if (element.style.opacity) document.getElementById("opacity").value = element.style.opacity;
+	if (element.style.borderWidth) document.getElementById("border_width").value = element.style.borderWidth.replace("px", "");
+	if (element.style.borderStyle) document.getElementById("border_style").value = element.style.borderStyle;
+	if (element.style.borderColor) document.getElementById("border_color").value = rgb2hex(element.style.borderColor);
+	if (element.style.borderTopLeftRadius) document.getElementById("border_radius1").value = element.style.borderTopLeftRadius.replace("px", "");
+	if (element.style.borderTopRightRadius) document.getElementById("border_radius2").value = element.style.borderTopRightRadius.replace("px", "");
+	if (element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = element.style.borderBottomLeftRadius.replace("px", "");
+	if (element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = element.style.borderBottomRightRadius.replace("px", "");
+	let filter_drop_shadow = element.style.filter;
 	if (filter_drop_shadow) {
-		let box_shadow = selected_element.style.boxShadow;
+		let box_shadow = element.style.boxShadow;
 		if (filter_drop_shadow.length > 5) { // none
 			filter_drop_shadow = filter_drop_shadow.split(" ");
 			document.getElementById("box_shadow_color").value = rgb2hex((filter_drop_shadow[0].replace("drop-shadow(", "") + filter_drop_shadow[1] + filter_drop_shadow[2]));
@@ -2642,13 +2610,13 @@ function loadSectionValues() {
 			document.getElementById("box_shadow_inset").checked = box_shadow.indexOf("inset") > -1 ? true : false;
 		}
 	}
-	if (selected_element.style.columnCount) document.getElementById("column_count").value = selected_element.style.columnCount;
-	if (selected_element.style.columnGap) document.getElementById("column_gap").value = selected_element.style.columnGap.replace("px", "");
-	if (selected_element.style.columnRuleWidth) document.getElementById("column_rule_width").value = selected_element.style.columnRuleWidth.replace("px", "");
-	if (selected_element.style.columnRuleStyle) document.getElementById("column_rule_style").value = selected_element.style.columnRuleStyle;
-	if (selected_element.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(selected_element.style.columnRuleColor);
+	if (element.style.columnCount) document.getElementById("column_count").value = element.style.columnCount;
+	if (element.style.columnGap) document.getElementById("column_gap").value = element.style.columnGap.replace("px", "");
+	if (element.style.columnRuleWidth) document.getElementById("column_rule_width").value = element.style.columnRuleWidth.replace("px", "");
+	if (element.style.columnRuleStyle) document.getElementById("column_rule_style").value = element.style.columnRuleStyle;
+	if (element.style.columnRuleColor) document.getElementById("column_rule_color").value = rgb2hex(element.style.columnRuleColor);
 	
-	let transform = selected_element.style.transform;
+	let transform = element.style.transform;
 	if (transform) {
 		document.getElementById("transform_degree1").value = "0";
 		document.getElementById("transform_degree2").value = "0";
@@ -2665,7 +2633,7 @@ function loadSectionValues() {
 		}
 	}
 
-	if (selected_element.style.clipPath) document.getElementById("clip_path").value = selected_element.style.clipPath;
+	if (element.style.clipPath) document.getElementById("clip_path").value = element.style.clipPath;
 }
 
 
@@ -2855,7 +2823,7 @@ document.onkeydown = function(e){
 		|| 	(e.ctrlKey && e.altKey) 
 		|| 	(e.shiftKey && e.altKey) 
 		|| 	(e.altKey && (key >= 96 && key <= 111)) // numpad and operators
-		|| 	(key >= 112 && key <= 123) // function keys
+		|| 	(key >= 112 && key <= 122) // function keys
 		|| 	(e.ctrlKey && key == keyCode.HOME) 
 		|| 	(e.ctrlKey && key == keyCode.END) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_W) 

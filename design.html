@@ -45,6 +45,29 @@
 					<img src="images/icon_box_copy.png" onclick="copySection();" title="Copy box"> 
 					<img src="images/icon_box_paste.png" onclick="pasteSection();" title="Paste box"> 
 					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box (Alt + Delete)"> 
+					<br>
+					<hr>
+					<table class="section_table">
+						<tr>
+							<td>Container box</td>
+							<td>
+								&nbsp; <input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();">
+							</td>
+						</tr>
+						<tr>
+							<td>Inner styles</td>
+							<td style="width:60%;">
+								&nbsp; <input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();">
+							</td>
+						</tr>
+						<tr>
+							<td>Default styles</td>
+							<td>
+								<button onclick="setSectionDefaultStyles(selected_section);">Box Styles</button> &nbsp; 
+								<button onclick="setElementDefaultStyles();">Element Styles</button> 
+							</td>
+						</tr>
+					</table>
 				</div>
 
 				<div id="utility_section">
@@ -195,12 +218,6 @@
 							<td>Layer</td>
 							<td>
 								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
-							</td>
-						</tr>
-						<tr>
-							<td>Container</td>
-							<td>
-								<input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();">
 							</td>
 						</tr>
 					</table>
@@ -501,6 +518,7 @@
 							<td>
 								<input id="column_rule_width" type="number" onchange="setSectionStyle('columnRuleWidth', this);" value="0" step="1">
 								<select id="column_rule_style" onchange="setSectionStyle('columnRuleStyle', this);">
+									<option></option>
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
@@ -511,23 +529,10 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Default</td>
-							<td>
-								<button onclick="setSectionDefaultStyles(selected_section);">Box Styles</button> &nbsp; 
-								<button onclick="setElementDefaultStyles();">Element Styles</button> 
-							</td>
-						</tr>
-						<tr>
 							<td>Styles</td>
 							<td>
 								<select id="select_styles" size="5"></select> 
 								<button onclick="applyStyle();">Apply</button>
-							</td>
-						</tr>
-						<tr>
-							<td>Inner Styles</td>
-							<td>
-								<input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();">
 							</td>
 						</tr>
 					</table>
@@ -553,8 +558,7 @@
 								<input id="color" type="color" onchange="setSectionStyle('color',this);"> 
 								<button onclick="setColorableElement('color', selected_section.id, 'color');showPopupPanel('color_pallette');">🚥</button>
 								<button onclick="setRandomSectionStyle('color');" title="Random color">↻</button> 
-								<button onclick="setSameSectionStyle('textColorSameAsLastSection');" title="Last section color">L</button> 
-								<button onclick="styleSwitchTextBackgroundColors();" title="Switch colors">S</button> 
+								<button onclick="styleSwitchTextBackgroundColors();" title="Switch colors">s</button> 
 							</td>
 						</tr>
 						<tr>
@@ -563,8 +567,6 @@
 								<input id="background_color" type="color" onchange="setSectionStyle('backgroundColor',this);"> 
 								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('backgroundColor');" title="Random color">↻</button> 
-								<button onclick="setSameSectionStyle('backgroundColorSameAsWrapper');" title="Page color">P</button> 
-								<button onclick="setSameSectionStyle('backgroundColorSameAsLastSection');" title="Last section color">L</button> 
 								<button id="remove_background_color" onclick="removeSectionStyle('backgroundColor');">x</button> 
 							</td>
 						</tr>
@@ -575,7 +577,6 @@
 								<input id="gradient_color2" type="color" onchange="setSectionStyle('backgroundImageGradient',this);"> 
 								<input id="gradient_color3" type="color" onchange="setSectionStyle('backgroundImageGradient',this);"> 
 								<input id="gradient_color4" type="color" onchange="setSectionStyle('backgroundImageGradient',this);"> 
-								<button onclick="setSameSectionStyle('backgroundGradientsSameColor');setSectionStyle('backgroundImageGradient',this);">＝</button>
 								<button onclick="setRandomSectionStyle('randomGradientColors');setSectionStyle('backgroundImageGradient',this);" title="Random gradient colors">↻</button><br>
 								 
 								<input id="gradient_alpha1" type="checkbox" onchange="setSectionStyle('backgroundImageGradient',this);"> &nbsp; 
@@ -693,6 +694,7 @@
 							<td>
 								<input id="border_width" type="number" onchange="setSectionStyle('borderWidth',this);" step="1">
 								<select id="border_style" onchange="setSectionStyle('borderStyle',this);">
+									<option></option>
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
@@ -703,8 +705,6 @@
 								<input id="border_color" type="color" onchange="setSectionStyle('borderColor',this);">
 								<button onclick="setColorableElement('border_color', selected_section.id, 'border');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('borderColor');" title="Random color">↻</button> 
-								<button onclick="setSameSectionStyle('borderColorSameAsTextColor');" title="Same as text color">T</button>
-								<button onclick="setSameSectionStyle('borderColorSameAsBackgroundColor');" title="Same as background color">B</button>
 							</td>
 						</tr>
 						<tr>
