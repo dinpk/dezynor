@@ -201,8 +201,11 @@ function addSection() {
 	selectSection(section_number);
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
-	alignSection('pageCenter');
-
+	alignSection('pageTopLeft');
+	setTimeout(function() { 
+		alignSection('pageCenterCenter');
+	}, 100);	
+	
 }
 
 function getNewSectionNumber() {
@@ -1115,7 +1118,11 @@ function alignSection(type) {
 				selected_section.style.top = parseInt(new_top) + "px";
 			}
 			break;
-		case "pageCenter":
+		case "pageTopLeft":
+			selected_section.style.left = document.getElementById("wrapper").style.left;
+			selected_section.style.top = document.getElementById("wrapper").style.top;
+			break;
+		case "pageCenterCenter":
 			let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 			selected_section.style.left = parseInt(new_left) + "px";
 			let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);

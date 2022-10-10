@@ -22,8 +22,9 @@
 				let all_images = await idbGetAllItems("dezynor_images");
 				let all_settings = await idbGetAllItems("dezynor_settings");
 				let all_designs = await idbGetAllItems("dezynor_designs");
+				let all_styles = await idbGetAllItems("dezynor_styles");
 				let all_fonts = await idbGetAllItems("dezynor_fonts");
-				total_files = all_images.length + all_designs.length + all_fonts.length + all_settings.length;
+				total_files = all_images.length + all_designs.length + all_styles.length + all_fonts.length + all_settings.length;
 				
 				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items (designs, images, fonts, settings etc.), please wait...</div>";
 
@@ -35,6 +36,10 @@
 			
 				for (i = 0; i < all_designs.length; i++) {
 					zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
+				}
+
+				for (i = 0; i < all_styles.length; i++) {
+					zip_items.file(all_styles[i].style_key + ".backup", JSON.stringify(all_styles[i].value));
 				}
 
 				for (i = 0; i < all_images.length; i++) {
@@ -86,6 +91,14 @@
 								showProgress();
 							}
 
+						} else if (file_name.indexOf("style-") == 0) {
+							let key = file_name.replace(".backup", "");
+							let object = JSON.parse(file_data);
+							if (await idbPutItem("dezynor_styles", {style_key:key, value:object})) {
+								total_processed++;
+								showProgress();
+							}
+						
 						} else if (file_name.indexOf("font-") == 0) {
 							let font_key = file_name.replace(".backup", "");
 							font_key = font_key.replace("font-", "");
