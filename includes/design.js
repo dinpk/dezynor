@@ -35,13 +35,10 @@ function saveCurrentState() {
 }
 
 function revertToLastState() {
-	if (revert_states.length > 0) {
+	if (revert_states.length > 1) {
 		document.getElementById("cover").innerHTML = revert_states.pop();
-		let all_sections = document.querySelectorAll("section");
-		if (all_sections.length > 0) {
-			let first_section_number = all_sections[0].id.replace("section", "");
-			selectSection(first_section_number);
-		}
+		showMessage("Reverted to last state", "Orange");
+		if (revert_states.length > 10) revert_states = slice(revert_states.length-10);
 	}
 }
 
@@ -264,6 +261,7 @@ function selectSection(counter) {
 	showHandles();
 	loadSectionValues(selected_section);
 	if (selected_element) loadSectionValues(selected_element);
+	saveCurrentState();
 }
 
 function setSelectedElement() { 
@@ -2833,6 +2831,7 @@ document.onkeydown = function(e){
 		|| 	(e.ctrlKey && key == keyCode.KEY_J) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_9) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_0) 
+		|| 	(e.ctrlKey && key == keyCode.KEY_Z) 
 		|| 	(e.altKey && key == keyCode.KEY_1) 
 		|| 	(e.altKey && key == keyCode.KEY_2) 
 
@@ -2909,8 +2908,9 @@ document.onkeyup = function(e) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("word_spacing_change"));
 		element.onchange();
-
-
+	
+	} else if (e.ctrlKey && key == keyCode.KEY_Z) {
+		revertToLastState();
 	} else if (e.altKey && key == keyCode.KEY_2) {
 		duplicateSection();
 	} else if (e.altKey && key == keyCode.KEY_1) {
