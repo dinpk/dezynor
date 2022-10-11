@@ -17,6 +17,7 @@ let design_object;
 let selected_section;
 let selected_element;
 let last_selected_section;
+let last_selected_element;
 let revert_states = [];
 let short_style_rules = ["padding", "borderRadius"];
 let move;
@@ -38,7 +39,7 @@ function revertToLastState() {
 	if (revert_states.length > 1) {
 		document.getElementById("cover").innerHTML = revert_states.pop();
 		showMessage("Reverted to last state", "Orange");
-		if (revert_states.length > 10) revert_states = slice(revert_states.length-10);
+		if (revert_states.length > 10) revert_states = revert_states.slice(revert_states.length-10);
 	}
 }
 
@@ -199,6 +200,7 @@ function addSection() {
 	section.style.width = (parseInt(wrapper.style.width) * 0.7) + "px";
 	section.style.height = (parseInt(wrapper.style.height) * 0.5) + "px";
 	selectSection(section_number);
+	setSectionDefaultStyles();
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
 	alignSection('pageTopLeft');
@@ -268,6 +270,9 @@ function selectSection(counter) {
 }
 
 function setSelectedElement() { 
+
+	last_selected_element = selected_element;
+
 	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
 	//selected_text = selection.toString();
 	if (!selection.anchorNode) return;
@@ -2280,10 +2285,19 @@ function styleSwitchTextBackgroundColors() {
 	background_color.onchange();
 }
 
-
-function setColorableElement(control_id, element_id, color_style) {
+function setColorableWrapper(control_id, color_style) {
 	colorable_control = document.getElementById(control_id);
-	colorable_element = document.getElementById(element_id);
+	colorable_element = document.getElementById("wrapper");
+	colorable_style = color_style;
+}
+
+function setColorableElement(control_id, color_style) {
+	colorable_control = document.getElementById(control_id);
+	if (selected_section && selected_section.dataset.inner_styles) {
+		colorable_element = selected_element;
+	} else {
+		colorable_element = selected_section;
+	}
 	colorable_style = color_style;
 }
 
@@ -2437,45 +2451,53 @@ function setElementDefaultStyles() {
 	}
 }
 
-function setSectionDefaultStyles(section) {
-	section.style.outline = "1px dashed gray";
-	section.style.direction = "ltr";
-	section.style.fontFamily = "Smooch";
-	section.style.fontSize = "25px";
-	section.style.color = "rgb(0,0,0)";
-	section.style.backgroundColor = "";
-	section.style.wordSpacing = "0px";
-	section.style.letterSpacing = "0px";
-	section.style.textIndent = "0px";
-	section.style.lineHeight = "35px";
-	section.style.textAlign = "center";
-	section.style.textShadow = "0px 0px 0px #000000";
-	section.style.padding = "0";
-	section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
-	section.style.backgroundPositionX = "center";
-	section.style.backgroundPositionY = "center";
-	section.style.opacity = "1";
-	section.style.backgroundSize = "100% 100%";
-	section.style.backgroundRepeat = "no-repeat";
-	section.style.borderWidth = "0";
-	section.style.borderStyle = "solid";
-	section.style.borderColor = "rgb(100,100,100)";
-	section.style.borderTopLeftRadius = "0px";
-	section.style.borderTopRightRadius = "0px";
-	section.style.borderBottomLeftRadius = "0px";
-	section.style.borderBottomRightRadius = "0px";
-	section.style.boxShadow = "0px 0px 0px 0px #000000";
-	section.style.filter = "none";
-	section.style.columnCount = "1";
-	section.style.columnGap = "10px";
-	section.style.columnFill = "auto";
-	section.style.columnRuleColor = "rgb(100,100,100)";
-	section.style.columnRuleWidth = "1px";
-	section.style.columnRuleStyle = "solid";
-	section.style.orphans = "0";
-	section.style.transform = "skew(0deg, 0deg)";
-	section.style.transformOrigin = "center center";
-	section.style.clipPath = "";
+function setToLastElementStyles() {
+	if (!selected_element || !last_selected_element || last_selected_element.localName == "section") return;
+	selected_element.setAttribute("style", last_selected_element.getAttribute("style"));
+}
+
+
+function setSectionDefaultStyles() {
+	if (!selected_section) return;
+	selected_section.style.outline = "1px dashed gray";
+	selected_section.style.direction = "ltr";
+	selected_section.style.fontFamily = "Smooch";
+	selected_section.style.fontSize = "25px";
+	selected_section.style.color = "rgb(0,0,0)";
+	selected_section.style.lineHeight = "35px";
+	selected_section.style.textAlign = "center";
+	return;
+	selected_section.style.backgroundColor = "";
+	selected_section.style.wordSpacing = "0px";
+	selected_section.style.letterSpacing = "0px";
+	selected_section.style.textIndent = "0px";
+	selected_section.style.textShadow = "0px 0px 0px #000000";
+	selected_section.style.padding = "0";
+	selected_section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
+	selected_section.style.backgroundPositionX = "center";
+	selected_section.style.backgroundPositionY = "center";
+	selected_section.style.opacity = "1";
+	selected_section.style.backgroundSize = "100% 100%";
+	selected_section.style.backgroundRepeat = "no-repeat";
+	selected_section.style.borderWidth = "0";
+	selected_section.style.borderStyle = "solid";
+	selected_section.style.borderColor = "rgb(100,100,100)";
+	selected_section.style.borderTopLeftRadius = "0px";
+	selected_section.style.borderTopRightRadius = "0px";
+	selected_section.style.borderBottomLeftRadius = "0px";
+	selected_section.style.borderBottomRightRadius = "0px";
+	selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
+	selected_section.style.filter = "none";
+	selected_section.style.columnCount = "1";
+	selected_section.style.columnGap = "10px";
+	selected_section.style.columnFill = "auto";
+	selected_section.style.columnRuleColor = "rgb(100,100,100)";
+	selected_section.style.columnRuleWidth = "1px";
+	selected_section.style.columnRuleStyle = "solid";
+	selected_section.style.orphans = "0";
+	selected_section.style.transform = "skew(0deg, 0deg)";
+	selected_section.style.transformOrigin = "center center";
+	selected_section.style.clipPath = "";
 }
 
 function loadSectionDimensions() {
@@ -2487,7 +2509,7 @@ function loadSectionDimensions() {
 
 function loadSectionValues(element) {
 
-	//loadSectionDefaultValues();
+	loadSectionDefaultValues();
 
 	if (!selected_section) return;
 

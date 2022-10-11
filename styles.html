@@ -357,7 +357,7 @@
 		<style>
 		
 			#styles_table {
-				width:95%;
+				width:97%;
 				margin:0 auto;
 				background:none;
 			}
@@ -377,8 +377,18 @@
 				border:1px solid #DDD;
 			}
 			
+			
+			#styles {
+				width:20%;
+			}
+			
 			#formatting {
 				padding:0;
+				width:25%;
+			}
+			
+			#sample {
+				width:55%;
 			}
 			
 			#styles > div {
@@ -432,13 +442,13 @@
 
 		<script>writeHeader();</script>
 
-		<div class="pad20">
-			<input id="style_name" type="text" placeholder="Style name" autofocus required> 
-			<input id="sample_text" type="text" placeholder="Sample text" required> 
-			<button onclick="addStyle();">Add</button>
+		<div class="pad30">
+			<input id="style_name" type="text" placeholder="Style name" class="pad10" autofocus required> 
+			<input id="sample_text" type="text" placeholder="Sample text" class="pad10" required> 
+			<button onclick="addStyle();" class="pad10" >Add</button>
 		</div>
 		
-		<table id="styles_table" class="pad20">
+		<table id="styles_table">
 			<tr>
 				<th>Styles</th>
 				<th>Formatting</th>

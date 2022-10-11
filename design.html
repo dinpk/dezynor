@@ -63,8 +63,14 @@
 						<tr>
 							<td>Default styles</td>
 							<td>
-								<button onclick="setSectionDefaultStyles(selected_section);">Box Styles</button> &nbsp; 
-								<button onclick="setElementDefaultStyles();">Element Styles</button> 
+								<button onclick="setSectionDefaultStyles();">Box</button> &nbsp; 
+								<button onclick="setElementDefaultStyles();">Element</button> 
+							</td>
+						</tr>
+						<tr>
+							<td>Repeat styles</td>
+							<td>
+								<button onclick="setToLastElementStyles();">Last Element</button> 
 							</td>
 						</tr>
 					</table>
@@ -116,7 +122,7 @@
 							<td>Background</td>
 							<td>
 								<input id="wrapper_background_color" type="color" onchange="setWrapperStyle('backgroundColor', this);" title="Choose color"> 
-								<button onclick="setColorableElement('wrapper_background_color', 'wrapper', 'back');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
+								<button onclick="setColorableWrapper('wrapper_background_color', 'back');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
 								<select id="wrapper_random_range" title="Random color type">
 									<option>any</option>
 									<option selected>light</option>
@@ -525,7 +531,7 @@
 									<option>dotted</option>
 								</select> 
 								<input id="column_rule_color" type="color" onchange="setSectionStyle('columnRuleColor', this);"> 
-								<button onclick="setColorableElement('column_rule_color', selected_section.id, 'column');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorableElement('column_rule_color', 'column');showPopupPanel('color_pallette');">🚥</button> 
 							</td>
 						</tr>
 						<tr>
@@ -556,7 +562,7 @@
 							<td>Text</td>
 							<td>
 								<input id="color" type="color" onchange="setSectionStyle('color',this);"> 
-								<button onclick="setColorableElement('color', selected_section.id, 'color');showPopupPanel('color_pallette');">🚥</button>
+								<button onclick="setColorableElement('color', 'color');showPopupPanel('color_pallette');">🚥</button>
 								<button onclick="setRandomSectionStyle('color');" title="Random color">↻</button> 
 								<button onclick="styleSwitchTextBackgroundColors();" title="Switch colors">s</button> 
 							</td>
@@ -565,7 +571,7 @@
 							<td>Background color</td>
 							<td>
 								<input id="background_color" type="color" onchange="setSectionStyle('backgroundColor',this);"> 
-								<button onclick="setColorableElement('background_color', selected_section.id, 'back');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorableElement('background_color', 'back');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('backgroundColor');" title="Random color">↻</button> 
 								<button id="remove_background_color" onclick="removeSectionStyle('backgroundColor');">x</button> 
 							</td>
@@ -703,7 +709,7 @@
 								<button id="remove_border" onclick="removeSectionStyle('border');">x</button>
 								<br>
 								<input id="border_color" type="color" onchange="setSectionStyle('borderColor',this);">
-								<button onclick="setColorableElement('border_color', selected_section.id, 'border');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorableElement('border_color', 'border');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('borderColor');" title="Random color">↻</button> 
 							</td>
 						</tr>
@@ -760,7 +766,7 @@
 							<td>Text shadow</td>
 							<td>
 								<input id="text_shadow_color" type="color" onchange="setSectionStyle('textShadow',this);"> 
-								<button onclick="setColorableElement('text_shadow_color', selected_section.id, 'textshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorableElement('text_shadow_color', 'textshadow');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomSectionStyle('textShadow');" title="Random color">↻</button> 
 								<button onclick="removeSectionStyle('textShadow');">x</button>
 								<br>
@@ -787,7 +793,7 @@
 								<button id="remove_box_shadow" onclick="removeSectionStyle('boxShadow');">x</button>
 								<br>
 								<input id="box_shadow_color" type="color" onchange="setSectionStyle('boxShadow',this);">
-								<button onclick="setColorableElement('box_shadow_color', selected_section.id, 'boxshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorableElement('box_shadow_color', 'boxshadow');showPopupPanel('color_pallette');">🚥</button> 
 								<input id="box_shadow_inset" type="checkbox" onclick="setSectionStyle('boxShadow',this);"> Inset
 								<br>
 								Blur <input id="box_shadow_blur" type="number" onchange="setSectionStyle('boxShadow',this);" step="1"> 
@@ -883,7 +889,7 @@
 								Distance y <input id="duplicate_linear_y_distance" type="number" step="1" value="50" disabled> 
 								<br>
 								<br>
-								<button onclick="revertToLastState();" title="Revert to last state">Revert to last state</button>
+								<button onclick="revertToLastState();" title="Revert to last state">Revert to Last State</button>
 							</td>
 						</tr>
 
