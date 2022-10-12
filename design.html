@@ -834,18 +834,27 @@
 							<td><input id="table_caption" type="checkbox"></td>
 						</tr>
 						<tr>
-							<td>Insert row</td>
+							<td>Row</td>
 							<td>
-								<button onclick="insertTableRow('before')">Before</button>
-								<button onclick="insertTableRow('after')">After</button>
+								<button onclick="insertTableRow('before')">Insert before</button>
+								<button onclick="insertTableRow('after')">Insert after</button>
+								<button onclick="deleteTableRow()">x</button>
 							</td>
 						</tr>
 						<tr>
-							<td>Insert column</td>
+							<td>Column</td>
 							<td>
-								<button onclick="insertTableColumn('before')">Before</button>
-								<button onclick="insertTableColumn('after')">After</button>
+								<button onclick="insertTableColumn('before')">Insert before</button>
+								<button onclick="insertTableColumn('after')">Insert after</button>
+								<button onclick="deleteTableColumn()">x</button>
 								
+							</td>
+						</tr>
+						<tr>
+							<td>Repeat style</td>
+							<td>
+								<button onclick="repeatTableRowStyle()">Row</button>
+								<button onclick="repeatTableColumnStyle()">Column</button>
 							</td>
 						</tr>
 					</table>

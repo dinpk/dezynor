@@ -2477,6 +2477,71 @@ function insertTableColumn(location) {
 	}
 }
 
+function deleteTableRow() {
+	if (!selected_element || selected_element.localName != "td") return;
+	let tr = selected_element.parentNode;
+	tr.remove();
+}
+
+function deleteTableColumn() {
+	if (!selected_element || selected_element.localName != "td") return;
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	let position;
+	let all_td = tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		if (all_td[i] == selected_element) {
+			position = i;
+		}
+	}
+
+	let all_tr = table.querySelectorAll("tr");
+	for (k = 0; k < all_tr.length; k++){
+		let all_tr_td = all_tr[k].querySelectorAll("td");
+		for (s = 0; s < all_tr_td.length; s++) {
+			if (s == position) {
+				all_tr_td[s].remove();
+			}
+		}
+	}
+}
+
+function repeatTableRowStyle() {
+	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
+	let style = selected_element.getAttribute("style");
+	let tr = selected_element.parentNode;
+	let all_td = tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		all_td[i].setAttribute("style", style);
+	}
+}
+
+
+function repeatTableColumnStyle() {
+	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
+	let style = selected_element.getAttribute("style");
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	let position;
+	let all_td = tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		if (all_td[i] == selected_element) {
+			position = i;
+		}
+	}
+
+	let all_tr = table.querySelectorAll("tr");
+	for (k = 0; k < all_tr.length; k++){
+		let all_tr_td = all_tr[k].querySelectorAll("td");
+		for (s = 0; s < all_tr_td.length; s++) {
+			if (s == position) {
+				all_tr_td[s].setAttribute("style", style);
+			}
+		}
+	}
+}
+
+
 
 function setElementDefaultStyles() {
 	if (selected_element && selected_element.localName != "section") {
