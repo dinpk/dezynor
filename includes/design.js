@@ -2408,8 +2408,6 @@ function setTable() {
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
-	let table_header = document.getElementById("table_header").checked;
-	let table_footer = document.getElementById("table_footer").checked;
 	let table_caption = document.getElementById("table_caption").checked;
 	
 	let border_width = parseInt(document.getElementById("table_border_width").value);
@@ -2421,24 +2419,6 @@ function setTable() {
 	if (table_caption) {
 		caption = "<caption>Caption</caption>";
 	}
-	
-	let thead = "";
-	if (table_header) {
-		thead = "<thead><tr>";
-		for (col = 0; col < table_columns; col++) {
-			thead = thead + "<th style='" + cell_style + "'>&nbsp;</th>";
-		}
-		thead = thead + "</tr></thead>";
-	}
-
-	let tfoot = "";
-	if (table_footer) {
-		tfoot = "<tfoot><tr>";
-		for (col = 0; col < table_columns; col++) {
-			tfoot = tfoot + "<td style='" + cell_style + "'>&nbsp;</td>";
-		}
-		tfoot = tfoot + "</tr></tfoot>";
-	}
 
 	let table = "";
 	for (row = 0;row < table_rows; row++) {
@@ -2448,13 +2428,12 @@ function setTable() {
 		}
 		table = table + "</tr>";
 	}
-	table = "<table>" + caption + thead + "<tbody>" + table + "</tbody>" + tfoot + "</table>";
+	table = "<table>" + caption + "<tbody>" + table + "</tbody>" + "</table>";
 	selected_section.innerHTML = table;
 }
 
 function insertTableRow(location) {
 	if (!selected_element || selected_element.localName != "td") return;
-	let table = selected_element.parentNode.parentNode.parentNode.localName;
 	let tr = selected_element.parentNode;
 	let cloned_tr = tr.cloneNode(true);
 	let all_td = cloned_tr.querySelectorAll("td");
@@ -2467,7 +2446,35 @@ function insertTableRow(location) {
 	} else {
 		tr.after(cloned_tr);
 	}
-	
+}
+
+function insertTableColumn(location) {
+	if (!selected_element || selected_element.localName != "td") return;
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	let position;
+	let all_td = tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		if (all_td[i] == selected_element) {
+			position = i;
+		}
+	}
+
+	let all_tr = table.querySelectorAll("tr");
+	for (k = 0; k < all_tr.length; k++){
+		let all_tr_td = all_tr[k].querySelectorAll("td");
+		for (s = 0; s < all_tr_td.length; s++) {
+			if (s == position) {
+				let cloned_td = all_tr_td[s].cloneNode(true);
+				cloned_td.innerHTML = "&nbsp;";
+				if (location == "before") {
+					all_tr_td[s].before(cloned_td);
+				} else {
+					all_tr_td[s].after(cloned_td);
+				}
+			}
+		}
+	}
 }
 
 
