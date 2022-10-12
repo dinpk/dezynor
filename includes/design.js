@@ -196,11 +196,11 @@ function addSection() {
 	section.setAttribute("contenteditable", "true");
 	wrapper.appendChild(section);
 	document.getElementById(section_id).style.zIndex = section_number;
-	setSectionDefaultStyles(document.getElementById(section_id));
 	section.style.width = (parseInt(wrapper.style.width) * 0.7) + "px";
 	section.style.height = (parseInt(wrapper.style.height) * 0.5) + "px";
 	selectSection(section_number);
 	setSectionDefaultStyles();
+	loadFormValues(section);
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
 	alignSection('pageTopLeft');
@@ -264,12 +264,14 @@ function selectSection(counter) {
 	colorable_element = selected_section;
 	reAlignSectionHandles();
 	showHandles();
-	loadSectionValues(selected_section);
-	if (selected_element) loadSectionValues(selected_element);
+	loadFormValues(selected_section);
+	if (selected_element) loadFormValues(selected_element);
 	saveCurrentState();
 }
 
 function setSelectedElement() { 
+
+	// elements without hard-space or characters are not selected: <td></td> <div> </div> etc.
 
 	last_selected_element = selected_element;
 
@@ -277,7 +279,7 @@ function setSelectedElement() {
 	//selected_text = selection.toString();
 	if (!selection.anchorNode) return;
 	selected_element = selection.anchorNode.parentNode;
-	let block_elements = ["p", "div", "article", "section", "main", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
+	let block_elements = ["p", "div", "section", "caption", "main", "article", "header", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
 	let reached_element = false;
 	while (!reached_element) {
 		for (i = 0; i < block_elements.length; i++) {
@@ -291,6 +293,9 @@ function setSelectedElement() {
 			selected_element = selected_element.parentNode;
 		}
 	}
+	
+
+	// console.log(selected_element);
 }
 
 function duplicateSection() {
@@ -1183,7 +1188,7 @@ function shiftSection(type) {
 }
 
 
-function styleRotateRight() {
+function rotateRight() {
 	document.getElementById("transform_type").value = "rotate";
 	let element = document.getElementById("transform_degree1");
 	element.onchange();
@@ -1194,7 +1199,7 @@ function styleRotateRight() {
 	element.onchange();
 }
 
-function styleRotateLeft() {
+function rotateLeft() {
 	document.getElementById("transform_type").value = "rotate";
 	let element = document.getElementById("transform_degree1");
 	element.onchange();
@@ -1686,7 +1691,7 @@ async function loadDezyn() {
 			data = data.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls of sections
 			document.getElementById("cover").innerHTML = data;
 			design_id = current_design_key;
-			loadWrapperStyles();
+			loadWrapperFormValues();
 			let all_sections = document.querySelectorAll("section");
 			if (all_sections.length > 0) {
 				let first_section_number = all_sections[0].id.replace("section", "");
@@ -1722,6 +1727,8 @@ function applyStyle() {
 	if (!selected_section || selected_styles.length == 0) return;
 
 	setSelectedElement();
+	
+	if (selected_section.dataset.inner_styles && selected_element.localName == "section") return;
 
 	for (i = 0; i < selected_styles.length; i++) {
 		let style = selected_styles[i].split(":");
@@ -1750,9 +1757,9 @@ function applyStyle() {
 		}
 		if (!is_short_rule) rule_code = rule_code.replaceAll("px", "");
 
-		setSectionStyle(new_rule_name, null, rule_code);
+		setStyle(new_rule_name, null, rule_code);
 	}
-	loadSectionValues(selected_element);
+	loadFormValues(selected_element);
 	//reAlignSectionHandles();
 }
 
@@ -1879,7 +1886,7 @@ function setRandomWrapperBackgroundColor() {
 	document.getElementById("wrapper_background_color").value = rgb2hex(random_color);
 }
 
-function loadWrapperStyles() {
+function loadWrapperFormValues() {
 	let wrapper = document.getElementById("wrapper");
 	document.getElementById("wrapper_width").value = wrapper.style.width.replace("px", "");
 	document.getElementById("wrapper_height").value = wrapper.style.height.replace("px", "");
@@ -1887,7 +1894,7 @@ function loadWrapperStyles() {
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
 }
 
-function setSectionStyle(style, element, value) {
+function setStyle(style, element, value) {
 	
 	if (!selected_section) return;
 
@@ -2045,7 +2052,7 @@ function setSectionStyle(style, element, value) {
 			if (!document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
 			let color4 = document.getElementById("gradient_color4").value;
 			if (!document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
-			selected_section.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";	
+			selected_element.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
 			break;
 		case "backgroundImageURL":
 			if (inner_styles) break;
@@ -2104,7 +2111,7 @@ function setSectionStyle(style, element, value) {
 	}
 }
 
-function setRandomSectionStyle(style) {
+function setRandomStyle(style) {
 	if (!selected_section) return;
 	
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
@@ -2158,7 +2165,7 @@ function setRandomSectionStyle(style) {
 
 
 
-function removeSectionStyle(style) {
+function removeStyle(style) {
 
 	if (!selected_section) return;
 	
@@ -2254,7 +2261,7 @@ function removeSectionClass(value) {
 }
 
 
-function styleBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
+function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	if (!selected_section) return;
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	document.getElementById("border_radius1").value = top_left;
@@ -2267,7 +2274,7 @@ function styleBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right)
 	selected_element.style.borderBottomRightRadius = bottom_right + "px";
 }
 
-function styleBorderWidthPreset(width) {
+function setBorderWidthPreset(width) {
 	if (!selected_section) return;
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;	
 	document.getElementById("border_width").value = width;
@@ -2275,7 +2282,7 @@ function styleBorderWidthPreset(width) {
 }
 
 
-function styleSwitchTextBackgroundColors() {
+function switchTextBackgroundColors() {
 	let text_color = document.getElementById("color");
 	let background_color = document.getElementById("background_color");
 	let temp = text_color.value;
@@ -2373,7 +2380,7 @@ async function uploadImage(element) {
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
 			selected_section.dataset.image_key = image_key;
 			document.getElementById("upload_image").value = "";
-			setSectionStyle('backgroundImage');
+			setStyle('backgroundImage');
 		}
 
 	}, false);
@@ -2445,6 +2452,25 @@ function setTable() {
 	selected_section.innerHTML = table;
 }
 
+function insertTableRow(location) {
+	if (!selected_element || selected_element.localName != "td") return;
+	let table = selected_element.parentNode.parentNode.parentNode.localName;
+	let tr = selected_element.parentNode;
+	let cloned_tr = tr.cloneNode(true);
+	let all_td = cloned_tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		all_td[i].innerHTML = "&nbsp;";
+	}
+	
+	if (location == "before") {
+		tr.before(cloned_tr);
+	} else {
+		tr.after(cloned_tr);
+	}
+	
+}
+
+
 function setElementDefaultStyles() {
 	if (selected_element && selected_element.localName != "section") {
 		selected_element.setAttribute("style", "");
@@ -2452,12 +2478,22 @@ function setElementDefaultStyles() {
 }
 
 function setToLastElementStyles() {
-	if (!selected_element || !last_selected_element || last_selected_element.localName == "section") return;
+	
+	if (
+		!selected_element || 
+		!last_selected_element || 
+		selected_element.localName == "section" || 
+		last_selected_element.localName == "section" ||
+		!last_selected_element.getAttribute("style")
+	) {
+		return;
+	}
+	
 	selected_element.setAttribute("style", last_selected_element.getAttribute("style"));
 }
 
 
-function setSectionDefaultStyles() {
+function setSectionDefaultStyles(new_section = false) {
 	if (!selected_section) return;
 	selected_section.style.outline = "1px dashed gray";
 	selected_section.style.direction = "ltr";
@@ -2466,7 +2502,6 @@ function setSectionDefaultStyles() {
 	selected_section.style.color = "rgb(0,0,0)";
 	selected_section.style.lineHeight = "35px";
 	selected_section.style.textAlign = "center";
-	return;
 	selected_section.style.backgroundColor = "";
 	selected_section.style.wordSpacing = "0px";
 	selected_section.style.letterSpacing = "0px";
@@ -2507,9 +2542,9 @@ function loadSectionDimensions() {
 	document.getElementById("height").value = selected_section.style.height.replace("px", "");
 }
 
-function loadSectionValues(element) {
+function loadFormValues(element) {
 
-	loadSectionDefaultValues();
+	loadSectionDefaultFormValues();
 
 	if (!selected_section) return;
 
@@ -2569,6 +2604,7 @@ function loadSectionValues(element) {
 
 	if (background_image.indexOf("gradient") > -1) {
 		gradient_type = background_image.indexOf("linear") > -1 ? "linear-gradient" : "radial-gradient";
+
 		document.getElementById("gradient_type").value = gradient_type;
 		background_image = background_image.replace("linear-gradient(", "").replace("radial-gradient(", "").replace("))", ")");
 		// add missing default values
@@ -2666,7 +2702,7 @@ function loadSectionValues(element) {
 
 
 
-function loadSectionDefaultValues() {
+function loadSectionDefaultFormValues() {
 	document.getElementById("font_family").value = "Smooch";
 	document.getElementById("font_size").value = "25";
 	document.getElementById("line_height").value = "35";
@@ -2693,7 +2729,7 @@ function loadSectionDefaultValues() {
 	document.getElementById("padding_right").value = "0";
 	document.getElementById("padding_bottom").value = "0";
 	document.getElementById("padding_left").value = "0";
-	document.getElementById("gradient_type").value = "linear";
+	document.getElementById("gradient_type").value = "linear-gradient";
 	document.getElementById("gradient_direction").value = "to top";
 	document.getElementById("gradient_color1").value = "#FFFFFF";
 	document.getElementById("gradient_color2").value = "#FFFFFF";
@@ -2703,13 +2739,13 @@ function loadSectionDefaultValues() {
 	document.getElementById("gradient_alpha2").checked = false;
 	document.getElementById("gradient_alpha3").checked = false;
 	document.getElementById("gradient_alpha4").checked = false;
-	document.getElementById("background_size").value = "stretch";
-	document.getElementById("background_position_x").value = "center";
-	document.getElementById("background_position_y").value = "center";
+	document.getElementById("background_size").value = "100% 100%";
+	document.getElementById("background_position_x").value = "50%";
+	document.getElementById("background_position_y").value = "50%";
 	document.getElementById("background_image_repeat").checked = false;
 	document.getElementById("opacity").value = "1";
-	document.getElementById("border_width").value = "0";
-	document.getElementById("border_style").value = "solid";
+	document.getElementById("border_width").value = "3";
+	document.getElementById("border_style").value = "";
 	document.getElementById("border_color").value = "#707070";
 	document.getElementById("border_radius1").value = "0";
 	document.getElementById("border_radius2").value = "0";
@@ -2723,8 +2759,8 @@ function loadSectionDefaultValues() {
 	document.getElementById("box_shadow_inset").checked = false;
 	document.getElementById("column_count").value = "1";
 	document.getElementById("column_gap").value = "10";
-	document.getElementById("column_rule_width").value = "1";
-	document.getElementById("column_rule_style").value = "solid";
+	document.getElementById("column_rule_width").value = "3";
+	document.getElementById("column_rule_style").value = "";
 	document.getElementById("column_rule_color").value = "#707070";
 	document.getElementById("transform_type").value = "skew";
 	document.getElementById("transform_degree1").value = "0";
@@ -2902,9 +2938,9 @@ document.onkeyup = function(e) {
 	} else if (key == keyCode.F9) {
 		saveDezyn();
 	} else if (e.ctrlKey && key == keyCode.COMMA) {
-		setSectionStyle('direction', null, 'rtl');
+		setStyle('direction', null, 'rtl');
 	} else if (e.ctrlKey && key == keyCode.PERIOD) {
-		setSectionStyle('direction', null, 'ltr');
+		setStyle('direction', null, 'ltr');
 	} else if (e.ctrlKey && key == keyCode.KEY_R) {
 		//styleTextAlign('right');
 	} else if (e.ctrlKey && key == keyCode.KEY_L) {
@@ -2969,11 +3005,11 @@ document.onkeyup = function(e) {
 	} else if (e.altKey && key == keyCode.NUMPAD_6) {
 		shiftSection('right');
 	} else if (e.altKey && key == keyCode.NUMPAD_7) {
-		styleRotateLeft();
+		rotateLeft();
 	} else if (e.altKey && key == keyCode.NUMPAD_8) {
 		shiftSection('up');
 	} else if (e.altKey && key == keyCode.NUMPAD_9) {
-		styleRotateRight();
+		rotateRight();
 	} else if (e.altKey && key == keyCode.UP_ARROW) {
 		let section_top = parseInt(selected_section.style.top.replace("px", ""));
 		let section_bottom = section_top + parseInt(selected_section.style.height.replace("px", ""));
