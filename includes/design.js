@@ -36,11 +36,12 @@ function saveCurrentState() {
 }
 
 function revertToLastState() {
-	if (revert_states.length > 1) {
+	if (revert_states.length > 0) {
 		document.getElementById("cover").innerHTML = revert_states.pop();
-		showMessage("Reverted to last state", "Orange");
-		if (revert_states.length > 10) revert_states = revert_states.slice(revert_states.length-10);
+		//showMessage("Reverted to last state", "Orange");
+		if (revert_states.length > 50) revert_states = revert_states.slice(revert_states.length-50);
 	}
+	unselectSections();
 }
 
 
@@ -235,6 +236,8 @@ function getNewSectionNumber() {
 
 function selectSection(counter) {
 
+	
+
 	last_selected_section = selected_section;
 
 	setSelectedElement();
@@ -266,7 +269,7 @@ function selectSection(counter) {
 	showHandles();
 	loadFormValues(selected_section);
 	if (selected_element) loadFormValues(selected_element);
-	saveCurrentState();
+	
 }
 
 function setSelectedElement() { 
@@ -301,6 +304,8 @@ function setSelectedElement() {
 function duplicateSection() {
 	
 	if (!(selected_section)) return;
+	
+	saveCurrentState();
 	
 	let original_section = selected_section;
 	
@@ -375,6 +380,9 @@ function updateContainerSections() {
 
 function removeSection() {
 	if (!(selected_section)) return;
+	
+	saveCurrentState();
+	
 	if (confirm("Do you really want to delete this box?")) {
 		selected_section.remove();
 		hideHandles();
@@ -395,6 +403,8 @@ function copySection() {
 }
 
 async function pasteSection() {
+
+	saveCurrentState();
 
 	let copied_sections = localStorage.getItem("copied_section").split("|");
 	let first_section_number;
@@ -848,6 +858,9 @@ function reAlignSectionHandles() {
 		console.log(`CenterX:${center_x} CenterY:${center_y} Angle:${angle} Width:${section_width} Height:${section_height}`);
 	}
 	*/
+	
+	
+		
 
 }
 
@@ -1723,12 +1736,18 @@ async function loadDezyn() {
 }
 
 function applyStyle() {
+	
 	let selected_styles = document.getElementById("select_styles").value.split(";");
 	if (!selected_section || selected_styles.length == 0) return;
 
-	setSelectedElement();
-	
 	if (selected_section.dataset.inner_styles && selected_element.localName == "section") return;
+
+	saveCurrentState();
+
+	setSelectedElement();
+
+	if (!selected_section.dataset.inner_styles) setSectionDefaultStyles();
+	setElementDefaultStyles();
 
 	for (i = 0; i < selected_styles.length; i++) {
 		let style = selected_styles[i].split(":");
@@ -1757,7 +1776,7 @@ function applyStyle() {
 		}
 		if (!is_short_rule) rule_code = rule_code.replaceAll("px", "");
 
-		setStyle(new_rule_name, null, rule_code);
+		setStyle(new_rule_name, null, rule_code, false);
 	}
 	loadFormValues(selected_element);
 	//reAlignSectionHandles();
@@ -1894,9 +1913,11 @@ function loadWrapperFormValues() {
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
 }
 
-function setStyle(style, element, value) {
+function setStyle(style, element, value, save_state = true) {
 	
 	if (!selected_section) return;
+	
+	if (save_state) saveCurrentState();
 
 	if (element && !value) value = element.value;
 	
@@ -1968,6 +1989,12 @@ function setStyle(style, element, value) {
 		case "opacity":
 			selected_element.style.opacity = value;
 			break;
+		case "borderCombined":
+			let border_width = document.getElementById("border_width").value;
+			let border_style = document.getElementById("border_style").value;
+			let border_color = document.getElementById("border_color").value;
+			selected_element.style.border = border_width + "px " + border_style + border_color;
+			break;
 		case "borderWidth":
 			selected_element.style.borderWidth = value + "px";
 			break;
@@ -1991,6 +2018,18 @@ function setStyle(style, element, value) {
 			break;
 		case "borderBottomRightRadius":
 			selected_element.style.borderBottomRightRadius = value + "px";
+			break;
+		case "columnCombined":
+			let column_count = document.getElementById("column_count").value;
+			let column_gap = document.getElementById("column_gap").value;
+			let column_rule_width = document.getElementById("column_rule_width").value;
+			let column_rule_style = document.getElementById("column_rule_style").value;
+			let column_rule_color = document.getElementById("column_rule_color").value;
+			selected_element.style.columnCount = column_count;
+			selected_element.style.columnGap = column_gap + "px";
+			selected_element.style.columnRuleWidth = column_rule_width + "px";
+			selected_element.style.columnRuleStyle = column_rule_style;
+			selected_element.style.columnRuleColor = column_rule_color;
 			break;
 		case "columnCount":
 			selected_element.style.columnCount = value;
@@ -2041,7 +2080,7 @@ function setStyle(style, element, value) {
 				selected_section.style.backgroundImage = "url(" + image + ")";
 			});
 			break;
-		case "backgroundImageGradient":
+		case "backgroundGradientCombined":
 			let gradient_type = document.getElementById("gradient_type").value;
 			let gradient_direction = document.getElementById("gradient_direction").value;
 			let color1 = document.getElementById("gradient_color1").value;
@@ -2112,7 +2151,10 @@ function setStyle(style, element, value) {
 }
 
 function setRandomStyle(style) {
+	
 	if (!selected_section) return;
+	
+	saveCurrentState();
 	
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	
@@ -2168,6 +2210,8 @@ function setRandomStyle(style) {
 function removeStyle(style) {
 
 	if (!selected_section) return;
+	
+	saveCurrentState();
 	
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	
@@ -2263,6 +2307,7 @@ function removeSectionClass(value) {
 
 function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	if (!selected_section) return;
+	saveCurrentState();
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	document.getElementById("border_radius1").value = top_left;
 	document.getElementById("border_radius2").value = top_right;
@@ -2276,6 +2321,7 @@ function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 
 function setBorderWidthPreset(width) {
 	if (!selected_section) return;
+	saveCurrentState();
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;	
 	document.getElementById("border_width").value = width;
 	selected_element.style.borderWidth = width + "px";
@@ -2545,7 +2591,7 @@ function repeatTableColumnStyle() {
 
 function setElementDefaultStyles() {
 	if (selected_element && selected_element.localName != "section") {
-		selected_element.setAttribute("style", "");
+		selected_element.removeAttribute("style");
 	}
 }
 
@@ -2565,7 +2611,7 @@ function setToLastElementStyles() {
 }
 
 
-function setSectionDefaultStyles(new_section = false) {
+function setSectionDefaultStyles() {
 	if (!selected_section) return;
 	selected_section.style.outline = "1px dashed gray";
 	selected_section.style.direction = "ltr";
@@ -2816,8 +2862,8 @@ function loadSectionDefaultFormValues() {
 	document.getElementById("background_position_y").value = "50%";
 	document.getElementById("background_image_repeat").checked = false;
 	document.getElementById("opacity").value = "1";
-	document.getElementById("border_width").value = "3";
-	document.getElementById("border_style").value = "";
+	document.getElementById("border_width").value = "0";
+	document.getElementById("border_style").value = "solid";
 	document.getElementById("border_color").value = "#707070";
 	document.getElementById("border_radius1").value = "0";
 	document.getElementById("border_radius2").value = "0";
@@ -2831,8 +2877,8 @@ function loadSectionDefaultFormValues() {
 	document.getElementById("box_shadow_inset").checked = false;
 	document.getElementById("column_count").value = "1";
 	document.getElementById("column_gap").value = "10";
-	document.getElementById("column_rule_width").value = "3";
-	document.getElementById("column_rule_style").value = "";
+	document.getElementById("column_rule_width").value = "1";
+	document.getElementById("column_rule_style").value = "solid";
 	document.getElementById("column_rule_color").value = "#707070";
 	document.getElementById("transform_type").value = "skew";
 	document.getElementById("transform_degree1").value = "0";

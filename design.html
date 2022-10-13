@@ -67,12 +67,6 @@
 								<button onclick="setElementDefaultStyles();">Element</button> 
 							</td>
 						</tr>
-						<tr>
-							<td>Repeat styles</td>
-							<td>
-								<button onclick="setToLastElementStyles();">Last Element</button> 
-							</td>
-						</tr>
 					</table>
 				</div>
 
@@ -514,22 +508,21 @@
 						<tr>
 							<td>Columns</td>
 							<td>
-								<input id="column_count" type="number" onchange="setStyle('columnCount', this);" step="1"> 
-								Gap <input id="column_gap" type="number" onchange="setStyle('columnGap', this);" step="10"> 
+								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" step="1"> 
+								Gap <input id="column_gap" type="number" onchange="setStyle('columnCombined', this);" step="10"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Columns rule</td>
 							<td>
-								<input id="column_rule_width" type="number" onchange="setStyle('columnRuleWidth', this);" value="0" step="1">
-								<select id="column_rule_style" onchange="setStyle('columnRuleStyle', this);">
-									<option></option>
+								<input id="column_rule_width" type="number" onchange="setStyle('columnCombined', this);" value="0" step="1">
+								<select id="column_rule_style" onchange="setStyle('columnCombined', this);">
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
 								</select> 
-								<input id="column_rule_color" type="color" onchange="setStyle('columnRuleColor', this);"> 
+								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);"> 
 								<button onclick="setColorableElement('column_rule_color', 'column');showPopupPanel('color_pallette');">🚥</button> 
 							</td>
 						</tr>
@@ -578,23 +571,23 @@
 						<tr>
 							<td>Background gradient</td>
 							<td>
-								<input id="gradient_color1" type="color" onchange="setStyle('backgroundImageGradient',this);"> 
-								<input id="gradient_color2" type="color" onchange="setStyle('backgroundImageGradient',this);"> 
-								<input id="gradient_color3" type="color" onchange="setStyle('backgroundImageGradient',this);"> 
-								<input id="gradient_color4" type="color" onchange="setStyle('backgroundImageGradient',this);"> 
-								<button onclick="setRandomStyle('randomGradientColors');setStyle('backgroundImageGradient',this);" title="Random gradient colors">↻</button><br>
+								<input id="gradient_color1" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
+								<input id="gradient_color2" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
+								<input id="gradient_color3" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
+								<input id="gradient_color4" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
+								<button onclick="setRandomStyle('randomGradientColors');setStyle('backgroundGradientCombined',this);" title="Random gradient colors">↻</button><br>
 								 
-								<input id="gradient_alpha1" type="checkbox" onchange="setStyle('backgroundImageGradient',this);"> &nbsp; 
-								<input id="gradient_alpha2" type="checkbox" onchange="setStyle('backgroundImageGradient',this);"> &nbsp;  
-								<input id="gradient_alpha3" type="checkbox" onchange="setStyle('backgroundImageGradient',this);">  &nbsp; 
-								<input id="gradient_alpha4" type="checkbox" onchange="setStyle('backgroundImageGradient',this);"><br>
+								<input id="gradient_alpha1" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);"> &nbsp; 
+								<input id="gradient_alpha2" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);"> &nbsp;  
+								<input id="gradient_alpha3" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);">  &nbsp; 
+								<input id="gradient_alpha4" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);"><br>
 
-								<select id="gradient_type" onchange="setGradientDirection();setStyle('backgroundImageGradient',this);">
+								<select id="gradient_type" onchange="setGradientDirection();setStyle('backgroundGradientCombined',this);">
 									<option value="linear-gradient">linear</option>
 									<option value="radial-gradient">radial</option>
 									<option value="conic-gradient">conic</option>
 								</select> 
-								<select id="gradient_direction" onchange="setStyle('backgroundImageGradient',this);">
+								<select id="gradient_direction" onchange="setStyle('backgroundGradientCombined',this);">
 									<optgroup label="Linear">
 										<option>to top</option>
 										<option>to bottom</option>
@@ -697,9 +690,8 @@
 						<tr>
 							<td>Style</td>
 							<td>
-								<input id="border_width" type="number" onchange="setStyle('borderWidth',this);" step="1">
-								<select id="border_style" onchange="setStyle('borderStyle',this);">
-									<option></option>
+								<input id="border_width" type="number" onchange="setStyle('borderCombined',this);" step="1">
+								<select id="border_style" onchange="setStyle('borderCombined',this);">
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
@@ -707,7 +699,7 @@
 								</select>
 								<button id="remove_border" onclick="removeStyle('border');">x</button>
 								<br>
-								<input id="border_color" type="color" onchange="setStyle('borderColor',this);">
+								<input id="border_color" type="color" onchange="setStyle('borderCombined',this);">
 								<button onclick="setColorableElement('border_color', 'border');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomStyle('borderColor');" title="Random color">↻</button> 
 							</td>
@@ -854,7 +846,8 @@
 							<td>Repeat style</td>
 							<td>
 								<button onclick="repeatTableRowStyle()">Row</button>
-								<button onclick="repeatTableColumnStyle()">Column</button>
+								<button onclick="repeatTableColumnStyle()">Column</button> 
+								<button onclick="setToLastElementStyles();">Last cell</button> 								
 							</td>
 						</tr>
 					</table>
