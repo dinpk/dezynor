@@ -41,6 +41,11 @@ function revertToLastState() {
 		//showMessage("Reverted to last state", "Orange");
 		if (revert_states.length > 50) revert_states = revert_states.slice(revert_states.length-50);
 	}
+	let all_sections = document.querySelectorAll("#wrapper section");
+	if (all_sections.length > 0) {
+		selectSection(all_sections[0].id.replace("section", ""));
+		selectSection(all_sections[all_sections.length-1].id.replace("section", ""));
+	}
 	unselectSections();
 }
 
@@ -201,7 +206,6 @@ function addSection() {
 	section.style.height = (parseInt(wrapper.style.height) * 0.5) + "px";
 	selectSection(section_number);
 	setSectionDefaultStyles();
-	loadFormValues(section);
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
 	alignSection('pageTopLeft');
@@ -236,8 +240,6 @@ function getNewSectionNumber() {
 
 function selectSection(counter) {
 
-	
-
 	last_selected_section = selected_section;
 
 	setSelectedElement();
@@ -248,7 +250,6 @@ function selectSection(counter) {
 		// console.log("selecting same section " + new_selected_id);
 		return;
 	}
-	
 	
 	unselectSections();
 	selected_section = document.getElementById(new_selected_id);
@@ -274,14 +275,16 @@ function selectSection(counter) {
 
 function setSelectedElement() { 
 
-	// elements without hard-space or characters are not selected: <td></td> <div> </div> etc.
-
 	last_selected_element = selected_element;
 
 	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
 	//selected_text = selection.toString();
 	if (!selection.anchorNode) return;
-	selected_element = selection.anchorNode.parentNode;
+	if (!selection.anchorNode.data) {
+		selected_element = selection.anchorNode;
+	} else {
+		selected_element = selection.anchorNode.parentNode;
+	}
 	let block_elements = ["p", "div", "section", "caption", "main", "article", "header", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
 	let reached_element = false;
 	while (!reached_element) {
@@ -1737,17 +1740,21 @@ async function loadDezyn() {
 
 function applyStyle() {
 	
-	let selected_styles = document.getElementById("select_styles").value.split(";");
-	if (!selected_section || selected_styles.length == 0) return;
 
-	if (selected_section.dataset.inner_styles && selected_element.localName == "section") return;
+	if (!selected_section || (selected_section.dataset.inner_styles && selected_element.localName == "section")) return;
+
+	let selected_styles = document.getElementById("select_styles").value.split(";");
+	if (selected_styles.length == 0) return;
 
 	saveCurrentState();
 
 	setSelectedElement();
 
-	if (!selected_section.dataset.inner_styles) setSectionDefaultStyles();
-	setElementDefaultStyles();
+	if (selected_section.dataset.inner_styles) {
+		setElementDefaultStyles();
+	} else {
+		setSectionDefaultStyles();
+	}
 
 	for (i = 0; i < selected_styles.length; i++) {
 		let style = selected_styles[i].split(":");
@@ -1778,8 +1785,8 @@ function applyStyle() {
 
 		setStyle(new_rule_name, null, rule_code, false);
 	}
+	
 	loadFormValues(selected_element);
-	//reAlignSectionHandles();
 }
 
 
@@ -1993,7 +2000,7 @@ function setStyle(style, element, value, save_state = true) {
 			let border_width = document.getElementById("border_width").value;
 			let border_style = document.getElementById("border_style").value;
 			let border_color = document.getElementById("border_color").value;
-			selected_element.style.border = border_width + "px " + border_style + border_color;
+			selected_element.style.border = border_width + "px " + border_style  + " " + border_color;
 			break;
 		case "borderWidth":
 			selected_element.style.borderWidth = value + "px";
@@ -2459,7 +2466,14 @@ function setTable() {
 	let border_width = parseInt(document.getElementById("table_border_width").value);
 	let border_style = document.getElementById("table_border_style").value;
 	let border_color = document.getElementById("table_border_color").value;
-	let cell_style = "border:" + border_width + "px " + border_style + " " + border_color + ";";
+	let border = "border:" + border_width + "px " + border_style + " " + border_color + ";";
+	
+	let padding_top = document.getElementById("table_cell_padding_top").value;
+	let padding_bottom = document.getElementById("table_cell_padding_bottom").value;
+	let padding_left = document.getElementById("table_cell_padding_left").value;
+	let padding_right = document.getElementById("table_cell_padding_right").value;
+	let padding = "padding:" + padding_top + "px " + padding_right + "px " + padding_bottom + "px " + padding_left + "px;"; 
+	let cell_style = border + padding;
 
 	let caption = "";
 	if (table_caption) {
@@ -2474,8 +2488,23 @@ function setTable() {
 		}
 		table = table + "</tr>";
 	}
-	table = "<table>" + caption + "<tbody>" + table + "</tbody>" + "</table>";
+	let table_style = "";
+	if (caption.length == 0) {
+		table_style = " style='height:99%';";
+	}
+	table = "<table" + table_style +  ">" + caption + "<tbody>" + table + "</tbody>" + "</table>";
 	selected_section.innerHTML = table;
+}
+
+function getTableColumnPosition() {
+	if (!selected_element || selected_element.localName != "td") return;
+	let tr = selected_element.parentNode;
+	let all_td = tr.querySelectorAll("td");
+	for (i = 0; i < all_td.length; i++) {
+		if (all_td[i] == selected_element) {
+			return i
+		}
+	}	
 }
 
 function insertTableRow(location) {
@@ -2498,14 +2527,7 @@ function insertTableColumn(location) {
 	if (!selected_element || selected_element.localName != "td") return;
 	let table = selected_element.parentNode.parentNode.parentNode;
 	let tr = selected_element.parentNode;
-	let position;
-	let all_td = tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
-		if (all_td[i] == selected_element) {
-			position = i;
-		}
-	}
-
+	let position = getTableColumnPosition();
 	let all_tr = table.querySelectorAll("tr");
 	for (k = 0; k < all_tr.length; k++){
 		let all_tr_td = all_tr[k].querySelectorAll("td");
@@ -2533,14 +2555,7 @@ function deleteTableColumn() {
 	if (!selected_element || selected_element.localName != "td") return;
 	let table = selected_element.parentNode.parentNode.parentNode;
 	let tr = selected_element.parentNode;
-	let position;
-	let all_td = tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
-		if (all_td[i] == selected_element) {
-			position = i;
-		}
-	}
-
+	let position = getTableColumnPosition();
 	let all_tr = table.querySelectorAll("tr");
 	for (k = 0; k < all_tr.length; k++){
 		let all_tr_td = all_tr[k].querySelectorAll("td");
@@ -2550,6 +2565,41 @@ function deleteTableColumn() {
 			}
 		}
 	}
+}
+
+function setTableStyle(style, element, value) {
+
+	if (!selected_element || selected_element.localName != "td") return;
+	
+	saveCurrentState();
+
+	if (element && !value) value = element.value;
+
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	let all_table_td = selected_section.querySelectorAll("table td");
+
+	switch (style) {
+		case "borderCombined":
+			let table_border_width = document.getElementById("table_border_width").value;
+			let table_border_style = document.getElementById("table_border_style").value;
+			let table_border_color = document.getElementById("table_border_color").value;
+			for (i = 0; i < all_table_td.length; i++) {
+				all_table_td[i].style.border = table_border_width + "px " + table_border_style + " " + table_border_color;
+			}
+			break;
+		case "paddingCombined":
+			let padding_top = document.getElementById("table_cell_padding_top").value;
+			let padding_bottom = document.getElementById("table_cell_padding_bottom").value;
+			let padding_left = document.getElementById("table_cell_padding_left").value;
+			let padding_right = document.getElementById("table_cell_padding_right").value;
+			for (i = 0; i < all_table_td.length; i++) {
+				all_table_td[i].style.padding = padding_top + "px " + padding_right + "px " + padding_bottom + "px " + padding_left + "px";
+			}
+			break;
+		
+	}
+	
 }
 
 function repeatTableRowStyle() {
@@ -2568,14 +2618,7 @@ function repeatTableColumnStyle() {
 	let style = selected_element.getAttribute("style");
 	let table = selected_element.parentNode.parentNode.parentNode;
 	let tr = selected_element.parentNode;
-	let position;
-	let all_td = tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
-		if (all_td[i] == selected_element) {
-			position = i;
-		}
-	}
-
+	let position = getTableColumnPosition();
 	let all_tr = table.querySelectorAll("tr");
 	for (k = 0; k < all_tr.length; k++){
 		let all_tr_td = all_tr[k].querySelectorAll("td");
@@ -2587,6 +2630,19 @@ function repeatTableColumnStyle() {
 	}
 }
 
+function repeatTableStyle() {
+	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
+	let style = selected_element.getAttribute("style");
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	let all_tr = table.querySelectorAll("tr");
+	for (k = 0; k < all_tr.length; k++){
+		let all_tr_td = all_tr[k].querySelectorAll("td");
+		for (s = 0; s < all_tr_td.length; s++) {
+			all_tr_td[s].setAttribute("style", style);
+		}
+	}
+}
 
 
 function setElementDefaultStyles() {
@@ -2610,6 +2666,91 @@ function setToLastElementStyles() {
 	selected_element.setAttribute("style", last_selected_element.getAttribute("style"));
 }
 
+function setTableVerticalAlignment() {
+	if (!selected_element || selected_element.localName != "td") return;
+	
+	saveCurrentState();
+	
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	
+	let align_element = document.getElementById("table_align_vertical").value;
+	let align_type = document.getElementById("table_align_type_vertical").value;
+	
+	let position = getTableColumnPosition();
+
+	let all_tr, all_tr_td, all_td;
+	
+	if (align_element == "cell") {
+		selected_element.style.verticalAlign = align_type;
+	} else if (align_element == "row") {
+		all_td = tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			all_td[i].style.verticalAlign = align_type;
+		}
+	} else if (align_element == "column") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					all_tr_td[s].style.verticalAlign = align_type;
+				}
+			}
+		}
+	} else if (align_element == "table") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				all_tr_td[s].style.verticalAlign = align_type;
+			}
+		}
+	}
+}
+
+function setTableHorizontalAlignment() {
+	if (!selected_element || selected_element.localName != "td") return;
+	
+	saveCurrentState();
+	
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	
+	let align_element = document.getElementById("table_align_horizontal").value;
+	let align_type = document.getElementById("table_align_type_horizontal").value;
+	
+	let position = getTableColumnPosition();
+
+	let all_tr, all_tr_td, all_td;
+	
+	if (align_element == "cell") {
+		selected_element.style.textAlign = align_type;
+	} else if (align_element == "row") {
+		all_td = tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			all_td[i].style.textAlign = align_type;
+		}
+	} else if (align_element == "column") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					all_tr_td[s].style.textAlign = align_type;
+				}
+			}
+		}
+	} else if (align_element == "table") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				all_tr_td[s].style.textAlign = align_type;
+			}
+		}
+	}
+}
 
 function setSectionDefaultStyles() {
 	if (!selected_section) return;
@@ -2717,7 +2858,6 @@ function loadFormValues(element) {
 	if (element.style.paddingBottom) document.getElementById("padding_bottom").value = element.style.paddingBottom.replace("px", "");
 	if (element.style.paddingLeft) document.getElementById("padding_left").value = element.style.paddingLeft.replace("px", "");
 	
-	// https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Images/Using_CSS_gradients
 	let background_image = element.style.backgroundImage;
 
 	if (background_image.indexOf("gradient") > -1) {
@@ -2760,9 +2900,7 @@ function loadFormValues(element) {
 	if (element.style.backgroundSize) document.getElementById("background_size").value = element.style.backgroundSize;
 	if (element.style.backgroundPositionX) document.getElementById("background_position_x").value = element.style.backgroundPositionX;
 	if (element.style.backgroundPositionY) document.getElementById("background_position_y").value = element.style.backgroundPositionY;
-	if (element.style.backgroundRepeat) {
-		document.getElementById("background_image_repeat").checked = (element.style.backgroundRepeat == "repeat") ? true : false;
-	}
+	if (element.style.backgroundRepeat) document.getElementById("background_image_repeat").checked = (element.style.backgroundRepeat == "repeat") ? true : false;
 	if (element.style.opacity) document.getElementById("opacity").value = element.style.opacity;
 	if (element.style.borderWidth) document.getElementById("border_width").value = element.style.borderWidth.replace("px", "");
 	if (element.style.borderStyle) document.getElementById("border_style").value = element.style.borderStyle;

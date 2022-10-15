@@ -58,6 +58,9 @@
 			}
 			
 			async function deleteUnusedImages() {
+			
+				document.getElementById("loader").style.display = "inline";
+				
 				let all_images = await idbGetAllItems("dezynor_images");
 				let all_designs = await idbGetAllItems("dezynor_designs");
 				
@@ -81,7 +84,11 @@
 					}
 					
 				}
+				
+				document.getElementById("loader").style.display = "none";
+				
 				showMessage("Unused images deleted successfully", "DarkGreen");
+				
 			}
 			
 		</script>

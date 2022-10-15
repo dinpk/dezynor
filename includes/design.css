@@ -96,6 +96,7 @@ body {
 #wrapper section table {
 	width:100%;
 	border-collapse:collapse;
+	box-sizing:border-box;
 }
 
 /* -------------------------- BOX LIST --------------------------------- */
