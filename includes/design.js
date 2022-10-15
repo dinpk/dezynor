@@ -1929,7 +1929,7 @@ function setStyle(style, element, value, save_state = true) {
 	if (element && !value) value = element.value;
 	
 	let inner_styles = selected_section.dataset.inner_styles;
-	if (!inner_styles) selected_element = selected_section;
+	if (!inner_styles || !selected_element) selected_element = selected_section;
 	
 	switch (style) {
 		case "top":
@@ -2507,61 +2507,54 @@ function getTableColumnPosition() {
 	}	
 }
 
-function insertTableRow(location) {
+function modifyTable(location) {
 	if (!selected_element || selected_element.localName != "td") return;
-	let tr = selected_element.parentNode;
-	let cloned_tr = tr.cloneNode(true);
-	let all_td = cloned_tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
-		all_td[i].innerHTML = "&nbsp;";
-	}
-	
-	if (location == "before") {
-		tr.before(cloned_tr);
-	} else {
-		tr.after(cloned_tr);
-	}
-}
 
-function insertTableColumn(location) {
-	if (!selected_element || selected_element.localName != "td") return;
-	let table = selected_element.parentNode.parentNode.parentNode;
+	saveCurrentState();
+
+	let table = selected_element.parentNode.parentNode;
+	let all_tr = table.querySelectorAll("tr");
 	let tr = selected_element.parentNode;
 	let position = getTableColumnPosition();
-	let all_tr = table.querySelectorAll("tr");
-	for (k = 0; k < all_tr.length; k++){
-		let all_tr_td = all_tr[k].querySelectorAll("td");
-		for (s = 0; s < all_tr_td.length; s++) {
-			if (s == position) {
-				let cloned_td = all_tr_td[s].cloneNode(true);
-				cloned_td.innerHTML = "&nbsp;";
-				if (location == "before") {
-					all_tr_td[s].before(cloned_td);
-				} else {
-					all_tr_td[s].after(cloned_td);
+	let all_tr_td;
+	
+	let table_modify = document.getElementById("table_modify").value;
+	
+	if (table_modify.indexOf("Insert row") > -1) {
+		let cloned_tr = tr.cloneNode(true);
+		let all_td = cloned_tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			all_td[i].innerHTML = "&nbsp;";
+		}
+		if (table_modify == "Insert row before") {
+			tr.before(cloned_tr);
+		} if (table_modify == "Insert row after") {
+			tr.after(cloned_tr);
+		}
+	} else if (table_modify.indexOf("Insert column") > -1) {
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					let cloned_td = all_tr_td[s].cloneNode(true);
+					cloned_td.innerHTML = "&nbsp;";
+					if (table_modify == "Insert column before") {
+						all_tr_td[s].before(cloned_td);
+					} else if (table_modify == "Insert column after") {
+						all_tr_td[s].after(cloned_td);
+					}
 				}
 			}
 		}
-	}
-}
-
-function deleteTableRow() {
-	if (!selected_element || selected_element.localName != "td") return;
-	let tr = selected_element.parentNode;
-	tr.remove();
-}
-
-function deleteTableColumn() {
-	if (!selected_element || selected_element.localName != "td") return;
-	let table = selected_element.parentNode.parentNode.parentNode;
-	let tr = selected_element.parentNode;
-	let position = getTableColumnPosition();
-	let all_tr = table.querySelectorAll("tr");
-	for (k = 0; k < all_tr.length; k++){
-		let all_tr_td = all_tr[k].querySelectorAll("td");
-		for (s = 0; s < all_tr_td.length; s++) {
-			if (s == position) {
-				all_tr_td[s].remove();
+	} else if (table_modify == "Delete row") {
+		tr.remove();
+	} else if (table_modify == "Delete column") {
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					all_tr_td[s].remove();
+				}
 			}
 		}
 	}
@@ -2602,74 +2595,53 @@ function setTableStyle(style, element, value) {
 	
 }
 
-function repeatTableRowStyle() {
+function repeatTableStyle() {
+	
 	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
-	let style = selected_element.getAttribute("style");
-	let tr = selected_element.parentNode;
-	let all_td = tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
-		all_td[i].setAttribute("style", style);
-	}
-}
-
-
-function repeatTableColumnStyle() {
-	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
+	
+	saveCurrentState();
+	
+	let repeat_table_style = document.getElementById("repeat_table_style").value;
+	
 	let style = selected_element.getAttribute("style");
 	let table = selected_element.parentNode.parentNode.parentNode;
-	let tr = selected_element.parentNode;
-	let position = getTableColumnPosition();
 	let all_tr = table.querySelectorAll("tr");
-	for (k = 0; k < all_tr.length; k++){
-		let all_tr_td = all_tr[k].querySelectorAll("td");
-		for (s = 0; s < all_tr_td.length; s++) {
-			if (s == position) {
+	let all_tr_td;
+	let tr = selected_element.parentNode;
+	
+	let position = getTableColumnPosition();
+
+	if (repeat_table_style == "To row") {
+		let all_td = tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			all_td[i].setAttribute("style", style);
+		}
+	} else if (repeat_table_style == "To column") {
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					all_tr_td[s].setAttribute("style", style);
+				}
+			}
+		}
+	} else  if (repeat_table_style == "To table") {
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
 				all_tr_td[s].setAttribute("style", style);
 			}
 		}
-	}
-}
-
-function repeatTableStyle() {
-	if (!selected_element || selected_element.localName != "td" || !selected_element.getAttribute("style")) return;
-	let style = selected_element.getAttribute("style");
-	let table = selected_element.parentNode.parentNode.parentNode;
-	let tr = selected_element.parentNode;
-	let all_tr = table.querySelectorAll("tr");
-	for (k = 0; k < all_tr.length; k++){
-		let all_tr_td = all_tr[k].querySelectorAll("td");
-		for (s = 0; s < all_tr_td.length; s++) {
-			all_tr_td[s].setAttribute("style", style);
-		}
+	} else  if (repeat_table_style == "From last cell") {
+		setToLastElementStyle();
 	}
 }
 
 
-function setElementDefaultStyles() {
-	if (selected_element && selected_element.localName != "section") {
-		selected_element.removeAttribute("style");
-	}
-}
 
-function setToLastElementStyles() {
-	
-	if (
-		!selected_element || 
-		!last_selected_element || 
-		selected_element.localName == "section" || 
-		last_selected_element.localName == "section" ||
-		!last_selected_element.getAttribute("style")
-	) {
-		return;
-	}
-	
-	selected_element.setAttribute("style", last_selected_element.getAttribute("style"));
-}
 
 function setTableVerticalAlignment() {
 	if (!selected_element || selected_element.localName != "td") return;
-	
-	saveCurrentState();
 	
 	let table = selected_element.parentNode.parentNode.parentNode;
 	let tr = selected_element.parentNode;
@@ -2712,8 +2684,6 @@ function setTableVerticalAlignment() {
 function setTableHorizontalAlignment() {
 	if (!selected_element || selected_element.localName != "td") return;
 	
-	saveCurrentState();
-	
 	let table = selected_element.parentNode.parentNode.parentNode;
 	let tr = selected_element.parentNode;
 	
@@ -2750,6 +2720,70 @@ function setTableHorizontalAlignment() {
 			}
 		}
 	}
+}
+
+
+
+function setTableDirection() {
+	if (!selected_element || selected_element.localName != "td") return;
+	
+	let table = selected_element.parentNode.parentNode.parentNode;
+	let tr = selected_element.parentNode;
+	
+	let direction_element = document.getElementById("table_direction").value;
+	let direction_type = document.getElementById("table_direction_type").value;
+	
+	let position = getTableColumnPosition();
+
+	let all_tr, all_tr_td, all_td;
+	
+	if (direction_element == "cell") {
+		selected_element.style.direction = direction_type;
+	} else if (direction_element == "row") {
+		all_td = tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			all_td[i].style.direction = direction_type;
+		}
+	} else if (direction_element == "column") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == position) {
+					all_tr_td[s].style.direction = direction_type;
+				}
+			}
+		}
+	} else if (direction_element == "table") {
+		all_tr = table.querySelectorAll("tr");
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				all_tr_td[s].style.direction = direction_type;
+			}
+		}
+	}
+}
+
+function setElementDefaultStyles() {
+	if (selected_element && selected_element.localName != "section") {
+		selected_element.removeAttribute("style");
+	}
+}
+
+function setToLastElementStyle() {
+	
+	if (
+		!selected_element || 
+		!last_selected_element || 
+		selected_element.localName == "section" || 
+		last_selected_element.localName == "section" ||
+		!last_selected_element.getAttribute("style")
+	) {
+		return;
+	}
+	
+	selected_element.setAttribute("style", last_selected_element.getAttribute("style"));
 }
 
 function setSectionDefaultStyles() {
