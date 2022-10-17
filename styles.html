@@ -123,7 +123,7 @@
 					let style_code = object.style_code;
 					document.getElementById("sample").innerHTML = "<div id='sample_element' style='" + style_code + "'>" + sample_text + "</div>";
 					selected_style_key = style_key;
-					loadSampleStyles();
+					setSampleStyles();
 					
 				});				
 				
@@ -149,7 +149,7 @@
 				});
 			}
 			
-			function setSampleStyle(style, element, value) {
+			function setStyle(style, element, value) {
 				if (!selected_style_key) return;
 				
 				if (element && !value) {
@@ -201,29 +201,23 @@
 					case "paddingRight":
 						sample.style.paddingRight = value + "px";
 						break;
-					case "columnCount":
-						sample.style.columnCount = value;
+					case "columnCombined":
+						let column_count = document.getElementById("column_count").value;
+						let column_gap = document.getElementById("column_gap").value;
+						let column_rule_width = document.getElementById("column_rule_width").value;
+						let column_rule_style = document.getElementById("column_rule_style").value;
+						let column_rule_color = document.getElementById("column_rule_color").value;
+						sample.style.columnCount = column_count;
+						sample.style.columnGap = column_gap + "px";
+						sample.style.columnRuleWidth = column_rule_width + "px";
+						sample.style.columnRuleStyle = column_rule_style;
+						sample.style.columnRuleColor = column_rule_color;
 						break;
-					case "columnGap":
-						sample.style.columnGap = value + "px";
-						break;
-					case "columnRuleWidth":
-						sample.style.columnRuleWidth = value + "px";
-						break;
-					case "columnRuleStyle":
-						sample.style.columnRuleStyle = value;
-						break;
-					case "columnRuleColor":
-						sample.style.columnRuleColor = value;
-						break;
-					case "borderWidth":
-						sample.style.borderWidth = value + "px";
-						break;
-					case "borderStyle":
-						sample.style.borderStyle = value;
-						break;
-					case "borderColor":
-						sample.style.borderColor = value;
+					case "borderCombined":
+						let border_width = document.getElementById("border_width").value;
+						let border_style = document.getElementById("border_style").value;
+						let border_color = document.getElementById("border_color").value;
+						sample.style.border = border_width + "px " + border_style  + " " + border_color;
 						break;
 					case "borderTopLeftRadius":
 						sample.style.borderTopLeftRadius = value + "px";
@@ -241,10 +235,10 @@
 			}
 
 			
-			function loadSampleStyles() {
+			function setSampleStyles() {
 				if (!selected_style_key) return;
 				
-				setSampleDefaultStyles();
+				setDefaultValues;
 
 				let sample_element = document.getElementById("sample_element");
 			
@@ -283,7 +277,7 @@
 			
 			
 			
-			function setSampleDefaultStyles() {
+			function setDefaultValues() {
 			
 				document.getElementById("select_fonts").value = "";
 				document.getElementById("font_size").value = "14";
@@ -297,8 +291,8 @@
 				document.getElementById("padding_right").value = "0";
 				document.getElementById("padding_bottom").value = "0";
 				document.getElementById("padding_left").value = "0";
-				document.getElementById("border_width").value = "3";
-				document.getElementById("border_style").value = "";
+				document.getElementById("border_width").value = "0";
+				document.getElementById("border_style").value = "solid";
 				document.getElementById("border_color").value = "#000000";
 				document.getElementById("border_radius1").value = "0";
 				document.getElementById("border_radius2").value = "0";
@@ -306,13 +300,13 @@
 				document.getElementById("border_radius4").value = "0";
 				document.getElementById("column_count").value = "1";
 				document.getElementById("column_gap").value = "30";
-				document.getElementById("column_rule_width").value = "3";
-				document.getElementById("column_rule_style").value = "";
+				document.getElementById("column_rule_width").value = "1";
+				document.getElementById("column_rule_style").value = "solid";
 				document.getElementById("column_rule_color").value = "#000000";
 			}
 
 
-			function removeSampleStyle(style) {
+			function removeStyle(style) {
 
 				if (!selected_style_key) return;
 				
@@ -466,26 +460,26 @@
 						<tr>
 							<td>Alignment</td>
 							<td>
-								<img src="images/icon_align_left.png" onclick="setSampleStyle('textAlign', this, 'left');"> 
-								<img src="images/icon_align_center.png" onclick="setSampleStyle('textAlign', this, 'center');"> 
-								<img src="images/icon_align_right.png" onclick="setSampleStyle('textAlign', this, 'right');"> 
-								<img src="images/icon_align_justify.png" onclick="setSampleStyle('textAlign', this, 'justify');"> 
-								<img src="images/icon_direction_ltr.png" onclick="setSampleStyle('direction', this, 'ltr');" title="Direction Left-to-Right"> 
-								<img src="images/icon_direction_rtl.png" onclick="setSampleStyle('direction', this, 'rtl');" title="Direction Right-to-Left"> 
+								<img src="images/icon_align_left.png" onclick="setStyle('textAlign', this, 'left');"> 
+								<img src="images/icon_align_center.png" onclick="setStyle('textAlign', this, 'center');"> 
+								<img src="images/icon_align_right.png" onclick="setStyle('textAlign', this, 'right');"> 
+								<img src="images/icon_align_justify.png" onclick="setStyle('textAlign', this, 'justify');"> 
+								<img src="images/icon_direction_ltr.png" onclick="setStyle('direction', this, 'ltr');" title="Direction Left-to-Right"> 
+								<img src="images/icon_direction_rtl.png" onclick="setStyle('direction', this, 'rtl');" title="Direction Right-to-Left"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Color</td>
 							<td>
-								Text <input id="color" type="color" onchange="setSampleStyle('color',this);"> 
-								Background <input id="background_color" type="color" onchange="setSampleStyle('backgroundColor',this);"> 
-								<button id="remove_background_color" onclick="removeSampleStyle('backgroundColor');">x</button> 
+								Text <input id="color" type="color" onchange="setStyle('color',this);"> 
+								Background <input id="background_color" type="color" onchange="setStyle('backgroundColor',this);"> 
+								<button id="remove_background_color" onclick="removeStyle('backgroundColor');">x</button> 
 							</td>
 						</tr>
 						<tr>
 							<td>Font</td>
 							<td>
-								<select id="select_fonts" onchange="setSampleStyle('fontFamily',this);">
+								<select id="select_fonts" onchange="setStyle('fontFamily',this);">
 									<optgroup id="google_fonts" label="Google fonts"></optgroup>
 									<optgroup id="uploaded_fonts" label="Uploaded fonts"></optgroup>
 								</select> 
@@ -494,71 +488,69 @@
 						<tr>
 							<td>Font size</td>
 							<td>
-								<input id="font_size" type="number" onchange="setSampleStyle('fontSize',this);" step="1" min="5" max="500" value="14">
+								<input id="font_size" type="number" onchange="setStyle('fontSize',this);" step="1" min="5" max="500" value="14">
 							</td>
 						</tr>
 						<tr>
 							<td>Spacing</td>
 							<td>
-								<input id="line_height" type="number" onchange="setSampleStyle('lineHeight',this);" min="0" step="1" max="300" value="18"> Lines<br>
-								<input id="text_indent" type="number" onchange="setSampleStyle('textIndent',this);" min="0" step="1" value="0"> Indent<br>
-								<input id="word_spacing" type="number" onchange="setSampleStyle('wordSpacing',this);" min="0" step="1" value="0"> Words<br>
-								<input id="letter_spacing" type="number" onchange="setSampleStyle('letterSpacing',this);" min="0" step="1" value="0"> Letters<br>
+								<input id="line_height" type="number" onchange="setStyle('lineHeight',this);" min="0" step="1" max="300" value="18"> Lines<br>
+								<input id="text_indent" type="number" onchange="setStyle('textIndent',this);" step="1" value="0"> Indent<br>
+								<input id="word_spacing" type="number" onchange="setStyle('wordSpacing',this);" step="1" value="0"> Words<br>
+								<input id="letter_spacing" type="number" onchange="setStyle('letterSpacing',this);" step="1" value="0"> Letters<br>
 							</td>
 						</tr>
 						<tr>
 							<td>Padding</td>
 							<td>
-								Top <input id="padding_top" type="number" onchange="setSampleStyle('paddingTop', this);" min="0" step="2" value="5">  
-								Bottom <input id="padding_bottom" type="number" onchange="setSampleStyle('paddingBottom', this);" min="0" step="2" value="5"><br>
-								Left <input id="padding_left" type="number" onchange="setSampleStyle('paddingLeft', this);" min="0" step="2" value="5">  
-								Right <input id="padding_right" type="number" onchange="setSampleStyle('paddingRight', this);" min="0" step="2" value="5"><br>
+								Top <input id="padding_top" type="number" onchange="setStyle('paddingTop', this);" min="0" step="2" value="5">  
+								Bottom <input id="padding_bottom" type="number" onchange="setStyle('paddingBottom', this);" min="0" step="2" value="5"><br>
+								Left <input id="padding_left" type="number" onchange="setStyle('paddingLeft', this);" min="0" step="2" value="5">  
+								Right <input id="padding_right" type="number" onchange="setStyle('paddingRight', this);" min="0" step="2" value="5"><br>
 							</td>
 						</tr>
 						<tr>
 							<td>Columns</td>
 							<td>
-								<input id="column_count" type="number" onchange="setSampleStyle('columnCount', this);" min="1" step="1" value="1"> 
-								Gap <input id="column_gap" type="number" onchange="setSampleStyle('columnGap', this);" min="0" step="10" value="30"> 
+								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" min="1" step="1" value="1"> 
+								Gap <input id="column_gap" type="number" onchange="setStyle('columnCombined', this);" min="0" step="10" value="30"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Columns rule</td>
 							<td>
-								<input id="column_rule_width" type="number" onchange="setSampleStyle('columnRuleWidth', this);" min="0" value="2" step="1">
-								<select id="column_rule_style" onchange="setSampleStyle('columnRuleStyle', this);">
-									<option></option>
+								<input id="column_rule_width" type="number" onchange="setStyle('columnCombined', this);" min="0" value="1" step="1">
+								<select id="column_rule_style" onchange="setStyle('columnCombined', this);">
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
 								</select> 
-								<input id="column_rule_color" type="color" onchange="setSampleStyle('columnRuleColor', this);"> 
+								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Border</td>
 							<td>
-								<input id="border_width" type="number" onchange="setSampleStyle('borderWidth',this);" min="0" value="0" step="1">
-								<select id="border_style" onchange="setSampleStyle('borderStyle',this);">
-									<option></option>
+								<input id="border_width" type="number" onchange="setStyle('borderCombined',this);" min="0" value="0" step="1">
+								<select id="border_style" onchange="setStyle('borderCombined',this);">
 									<option>solid</option>
 									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
 								</select>
-								<input id="border_color" type="color" onchange="setSampleStyle('borderColor',this);">
-								<button id="remove_border" onclick="removeSampleStyle('border');">x</button>
+								<input id="border_color" type="color" onchange="setStyle('borderCombined',this);">
+								<button id="remove_border" onclick="removeStyle('border');">x</button>
 							</td>
 						</tr>
 						<tr>
 							<td>Border radius</td>
 							<td>
-								<input id="border_radius1" type="number" onchange="setSampleStyle('borderTopLeftRadius',this);" min="0" value="0" title="Top left radius"> 
-								<input id="border_radius2" type="number" onchange="setSampleStyle('borderTopRightRadius',this);" min="0" value="0" title="Top right radius">
+								<input id="border_radius1" type="number" onchange="setStyle('borderTopLeftRadius',this);" min="0" value="0" title="Top left radius"> 
+								<input id="border_radius2" type="number" onchange="setStyle('borderTopRightRadius',this);" min="0" value="0" title="Top right radius">
 								<br>
-								<input id="border_radius3" type="number" onchange="setSampleStyle('borderBottomLeftRadius',this);" min="0" value="0" title="Bottom left radius">
-								<input id="border_radius4" type="number" onchange="setSampleStyle('borderBottomRightRadius',this);" min="0" value="0" title="Bottom right radius">
+								<input id="border_radius3" type="number" onchange="setStyle('borderBottomLeftRadius',this);" min="0" value="0" title="Bottom left radius">
+								<input id="border_radius4" type="number" onchange="setStyle('borderBottomRightRadius',this);" min="0" value="0" title="Bottom right radius">
 							</td>
 						</tr>
 					</table>				

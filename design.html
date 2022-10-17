@@ -18,6 +18,25 @@
 		
 		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview (Alt + Menu)">►</div>
 
+		<div id="options_bar">
+			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
+			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
+			<span><input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();"> <label for="inner_styles">Inner styles</label></span>
+			<span><input id="overflow_section" type="checkbox" onchange="toggleOverflowSection();"> <label for="overflow_section">Overflow</label></span>
+			<span>
+				Default styles
+				<button onclick="setSectionDefaultStyles();">Box</button> 
+				<button onclick="setElementDefaultStyles();">Element</button> 
+			</span>
+			<span>
+				Align/resize to
+				<select id="align_to">
+					<option value="page">Page</option>
+					<option value="section">Previous box</option>
+				</select>
+			</span>
+		</div>
+
 		<div id="dash_panel_wrapper">
 			<div id="dash_panel">
 
@@ -47,27 +66,6 @@
 					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box (Alt + Delete)"> 
 					<br>
 					<hr>
-					<table class="section_table">
-						<tr>
-							<td>Container box</td>
-							<td>
-								&nbsp; <input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();">
-							</td>
-						</tr>
-						<tr>
-							<td>Inner styles</td>
-							<td style="width:60%;">
-								&nbsp; <input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();">
-							</td>
-						</tr>
-						<tr>
-							<td>Default styles</td>
-							<td>
-								<button onclick="setSectionDefaultStyles();">Box</button> &nbsp; 
-								<button onclick="setElementDefaultStyles();">Element</button> 
-							</td>
-						</tr>
-					</table>
 				</div>
 
 				<div id="utility_section">
@@ -168,15 +166,6 @@
 								<button onclick="shiftSection('left');">◄</button> 
 								<input id="left" type="number" onchange="setStyle('left', this);" step="10.0">
 								<button onclick="shiftSection('right');">►</button>
-							</td>
-						</tr>
-						<tr>
-							<td>According to</td>
-							<td>
-								<select id="align_to">
-									<option value="page">Page</option>
-									<option value="section">Previous box</option>
-								</select>
 							</td>
 						</tr>
 						<tr>
@@ -806,6 +795,10 @@
 							</td>
 						</tr>
 						<tr>
+							<td>Caption</td>
+							<td><input id="table_caption" type="checkbox"></td>
+						</tr>
+						<tr>
 							<td>Border</td>
 							<td>
 								<input id="table_border_width" type="number" step="1" value="1" onchange="setTableStyle('borderCombined', this);">
@@ -825,10 +818,6 @@
 								Left <input id="table_cell_padding_left" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" step="1">  
 								Right <input id="table_cell_padding_right" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" step="1"><br>
 							</td>
-						</tr>
-						<tr>
-							<td>Caption</td>
-							<td><input id="table_caption" type="checkbox"></td>
 						</tr>
 						<tr>
 							<td style="visibility:hidden;"></td>

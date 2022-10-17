@@ -240,6 +240,7 @@ function getNewSectionNumber() {
 
 function selectSection(counter) {
 
+
 	last_selected_section = selected_section;
 
 	setSelectedElement();
@@ -270,6 +271,7 @@ function selectSection(counter) {
 	showHandles();
 	loadFormValues(selected_section);
 	if (selected_element) loadFormValues(selected_element);
+	
 	
 }
 
@@ -447,6 +449,19 @@ function unselectSections() {
 	hideHandles();
 }
 
+
+
+
+function toggleEditableSection() {
+	if (!selected_section) return;
+	
+	if (document.getElementById("editable_section").checked) {
+		selected_section.setAttribute("contenteditable", true);
+	} else {
+		selected_section.removeAttribute("contenteditable");
+	}
+}
+
 function toggleInnerStyles() {
 	if (!selected_section) return;
 	
@@ -454,6 +469,16 @@ function toggleInnerStyles() {
 		selected_section.dataset.inner_styles = "1";
 	} else {
 		delete selected_section.dataset.inner_styles;
+	}
+}
+
+function toggleOverflowSection() {
+	if (!selected_section) return;
+	
+	if (document.getElementById("overflow_section").checked) {
+		selected_section.style.overflow = "visible";
+	} else {
+		selected_section.style.overflow = "hidden";
 	}
 }
 
@@ -467,6 +492,9 @@ function toggleContainerSection() {
 		delete selected_section.dataset.contained_sections;
 	}
 }
+
+
+
 
 function setContainerSection(section) {
 	
@@ -1228,6 +1256,8 @@ function rotateLeft() {
 
 function setLayout(parameters) {
 	
+	saveCurrentState();
+	
 	let wrapper_width = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
 	let wrapper_height = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
 
@@ -1433,6 +1463,8 @@ function duplicateTransformEnables() {
 }
 
 function duplicateTransform() {
+
+	saveCurrentState();
 	
 	let duplicate_type = document.getElementById("duplicate_type").value;
 	if (duplicate_type == "circular") {
@@ -1447,11 +1479,8 @@ function duplicateTransform() {
 }
 
 function duplicateCircular() {
-	
 	if (!(selected_section)) return;
-	
-	saveCurrentState();
-	
+
 	let center_x = parseInt(document.getElementById("left").value);
 	let center_y = parseInt(document.getElementById("top").value);
 	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
@@ -1474,7 +1503,6 @@ function duplicateCircular() {
 
 function duplicateLinearOneSided() {
 	if (!selected_section) return;
-	saveCurrentState();
 	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
@@ -1495,13 +1523,11 @@ function duplicateLinearOneSided() {
 		section.style.left = new_left + "px";
 		section.style.top = new_top + "px";
     }
-	reAlignSectionHandles();
 	
 }
 
 function duplicateLinearTwoSided() {
 	if (!selected_section) return;
-	saveCurrentState();
 	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let left = parseInt(document.getElementById("left").value);
 	let top = parseInt(document.getElementById("top").value);
@@ -1545,7 +1571,6 @@ function duplicateLinearTwoSided() {
 
 function duplicateLinearRowsColumns() {
 	if (!selected_section) return;
-	saveCurrentState();
 	let x_copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let y_copies = parseInt(document.getElementById("duplicate_y_copies").value);
 	let left = parseInt(document.getElementById("left").value);
@@ -1570,8 +1595,6 @@ function duplicateLinearRowsColumns() {
 			section.style.top = new_top + "px";
 		}
     }
-	reAlignSectionHandles();
-	
 }
 
 
@@ -2315,7 +2338,7 @@ function removeSectionClass(value) {
 function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	if (!selected_section) return;
 	saveCurrentState();
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	document.getElementById("border_radius1").value = top_left;
 	document.getElementById("border_radius2").value = top_right;
 	document.getElementById("border_radius3").value = bottom_left;
@@ -2328,6 +2351,7 @@ function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 
 function setBorderWidthPreset(width) {
 	if (!selected_section) return;
+	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	saveCurrentState();
 	if (!selected_section.dataset.inner_styles) selected_element = selected_section;	
 	document.getElementById("border_width").value = width;
@@ -2826,6 +2850,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.transform = "skew(0deg, 0deg)";
 	selected_section.style.transformOrigin = "center center";
 	selected_section.style.clipPath = "";
+	selected_section.style.overflow = "hidden";
 }
 
 function loadSectionDimensions() {
@@ -2840,12 +2865,19 @@ function loadFormValues(element) {
 	loadSectionDefaultFormValues();
 
 	if (!selected_section) return;
+	if (!selected_section.dataset.inner_styles || !element.getAttribute("style")) element = selected_section;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
 	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
-	
-	if (!selected_section.dataset.inner_styles || !element.getAttribute("style")) {
-		element = selected_section;
+	if (selected_section.style.overflow == "visible") {
+		document.getElementById("overflow_section").checked = true;
+	} else {
+		document.getElementById("overflow_section").checked = false;
+	}
+	if (selected_section.getAttribute("contenteditable")) {
+		document.getElementById("editable_section").checked = true;
+	} else {
+		document.getElementById("editable_section").checked = false;
 	}
 	
 	
@@ -2891,6 +2923,11 @@ function loadFormValues(element) {
 	if (element.style.paddingRight) document.getElementById("padding_right").value = element.style.paddingRight.replace("px", "");
 	if (element.style.paddingBottom) document.getElementById("padding_bottom").value = element.style.paddingBottom.replace("px", "");
 	if (element.style.paddingLeft) document.getElementById("padding_left").value = element.style.paddingLeft.replace("px", "");
+
+	if (element.style.paddingTop) document.getElementById("table_cell_padding_top").value = element.style.paddingTop.replace("px", "");
+	if (element.style.paddingRight) document.getElementById("table_cell_padding_right").value = element.style.paddingRight.replace("px", "");
+	if (element.style.paddingBottom) document.getElementById("table_cell_padding_bottom").value = element.style.paddingBottom.replace("px", "");
+	if (element.style.paddingLeft) document.getElementById("table_cell_padding_left").value = element.style.paddingLeft.replace("px", "");
 	
 	let background_image = element.style.backgroundImage;
 
@@ -2939,6 +2976,11 @@ function loadFormValues(element) {
 	if (element.style.borderWidth) document.getElementById("border_width").value = element.style.borderWidth.replace("px", "");
 	if (element.style.borderStyle) document.getElementById("border_style").value = element.style.borderStyle;
 	if (element.style.borderColor) document.getElementById("border_color").value = rgb2hex(element.style.borderColor);
+
+	if (element.style.borderWidth) document.getElementById("table_border_width").value = element.style.borderWidth.replace("px", "");
+	if (element.style.borderStyle) document.getElementById("table_border_style").value = element.style.borderStyle;
+	if (element.style.borderColor) document.getElementById("table_border_color").value = rgb2hex(element.style.borderColor);
+
 	if (element.style.borderTopLeftRadius) document.getElementById("border_radius1").value = element.style.borderTopLeftRadius.replace("px", "");
 	if (element.style.borderTopRightRadius) document.getElementById("border_radius2").value = element.style.borderTopRightRadius.replace("px", "");
 	if (element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = element.style.borderBottomLeftRadius.replace("px", "");
