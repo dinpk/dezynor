@@ -1399,6 +1399,7 @@ function preview(status) {
 let dash_panel_toggle = true;
 function toggleDashPanel() {
 	if (dash_panel_toggle) {
+		document.getElementById("icons_bar").style.display = "none";
 		document.getElementById("options_bar").style.display = "none";
 		document.getElementById("dash_panel_wrapper").style.right = "-500px";
 		document.getElementById("dash_panel_toggle").innerHTML = "◄";
@@ -1406,8 +1407,9 @@ function toggleDashPanel() {
 		preview("on");
 		hidePopupPanel();
 	} else {
+		document.getElementById("icons_bar").style.display = "block";
 		document.getElementById("options_bar").style.display = "block";
-		document.getElementById("dash_panel_wrapper").style.right = "0";
+		document.getElementById("dash_panel_wrapper").style.right = "44px";
 		document.getElementById("dash_panel_toggle").innerHTML = "►";
 		dash_panel_toggle = true;
 		preview("off");

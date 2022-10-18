@@ -18,6 +18,23 @@
 		
 		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="F2">►</div>
 
+		<div id="icons_bar">
+			<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
+			<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
+			<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and position">
+			<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and spacing">
+			<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and gradient">
+			<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image">
+			<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
+			<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text shadow">
+			<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box shadow">
+			<img src="images/menu_icon_table.png" onclick="showSectionPanel('table_section');" title="Table">
+			<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
+			<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
+			<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
+			<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design file"> 
+		</div>
+
 		<div id="options_bar">
 			<span><button onclick="togglePreview(this);">👁 Clean</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
@@ -57,23 +74,6 @@
 
 		<div id="dash_panel_wrapper">
 			<div id="dash_panel">
-
-				<header id="menu_icons">
-					<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
-					<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
-					<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and position">
-					<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and spacing">
-					<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and gradient">
-					<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image">
-					<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
-					<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text shadow">
-					<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box shadow">
-					<img src="images/menu_icon_table.png" onclick="showSectionPanel('table_section');" title="Table">
-					<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
-					<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
-					<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
-					<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design file"> 
-				</header>
 
 				<div id="box_section">
 					<h4 id="box_heading" onclick="hideSectionPanel('box_section');">Box</h4>

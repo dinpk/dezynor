@@ -101,7 +101,21 @@ body {
 
 
 
-/* -------------------------  OPTIONS BAR ---------------------------- */
+/* ------------------------- ICONS BAR ---------------------------- */
+
+#icons_bar {
+	position:fixed;
+	top:0;
+	right:0;
+	background-color:#E5E5E5;
+	width:44px;
+	height:100%;
+	padding-top:40px;
+	border-left:#999;
+	text-align:center;
+}
+
+/* ------------------------- OPTIONS BAR ---------------------------- */
 
 #options_bar {
 	position:fixed;
@@ -146,11 +160,11 @@ body {
 	text-align:center;
 	top:0;
 	right:0;
+	width:44px;
 	background-color:cornflowerblue;
 	font-family:Verdana;
 	font-size:12px;
 	padding:1px 2px 2px 5px;
-	border-bottom-left-radius:2px;
 	color:white;
 	cursor:pointer;
 	transition:.5s;
@@ -159,7 +173,7 @@ body {
 #dash_panel_wrapper {
 	position:fixed;
 	top:0;
-	right:0;
+	right:44px;
 	transition:.2s;
 	overflow:auto;
 	max-height:96vh;
