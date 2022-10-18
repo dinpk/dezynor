@@ -68,3 +68,40 @@ function rgba2hex(orig) {
 
       return "#" + hex;
 }
+
+
+async function loadSelectFonts() {
+
+	let google_fonts_options = "";
+	let online_fonts = await idbGetItem("dezynor_settings", "fonts");
+	online_fonts.sort();
+	let online_fonts_list = "";
+	for (i = 0; i < online_fonts.length; i++) {
+		let storage_font_name = online_fonts[i].split("|")[0];
+		let storage_font_location = online_fonts[i].split("|")[1];
+		if (storage_font_location == "Google") {
+			online_fonts_list = online_fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
+			google_fonts_options = google_fonts_options + "<option>" + storage_font_name + "</option>";
+		} else if (storage_font_location == "Installed") {
+			
+		}
+	}
+
+	let uploaded_fonts_list = "";
+	let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
+	let uploaded_fonts_options = "";
+	for (i = 0; i < uploaded_fonts.length; i++) {
+		let font_key = uploaded_fonts[i].font_key;
+		let font = uploaded_fonts[i].value;
+		font_name = font_key.replaceAll("_", " ");
+		uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
+		uploaded_fonts_options = uploaded_fonts_options + "<option value='" + font_key + "'>" + font_name + "</option>";
+	}
+	let style = document.createElement("style");
+	let fonts_node = document.createTextNode(online_fonts_list + uploaded_fonts_list);
+	style.appendChild(fonts_node);
+	document.getElementsByTagName("head")[0].appendChild(style);
+	
+	document.getElementById("google_fonts").innerHTML = google_fonts_options;
+	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
+}

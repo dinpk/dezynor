@@ -16,10 +16,10 @@
 			<div id="wrapper"></div>
 		</div>
 		
-		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview (Alt + Menu)">►</div>
+		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="F2">►</div>
 
 		<div id="options_bar">
-			<span><button onclick="togglePreview(this);">Clean</button></span>
+			<span><button onclick="togglePreview(this);">👁 Clean</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
 			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
 			<span><input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();"> <label for="inner_styles">Inner styles</label></span>
@@ -41,8 +41,17 @@
 				<button onclick="selectSectionNextPrev('prev');">◄</button> 
 				<button onclick="selectSectionNextPrev('next');">►</button> 
 				Order 
-				<button onclick="orderSectionUpDown('up');">▲</button> 
 				<button onclick="orderSectionUpDown('down');">▼</button> 
+				<button onclick="orderSectionUpDown('up');">▲</button> 
+			</span>
+			<span>
+				Paste 
+				<select id="paste_result">
+					<option value="plain">Plain text</option>
+					<option value="plain_with_lines">Line breaks</option>
+					<option value="html_without_styles">HTML only</option>
+					<option value="as_it_is">As it is</option>
+				</select>
 			</span>
 		</div>
 

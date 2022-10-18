@@ -9,12 +9,15 @@
 		<script src="includes/common.js"></script>
 		<script>
 			window.onload = async function() {
-				await delay(500);
+				await delay(200);
+				loadSelectFonts();
+				await delay(200);
 				loadSettings();
 			}
 
 			async function saveSettings() {
 
+				localStorage.setItem("default_font", document.getElementById("default_font").value);
 				localStorage.setItem("page_width", document.getElementById("page_width").value);
 				localStorage.setItem("page_height", document.getElementById("page_height").value);
 				localStorage.setItem("max_upload_width", document.getElementById("max_upload_width").value);
@@ -37,6 +40,7 @@
 			}
 
 			async function loadSettings() {
+				document.getElementById("default_font").value = localStorage.getItem("default_font");
 				document.getElementById("page_width").value = localStorage.getItem("page_width");
 				document.getElementById("page_height").value = localStorage.getItem("page_height");
 				document.getElementById("max_upload_width").value = localStorage.getItem("max_upload_width");
@@ -141,6 +145,15 @@
 				<form onsubmit="event.preventDefault();saveSettings();">
 					
 					<table id="settings">
+						<tr>
+							<td>Default font</td>
+							<td>
+								<select id="default_font">
+									<optgroup id="google_fonts" label="Google fonts"></optgroup>
+									<optgroup id="uploaded_fonts" label="Uploaded fonts"></optgroup>
+								</select> 
+							</td>
+						</tr>
 						<tr>
 							<td>Paste result</td>
 							<td>

@@ -14,22 +14,7 @@
 			window.onload = async function() {
 				await delay(500);
 				loadStyles();
-				let uploaded_fonts_list = "";
-				let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
-				let uploaded_fonts_options = "";
-				for (i = 0; i < uploaded_fonts.length; i++) {
-					let font_key = uploaded_fonts[i].font_key;
-					let font = uploaded_fonts[i].value;
-					font_name = font_key.replaceAll("_", " ");
-					uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
-					uploaded_fonts_options = uploaded_fonts_options + "<option value='" + font_key + "'>" + font_name + "</option>";
-				}
-				let style = document.createElement("style");
-				let fonts_node = document.createTextNode(uploaded_fonts_list);
-				style.appendChild(fonts_node);
-				document.getElementsByTagName("head")[0].appendChild(style);
-				document.getElementById("select_fonts").innerHTML = uploaded_fonts_options;
-				
+				loadSelectFonts();
 			}
 
 

@@ -1,5 +1,7 @@
 window.onload = function() {
-	loadSelectValues();
+	loadSelectFolders();
+	loadSelectFonts();
+	loadSelectStyles();
 	loadDezyn();
 	setRandomWrapperBackgroundColor();
 	showSectionPanel('box_section');
@@ -242,19 +244,12 @@ function getNewSectionNumber() {
 
 function selectSection(counter) {
 
-
 	last_selected_section = selected_section;
 
 	setSelectedElement();
 	
-	let new_selected_id = "section" + counter;
-	let section_count = document.querySelectorAll("section").length;
-	if (selected_section && selected_section.id == new_selected_id && section_count > 1) {
-		// console.log("selecting same section " + new_selected_id);
-		return;
-	}
-	
 	unselectSections();
+	let new_selected_id = "section" + counter;
 	selected_section = document.getElementById(new_selected_id);
 	
 	move.setAttribute("onmousedown", "onMouseDown4Move('" + counter + "');");
@@ -325,7 +320,7 @@ function orderSectionUpDown(direction) {
 	if (direction == "up") {
 		z_index.value = parseInt(z_index.value) + 1;
 	} else {
-		z_index.value = parseInt(z_index.value) - 1;
+		if (z_index.value > 0) z_index.value = parseInt(z_index.value) - 1;
 	}
 	z_index.onchange();
 }
@@ -606,7 +601,8 @@ function pasteText(e) {
 	}
 	data = data.replace(/\s/g, " "); // hard space
 
-	let paste_result = localStorage.getItem("paste_result");
+	//let paste_result = localStorage.getItem("paste_result");
+	let paste_result = document.getElementById("paste_result").value;
 	if (paste_result == "plain") {
 		let text = (e.originalEvent || e).clipboardData.getData('text/plain');
 		document.execCommand("insertHTML", false, text); 
@@ -1369,12 +1365,12 @@ function setLayout(parameters) {
 
 
 function togglePreview(element) {
-	if (element.innerText == "Clean") {
+	if (element.innerText == "👁 Clean") {
 		preview("on");
-		element.innerText = "View";
-	} else if (element.innerText == "View") {
+		element.innerText = "👁 View";
+	} else if (element.innerText == "👁 View") {
 		preview("off");
-		element.innerText = "Clean";
+		element.innerText = "👁 Clean";
 	}
 }
 
@@ -1401,14 +1397,16 @@ function preview(status) {
 }
 
 let dash_panel_toggle = true;
-function dashPanelToggle() {
+function toggleDashPanel() {
 	if (dash_panel_toggle) {
+		document.getElementById("options_bar").style.display = "none";
 		document.getElementById("dash_panel_wrapper").style.right = "-500px";
 		document.getElementById("dash_panel_toggle").innerHTML = "◄";
 		dash_panel_toggle = false;
 		preview("on");
 		hidePopupPanel();
 	} else {
+		document.getElementById("options_bar").style.display = "block";
 		document.getElementById("dash_panel_wrapper").style.right = "0";
 		document.getElementById("dash_panel_toggle").innerHTML = "►";
 		dash_panel_toggle = true;
@@ -1880,10 +1878,7 @@ function applyStyle() {
 }
 
 
-
-async function loadSelectValues() {
-
-	// ------------------------- folders
+async function loadSelectFolders() {
 	let select_folders = document.getElementById("select_folders");
 	let option = document.createElement("option");
 	option.text = "default";
@@ -1897,44 +1892,10 @@ async function loadSelectValues() {
 		option.text = folder_name;
 		select_folders.add(option);
 	}
-
-	// ------------------------- fonts
-	let google_fonts_options = "";
-	let online_fonts = await idbGetItem("dezynor_settings", "fonts");
-	online_fonts.sort();
-	let online_fonts_list = "";
-	for (i = 0; i < online_fonts.length; i++) {
-		let storage_font_name = online_fonts[i].split("|")[0];
-		let storage_font_location = online_fonts[i].split("|")[1];
-		if (storage_font_location == "Google") {
-			online_fonts_list = online_fonts_list + "@import url('https://fonts.googleapis.com/css?family=" + storage_font_name + "&display=swap');";
-			google_fonts_options = google_fonts_options + "<option>" + storage_font_name + "</option>";
-		} else if (storage_font_location == "Installed") {
-			
-		}
-	}
-
-	let uploaded_fonts_list = "";
-	let uploaded_fonts = await idbGetAllItems("dezynor_fonts");
-	let uploaded_fonts_options = "";
-	for (i = 0; i < uploaded_fonts.length; i++) {
-		let font_key = uploaded_fonts[i].font_key;
-		let font = uploaded_fonts[i].value;
-		font_name = font_key.replaceAll("_", " ");
-		uploaded_fonts_list = uploaded_fonts_list + "@font-face {font-family:'" + font_key + "';font-style:normal;font-weight:400;font-display:swap;src:url(" + URL.createObjectURL(font) + ") format('truetype');}";
-		uploaded_fonts_options = uploaded_fonts_options + "<option value='" + font_key + "'>" + font_name + "</option>";
-	}
+}
 
 
-	let style = document.createElement("style");
-	let fonts_node = document.createTextNode(online_fonts_list + uploaded_fonts_list);
-	style.appendChild(fonts_node);
-	document.getElementsByTagName("head")[0].appendChild(style);
-	
-	document.getElementById("google_fonts").innerHTML = google_fonts_options;
-	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
-
-	// ------------------------- formatted elements
+async function loadSelectStyles() {
 	let styles = await idbGetAllItems("dezynor_styles");
 	let styles_options = "";
 	for (i = 0; i < styles.length; i++) {
@@ -1946,7 +1907,6 @@ async function loadSelectValues() {
 		styles_options = styles_options + "<option value='" + style_code + "'>" + style_name + "</option>";
 	}
 	document.getElementById("select_styles").innerHTML = styles_options;
-
 }
 
 
@@ -2880,7 +2840,7 @@ function setSectionDefaultStyles() {
 	if (!selected_section) return;
 	selected_section.style.outline = "1px dashed gray";
 	selected_section.style.direction = "ltr";
-	selected_section.style.fontFamily = "Smooch";
+	selected_section.style.fontFamily = localStorage.getItem("default_font");
 	selected_section.style.fontSize = "25px";
 	selected_section.style.color = "rgb(0,0,0)";
 	selected_section.style.lineHeight = "35px";
@@ -3101,7 +3061,7 @@ function loadFormValues(element) {
 
 
 function loadSectionDefaultFormValues() {
-	document.getElementById("font_family").value = "Smooch";
+	document.getElementById("font_family").value = localStorage.getItem("default_font");
 	document.getElementById("font_size").value = "25";
 	document.getElementById("line_height").value = "35";
 	document.getElementById("word_spacing").value = "0";
@@ -3313,7 +3273,7 @@ document.onkeyup = function(e) {
 	if (key == keyCode.F1) {
 		
 	} else if (key == keyCode.F2) {
-		dashPanelToggle();
+		toggleDashPanel();
 	} else if (key == keyCode.F3) {
 		let z_index_element = document.getElementById("z_index");
 		let new_z_index = parseInt(z_index_element.value) - 1;
