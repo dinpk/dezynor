@@ -19,21 +19,30 @@
 		<div id="dash_panel_toggle" onclick="dashPanelToggle();" title="Preview (Alt + Menu)">►</div>
 
 		<div id="options_bar">
+			<span><button onclick="togglePreview(this);">Clean</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
 			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
 			<span><input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();"> <label for="inner_styles">Inner styles</label></span>
 			<span><input id="overflow_section" type="checkbox" onchange="toggleOverflowSection();"> <label for="overflow_section">Overflow</label></span>
 			<span>
-				Default styles
+				Defaults
 				<button onclick="setSectionDefaultStyles();">Box</button> 
 				<button onclick="setElementDefaultStyles();">Element</button> 
 			</span>
 			<span>
-				Align/resize to
+				Align to
 				<select id="align_to">
 					<option value="page">Page</option>
 					<option value="section">Previous box</option>
 				</select>
+			</span>
+			<span>
+				Select 
+				<button onclick="selectSectionNextPrev('prev');">◄</button> 
+				<button onclick="selectSectionNextPrev('next');">►</button> 
+				Order 
+				<button onclick="orderSectionUpDown('up');">▲</button> 
+				<button onclick="orderSectionUpDown('down');">▼</button> 
 			</span>
 		</div>
 
@@ -666,7 +675,7 @@
 							<td>Clip text</td>
 							<td>
 								<button onclick="setSectionClass('clipText');">Set</button> 
-								<button onclick="removeSectionClass('clipText');">x</button> 
+								<button onclick="removeSectionClass('clipText');">Remove</button> 
 							</td>
 						</tr>
 
@@ -945,9 +954,7 @@
 								
 								Distance x <input id="duplicate_linear_x_distance" type="number" step="1" value="50" disabled><br> 
 								Distance y <input id="duplicate_linear_y_distance" type="number" step="1" value="50" disabled> 
-								<br>
-								<br>
-								<button onclick="revertToLastState();" title="Revert to last state">Revert to Last State</button>
+
 							</td>
 						</tr>
 

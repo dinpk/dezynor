@@ -18,6 +18,8 @@ let selected_section;
 let selected_element;
 let last_selected_section;
 let last_selected_element;
+let next_focused_section = 0;
+let prev_focused_section = 0;
 let revert_states = [];
 let short_style_rules = ["padding", "borderRadius"];
 let move;
@@ -273,6 +275,59 @@ function selectSection(counter) {
 	if (selected_element) loadFormValues(selected_element);
 	
 	
+}
+
+function selectSectionNextPrev(direction) {
+
+	let first_section, last_section;
+	let all_sections = document.querySelectorAll("#wrapper section");
+	if (all_sections.length > 0) {
+		first_section = all_sections[0];
+		last_section = all_sections[all_sections.length-1];
+	} else {
+		return;		
+	}
+
+	if (direction == "next") {
+		
+		for (i = 0; i < all_sections.length; i++) {
+			if (all_sections[i] == selected_section) {
+				next_focused_section = all_sections[i+1];
+				break;
+			}
+		}
+		
+		if (next_focused_section) {
+			selectSection(next_focused_section.id.replace("section", ""));
+		} else {
+			selectSection(first_section.id.replace("section", ""));
+		}
+		
+	} else if (direction == "prev") {
+		
+		for (i = 0; i < all_sections.length; i++) {
+			if (all_sections[i] == selected_section) {
+				prev_focused_section = all_sections[i-1];
+				break;
+			}
+		}
+		
+		if (prev_focused_section) {
+			selectSection(prev_focused_section.id.replace("section", ""));
+		} else {
+			selectSection(last_section.id.replace("section", ""));
+		}
+	}
+}
+
+function orderSectionUpDown(direction) {
+	let z_index = document.getElementById("z_index");
+	if (direction == "up") {
+		z_index.value = parseInt(z_index.value) + 1;
+	} else {
+		z_index.value = parseInt(z_index.value) - 1;
+	}
+	z_index.onchange();
 }
 
 function setSelectedElement() { 
@@ -1312,6 +1367,18 @@ function setLayout(parameters) {
 	}
 }
 
+
+function togglePreview(element) {
+	if (element.innerText == "Clean") {
+		preview("on");
+		element.innerText = "View";
+	} else if (element.innerText == "View") {
+		preview("off");
+		element.innerText = "Clean";
+	}
+}
+
+
 function preview(status) {
 
 	let all_sections = document.querySelectorAll("section");
@@ -2186,7 +2253,7 @@ function setRandomStyle(style) {
 	
 	saveCurrentState();
 	
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	
 	let random_color, random_range;
 
@@ -2243,7 +2310,7 @@ function removeStyle(style) {
 	
 	saveCurrentState();
 	
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	
 	switch (style) {
 		case "backgroundColor":
@@ -2353,7 +2420,6 @@ function setBorderWidthPreset(width) {
 	if (!selected_section) return;
 	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	saveCurrentState();
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;	
 	document.getElementById("border_width").value = width;
 	selected_element.style.borderWidth = width + "px";
 }
@@ -3239,23 +3305,15 @@ document.onkeydown = function(e){
 
 }
 
-let next_focused_section = 0;
 
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 	//console.log(key);
 
 	if (key == keyCode.F1) {
-		dashPanelToggle();
+		
 	} else if (key == keyCode.F2) {
-		if (document.querySelectorAll("section")[next_focused_section]) {
-			let section = document.querySelectorAll("section")[next_focused_section];
-			let section_number = section.id.replace("section", "");
-			selectSection(section_number);
-			next_focused_section++;
-		} else {
-			next_focused_section = 0;
-		}
+		dashPanelToggle();
 	} else if (key == keyCode.F3) {
 		let z_index_element = document.getElementById("z_index");
 		let new_z_index = parseInt(z_index_element.value) - 1;
