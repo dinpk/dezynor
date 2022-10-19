@@ -1806,7 +1806,7 @@ async function loadDezyn() {
 			}
 			document.getElementById("select_folders").value = object.folder;
 			
-		}).then(function() { // add fresh object URLs to sections
+		}).then(function() { // add fresh object URLs of images
 
 			let all_sections = document.querySelectorAll("section");
 			for (i = 0; i < all_sections.length; i++) {
@@ -1815,6 +1815,16 @@ async function loadDezyn() {
 				if (image_key && image_key != "") {
 					idbGetItem("dezynor_images", image_key).then(function(result) {
 						if (result && section) section.style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
+					});
+				}
+			}
+			let all_tds = document.querySelectorAll("section td");
+			for (i = 0; i < all_tds.length; i++) {
+				let td = all_tds[i];
+				let image_key = td.dataset.image_key;
+				if (image_key && image_key != "") {
+					idbGetItem("dezynor_images", image_key).then(function(result) {
+						if (result && td) td.style.backgroundImage = "url(" + URL.createObjectURL(result) + ")";
 					});
 				}
 			}
@@ -2129,14 +2139,15 @@ function setStyle(style, element, value, save_state = true) {
 			}
 			break;
 		case "backgroundImage":
-			if (!selected_section.dataset.image_key) break;
-			idbGetItem("dezynor_images", selected_section.dataset.image_key).then(function(result) {
+			if (!selected_element.dataset.image_key) break;
+			idbGetItem("dezynor_images", selected_element.dataset.image_key).then(function(result) {
 				if (!result) {
 					console.log("Image not found");
 					return;
 				}				
 				let image = URL.createObjectURL(result);
-				selected_section.style.backgroundImage = "url(" + image + ")";
+				selected_element.style.backgroundImage = "url(" + image + ")";
+				selected_element.style.backgroundSize = "100% 100%";
 			});
 			break;
 		case "backgroundGradientCombined":
@@ -2156,25 +2167,25 @@ function setStyle(style, element, value, save_state = true) {
 			if (inner_styles) break;
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) return;
-			selected_section.style.backgroundImage = "url(" + image_url + ")";
+			selected_element.style.backgroundImage = "url(" + image_url + ")";
 			break;
 		case "backgroundRepeat": 
 			if (element.checked) {
-				selected_section.style.backgroundRepeat = "repeat";
-				selected_section.style.backgroundSize = "auto";
+				selected_element.style.backgroundRepeat = "repeat";
+				selected_element.style.backgroundSize = "auto";
 				document.getElementById("background_size").value = "auto";
 			} else {
-				selected_section.style.backgroundRepeat = "no-repeat";
+				selected_element.style.backgroundRepeat = "no-repeat";
 			}
 			break;
 		case "backgroundSize": 
-			selected_section.style.backgroundSize = value;
+			selected_element.style.backgroundSize = value;
 			break;
 		case "backgroundPositionX": 
-			selected_section.style.backgroundPositionX = value;
+			selected_element.style.backgroundPositionX = value;
 			break;
 		case "backgroundPositionY": 
-			selected_section.style.backgroundPositionY = value;
+			selected_element.style.backgroundPositionY = value;
 			break;
 		case "textShadow":
 			let text_shadow_count = document.getElementById("text_shadow_count").value;
@@ -2323,7 +2334,8 @@ function removeStyle(style) {
 			document.getElementById("box_shadow_inset").checked = false;
 			break;
 		case "backgroundImage":
-			selected_section.style.backgroundImage = "";
+			selected_element.style.backgroundImage = "";
+			delete selected_element.dataset.image_key;
 		case "clipPath":
 			selected_element.style.clipPath = "";
 			document.getElementById("clip_path").value = "";
@@ -2441,6 +2453,8 @@ async function uploadImage(element) {
 	
 	if (!(selected_section)) return;
 	
+	if (!selected_element.localName == "td" || !selected_section.dataset.inner_styles) selected_element = selected_section;
+	
 	image_key = "image-" + new Date().getTime();
 	const image_file = element.files[0];
 
@@ -2483,7 +2497,7 @@ async function uploadImage(element) {
 			}
 			let resized_blob = new Blob([u8arr], { type: mime });
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
-			selected_section.dataset.image_key = image_key;
+			selected_element.dataset.image_key = image_key;
 			document.getElementById("upload_image").value = "";
 			setStyle('backgroundImage');
 		}

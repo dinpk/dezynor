@@ -100,7 +100,6 @@ body {
 }
 
 
-
 /* ------------------------- ICONS BAR ---------------------------- */
 
 #icons_bar {
@@ -108,11 +107,20 @@ body {
 	top:0;
 	right:0;
 	background-color:#E5E5E5;
-	width:44px;
+	width:42px;
 	height:100%;
-	padding-top:40px;
+	padding-top:30px;
 	border-left:#999;
 	text-align:center;
+}
+
+#icons_bar img {
+	padding:2px 4px 2px 4px;
+}
+
+#icons_bar img:hover {
+	background-color:#FFF;
+	cursor:pointer;
 }
 
 /* ------------------------- OPTIONS BAR ---------------------------- */
@@ -160,8 +168,8 @@ body {
 	text-align:center;
 	top:0;
 	right:0;
-	width:44px;
-	background-color:cornflowerblue;
+	width:42px;
+	background-color:black;
 	font-family:Verdana;
 	font-size:12px;
 	padding:1px 2px 2px 5px;
