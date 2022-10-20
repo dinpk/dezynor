@@ -328,6 +328,7 @@ function setSelectedElement() {
 	last_selected_element = selected_element;
 
 	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
+	console.log(selection);
 	//selected_text = selection.toString();
 	if (!selection.anchorNode) return;
 	if (!selection.anchorNode.data) {
@@ -2145,6 +2146,9 @@ function setStyle(style, element, value, save_state = true) {
 				let image = URL.createObjectURL(result);
 				selected_element.style.backgroundImage = "url(" + image + ")";
 				selected_element.style.backgroundSize = "100% 100%";
+				selected_element.style.backgroundRepeat = "no-repeat";
+				selected_element.style.backgroundPositionX = "center";
+				selected_element.style.backgroundPositionY = "center";
 			});
 			break;
 		case "backgroundGradientCombined":
@@ -2344,17 +2348,19 @@ function removeStyle(style) {
 function setSectionClass(value) {
 	if (!selected_section) return;
 	
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	
 	switch (value) {
 		case "clipText":
-			selected_section.classList.add("clip_text");
+			selected_element.classList.add("clip_text");
 			break;
 		case "showSectionSide":
-			selected_section.classList.remove("show_left");
-			selected_section.classList.remove("show_right");
-			selected_section.classList.remove("show_top");
-			selected_section.classList.remove("show_bottom");
+			selected_element.classList.remove("show_left");
+			selected_element.classList.remove("show_right");
+			selected_element.classList.remove("show_top");
+			selected_element.classList.remove("show_bottom");
 			let show_side = document.getElementById("show_section_side").value;
-			if (show_side != "show_all") selected_section.classList.add(show_side);
+			if (show_side != "show_all") selected_element.classList.add(show_side);
 			break;
 	}
 }
@@ -2362,10 +2368,10 @@ function setSectionClass(value) {
 
 function removeSectionClass(value) {
 	if (!selected_section) return;
-	
+	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
 	switch (value) {
 		case "clipText":
-			selected_section.classList.remove("clip_text");
+			selected_element.classList.remove("clip_text");
 			break;
 	}
 	
@@ -2530,6 +2536,8 @@ function setTable() {
 	let border_color = document.getElementById("table_border_color").value;
 	let border = "border:" + border_width + "px " + border_style + " " + border_color + ";";
 	
+	let border_spacing = document.getElementById("table_border_spacing").value;
+	
 	let padding_top = document.getElementById("table_cell_padding_top").value;
 	let padding_bottom = document.getElementById("table_cell_padding_bottom").value;
 	let padding_left = document.getElementById("table_cell_padding_left").value;
@@ -2552,8 +2560,13 @@ function setTable() {
 	}
 	let table_style = "";
 	if (caption.length == 0) {
-		table_style = " style='height:99%';";
+		table_style = "height:99%;";
 	}
+	if (border_spacing > 0) {
+		table_style = table_style + "border-collapse:separate;border-spacing:" + border_spacing + "px;";
+	}
+	table_style = " style='" + table_style + "'";
+	
 	table = "<table" + table_style +  ">" + caption + "<tbody>" + table + "</tbody>" + "</table>";
 	selected_section.innerHTML = table;
 }
@@ -2652,7 +2665,15 @@ function setTableStyle(style, element, value) {
 				all_table_td[i].style.padding = padding_top + "px " + padding_right + "px " + padding_bottom + "px " + padding_left + "px";
 			}
 			break;
-		
+		case "borderSpacing":
+			let border_spacing = document.getElementById("table_border_spacing").value;
+			table.style.borderSpacing = border_spacing + "px";
+			if (border_spacing == 0) {
+				table.style.borderCollapse = "collapse";
+			} else {
+				table.style.borderCollapse = "separate";
+			}
+			break;
 	}
 	
 }
