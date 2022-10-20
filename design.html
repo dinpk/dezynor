@@ -528,6 +528,10 @@
 									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
+									<option>inset</option>
+									<option>outset</option>
+									<option>ridge</option>
+									<option>groove</option>
 								</select> 
 								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);"> 
 								<button onclick="setColorableElement('column_rule_color', 'column');showPopupPanel('color_pallette');">🚥</button> 
@@ -703,6 +707,10 @@
 									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
+									<option>inset</option>
+									<option>outset</option>
+									<option>ridge</option>
+									<option>groove</option>
 								</select>
 								<button id="remove_border" onclick="removeStyle('border');">x</button>
 								<br>
@@ -822,8 +830,13 @@
 								<input id="table_border_width" type="number" step="1" value="1" onchange="setTableStyle('borderCombined', this);">
 								<select id="table_border_style" onchange="setTableStyle('borderCombined', this);">
 									<option>solid</option>
+									<option>double</option>
 									<option>dashed</option>
 									<option>dotted</option>
+									<option>inset</option>
+									<option>outset</option>
+									<option>ridge</option>
+									<option>groove</option>
 								</select>
 								<input id="table_border_color" type="color" value="#999999" onchange="setTableStyle('borderCombined', this);">
 							</td>

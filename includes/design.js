@@ -24,6 +24,7 @@ let next_focused_section = 0;
 let prev_focused_section = 0;
 let revert_states = [];
 let short_style_rules = ["padding", "borderRadius"];
+let block_elements = ["p", "div", "section", "caption", "main", "article", "header", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
 let move;
 let resize_bottom_right;
 let resize_top_right;
@@ -246,8 +247,6 @@ function selectSection(counter) {
 
 	last_selected_section = selected_section;
 
-	setSelectedElement();
-	
 	unselectSections();
 	let new_selected_id = "section" + counter;
 	selected_section = document.getElementById(new_selected_id);
@@ -267,9 +266,8 @@ function selectSection(counter) {
 	reAlignSectionHandles();
 	showHandles();
 	loadFormValues(selected_section);
-	if (selected_element) loadFormValues(selected_element);
 	
-	
+	setSelectedElement();
 }
 
 function selectSectionNextPrev(direction) {
@@ -325,7 +323,7 @@ function orderSectionUpDown(direction) {
 	z_index.onchange();
 }
 
-function setSelectedElement() { 
+function setSelectedElement() {
 
 	last_selected_element = selected_element;
 
@@ -337,7 +335,7 @@ function setSelectedElement() {
 	} else {
 		selected_element = selection.anchorNode.parentNode;
 	}
-	let block_elements = ["p", "div", "section", "caption", "main", "article", "header", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "th", "td", "li"];
+	
 	let reached_element = false;
 	while (!reached_element) {
 		for (i = 0; i < block_elements.length; i++) {
@@ -352,8 +350,7 @@ function setSelectedElement() {
 		}
 	}
 	
-
-	// console.log(selected_element);
+	if (last_selected_element != selected_element) loadFormValues(selected_element);
 }
 
 function duplicateSection() {
@@ -2164,9 +2161,8 @@ function setStyle(style, element, value, save_state = true) {
 			selected_element.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
 			break;
 		case "backgroundImageURL":
-			if (inner_styles) break;
 			let image_url = prompt("Provide an image URL");
-			if (!image_url || image_url.trim().length == 0) return;
+			if (!image_url || image_url.trim().length == 0) break;
 			selected_element.style.backgroundImage = "url(" + image_url + ")";
 			break;
 		case "backgroundRepeat": 
@@ -2453,7 +2449,7 @@ async function uploadImage(element) {
 	
 	if (!(selected_section)) return;
 	
-	if (!selected_element.localName == "td" || !selected_section.dataset.inner_styles) selected_element = selected_section;
+	if ((selected_element && !selected_element.localName == "td") || !selected_section.dataset.inner_styles) selected_element = selected_section;
 	
 	image_key = "image-" + new Date().getTime();
 	const image_file = element.files[0];
@@ -3303,6 +3299,8 @@ document.onkeyup = function(e) {
 		z_index_element.onchange();
 	} else if (key == keyCode.F9) {
 		saveDezyn();
+	} else if (key == keyCode.DOWN_ARROW || key == keyCode.UP_ARROW || key == keyCode.RIGHT_ARROW || key == keyCode.LEFT_ARROW) {
+		setSelectedElement();
 	} else if (e.ctrlKey && key == keyCode.COMMA) {
 		setStyle('direction', null, 'rtl');
 	} else if (e.ctrlKey && key == keyCode.PERIOD) {
