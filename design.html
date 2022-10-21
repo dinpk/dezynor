@@ -19,20 +19,20 @@
 		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="F2">►</div>
 
 		<div id="icons_bar">
+			<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design File"> 
 			<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
 			<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
-			<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and position">
-			<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and spacing">
-			<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and gradient">
+			<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position">
+			<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing">
+			<img src="images/menu_icon_color_gradient.png" onclick="showSectionPanel('color_section');" title="Color and Gradient">
 			<img src="images/menu_icon_background_image.png" onclick="showSectionPanel('art_section');" title="Image">
 			<img src="images/menu_icon_border.png" onclick="showSectionPanel('border_section');" title="Border">
-			<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text shadow">
-			<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box shadow">
+			<img src="images/menu_icon_text_shadow.png" onclick="showSectionPanel('text_shadow_section');" title="Text Shadow">
+			<img src="images/menu_icon_box_shadow.png" onclick="showSectionPanel('box_shadow_section');" title="Box Shadow">
 			<img src="images/menu_icon_table.png" onclick="showSectionPanel('table_section');" title="Table">
 			<img src="images/menu_icon_transform.png" onclick="showSectionPanel('transform_section');" title="Transform">
 			<img src="images/menu_icon_layouts.png" onclick="showSectionPanel('layout_section');" title="Layouts">
 			<img src="images/menu_icon_shapes.png" onclick="showSectionPanel('shape_section');" title="Shapes">
-			<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design file"> 
 		</div>
 
 		<div id="options_bar">
@@ -475,8 +475,10 @@
 								<img src="images/icon_align_center.png" onclick="setStyle('textAlign', this, 'center');"> 
 								<img src="images/icon_align_right.png" onclick="setStyle('textAlign', this, 'right');"> 
 								<img src="images/icon_align_justify.png" onclick="setStyle('textAlign', this, 'justify');"> 
-								<img src="images/icon_direction_ltr.png" onclick="setStyle('direction', this, 'ltr');" title="Direction Left-to-Right"> 
-								<img src="images/icon_direction_rtl.png" onclick="setStyle('direction', this, 'rtl');" title="Direction Right-to-Left"> 
+								<img src="images/icon_direction_ltr.png" onclick="setStyle('direction', this, 'ltr');" title="Direction (Left to right)"> 
+								<img src="images/icon_direction_rtl.png" onclick="setStyle('direction', this, 'rtl');" title="Direction (Right to left)"> 
+								<img src="images/icon_list_unordered.png" onclick="setStyle('ul', this);" title="Unordered list"> 
+								<img src="images/icon_list_ordered.png" onclick="setStyle('ol', this);" title="Ordered list"> 
 							</td>
 						</tr>
 						<tr>
@@ -506,10 +508,19 @@
 						<tr>
 							<td>Padding</td>
 							<td>
-								Top <input id="padding_top" type="number" onchange="setStyle('paddingTop', this);" step="2">  
-								Bottom <input id="padding_bottom" type="number" onchange="setStyle('paddingBottom', this);" step="2"><br>
-								Left <input id="padding_left" type="number" onchange="setStyle('paddingLeft', this);" step="2">  
-								Right <input id="padding_right" type="number" onchange="setStyle('paddingRight', this);" step="2"><br>
+								<input id="padding_top" type="number" class="w20" onchange="setStyle('paddingTop', this);" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
+								<input id="padding_bottom" type="number" onchange="setStyle('paddingBottom', this);" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
+								<input id="padding_left" type="number" onchange="setStyle('paddingLeft', this);" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
+								<input id="padding_right" type="number" onchange="setStyle('paddingRight', this);" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
+							</td>
+						</tr>
+						<tr>
+							<td>Margin</td>
+							<td>
+								<input id="margin_top" type="number" class="w20" onchange="setStyle('marginTop', this);" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
+								<input id="margin_bottom" type="number" onchange="setStyle('marginBottom', this);" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
+								<input id="margin_left" type="number" onchange="setStyle('marginLeft', this);" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
+								<input id="margin_right" type="number" onchange="setStyle('marginRight', this);" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
 							</td>
 						</tr>
 						<tr>

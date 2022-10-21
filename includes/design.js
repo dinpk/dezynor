@@ -328,9 +328,9 @@ function setSelectedElement() {
 	last_selected_element = selected_element;
 
 	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
-	console.log(selection);
+
 	//selected_text = selection.toString();
-	if (!selection.anchorNode) return;
+	if (!selection.anchorNode || document.activeElement.localName == "input") return;
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
 	} else {
@@ -2023,8 +2023,30 @@ function setStyle(style, element, value, save_state = true) {
 		case "paddingLeft":
 			selected_element.style.paddingLeft = value + "px";
 			break;
+		case "marginTop":
+			selected_element.style.marginTop = value + "px";
+			break;
+		case "marginRight":
+			selected_element.style.marginRight = value + "px";
+			break;
+		case "marginBottom":
+			selected_element.style.marginBottom = value + "px";
+			break;
+		case "marginLeft":
+			selected_element.style.marginLeft = value + "px";
+			break;
 		case "direction":
 			selected_element.style.direction = value;
+			break;
+		case "ul":
+			if (selected_element.localName != "section") {
+				selected_element.outerHTML = "<ul><li>" + selected_element.innerText + "</li></ul>";
+			}
+			break;
+		case "ol":
+			if (selected_element.localName != "section") {
+				selected_element.outerHTML = "<ol><li>" + selected_element.innerText + "</li></ol>";
+			}
 			break;
 		case "fontFamily":
 			selected_element.style.fontFamily = value;
@@ -2884,6 +2906,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.textIndent = "0px";
 	selected_section.style.textShadow = "0px 0px 0px #000000";
 	selected_section.style.padding = "0";
+	selected_section.style.margin = "0";
 	selected_section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
 	selected_section.style.backgroundPositionX = "center";
 	selected_section.style.backgroundPositionY = "center";
@@ -2982,6 +3005,11 @@ function loadFormValues(element) {
 	if (element.style.paddingRight) document.getElementById("padding_right").value = element.style.paddingRight.replace("px", "");
 	if (element.style.paddingBottom) document.getElementById("padding_bottom").value = element.style.paddingBottom.replace("px", "");
 	if (element.style.paddingLeft) document.getElementById("padding_left").value = element.style.paddingLeft.replace("px", "");
+
+	if (element.style.marginTop) document.getElementById("margin_top").value = element.style.marginTop.replace("px", "");
+	if (element.style.marginRight) document.getElementById("margin_right").value = element.style.marginRight.replace("px", "");
+	if (element.style.marginBottom) document.getElementById("margin_bottom").value = element.style.marginBottom.replace("px", "");
+	if (element.style.marginLeft) document.getElementById("margin_left").value = element.style.marginLeft.replace("px", "");
 
 	if (element.style.paddingTop) document.getElementById("table_cell_padding_top").value = element.style.paddingTop.replace("px", "");
 	if (element.style.paddingRight) document.getElementById("table_cell_padding_right").value = element.style.paddingRight.replace("px", "");
@@ -3120,6 +3148,10 @@ function loadSectionDefaultFormValues() {
 	document.getElementById("padding_right").value = "0";
 	document.getElementById("padding_bottom").value = "0";
 	document.getElementById("padding_left").value = "0";
+	document.getElementById("margin_top").value = "0";
+	document.getElementById("margin_right").value = "0";
+	document.getElementById("margin_bottom").value = "0";
+	document.getElementById("margin_left").value = "0";
 	document.getElementById("gradient_type").value = "linear-gradient";
 	document.getElementById("gradient_direction").value = "to top";
 	document.getElementById("gradient_color1").value = "#FFFFFF";
