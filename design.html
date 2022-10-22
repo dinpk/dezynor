@@ -947,7 +947,17 @@
 								<button onclick="setTableVerticalAlignment();">Go</button>
 							</td>
 						</tr>
-						
+						<tr>
+							<td>Merge</td>
+							<td>
+								<input id="table_merge_cells" type="number" step="1" min="2" value="2"> 
+								<select id="table_merge_direction">
+									<option>to right</option>
+									<option>to bottom</option>
+								</select> 
+								<button onclick="mergeTableCells();">Go</button>
+							</td>
+						</tr>
 					</table>
 				</div>
 

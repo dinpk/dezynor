@@ -1723,6 +1723,8 @@ function duplicateDezyn() {
 
 async function exportDezyn() {
 
+	showMessage("Exporting... please wait for the file to be downloaded", "Chocolate");
+
 	let zip_items = new JSZip();
 	// design
 	let data = document.getElementById("cover").innerHTML;
@@ -1770,7 +1772,8 @@ async function exportDezyn() {
 		}}).then(function(content) {
 			saveAs(content, file_name + ".zip");
 		});
-		console.log(4);
+		
+		
 }
 
 async function deleteDezyn() {
@@ -2024,15 +2027,19 @@ function setStyle(style, element, value, save_state = true) {
 			selected_element.style.paddingLeft = value + "px";
 			break;
 		case "marginTop":
+			if (selected_element.localName == "section") break;
 			selected_element.style.marginTop = value + "px";
 			break;
 		case "marginRight":
+			if (selected_element.localName == "section") break;
 			selected_element.style.marginRight = value + "px";
 			break;
 		case "marginBottom":
+			if (selected_element.localName == "section") break;
 			selected_element.style.marginBottom = value + "px";
 			break;
 		case "marginLeft":
+			if (selected_element.localName == "section") break;
 			selected_element.style.marginLeft = value + "px";
 			break;
 		case "direction":
@@ -2167,10 +2174,10 @@ function setStyle(style, element, value, save_state = true) {
 				}				
 				let image = URL.createObjectURL(result);
 				selected_element.style.backgroundImage = "url(" + image + ")";
-				selected_element.style.backgroundSize = "100% 100%";
-				selected_element.style.backgroundRepeat = "no-repeat";
-				selected_element.style.backgroundPositionX = "center";
-				selected_element.style.backgroundPositionY = "center";
+				selected_element.style.backgroundSize = document.getElementById("background_size").value;
+				selected_element.style.backgroundRepeat = document.getElementById("background_image_repeat").checked ? "repeat" : "no-repeat";
+				selected_element.style.backgroundPositionX = document.getElementById("background_position_x").value;
+				selected_element.style.backgroundPositionY = document.getElementById("background_position_y").value;
 			});
 			break;
 		case "backgroundGradientCombined":
@@ -2870,9 +2877,20 @@ function setTableDirection() {
 	}
 }
 
+function mergeTableCells() {
+	
+	let merge_cells = document.getElementById("table_merge_cells").value;
+	let merge_direction = document.getElementById("table_merge_direction").value;
+	
+	console.log(merge_cells, merge_direction);
+	
+}
+
+
 function setElementDefaultStyles() {
 	if (selected_element && selected_element.localName != "section") {
 		selected_element.removeAttribute("style");
+		selected_element.outerHTML = "<div>" + selected_element.textContent + "</div>"
 	}
 }
 
@@ -2905,7 +2923,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.letterSpacing = "0px";
 	selected_section.style.textIndent = "0px";
 	selected_section.style.textShadow = "0px 0px 0px #000000";
-	selected_section.style.padding = "0";
+	selected_section.style.padding = "40px 0 0 0";
 	selected_section.style.margin = "0";
 	selected_section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
 	selected_section.style.backgroundPositionX = "center";
