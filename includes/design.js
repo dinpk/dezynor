@@ -2611,6 +2611,20 @@ function getTableColumnPosition() {
 	}	
 }
 
+function getTableRowPosition() {
+	if (!selected_element || selected_element.localName != "td") return;
+	let table = selected_element.parentNode.parentNode;
+	let all_tr = table.querySelectorAll("tr");	let tr = selected_element.parentNode;
+	for (k = 0; k < all_tr.length; k++) {
+		all_tr_td = all_tr[k].querySelectorAll("td");
+		for (s = 0; s < all_tr_td.length; s++) {
+			if (all_tr_td[s] == selected_element) {
+				return k;
+			}
+		}
+	}	
+}
+
 function modifyTable(location) {
 	if (!selected_element || selected_element.localName != "td") return;
 
@@ -2878,11 +2892,42 @@ function setTableDirection() {
 }
 
 function mergeTableCells() {
+	if (!selected_element || selected_element.localName != "td") return;
+
+	saveCurrentState();
+
+	let table = selected_element.parentNode.parentNode;
+	let all_tr = table.querySelectorAll("tr");
+	let tr = selected_element.parentNode;
+	let column_position = getTableColumnPosition();
+	let row_position = getTableRowPosition();
+	let all_tr_td;
 	
-	let merge_cells = document.getElementById("table_merge_cells").value;
+	let merge_cells = parseInt(document.getElementById("table_merge_cells").value);
 	let merge_direction = document.getElementById("table_merge_direction").value;
 	
-	console.log(merge_cells, merge_direction);
+	if (merge_direction == "to right") {
+		let all_td = tr.querySelectorAll("td");
+		for (i = 0; i < all_td.length; i++) {
+			if (i == column_position && column_position != all_td.length-1) {
+				all_td[i].setAttribute("colspan", merge_cells);
+			} else if (i > column_position && i < (column_position + merge_cells)) {
+				all_td[i].remove();
+			}
+		}
+	} else if (merge_direction == "to bottom") {
+		for (k = 0; k < all_tr.length; k++){
+			all_tr_td = all_tr[k].querySelectorAll("td");
+			for (s = 0; s < all_tr_td.length; s++) {
+				if (s == column_position && k == row_position && row_position != all_tr.length-1) {
+					all_tr_td[s].setAttribute("rowspan", merge_cells);
+				} else if (s == column_position && k > row_position && k < (row_position + merge_cells)) {
+					all_tr_td[s].remove();
+				}
+			}
+		}
+	}
+
 	
 }
 
