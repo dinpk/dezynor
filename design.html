@@ -39,7 +39,13 @@
 			<span><button onclick="togglePreview(this);">👁 Clean</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
 			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
-			<span><input id="inner_styles" type="checkbox" onchange="toggleInnerStyles();"> <label for="inner_styles">Inner styles</label></span>
+			<span>
+				Styles 
+				<select id="inner_styles" onchange="toggleInnerStyles();">
+					<option>Box</option>
+					<option>Inner</option>
+				</select>
+			</span>
 			<span><input id="overflow_section" type="checkbox" onchange="toggleOverflowSection();"> <label for="overflow_section">Overflow</label></span>
 			<span>
 				Defaults
@@ -838,7 +844,7 @@
 						<tr>
 							<td>Border</td>
 							<td>
-								<input id="table_border_width" type="number" step="1" value="1" onchange="setTableStyle('borderCombined', this);">
+								<input id="table_border_width" type="number" step="1" min="1" value="1" onchange="setTableStyle('borderCombined', this);">
 								<select id="table_border_style" onchange="setTableStyle('borderCombined', this);">
 									<option>solid</option>
 									<option>double</option>

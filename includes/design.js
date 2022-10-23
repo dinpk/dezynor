@@ -513,7 +513,7 @@ function toggleEditableSection() {
 function toggleInnerStyles() {
 	if (!selected_section) return;
 	
-	if (document.getElementById("inner_styles").checked) {
+	if (document.getElementById("inner_styles").value == "Inner") {
 		selected_section.dataset.inner_styles = "1";
 	} else {
 		delete selected_section.dataset.inner_styles;
@@ -1990,9 +1990,11 @@ function setStyle(style, element, value, save_state = true) {
 	if (save_state) saveCurrentState();
 
 	if (element && !value) value = element.value;
-	
-	let inner_styles = selected_section.dataset.inner_styles;
-	if (!inner_styles || !selected_element) selected_element = selected_section;
+
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
 	
 	switch (style) {
 		case "top":
@@ -2012,108 +2014,108 @@ function setStyle(style, element, value, save_state = true) {
 			reAlignSectionHandles();		
 			break;
 		case "padding":
-			selected_element.style.padding = value;
+			selected.style.padding = value;
 			break;
 		case "paddingTop":
-			selected_element.style.paddingTop = value + "px";
+			selected.style.paddingTop = value + "px";
 			break;
 		case "paddingRight":
-			selected_element.style.paddingRight = value + "px";
+			selected.style.paddingRight = value + "px";
 			break;
 		case "paddingBottom":
-			selected_element.style.paddingBottom = value + "px";
+			selected.style.paddingBottom = value + "px";
 			break;
 		case "paddingLeft":
-			selected_element.style.paddingLeft = value + "px";
+			selected.style.paddingLeft = value + "px";
 			break;
 		case "marginTop":
-			if (selected_element.localName == "section") break;
-			selected_element.style.marginTop = value + "px";
+			if (selected.localName == "section") break;
+			selected.style.marginTop = value + "px";
 			break;
 		case "marginRight":
-			if (selected_element.localName == "section") break;
-			selected_element.style.marginRight = value + "px";
+			if (selected.localName == "section") break;
+			selected.style.marginRight = value + "px";
 			break;
 		case "marginBottom":
-			if (selected_element.localName == "section") break;
-			selected_element.style.marginBottom = value + "px";
+			if (selected.localName == "section") break;
+			selected.style.marginBottom = value + "px";
 			break;
 		case "marginLeft":
-			if (selected_element.localName == "section") break;
-			selected_element.style.marginLeft = value + "px";
+			if (selected.localName == "section") break;
+			selected.style.marginLeft = value + "px";
 			break;
 		case "direction":
-			selected_element.style.direction = value;
+			selected.style.direction = value;
 			break;
 		case "ul":
-			if (selected_element.localName != "section") {
-				selected_element.outerHTML = "<ul><li>" + selected_element.innerText + "</li></ul>";
+			if (selected.localName != "section") {
+				selected.outerHTML = "<ul><li>" + selected.innerText + "</li></ul>";
 			}
 			break;
 		case "ol":
-			if (selected_element.localName != "section") {
-				selected_element.outerHTML = "<ol><li>" + selected_element.innerText + "</li></ol>";
+			if (selected.localName != "section") {
+				selected.outerHTML = "<ol><li>" + selected.innerText + "</li></ol>";
 			}
 			break;
 		case "fontFamily":
-			selected_element.style.fontFamily = value;
+			selected.style.fontFamily = value;
 			break;
 		case "fontSize":
-			selected_element.style.fontSize = value + "px";
+			selected.style.fontSize = value + "px";
 			break;
 		case "color":
-			selected_element.style.color = value;
+			selected.style.color = value;
 			break;
 		case "backgroundColor":
-			selected_element.style.backgroundColor = value;
+			selected.style.backgroundColor = value;
 			break;
 		case "wordSpacing":
-			selected_element.style.wordSpacing = value + "px";
+			selected.style.wordSpacing = value + "px";
 			break;
 		case "letterSpacing":
-			selected_element.style.letterSpacing = value + "px";
+			selected.style.letterSpacing = value + "px";
 			break;
 		case "textIndent":
-			selected_element.style.textIndent = value + "px";
+			selected.style.textIndent = value + "px";
 			break;
 		case "lineHeight":
-			selected_element.style.lineHeight = value + "px";
+			selected.style.lineHeight = value + "px";
 			break;
 		case "textAlign":
-			selected_element.style.textAlign = value;
+			selected.style.textAlign = value;
 			break;
 		case "opacity":
-			selected_element.style.opacity = value;
+			selected.style.opacity = value;
 			break;
 		case "borderCombined":
 			let border_width = document.getElementById("border_width").value;
 			let border_style = document.getElementById("border_style").value;
 			let border_color = document.getElementById("border_color").value;
-			selected_element.style.border = border_width + "px " + border_style  + " " + border_color;
+			selected.style.border = border_width + "px " + border_style  + " " + border_color;
 			break;
 		case "borderWidth":
-			selected_element.style.borderWidth = value + "px";
+			selected.style.borderWidth = value + "px";
 			break;
 		case "borderStyle":
-			selected_element.style.borderStyle = value;
+			selected.style.borderStyle = value;
 			break;
 		case "borderColor":
-			selected_element.style.borderColor = value;
+			selected.style.borderColor = value;
 			break;
 		case "borderRadius":
-			selected_element.style.borderRadius = value;
+			selected.style.borderRadius = value;
 			break;
 		case "borderTopLeftRadius":
-			selected_element.style.borderTopLeftRadius = value + "px";
+			selected.style.borderTopLeftRadius = value + "px";
 			break;
 		case "borderTopRightRadius":
-			selected_element.style.borderTopRightRadius = value + "px";
+			selected.style.borderTopRightRadius = value + "px";
 			break;
 		case "borderBottomLeftRadius":
-			selected_element.style.borderBottomLeftRadius = value + "px";
+			selected.style.borderBottomLeftRadius = value + "px";
 			break;
 		case "borderBottomRightRadius":
-			selected_element.style.borderBottomRightRadius = value + "px";
+			selected.style.borderBottomRightRadius = value + "px";
 			break;
 		case "columnCombined":
 			let column_count = document.getElementById("column_count").value;
@@ -2121,34 +2123,34 @@ function setStyle(style, element, value, save_state = true) {
 			let column_rule_width = document.getElementById("column_rule_width").value;
 			let column_rule_style = document.getElementById("column_rule_style").value;
 			let column_rule_color = document.getElementById("column_rule_color").value;
-			selected_element.style.columnCount = column_count;
-			selected_element.style.columnGap = column_gap + "px";
-			selected_element.style.columnRuleWidth = column_rule_width + "px";
-			selected_element.style.columnRuleStyle = column_rule_style;
-			selected_element.style.columnRuleColor = column_rule_color;
+			selected.style.columnCount = column_count;
+			selected.style.columnGap = column_gap + "px";
+			selected.style.columnRuleWidth = column_rule_width + "px";
+			selected.style.columnRuleStyle = column_rule_style;
+			selected.style.columnRuleColor = column_rule_color;
 			break;
 		case "columnCount":
-			selected_element.style.columnCount = value;
+			selected.style.columnCount = value;
 			break;
 		case "columnGap":
-			selected_element.style.columnGap = value + "px";
+			selected.style.columnGap = value + "px";
 			break;
 		case "columnRuleWidth":
-			selected_element.style.columnRuleWidth = value + "px";
+			selected.style.columnRuleWidth = value + "px";
 			break;
 		case "columnRuleStyle":
-			selected_element.style.columnRuleStyle = value;
+			selected.style.columnRuleStyle = value;
 			break;
 		case "columnRuleColor":
-			selected_element.style.columnRuleColor = value;
+			selected.style.columnRuleColor = value;
 			break;
 		case "clipPath":
-			selected_element.style.clipPath = value;
+			selected.style.clipPath = value;
 			break;
 		case "clipPathStyle":
 			value = element.querySelector('span').getAttribute('style');
 			value = value.replace("clip-path:", "");
-			selected_element.style.clipPath = value;
+			selected.style.clipPath = value;
 			document.getElementById("clip_path").value = value;
 			break;
 		case "transform":
@@ -2156,28 +2158,28 @@ function setStyle(style, element, value, save_state = true) {
 			let transform_degree1 = document.getElementById("transform_degree1").value;
 			let transform_degree2 = document.getElementById("transform_degree2").value;
 			if (transform_type == "rotate") {
-				selected_element.style.transform = "rotate(" + transform_degree1 + "deg)";
+				selected.style.transform = "rotate(" + transform_degree1 + "deg)";
 				document.getElementById("transform_degree2").style.display = "none";
 			} else if (transform_type == "skew") {
 				document.getElementById("transform_degree2").style.display = "inline";
-				selected_element.style.transform = "skew(" + transform_degree1 + "deg, " + transform_degree2 + "deg)";
+				selected.style.transform = "skew(" + transform_degree1 + "deg, " + transform_degree2 + "deg)";
 			} else if (transform_type == "scale") {
-				selected_element.style.transform = "scale(" + transform_degree1 + ", " + transform_degree2 + ")";
+				selected.style.transform = "scale(" + transform_degree1 + ", " + transform_degree2 + ")";
 			}
 			break;
 		case "backgroundImage":
-			if (!selected_element.dataset.image_key) break;
-			idbGetItem("dezynor_images", selected_element.dataset.image_key).then(function(result) {
+			if (!selected.dataset.image_key) break;
+			idbGetItem("dezynor_images", selected.dataset.image_key).then(function(result) {
 				if (!result) {
 					console.log("Image not found");
 					return;
 				}				
 				let image = URL.createObjectURL(result);
-				selected_element.style.backgroundImage = "url(" + image + ")";
-				selected_element.style.backgroundSize = document.getElementById("background_size").value;
-				selected_element.style.backgroundRepeat = document.getElementById("background_image_repeat").checked ? "repeat" : "no-repeat";
-				selected_element.style.backgroundPositionX = document.getElementById("background_position_x").value;
-				selected_element.style.backgroundPositionY = document.getElementById("background_position_y").value;
+				selected.style.backgroundImage = "url(" + image + ")";
+				selected.style.backgroundSize = document.getElementById("background_size").value;
+				selected.style.backgroundRepeat = document.getElementById("background_image_repeat").checked ? "repeat" : "no-repeat";
+				selected.style.backgroundPositionX = document.getElementById("background_position_x").value;
+				selected.style.backgroundPositionY = document.getElementById("background_position_y").value;
 			});
 			break;
 		case "backgroundGradientCombined":
@@ -2191,30 +2193,30 @@ function setStyle(style, element, value, save_state = true) {
 			if (!document.getElementById("gradient_alpha3").checked) color3 = color3 + "00";
 			let color4 = document.getElementById("gradient_color4").value;
 			if (!document.getElementById("gradient_alpha4").checked) color4 = color4 + "00";
-			selected_element.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
+			selected.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
 			break;
 		case "backgroundImageURL":
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) break;
-			selected_element.style.backgroundImage = "url(" + image_url + ")";
+			selected.style.backgroundImage = "url(" + image_url + ")";
 			break;
 		case "backgroundRepeat": 
 			if (element.checked) {
-				selected_element.style.backgroundRepeat = "repeat";
-				selected_element.style.backgroundSize = "auto";
+				selected.style.backgroundRepeat = "repeat";
+				selected.style.backgroundSize = "auto";
 				document.getElementById("background_size").value = "auto";
 			} else {
-				selected_element.style.backgroundRepeat = "no-repeat";
+				selected.style.backgroundRepeat = "no-repeat";
 			}
 			break;
 		case "backgroundSize": 
-			selected_element.style.backgroundSize = value;
+			selected.style.backgroundSize = value;
 			break;
 		case "backgroundPositionX": 
-			selected_element.style.backgroundPositionX = value;
+			selected.style.backgroundPositionX = value;
 			break;
 		case "backgroundPositionY": 
-			selected_element.style.backgroundPositionY = value;
+			selected.style.backgroundPositionY = value;
 			break;
 		case "textShadow":
 			let text_shadow_count = document.getElementById("text_shadow_count").value;
@@ -2227,7 +2229,7 @@ function setStyle(style, element, value, save_state = true) {
 				text_shadow += h + "px " + y + "px " + blur + "px " + color;
 				if (i != text_shadow_count) text_shadow += ",";
 			}
-			selected_element.style.textShadow = text_shadow;
+			selected.style.textShadow = text_shadow;
 			break;
 		case "boxShadow":
 			let h = document.getElementById("box_shadow_h").value;
@@ -2237,12 +2239,12 @@ function setStyle(style, element, value, save_state = true) {
 			let color = document.getElementById("box_shadow_color").value;
 			let inset = document.getElementById("box_shadow_inset").checked ? "inset " : "";
 			
-			if (selected_element.dataset.image_key && inset.length == 0) {
-				selected_element.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
-				selected_element.style.boxShadow = "none";
+			if (selected.dataset.image_key && inset.length == 0) {
+				selected.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
+				selected.style.boxShadow = "none";
 			} else {
-				selected_element.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
-				selected_element.style.filter = "none";
+				selected.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
+				selected.style.filter = "none";
 			}
 			break;
 
@@ -2254,8 +2256,11 @@ function setRandomStyle(style) {
 	if (!selected_section) return;
 	
 	saveCurrentState();
-	
-	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
+
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
 	
 	let random_color, random_range;
 
@@ -2263,13 +2268,13 @@ function setRandomStyle(style) {
 		case "color":
 			random_range = document.getElementById("random_color_range").value;
 			random_color = getRandomRGBColor(random_range);
-			selected_element.style.color = random_color;
+			selected.style.color = random_color;
 			document.getElementById("color").value = rgb2hex(random_color);
 			break;
 		case "backgroundColor":
 			random_range = document.getElementById("random_color_range").value;
 			random_color = getRandomRGBColor(random_range);
-			selected_element.style.backgroundColor = random_color;
+			selected.style.backgroundColor = random_color;
 			document.getElementById("background_color").value = rgb2hex(random_color);
 			break;
 		case "randomGradientColors":
@@ -2285,7 +2290,7 @@ function setRandomStyle(style) {
 			break;
 		case "borderColor":
 			random_color = getRandomRGBColor("any");
-			selected_element.style.borderColor = random_color;
+			selected.style.borderColor = random_color;
 			document.getElementById("border_color").value = rgb2hex(random_color);
 			break;
 		case "textShadow":
@@ -2312,26 +2317,29 @@ function removeStyle(style) {
 	
 	saveCurrentState();
 	
-	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
 	
 	switch (style) {
 		case "backgroundColor":
 			document.getElementById("background_color").value = "#000001";
-			selected_element.style.backgroundColor = "";
+			selected.style.backgroundColor = "";
 			break;
 		case "border":
-			selected_element.style.borderWidth = "0";
-			selected_element.style.borderStyle = "solid";
-			selected_element.style.borderColor = "rgb(255,255,255)";
+			selected.style.borderWidth = "0";
+			selected.style.borderStyle = "solid";
+			selected.style.borderColor = "rgb(255,255,255)";
 			document.getElementById("border_width").value = "0";
 			document.getElementById("border_style").value = "solid";
 			document.getElementById("border_color").value = "#FFFFFF";
 			break;
 		case "borderRadius":
-			selected_element.style.borderTopLeftRadius = "0";
-			selected_element.style.borderTopRightRadius = "0";
-			selected_element.style.borderBottomLeftRadius = "0";
-			selected_element.style.borderBottomRightRadius = "0";
+			selected.style.borderTopLeftRadius = "0";
+			selected.style.borderTopRightRadius = "0";
+			selected.style.borderBottomLeftRadius = "0";
+			selected.style.borderBottomRightRadius = "0";
 			document.getElementById("border_radius1").value = "0";
 			document.getElementById("border_radius2").value = "0";
 			document.getElementById("border_radius3").value =  "0";
@@ -2342,10 +2350,10 @@ function removeStyle(style) {
 			document.getElementById("transform_degree1").value = "0";
 			document.getElementById("transform_degree2").value = "0";
 			document.getElementById("transform_degree2").style.visibility = "visible";
-			selected_element.style.transform = "skew(0deg, 0deg)";
+			selected.style.transform = "skew(0deg, 0deg)";
 			break;
 		case "textShadow":
-			selected_element.style.textShadow = "0px 0px 0px #000000";
+			selected.style.textShadow = "0px 0px 0px #000000";
 			document.getElementById("text_shadow_count").value = "0";
 			document.getElementById("text_shadow_h").value = "0";
 			document.getElementById("text_shadow_y").value = "0";
@@ -2353,8 +2361,8 @@ function removeStyle(style) {
 			document.getElementById("text_shadow_color").value = "#000000";
 			break;
 		case "boxShadow":
-			selected_element.style.filter = "none";
-			selected_element.style.boxShadow = "0px 0px 0px 0px #000000";
+			selected.style.filter = "none";
+			selected.style.boxShadow = "0px 0px 0px 0px #000000";
 			document.getElementById("box_shadow_h").value = "0";
 			document.getElementById("box_shadow_y").value = "0";
 			document.getElementById("box_shadow_blur").value = "0";
@@ -2363,10 +2371,10 @@ function removeStyle(style) {
 			document.getElementById("box_shadow_inset").checked = false;
 			break;
 		case "backgroundImage":
-			selected_element.style.backgroundImage = "";
-			delete selected_element.dataset.image_key;
+			selected.style.backgroundImage = "";
+			delete selected.dataset.image_key;
 		case "clipPath":
-			selected_element.style.clipPath = "";
+			selected.style.clipPath = "";
 			document.getElementById("clip_path").value = "";
 			break;
 			
@@ -2377,19 +2385,22 @@ function removeStyle(style) {
 function setSectionClass(value) {
 	if (!selected_section) return;
 	
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
 	
 	switch (value) {
 		case "clipText":
-			selected_element.classList.add("clip_text");
+			selected.classList.add("clip_text");
 			break;
 		case "showSectionSide":
-			selected_element.classList.remove("show_left");
-			selected_element.classList.remove("show_right");
-			selected_element.classList.remove("show_top");
-			selected_element.classList.remove("show_bottom");
+			selected.classList.remove("show_left");
+			selected.classList.remove("show_right");
+			selected.classList.remove("show_top");
+			selected.classList.remove("show_bottom");
 			let show_side = document.getElementById("show_section_side").value;
-			if (show_side != "show_all") selected_element.classList.add(show_side);
+			if (show_side != "show_all") selected.classList.add(show_side);
 			break;
 	}
 }
@@ -2397,10 +2408,15 @@ function setSectionClass(value) {
 
 function removeSectionClass(value) {
 	if (!selected_section) return;
-	if (!selected_section.dataset.inner_styles) selected_element = selected_section;
+
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
+
 	switch (value) {
 		case "clipText":
-			selected_element.classList.remove("clip_text");
+			selected.classList.remove("clip_text");
 			break;
 	}
 	
@@ -2410,23 +2426,33 @@ function removeSectionClass(value) {
 function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	if (!selected_section) return;
 	saveCurrentState();
-	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
+
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
+
 	document.getElementById("border_radius1").value = top_left;
 	document.getElementById("border_radius2").value = top_right;
 	document.getElementById("border_radius3").value = bottom_left;
 	document.getElementById("border_radius4").value = bottom_right;
-	selected_element.style.borderTopLeftRadius = top_left + "px";
-	selected_element.style.borderTopRightRadius = top_right + "px";
-	selected_element.style.borderBottomLeftRadius = bottom_left + "px";
-	selected_element.style.borderBottomRightRadius = bottom_right + "px";
+	selected.style.borderTopLeftRadius = top_left + "px";
+	selected.style.borderTopRightRadius = top_right + "px";
+	selected.style.borderBottomLeftRadius = bottom_left + "px";
+	selected.style.borderBottomRightRadius = bottom_right + "px";
 }
 
 function setBorderWidthPreset(width) {
 	if (!selected_section) return;
-	if (!selected_element || !selected_section.dataset.inner_styles) selected_element = selected_section;
+
+	let selected = selected_element;
+	if (!selected || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
+
 	saveCurrentState();
 	document.getElementById("border_width").value = width;
-	selected_element.style.borderWidth = width + "px";
+	selected.style.borderWidth = width + "px";
 }
 
 
@@ -2484,8 +2510,11 @@ async function uploadImage(element) {
 	
 	if (!(selected_section)) return;
 	
-	if ((selected_element && !selected_element.localName == "td") || !selected_section.dataset.inner_styles) selected_element = selected_section;
-	
+	let selected = selected_element;
+	if (!selected || (selected && selected.localName != "td") || !selected_section.dataset.inner_styles) {
+		selected = selected_section;
+	}
+
 	image_key = "image-" + new Date().getTime();
 	const image_file = element.files[0];
 
@@ -2518,7 +2547,7 @@ async function uploadImage(element) {
 			canvas.height = height;
 			context.drawImage(image, 0, 0, width, height);
 			let data_url = canvas.toDataURL(image_file.type);
-			let arr = data_url.split(',');
+			let arr = data_url.split(",");
 			let mime = arr[0].match(/:(.*?);/)[1];
 			let bstr = atob(arr[1]);
 			let n = bstr.length;
@@ -2528,9 +2557,9 @@ async function uploadImage(element) {
 			}
 			let resized_blob = new Blob([u8arr], { type: mime });
 			await idbPutItem("dezynor_images", {image_key:image_key, value:resized_blob});
-			selected_element.dataset.image_key = image_key;
+			selected.dataset.image_key = image_key;
 			document.getElementById("upload_image").value = "";
-			setStyle('backgroundImage');
+			setStyle("backgroundImage");
 		}
 
 	}, false);
@@ -3007,13 +3036,13 @@ function loadSectionDimensions() {
 
 function loadFormValues(element) {
 
-	loadSectionDefaultFormValues();
+	loadDefaultFormValues();
 
 	if (!selected_section) return;
 	if (!selected_section.dataset.inner_styles || !element.getAttribute("style")) element = selected_section;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
-	document.getElementById("inner_styles").checked = selected_section.dataset.inner_styles ? true : false;
+	document.getElementById("inner_styles").value = selected_section.dataset.inner_styles ? "Inner" : "Box";
 	if (selected_section.style.overflow == "visible") {
 		document.getElementById("overflow_section").checked = true;
 	} else {
@@ -3184,7 +3213,7 @@ function loadFormValues(element) {
 
 
 
-function loadSectionDefaultFormValues() {
+function loadDefaultFormValues() {
 	document.getElementById("font_family").value = localStorage.getItem("default_font");
 	document.getElementById("font_size").value = "25";
 	document.getElementById("line_height").value = "35";
@@ -3199,14 +3228,6 @@ function loadSectionDefaultFormValues() {
 	document.getElementById("text_shadow_blur").value = "0";
 	document.getElementById("text_shadow_color").value = "#000000";;
 
-	/*
-	document.getElementById("top").value = selected_element.style.top.replace("px", "");
-	document.getElementById("left").value = selected_element.style.left.replace("px", "");
-	document.getElementById("width").value = selected_element.style.width.replace("px", "");
-	document.getElementById("height").value = selected_element.style.height.replace("px", "");
-	document.getElementById("z_index").value = selected_element.style.zIndex;
-	*/
-	
 	document.getElementById("padding_top").value = "0";
 	document.getElementById("padding_right").value = "0";
 	document.getElementById("padding_bottom").value = "0";
@@ -3253,6 +3274,7 @@ function loadSectionDefaultFormValues() {
 	document.getElementById("transform_degree2").value = "0";
 	document.getElementById("transform_degree2").style.visibility = "visible";
 	document.getElementById("clip_path").value = "";
+	
 }
 
 
