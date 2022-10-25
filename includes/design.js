@@ -1303,63 +1303,42 @@ function rotateLeft() {
 	element.onchange();
 }
 
-function setLayout(parameters) {
+
+function setLayout(layout) {
+	
+	if (!selected_section) return;
 	
 	saveCurrentState();
 	
-	let wrapper_width = parseInt(document.getElementById("wrapper").style.width.replace("px", ""));
-	let wrapper_height = parseInt(document.getElementById("wrapper").style.height.replace("px", ""));
-
-	let gutter_x = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) * .04;
-	let gutter_y = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) * .04;
-
-
-	let all_sections = document.querySelectorAll("section");
-	let section_ids = [];
-	for (d = 0; d < all_sections.length; d++) {
-		section_ids.push(all_sections[d].id);
-		
-		all_sections[d].style.left = wrapper_width + 50 + "px";
-		selectSection(all_sections[d].id.replace("section", ""));
-		reAlignSectionHandles();
-	}
-
-	let gutter = document.getElementById("layout_gutter").value;
-
-	let boxes = parameters.split(",");
-	for (let k = 0; k < boxes.length; k++) {
-		let attributes = boxes[k].split("|");
-		let x, y, width, height;
-		if (gutter == "no") {
-			x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 2);
-			y = (attributes[1] * wrapper_height / 100) - (gutter_y / 2);
-			width = (attributes[2] * wrapper_width / 100) + (gutter_x);
-			height = (attributes[3] * wrapper_height / 100) + (gutter_y);
-		} else if (gutter == "min") {
-			x = (attributes[0].trim() * wrapper_width / 100) - (gutter_x / 3.5);
-			y = (attributes[1] * wrapper_height / 100) - (gutter_y / 3.5);
-			width = (attributes[2] * wrapper_width / 100) + (gutter_x / 2);
-			height = (attributes[3] * wrapper_height / 100) + (gutter_y / 2);
-		} else if (gutter == "max") {
-			x = (attributes[0].trim() * wrapper_width / 100);
-			y = (attributes[1] * wrapper_height / 100);
-			width = (attributes[2] * wrapper_width / 100);
-			height = (attributes[3] * wrapper_height / 100);
+	let border_width = document.getElementById("layout_border_width").value;
+	let border_style = document.getElementById("layout_border_style").value;
+	let border_color = document.getElementById("layout_border_color").value;
+	let gap = document.getElementById("layout_gap").value;
+	
+	selected_section.style.padding = "0";
+	selected_section.innerHTML = layout;
+	
+	selected_section.dataset.inner_styles = "1";
+	let all_tables = selected_section.querySelectorAll("table");
+	for (t = 0; t < all_tables.length; t++) {
+		let table = all_tables[t];
+		if (!table.style.height) table.style.height = "100%";
+		table.style.borderSpacing = gap + "px";
+		if (layout_gap == 0) {
+			table.style.borderCollapse = "Collapse";
+		} else {
+			table.style.borderCollapse = "Separate";
 		}
 
-		let section_id = section_ids.splice(0, 1);
-		let section = document.getElementById(section_id);
-		
-		if (section) {
-			section.style.left = x + "px";
-			section.style.top = y + "px";
-			section.style.width = width + "px";
-			section.style.height = height + "px";
-			selectSection(section.id.replace("section", ""));
-			reAlignSectionHandles();
-		}
 	}
+	
+	let all_tds = selected_section.querySelectorAll("table td");
+	for (i = 0; i < all_tds.length; i++) {
+		all_tds[i].style.border = border_width + "px " + border_style + " " + border_color;
+	}
+
 }
+
 
 
 function togglePreview(element) {
@@ -2199,6 +2178,10 @@ function setStyle(style, element, value, save_state = true) {
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) break;
 			selected.style.backgroundImage = "url(" + image_url + ")";
+			selected.style.backgroundSize = document.getElementById("background_size").value;
+			selected.style.backgroundRepeat = document.getElementById("background_image_repeat").checked ? "repeat" : "no-repeat";
+			selected.style.backgroundPositionX = document.getElementById("background_position_x").value;
+			selected.style.backgroundPositionY = document.getElementById("background_position_y").value;
 			break;
 		case "backgroundRepeat": 
 			if (element.checked) {
@@ -2584,6 +2567,8 @@ function setTable() {
 	if (selected_section.querySelector("table")) {
 		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;
 	}
+	
+	selected_section.dataset.inner_styles = "1";
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
@@ -3090,8 +3075,8 @@ function loadFormValues(element) {
 
 	if (element.style.top) document.getElementById("top").value = element.style.top.replace("px", "");
 	if (element.style.left) document.getElementById("left").value = element.style.left.replace("px", "");
-	if (element.style.width) document.getElementById("width").value = element.style.width.replace("px", "");
-	if (element.style.height) document.getElementById("height").value = element.style.height.replace("px", "");
+	if (element.style.width) document.getElementById("width").value = element.style.width.replace("px", "").replace("%", "");
+	if (element.style.height) document.getElementById("height").value = element.style.height.replace("px", "").replace("%", "");
 	if (element.style.zIndex) document.getElementById("z_index").value = element.style.zIndex;
 	if (element.style.paddingTop) document.getElementById("padding_top").value = element.style.paddingTop.replace("px", "");
 	if (element.style.paddingRight) document.getElementById("padding_right").value = element.style.paddingRight.replace("px", "");
@@ -3274,6 +3259,7 @@ function loadDefaultFormValues() {
 	document.getElementById("transform_degree2").value = "0";
 	document.getElementById("transform_degree2").style.visibility = "visible";
 	document.getElementById("clip_path").value = "";
+	document.getElementById("layout_gap").value = "10";
 	
 }
 
@@ -3437,8 +3423,6 @@ document.onkeyup = function(e) {
 		z_index_element.onchange();
 	} else if (key == keyCode.F9) {
 		saveDezyn();
-	} else if (key == keyCode.DOWN_ARROW || key == keyCode.UP_ARROW || key == keyCode.RIGHT_ARROW || key == keyCode.LEFT_ARROW) {
-		setSelectedElement();
 	} else if (e.ctrlKey && key == keyCode.COMMA) {
 		setStyle('direction', null, 'rtl');
 	} else if (e.ctrlKey && key == keyCode.PERIOD) {
@@ -3560,6 +3544,8 @@ document.onkeyup = function(e) {
 		} else {
 			alignSection('hLeft');
 		}
+	} else if (key == keyCode.DOWN_ARROW || key == keyCode.UP_ARROW || key == keyCode.RIGHT_ARROW || key == keyCode.LEFT_ARROW) {
+		setSelectedElement();
 	}
 	
 };

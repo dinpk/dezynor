@@ -36,6 +36,8 @@
 		</div>
 
 		<div id="options_bar">
+			<img src="images/icon_undo.png" onclick="revertToLastState();" title="Undo">
+			
 			<span><button onclick="togglePreview(this);">👁 Clean</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
 			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
@@ -241,75 +243,85 @@
 						<tr>
 							<td>Layouts</td>
 							<td>
-								<img src="images/layouts/layout1.png" title="Layout 1" onclick="setLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|28|28, 36|36|28|28, 68|36|28|28, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
-								<img src="images/layouts/layout34.png" title="Layout 34" onclick="setLayout('4|4|92|18, 4|26|92|18, 4|48|15|48, 23|48|15|48, 42|48|16|48, 62|48|15|48, 81|48|15|48');">
-								<img src="images/layouts/layout33.png" title="Layout 33" onclick="setLayout('4|4|92|22, 4|30|15|66, 23|30|15|66, 42|30|16|66, 62|30|15|66, 81|30|15|66');">
-								<img src="images/layouts/layout5.png" title="Layout 5" onclick="setLayout('4|4|28|44, 36|4|28|44, 68|4|28|44, 4|52|28|44, 36|52|28|44, 68|52|28|44');">
-								<img src="images/layouts/layout16.png" title="Layout 16" onclick="setLayout('4|4|44|28, 4|36|44|28, 4|68|44|28, 52|4|44|28, 52|36|44|28, 52|68|44|28');">
-								<img src="images/layouts/layout3.png" title="Layout 3" onclick="setLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|28|60, 36|36|28|60, 68|36|28|60');">
-								<img src="images/layouts/layout4.png" title="Layout 4" onclick="setLayout('4|4|28|28, 36|4|28|28, 68|4|28|92, 4|36|60|28, 4|68|28|28, 36|68|28|28');">
-								<img src="images/layouts/layout10.png" title="Layout 10" onclick="setLayout('4|4|28|28, 36|4|60|60, 4|36|28|28, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
-								<img src="images/layouts/layout12.png" title="Layout 12" onclick="setLayout('4|4|28|28, 36|4|60|28, 4|36|28|28, 36|36|60|28, 4|68|28|28, 36|68|60|28');">
-								<img src="images/layouts/layout13.png" title="Layout 13" onclick="setLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|60|60, 68|36|28|28, 68|68|28|28');">
-								<img src="images/layouts/layout20.png" title="Layout 20" onclick="setLayout('4|4|28|28, 36|4|28|60, 68|4|28|28, 4|36|28|28, 68|36|28|28, 4|68|92|28');">
-								<img src="images/layouts/layout24.png" title="Layout 24" onclick="setLayout('4|4|20|44, 28|4|20|44, 52|4|20|44, 76|4|20|44, 4|52|44|44, 52|52|44|44');">
-								<img src="images/layouts/layout51.png" title="Layout 51" onclick="setLayout('4|4|15|92, 23|4|15|92, 42|4|16|92, 62|4|15|92, 81|4|15|92');">							
-								<img src="images/layouts/layout52.png" title="Layout 52" onclick="setLayout('4|4|92|15, 4|23|92|15, 4|42|92|16, 4|62|92|15, 4|81|92|15');">							
-								<img src="images/layouts/layout18.png" title="Layout 18" onclick="setLayout('4|4|28|44, 36|4|28|44, 68|4|28|92, 4|52|28|44, 36|52|28|44');">
-								<img src="images/layouts/layout14.png" title="Layout 14" onclick="setLayout('4|4|92|28, 4|36|44|28, 4|68|44|28, 52|36|44|28, 52|68|44|28');">
-								<img src="images/layouts/layout32.png" title="Layout 32" onclick="setLayout('4|4|92|18, 4|26|28|48, 36|26|28|48, 68|26|28|48, 4|78|92|18');">
-								<img src="images/layouts/layout22.png" title="Layout 22" onclick="setLayout('4|4|28|60, 36|4|28|92, 68|4|28|60, 4|68|28|28, 68|68|28|28');">
-								<img src="images/layouts/layout23.png" title="Layout 23" onclick="setLayout('4|4|20|44, 28|4|20|44, 52|4|20|44, 76|4|20|44, 4|52|92|44');">
-
-								<img src="images/layouts/layout53.png" title="Layout 53" onclick="setLayout('4|4|20|92, 28|4|20|92, 52|4|20|92, 76|4|20|92');">
-								<img src="images/layouts/layout54.png" title="Layout 54" onclick="setLayout('4|4|92|20, 4|28|92|20, 4|52|92|20, 4|76|92|20');">
-
-								<img src="images/layouts/layout46.png" title="Layout 46" onclick="setLayout('4|4|44|44, 52|4|44|44, 4|52|44|44, 52|52|44|44');">
-								<img src="images/layouts/layout17.png" title="Layout 17" onclick="setLayout('4|4|58|44, 66|4|30|44, 4|52|30|44, 38|52|58|44');">
-								<img src="images/layouts/layout6.png" title="Layout 6" onclick="setLayout('4|4|44|26, 4|35|44|61, 52|4|44|60, 52|69|44|27');">
-								<img src="images/layouts/layout21.png" title="Layout 21" onclick="setLayout('4|4|60|60, 68|4|28|60, 4|68|60|28, 68|68|28|28');">
-								<img src="images/layouts/layout31.png" title="Layout 31" onclick="setLayout('4|4|28|60, 36|4|28|60, 68|4|28|60, 4|68|92|28');">
-								<img src="images/layouts/layout36.png" title="Layout 36" onclick="setLayout('4|36|28|60, 36|36|28|60, 68|36|28|60, 4|4|92|28');">
-								<img src="images/layouts/layout7.png" title="Layout 7" onclick="setLayout('4|4|28|44, 4|52|28|44, 36|4|28|92, 68|4|28|92');">
-								<img src="images/layouts/layout38.png" title="Layout 38" onclick="setLayout('4|4|28|92, 36|4|28|44, 36|52|28|44, 68|4|28|92');">
-								<img src="images/layouts/layout39.png" title="Layout 39" onclick="setLayout('4|4|28|92, 36|4|28|92, 68|4|28|44, 68|52|28|44');">
-								<img src="images/layouts/layout19.png" title="Layout 19" onclick="setLayout('4|4|28|44, 36|4|28|44, 68|4|28|92, 4|52|60|44');">
-								<img src="images/layouts/layout40.png" title="Layout 40" onclick="setLayout('4|4|60|44, 4|52|28|44, 36|52|28|44, 68|4|28|92');">
-								<img src="images/layouts/layout41.png" title="Layout 41" onclick="setLayout('4|4|28|92, 36|4|28|44, 68|4|28|44, 36|52|60|44');">
-								<img src="images/layouts/layout42.png" title="Layout 42" onclick="setLayout('4|4|28|92, 36|4|60|44, 36|52|28|44, 68|52|28|44');">
-								<img src="images/layouts/layout15.png" title="Layout 15" onclick="setLayout('4|4|92|28, 4|36|44|28, 4|68|44|28, 52|36|44|60');">
-								<img src="images/layouts/layout44.png" title="Layout 44" onclick="setLayout('4|4|44|28, 4|36|44|28, 52|4|44|60, 4|68|92|28');">
-								<img src="images/layouts/layout45.png" title="Layout 45" onclick="setLayout('4|4|44|60, 52|4|44|28, 52|36|44|28, 4|68|92|28');">
-								<img src="images/layouts/layout2.png" title="Layout 2" onclick="setLayout('4|4|28|28, 4|36|28|28, 4|68|28|28, 36|4|60|92');">
-								<img src="images/layouts/layout8.png" title="Layout 8" onclick="setLayout('4|4|28|28, 36|4|28|28, 68|4|28|28, 4|36|92|60');">
-								<img src="images/layouts/layout37.png" title="Layout 37" onclick="setLayout('4|4|60|92, 68|4|28|28, 68|36|28|28, 68|68|28|28');">
-								<img src="images/layouts/layout9.png" title="Layout 9" onclick="setLayout('4|4|92|60, 4|68|28|28, 36|68|28|28, 68|68|28|28');">
-
-								<img src="images/layouts/layout49.png" title="Layout 49" onclick="setLayout('4|4|28|92, 36|4|28|92, 68|4|28|92');">
-								<img src="images/layouts/layout50.png" title="Layout 50" onclick="setLayout('4|4|92|28, 4|36|92|28, 4|68|92|28');">
-
-								<img src="images/layouts/layout11.png" title="Layout 11" onclick="setLayout('4|4|30|44, 38|4|58|44, 4|52|92|44');">
-								<img src="images/layouts/layout25.png" title="Layout 25" onclick="setLayout('4|4|92|28, 4|36|28|60, 36|36|60|60');">
-								<img src="images/layouts/layout47.png" title="Layout 47" onclick="setLayout('4|4|44|92, 52|4|44|44, 52|52|44|44');">
-								<img src="images/layouts/layout48.png" title="Layout 48" onclick="setLayout('4|4|44|44, 4|52|44|44, 52|4|44|92');">
-								<img src="images/layouts/layout30.png" title="Layout 30" onclick="setLayout('4|4|44|92, 52|4|44|92');">
-								<img src="images/layouts/layout35.png" title="Layout 35" onclick="setLayout('4|4|92|44, 4|52|92|44');">
-								<img src="images/layouts/layout26.png" title="Layout 26" onclick="setLayout('4|4|92|28, 4|36|92|60');">
-								<img src="images/layouts/layout28.png" title="Layout 28" onclick="setLayout('4|4|92|60, 4|68|92|28');">
-								<img src="images/layouts/layout27.png" title="Layout 27" onclick="setLayout('4|4|28|92, 36|4|60|92');">
-								<img src="images/layouts/layout29.png" title="Layout 29" onclick="setLayout('4|4|60|92, 68|4|28|92');">
-								<img src="images/layouts/layout43.png" title="Layout 43" onclick="setLayout('4|4|92|92');">
-
+								<img src="images/layouts/layout1.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout34.png" onclick="setLayout('<table><tr style=height:30%><td colspan=5>&nbsp;</td></tr><tr style=height:30%><td colspan=5>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout33.png" onclick="setLayout('<table><tr style=height:30%><td colspan=5>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout5.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout16.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout3.png" onclick="setLayout('<table><tr style=height:30%><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout4.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td rowspan=3>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout10.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td colspan=2 rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout12.png" onclick="setLayout('<table><tr><td style=width:33%>&nbsp;</td><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout13.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=2 rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout20.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=3>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout24.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout51.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');"> 
+								<img src="images/layouts/layout52.png" onclick="setLayout('<table><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">							
+								<img src="images/layouts/layout18.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout14.png" onclick="setLayout('<table><tr><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout32.png" onclick="setLayout('<table><tr><td colspan=3>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=3>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout22.png" onclick="setLayout('<table><tr><td style=height:66%>&nbsp;</td><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout23.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=4>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout53.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout54.png" onclick="setLayout('<table><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout46.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout17.png" onclick="setLayout('<table style=height:50%><tr><td style=width:66%>&nbsp;</td><td style=width:34%>&nbsp;</td></tr></table><table style=height:50%><tr><td style=width:34%>&nbsp;</td><td style=width:66%>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout6.png" onclick="setLayout('<table style=height:50%><tr><td style=width:34%>&nbsp;</td><td style=width:66%>&nbsp;</td></tr></table><table style=height:50%><tr><td style=width:66%>&nbsp;</td><td style=width:34%>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout55.png" onclick="setLayout('<table style=width:50%;float:left><tr><td style=height:66%>&nbsp;</td></tr><tr><td style=height:34%>&nbsp;</td></tr></table><table style=width:50%;float:left><tr><td style=height:34%>&nbsp;</td></tr><tr><td style=height:66%>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout56.png" onclick="setLayout('<table style=width:50%;float:left><tr><td style=height:34%>&nbsp;</td></tr><tr><td style=height:66%>&nbsp;</td></tr></table><table style=width:50%;float:left><tr><td style=height:66%>&nbsp;</td></tr><tr><td style=height:34%>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout21.png" onclick="setLayout('<table><tr style=height:66%><td style=width:66%>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout31.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr style=height:33%><td colspan=3>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout36.png" onclick="setLayout('<table><tr style=height:33%><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=3>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout7.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td rowspan=2>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout38.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout39.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout19.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout40.png" onclick="setLayout('<table><tr><td colspan=2>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout41.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout42.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout57.png" onclick="setLayout('<table><tr><td colspan=2>&nbsp;</td></tr><tr><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout15.png" onclick="setLayout('<table><tr><td colspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout45.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout44.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout2.png" onclick="setLayout('<table><tr><td style=width:33%>&nbsp;</td><td rowspan=3>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout37.png" onclick="setLayout('<table><tr><td style=width:67% rowspan=3>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout8.png" onclick="setLayout('<table><tr><td style=height:33%>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=3>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout9.png" onclick="setLayout('<table><tr><td style=height:67% colspan=3>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout49.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout50.png" onclick="setLayout('<table><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout11.png" onclick="setLayout('<table><tr><td style=width:33%>&nbsp;</td><td>&nbsp;</td></tr><tr><td colspan=2>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout25.png" onclick="setLayout('<table><tr><td colspan=2>&nbsp;</td></tr><tr><td style=width:33%>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout47.png" onclick="setLayout('<table><tr><td rowspan=2>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout48.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td rowspan=2>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout30.png" onclick="setLayout('<table><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout35.png" onclick="setLayout('<table><tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout26.png" onclick="setLayout('<table><tr style=height:33%><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout28.png" onclick="setLayout('<table><tr style=height:67%><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout27.png" title="Layout 27" onclick="setLayout('<table><tr><td style=width:33%>&nbsp;</td><td>&nbsp;</td></tr></table>');">
+								<img src="images/layouts/layout29.png" title="Layout 29" onclick="setLayout('<table><tr><td style=width:67%>&nbsp;</td><td>&nbsp;</td></tr></table>');">
 							</td>
 						</tr>
 						<tr>
 							<td>Gap</td>
 							<td>
-								<select id="layout_gutter">
-									<option>no</option>
-									<option selected="selected">min</option>
-									<option>max</option>
+								<input id="layout_gap" type="number" min="0">
+							</td>
+						</tr>
+						<tr>
+							<td>Border</td>
+							<td>
+								<input id="layout_border_width" type="number" step="1" min="0" value="1" onchange="setTableStyle('borderCombined', this);">
+								<select id="layout_border_style" onchange="setTableStyle('borderCombined', this);">
+									<option>solid</option>
+									<option>double</option>
+									<option>dashed</option>
+									<option>dotted</option>
+									<option>inset</option>
+									<option>outset</option>
+									<option>ridge</option>
+									<option>groove</option>
 								</select>
+								<input id="layout_border_color" type="color" value="#999999" onchange="setTableStyle('borderCombined', this);">
 							</td>
 						</tr>
 					</table>
@@ -844,7 +856,7 @@
 						<tr>
 							<td>Border</td>
 							<td>
-								<input id="table_border_width" type="number" step="1" min="1" value="1" onchange="setTableStyle('borderCombined', this);">
+								<input id="table_border_width" type="number" step="1" min="0" value="1" onchange="setTableStyle('borderCombined', this);">
 								<select id="table_border_style" onchange="setTableStyle('borderCombined', this);">
 									<option>solid</option>
 									<option>double</option>

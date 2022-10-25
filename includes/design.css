@@ -133,6 +133,7 @@ body {
 	width:100%;
 	line-height:200%;
 	padding-left:5px;
+	font-size:12px;
 	border-bottom:1px solid #888;
 }
 
@@ -148,6 +149,11 @@ body {
 	font-size:12px;
 	border:1px solid #CCC;
 	border-radius:3px;
+}
+
+#options_bar img {
+	cursor:pointer;
+	margin:0 5px 0 5px;
 }
 
 #options_bar input[type=checkbox] {
