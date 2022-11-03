@@ -18,7 +18,6 @@ let design_id = generateDeisgnId();
 let design_object;
 let selected_section;
 let selected_element;
-let extent_element;
 let last_selected_section;
 let last_selected_element;
 let next_focused_section = 0;
@@ -214,11 +213,11 @@ function addSection() {
 	setSectionDefaultStyles();
 	section.innerHTML = "<div>&nbsp;</div>";
 	document.getElementById(section_id).focus();
+	loadFormValues(section)
 	alignSection('pageTopLeft');
 	setTimeout(function() { 
 		alignSection('pageCenterCenter');
 	}, 100);	
-	
 }
 
 function getNewSectionNumber() {
@@ -334,10 +333,8 @@ function selectElement() {
 	if (!selection.anchorNode || document.activeElement.localName == "input") return;
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
-		extent_element = selection.extentNode;
 	} else {
 		selected_element = selection.anchorNode.parentNode;
-		extent_element = selection.extentNode.parentNode;
 	}
 
 	// block level selected_element
@@ -345,7 +342,6 @@ function selectElement() {
 	while (!reached_element) {
 		if (valueInArray(selected_element.localName, block_elements)) {
 			reached_element = true;
-			console.log(selected_element.localName);
 			break;
 		}
 		if (!reached_element && selected_element.parentNode) {
@@ -353,42 +349,6 @@ function selectElement() {
 		}
 	}
 
-	// block level extent_element
-	reached_element = false;
-	while (!reached_element) {
-		if (valueInArray(extent_element.localName, block_elements)) {
-			reached_element = true;
-			break;
-		}
-		if (!reached_element && extent_element.parentNode) {
-			extent_element = extent_element.parentNode;
-		}
-	}
-
-	let selected_elements = [];
-	let do_selection = false;
-	let section_elements = selected_section.querySelectorAll("*");
-	for (s = 0; s < section_elements.length; s++) {
-		let current_element = section_elements[s];
-		if (selected_element == extent_element) {
-			if (valueInArray(current_element.localName, block_elements)) selected_elements.push(current_element);
-			break;
-		}
-
-		if (selected_element == current_element) do_selection = true;
-		if (extent_element == current_element && valueInArray(current_element.localName, block_elements)) {
-			selected_elements.push(current_element);
-			break;
-		}
-
-		if (do_selection && valueInArray(current_element.localName, block_elements)) {
-			selected_elements.push(current_element);
-		}
-	}
-	
-	console.log(selected_elements);
-
-	
 	if (last_selected_element != selected_element) loadFormValues(selected_element);
 }
 
@@ -3023,7 +2983,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.letterSpacing = "0px";
 	selected_section.style.textIndent = "0px";
 	selected_section.style.textShadow = "0px 0px 0px #000000";
-	selected_section.style.padding = "40px 0 0 0";
+	selected_section.style.padding = "20px 0 0 0";
 	selected_section.style.margin = "0";
 	selected_section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
 	selected_section.style.backgroundPositionX = "center";
@@ -3050,7 +3010,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.transform = "skew(0deg, 0deg)";
 	selected_section.style.transformOrigin = "center center";
 	selected_section.style.clipPath = "";
-	selected_section.style.overflow = "hidden";
+	selected_section.style.overflow = "visible";
 }
 
 function loadSectionDimensions() {
@@ -3503,6 +3463,10 @@ document.onkeyup = function(e) {
 	
 	} else if (e.ctrlKey && key == keyCode.KEY_Z) {
 		revertToLastState();
+	} else if (e.altKey && key == keyCode.KEY_4) {
+		pasteSection();
+	} else if (e.altKey && key == keyCode.KEY_3) {
+		copySection();
 	} else if (e.altKey && key == keyCode.KEY_2) {
 		duplicateSection();
 	} else if (e.altKey && key == keyCode.KEY_1) {
