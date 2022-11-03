@@ -105,3 +105,10 @@ async function loadSelectFonts() {
 	document.getElementById("google_fonts").innerHTML = google_fonts_options;
 	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
 }
+
+function valueInArray(value, values_array) {
+	for (i = 0; i < values_array.length; i++) {
+		if (values_array[i] == value) return true;
+	}
+	return false;
+}

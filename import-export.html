@@ -63,8 +63,6 @@
 				
 			}
 
-
-
 			
 			function importData() {
 			
@@ -177,16 +175,14 @@
 				
 				let request = window.indexedDB.deleteDatabase("dezynordb");
 				request.onblocked = function(event) {
-					alert("Error message: Database in blocked state. ");
+					alert("Error message: Database is in blocked state. ");
 				};
 				request.onerror = function(event) {
 				  console.log("Error deleting database.");
 				};
 
 				request.onsuccess = function(event) {
-				  console.log("Database deleted successfully");
-
-				  console.log(request.result); // should be null
+				  showMessage("Database deleted successfully", "Red");
 				};			
 			}
 
@@ -210,7 +206,7 @@
 		<div id="message"></div>
 		<div id="progress_bar" class="padleft20" style="visibility:hidden"><progress></progress></div>				
 		<div class="pad20">
-			<input type="button" value="Export data" onclick="exportData();"> designs, images fonts, settings
+			<input type="button" value="Export data" onclick="exportData();"> designs, images, fonts, styles, and settings
 			<br><br>
 			<br><br>
 			<input type="button" value="Clear database" onclick="deleteDatabase();"> erase everything, start from scratch

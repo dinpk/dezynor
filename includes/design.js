@@ -18,6 +18,7 @@ let design_id = generateDeisgnId();
 let design_object;
 let selected_section;
 let selected_element;
+let extent_element;
 let last_selected_section;
 let last_selected_element;
 let next_focused_section = 0;
@@ -267,7 +268,7 @@ function selectSection(counter) {
 	showHandles();
 	loadFormValues(selected_section);
 	
-	setSelectedElement();
+	selectElement();
 }
 
 function selectSectionNextPrev(direction) {
@@ -323,33 +324,70 @@ function orderSectionUpDown(direction) {
 	z_index.onchange();
 }
 
-function setSelectedElement() {
+function selectElement() {
 
 	last_selected_element = selected_element;
 
 	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
-
+	
 	//selected_text = selection.toString();
 	if (!selection.anchorNode || document.activeElement.localName == "input") return;
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
+		extent_element = selection.extentNode;
 	} else {
 		selected_element = selection.anchorNode.parentNode;
+		extent_element = selection.extentNode.parentNode;
 	}
-	
+
+	// block level selected_element
 	let reached_element = false;
 	while (!reached_element) {
-		for (i = 0; i < block_elements.length; i++) {
-			let current_element = block_elements[i];
-			if (current_element == selected_element.localName) {
-				reached_element = true;
-				break;
-			}
+		if (valueInArray(selected_element.localName, block_elements)) {
+			reached_element = true;
+			console.log(selected_element.localName);
+			break;
 		}
 		if (!reached_element && selected_element.parentNode) {
 			selected_element = selected_element.parentNode;
 		}
 	}
+
+	// block level extent_element
+	reached_element = false;
+	while (!reached_element) {
+		if (valueInArray(extent_element.localName, block_elements)) {
+			reached_element = true;
+			break;
+		}
+		if (!reached_element && extent_element.parentNode) {
+			extent_element = extent_element.parentNode;
+		}
+	}
+
+	let selected_elements = [];
+	let do_selection = false;
+	let section_elements = selected_section.querySelectorAll("*");
+	for (s = 0; s < section_elements.length; s++) {
+		let current_element = section_elements[s];
+		if (selected_element == extent_element) {
+			if (valueInArray(current_element.localName, block_elements)) selected_elements.push(current_element);
+			break;
+		}
+
+		if (selected_element == current_element) do_selection = true;
+		if (extent_element == current_element && valueInArray(current_element.localName, block_elements)) {
+			selected_elements.push(current_element);
+			break;
+		}
+
+		if (do_selection && valueInArray(current_element.localName, block_elements)) {
+			selected_elements.push(current_element);
+		}
+	}
+	
+	console.log(selected_elements);
+
 	
 	if (last_selected_element != selected_element) loadFormValues(selected_element);
 }
@@ -948,6 +986,8 @@ function reAlignSectionHandles() {
 function resizeSection(type) {
 	if (!selected_section) return;
 
+	saveCurrentState();
+
 	let align_to = document.getElementById("align_to").value;
 	let element;
 
@@ -1034,6 +1074,8 @@ function resizeSection(type) {
 
 function alignSection(type) {
 	if (!selected_section) return;
+
+	saveCurrentState();
 
 	let dimensions = getSectionDimensions(selected_section);
 	let align_to = document.getElementById("align_to").value;
@@ -1819,7 +1861,6 @@ async function loadDezyn() {
 }
 
 function applyStyle() {
-	
 
 	if (!selected_section || (selected_section.dataset.inner_styles && selected_element.localName == "section")) return;
 
@@ -1828,7 +1869,7 @@ function applyStyle() {
 
 	saveCurrentState();
 
-	setSelectedElement();
+	selectElement();
 
 	if (selected_section.dataset.inner_styles) {
 		setElementDefaultStyles();
@@ -3005,7 +3046,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.columnRuleColor = "rgb(100,100,100)";
 	selected_section.style.columnRuleWidth = "1px";
 	selected_section.style.columnRuleStyle = "solid";
-	selected_section.style.orphans = "0";
+	selected_section.style.orphans = "1";
 	selected_section.style.transform = "skew(0deg, 0deg)";
 	selected_section.style.transformOrigin = "center center";
 	selected_section.style.clipPath = "";
@@ -3545,7 +3586,7 @@ document.onkeyup = function(e) {
 			alignSection('hLeft');
 		}
 	} else if (key == keyCode.DOWN_ARROW || key == keyCode.UP_ARROW || key == keyCode.RIGHT_ARROW || key == keyCode.LEFT_ARROW) {
-		setSelectedElement();
+		selectElement();
 	}
 	
 };

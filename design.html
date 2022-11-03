@@ -127,13 +127,13 @@
 						<tr>
 							<td>Page width</td>
 							<td>
-								<input id="wrapper_width" type="number" onchange="setWrapperStyle('width', this);" step="50"> 
+								<input id="wrapper_width" type="number" onchange="setWrapperStyle('width', this);" min="20" step="50"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Page height</td>
 							<td>
-								<input id="wrapper_height" type="number" onchange="setWrapperStyle('height', this);" step="50"> 
+								<input id="wrapper_height" type="number" onchange="setWrapperStyle('height', this);" min="20" step="50"> 
 							</td>
 						</tr>
 						<tr>
@@ -166,7 +166,7 @@
 							<td>Width</td>
 							<td>
 								<button onclick="resizeSection('widthDown');">◄</button> 
-								<input id="width" type="number" onchange="setStyle('width', this);" step="10.0">
+								<input id="width" type="number" onchange="setStyle('width', this);" min="20" step="10">
 								<button onclick="resizeSection('widthUp');">►</button> 
 							</td>
 						</tr>
@@ -174,7 +174,7 @@
 							<td>Height</td>
 							<td>
 								<button onclick="resizeSection('heightDown');">▼</button> 
-								<input id="height" type="number" onchange="setStyle('height', this);" step="10.0">
+								<input id="height" type="number" onchange="setStyle('height', this);" min="20" step="10">
 								<button onclick="resizeSection('heightUp');">▲</button> 
 							</td>
 						</tr>
@@ -182,7 +182,7 @@
 							<td>Top</td>
 							<td>
 								<button onclick="shiftSection('down');">▼</button> 
-								<input id="top" type="number" onchange="setStyle('top', this);" step="10.0">
+								<input id="top" type="number" onchange="setStyle('top', this);" step="10">
 								<button onclick="shiftSection('up');">▲</button> 
 							</td>
 						</tr>
@@ -190,7 +190,7 @@
 							<td>Left</td>
 							<td>
 								<button onclick="shiftSection('left');">◄</button> 
-								<input id="left" type="number" onchange="setStyle('left', this);" step="10.0">
+								<input id="left" type="number" onchange="setStyle('left', this);" step="10">
 								<button onclick="shiftSection('right');">►</button>
 							</td>
 						</tr>
@@ -526,32 +526,32 @@
 						<tr>
 							<td>Padding</td>
 							<td>
-								<input id="padding_top" type="number" class="w20" onchange="setStyle('paddingTop', this);" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
-								<input id="padding_bottom" type="number" onchange="setStyle('paddingBottom', this);" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
-								<input id="padding_left" type="number" onchange="setStyle('paddingLeft', this);" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
-								<input id="padding_right" type="number" onchange="setStyle('paddingRight', this);" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
+								<input id="padding_top" type="number" class="w20" onchange="setStyle('paddingTop', this);" min="0" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
+								<input id="padding_bottom" type="number" onchange="setStyle('paddingBottom', this);" min="0" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
+								<input id="padding_left" type="number" onchange="setStyle('paddingLeft', this);" min="0" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
+								<input id="padding_right" type="number" onchange="setStyle('paddingRight', this);" min="0" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
 							</td>
 						</tr>
 						<tr>
 							<td>Margin</td>
 							<td>
-								<input id="margin_top" type="number" class="w20" onchange="setStyle('marginTop', this);" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
-								<input id="margin_bottom" type="number" onchange="setStyle('marginBottom', this);" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
-								<input id="margin_left" type="number" onchange="setStyle('marginLeft', this);" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
-								<input id="margin_right" type="number" onchange="setStyle('marginRight', this);" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
+								<input id="margin_top" type="number" class="w20" onchange="setStyle('marginTop', this);" min="0" step="2" style="width:40px;box-shadow:blue 0 1px 0 0 inset;">  
+								<input id="margin_bottom" type="number" onchange="setStyle('marginBottom', this);" min="0" step="2" style="width:40px;box-shadow:blue 0 -1px 0 0 inset;"> 
+								<input id="margin_left" type="number" onchange="setStyle('marginLeft', this);" min="0" step="2" style="width:40px;padding-left:3px;box-shadow:blue 2px 0 0 0 inset;">  
+								<input id="margin_right" type="number" onchange="setStyle('marginRight', this);" min="0" step="2" style="width:40px;box-shadow:blue -2px 0 0 0 inset;">
 							</td>
 						</tr>
 						<tr>
 							<td>Columns</td>
 							<td>
-								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" step="1"> 
-								Gap <input id="column_gap" type="number" onchange="setStyle('columnCombined', this);" step="10"> 
+								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" min="1" step="1"> 
+								Gap <input id="column_gap" type="number" onchange="setStyle('columnCombined', this);" min="0" step="10"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Columns rule</td>
 							<td>
-								<input id="column_rule_width" type="number" onchange="setStyle('columnCombined', this);" value="0" step="1">
+								<input id="column_rule_width" type="number" onchange="setStyle('columnCombined', this);" value="0" min="0" step="1">
 								<select id="column_rule_style" onchange="setStyle('columnCombined', this);">
 									<option>solid</option>
 									<option>double</option>
@@ -730,7 +730,7 @@
 						<tr>
 							<td>Style</td>
 							<td>
-								<input id="border_width" type="number" onchange="setStyle('borderCombined',this);" step="1">
+								<input id="border_width" type="number" onchange="setStyle('borderCombined',this);" min="0" step="1">
 								<select id="border_style" onchange="setStyle('borderCombined',this);">
 									<option>solid</option>
 									<option>double</option>
@@ -751,12 +751,12 @@
 						<tr>
 							<td>Radius</td>
 							<td>
-								<input id="border_radius1" type="number" onchange="setStyle('borderTopLeftRadius',this);" title="Top left radius"> 
-								<input id="border_radius2" type="number" onchange="setStyle('borderTopRightRadius',this);" title="Top right radius">
+								<input id="border_radius1" type="number" onchange="setStyle('borderTopLeftRadius',this);" title="Top left radius" min="0"> 
+								<input id="border_radius2" type="number" onchange="setStyle('borderTopRightRadius',this);" title="Top right radius" min="0">
 								<button id="remove_border" onclick="removeStyle('borderRadius');">x</button>
 								<br>
-								<input id="border_radius3" type="number" onchange="setStyle('borderBottomLeftRadius',this);" title="Bottom left radius">
-								<input id="border_radius4" type="number" onchange="setStyle('borderBottomRightRadius',this);" title="Bottom right radius">
+								<input id="border_radius3" type="number" onchange="setStyle('borderBottomLeftRadius',this);" title="Bottom left radius" min="0">
+								<input id="border_radius4" type="number" onchange="setStyle('borderBottomRightRadius',this);" title="Bottom right radius" min="0">
 							</td>
 						</tr>
 						<tr>
@@ -808,8 +808,8 @@
 								H <input id="text_shadow_h" type="number" onchange="setStyle('textShadow',this);" step="1">
 								V <input id="text_shadow_y" type="number" onchange="setStyle('textShadow',this);" step="1">
 								<br>
-								Blur <input id="text_shadow_blur" type="number" onchange="setStyle('textShadow',this);" step="1"> 
-								Count <input id="text_shadow_count" type="number" onchange="setStyle('textShadow',this);" step="1" value="0"> 
+								Blur <input id="text_shadow_blur" type="number" onchange="setStyle('textShadow',this);" min="0" step="1"> 
+								Count <input id="text_shadow_count" type="number" onchange="setStyle('textShadow',this);" step="1" min="0" value="0"> 
 								
 							</td>
 						</tr>
@@ -831,8 +831,8 @@
 								<button onclick="setColorableElement('box_shadow_color', 'boxshadow');showPopupPanel('color_pallette');">🚥</button> 
 								<input id="box_shadow_inset" type="checkbox" onclick="setStyle('boxShadow',this);"> Inset
 								<br>
-								Blur <input id="box_shadow_blur" type="number" onchange="setStyle('boxShadow',this);" step="1"> 
-								Spread <input id="box_shadow_spread" type="number" onchange="setStyle('boxShadow',this);" step="1"> 
+								Blur <input id="box_shadow_blur" type="number" onchange="setStyle('boxShadow',this);" min="0" step="1"> 
+								Spread <input id="box_shadow_spread" type="number" onchange="setStyle('boxShadow',this);" min="0" step="1"> 
 							</td>
 						</tr>
 					</table>
@@ -879,10 +879,10 @@
 						<tr>
 							<td>Padding</td>
 							<td>
-								Top <input id="table_cell_padding_top" type="number" onchange="setTableStyle('paddingCombined', this);" value="0" step="1">  
-								Bottom <input id="table_cell_padding_bottom" type="number" onchange="setTableStyle('paddingCombined', this);" value="0" step="1"><br>
-								Left <input id="table_cell_padding_left" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" step="1">  
-								Right <input id="table_cell_padding_right" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" step="1"><br>
+								Top <input id="table_cell_padding_top" type="number" onchange="setTableStyle('paddingCombined', this);" value="0" min="0" step="1">  
+								Bottom <input id="table_cell_padding_bottom" type="number" onchange="setTableStyle('paddingCombined', this);" value="0" min="0" step="1"><br>
+								Left <input id="table_cell_padding_left" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" min="0" step="1">  
+								Right <input id="table_cell_padding_right" type="number" onchange="setTableStyle('paddingCombined', this);" value="2" min="0" step="1"><br>
 							</td>
 						</tr>
 						<tr>
@@ -1014,13 +1014,13 @@
 								<button onclick="duplicateTransform();">Go</button>
 								<br>
 
-								Radius <input id="duplicate_circular_radius" type="number" step="1" value="300" disabled><br>
+								Radius <input id="duplicate_circular_radius" type="number" min="0" step="1" value="300" disabled><br>
 								
-								Copies x <input id="duplicate_x_copies" type="number" step="1" value="10" disabled><br>
-								Copies y <input id="duplicate_y_copies" type="number" step="1" value="10" disabled><br>
+								Copies x <input id="duplicate_x_copies" type="number" min="2" step="1" value="10" disabled><br>
+								Copies y <input id="duplicate_y_copies" type="number" min="2" step="1" value="10" disabled><br>
 								
-								Distance x <input id="duplicate_linear_x_distance" type="number" step="1" value="50" disabled><br> 
-								Distance y <input id="duplicate_linear_y_distance" type="number" step="1" value="50" disabled> 
+								Distance x <input id="duplicate_linear_x_distance" type="number" min="0" step="1" value="50" disabled><br> 
+								Distance y <input id="duplicate_linear_y_distance" type="number" min="0" step="1" value="50" disabled> 
 
 							</td>
 						</tr>
