@@ -17,7 +17,9 @@ window.onload = function() {
 let design_id = generateDeisgnId();
 let design_object;
 let selected_section;
+let saved_range;
 let selected_element;
+let selected_content_element;
 let last_selected_section;
 let last_selected_element;
 let next_focused_section = 0;
@@ -325,11 +327,12 @@ function orderSectionUpDown(direction) {
 
 function selectElement() {
 
+	if (document.activeElement.localName == "input") return;
+
 	last_selected_element = selected_element;
 
-	selection = (document.all) ? document.selection.createRange().text : document.getSelection();
-	
-	//selected_text = selection.toString();
+	let selection = window.getSelection();
+
 	if (!selection.anchorNode || document.activeElement.localName == "input") return;
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
@@ -337,7 +340,9 @@ function selectElement() {
 		selected_element = selection.anchorNode.parentNode;
 	}
 
-	// block level selected_element
+	saved_range = selection.getRangeAt(0);
+	selected_content_element = getSelectedContentElement();
+
 	let reached_element = false;
 	while (!reached_element) {
 		if (valueInArray(selected_element.localName, block_elements)) {
@@ -350,6 +355,18 @@ function selectElement() {
 	}
 
 	if (last_selected_element != selected_element) loadFormValues(selected_element);
+}
+
+function getSelectedContentElement() {
+    let container = "";
+	let selection = window.getSelection();
+	if (selection.rangeCount) {
+		container = document.createElement("span");
+		for (i = 0; i < selection.rangeCount; i++) {
+			container.appendChild(selection.getRangeAt(i).cloneContents());
+		}
+	}
+    return container;
 }
 
 function duplicateSection() {
@@ -1976,6 +1993,10 @@ function setStyle(style, element, value, save_state = true) {
 		selected = selected_section;
 	}
 	
+	if (selected_content_element) {
+		selected = selected_content_element;
+	}
+	
 	switch (style) {
 		case "top":
 			selected_section.style.top = value + "px";
@@ -2232,6 +2253,14 @@ function setStyle(style, element, value, save_state = true) {
 			}
 			break;
 
+	}
+	
+	if (selected_content_element) {
+	    let selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(saved_range);
+		saved_range.deleteContents();
+		saved_range.insertNode(selected);
 	}
 }
 
