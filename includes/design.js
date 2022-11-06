@@ -333,15 +333,23 @@ function selectElement() {
 
 	let selection = window.getSelection();
 
+	// selected_content_element
+	selected_content_element = null;
+	if (selection.toString().length > 0) {
+		saved_range = selection.getRangeAt(0);
+		selected_content_element = document.createElement("span");
+		for (i = 0; i < selection.rangeCount; i++) {
+			selected_content_element.appendChild(selection.getRangeAt(i).cloneContents());
+		}
+	}
+
+	// selected_element
 	if (!selection.anchorNode || document.activeElement.localName == "input") return;
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
 	} else {
 		selected_element = selection.anchorNode.parentNode;
 	}
-
-	saved_range = selection.getRangeAt(0);
-	selected_content_element = getSelectedContentElement();
 
 	let reached_element = false;
 	while (!reached_element) {
@@ -355,18 +363,6 @@ function selectElement() {
 	}
 
 	if (last_selected_element != selected_element) loadFormValues(selected_element);
-}
-
-function getSelectedContentElement() {
-    let container = "";
-	let selection = window.getSelection();
-	if (selection.rangeCount) {
-		container = document.createElement("span");
-		for (i = 0; i < selection.rangeCount; i++) {
-			container.appendChild(selection.getRangeAt(i).cloneContents());
-		}
-	}
-    return container;
 }
 
 function duplicateSection() {
@@ -456,6 +452,45 @@ function removeSection() {
 		hideHandles();
 		selected_section = null;
 	}
+}
+
+function removeContainerSection() {
+	if (!(selected_section)) return;
+	
+	saveCurrentState();
+	
+	if (confirm("Do you really want to delete this and all the contained boxes?")) {
+
+		let dimensions = getSectionDimensions(selected_section);
+		let top = dimensions.top
+		let bottom = dimensions.bottom
+		let left = dimensions.left
+		let right = dimensions.right
+		
+		let sections_list = "";
+		let all_sections = document.querySelectorAll("section");
+		for (i = 0; i < all_sections.length; i++) {
+			let this_section = all_sections[i];
+			if (this_section !== selected_section) {
+				let section_width = parseInt(this_section.style.width.replace("px", ""));
+				let section_height = parseInt(this_section.style.height.replace("px", ""));
+				let section_top = parseInt(this_section.style.top.replace("px", ""));
+				let section_left = parseInt(this_section.style.left.replace("px", ""));
+				let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
+				let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
+				if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
+					this_section.remove();
+				}
+			}
+		}	
+
+		selected_section.remove();
+		hideHandles();
+
+		selected_section = null;
+
+	}
+
 }
 
 function copySection() {
@@ -1361,12 +1396,12 @@ function setLayout(layout) {
 
 
 function togglePreview(element) {
-	if (element.innerText == "👁 Clean") {
+	if (element.innerText == "👁 Preview off") {
 		preview("on");
-		element.innerText = "👁 View";
-	} else if (element.innerText == "👁 View") {
+		element.innerText = "👁 Preview on";
+	} else if (element.innerText == "👁 Preview on") {
 		preview("off");
-		element.innerText = "👁 Clean";
+		element.innerText = "👁 Preview off";
 	}
 }
 
@@ -2976,8 +3011,26 @@ function mergeTableCells() {
 }
 
 
+function setSelectionPlain() {
+	let selection = window.getSelection();
+	let selected_text = selection.toString();
+	if (selected_text.length > 0) {
+		
+		saveCurrentState();
+		
+		let text_node = document.createTextNode(selected_text);
+		let range = selection.getRangeAt(0);
+		range.deleteContents();
+		range.insertNode(text_node);
+	}
+}
+
+
 function setElementDefaultStyles() {
 	if (selected_element && selected_element.localName != "section") {
+		
+		saveCurrentState();
+		
 		selected_element.removeAttribute("style");
 		selected_element.outerHTML = "<div>" + selected_element.textContent + "</div>"
 	}
@@ -3000,6 +3053,9 @@ function setToLastElementStyle() {
 
 function setSectionDefaultStyles() {
 	if (!selected_section) return;
+	
+	saveCurrentState();
+	
 	selected_section.style.outline = "1px dashed gray";
 	selected_section.style.direction = "ltr";
 	selected_section.style.fontFamily = localStorage.getItem("default_font");
@@ -3500,6 +3556,8 @@ document.onkeyup = function(e) {
 		duplicateSection();
 	} else if (e.altKey && key == keyCode.KEY_1) {
 		addSection();
+	} else if (e.shiftKey && e.altKey && key == keyCode.DELETE) {
+		removeContainerSection();
 	} else if (e.altKey && key == keyCode.DELETE) {
 		removeSection();
 	} else if (e.altKey && key == keyCode.SUBTRACT) {

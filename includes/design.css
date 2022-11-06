@@ -129,26 +129,25 @@ body {
 	position:fixed;
 	left:0;
 	bottom:0;
-	background-color:#E5E5E5;
+	background-color:white;
 	width:100%;
-	line-height:200%;
+	line-height:250%;
 	padding-left:5px;
 	font-size:12px;
+	border-top:1px solid #888;
 	border-bottom:1px solid #888;
 }
 
 #options_bar span {
-	margin-left:2px;
-	padding:0 5px 0 5px;
-	background-color:#FFF;
+	margin-left:4px;
+	padding:2px 5px 0 5px;
+	background-color:#E5E5E5;
+	border:1px solid #DDD;
 	display:inline-block;
 	min-height:20px;
 	line-height:120%;
-	padding-top:2px;
 	font-family:Arial;
 	font-size:12px;
-	border:1px solid #CCC;
-	border-radius:3px;
 }
 
 #options_bar img {

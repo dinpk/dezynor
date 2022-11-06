@@ -38,7 +38,7 @@
 		<div id="options_bar">
 			<img src="images/icon_undo.png" onclick="revertToLastState();" title="Undo">
 			
-			<span><button onclick="togglePreview(this);">👁 Clean</button></span>
+			<span><button onclick="togglePreview(this);">👁 Preview off</button></span>
 			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
 			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
 			<span>
@@ -53,6 +53,7 @@
 				Defaults
 				<button onclick="setSectionDefaultStyles();">Box</button> 
 				<button onclick="setElementDefaultStyles();">Element</button> 
+				<button onclick="setSelectionPlain();">Selection</button> 
 			</span>
 			<span>
 				Align to
@@ -342,6 +343,7 @@
 								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0px 0px, 0% 20%, 80% 100%, 100% 100%, 100% 80%, 20% 0px)">&nbsp;</span></span>
 								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0px 80%, 0px 100%, 20% 100%, 100% 20%, 100% 0px, 80% 0%)">&nbsp;</span></span>
 								<h5>Borders</h5>
+								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 1% 100%, 1% 1%, 99% 1%, 99% 99%, 1% 99%, 1% 100%, 100% 100%, 100% 0%)">&nbsp;</span></span> 
 								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 2% 100%, 2% 2%, 98% 2%, 98% 98%, 2% 98%, 2% 100%, 100% 100%, 100% 0%)">&nbsp;</span></span> 
 								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(2% 2%, 2% 98%, 5% 98%, 5% 5%, 95% 5%, 95% 95%, 5% 95%, 5% 98%, 98% 98%, 98% 2%)">&nbsp;</span></span> 
 								<span class="shape_wrapper" onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0% 0%, 0% 100%, 25% 100%, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 100%, 100% 100%, 100% 0%)">&nbsp;</span></span>

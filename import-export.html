@@ -26,7 +26,7 @@
 				let all_fonts = await idbGetAllItems("dezynor_fonts");
 				total_files = all_images.length + all_designs.length + all_styles.length + all_fonts.length + all_settings.length;
 				
-				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items (designs, images, fonts, settings etc.), please wait...</div>";
+				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items (designs, styles, images, fonts, settings etc.), please wait...</div>";
 
 				let zip_items = new JSZip();
 
