@@ -592,8 +592,6 @@ function toggleContainerSection() {
 }
 
 
-
-
 function setContainerSection(section) {
 	
 	let dimensions = getSectionDimensions(section);
@@ -1751,7 +1749,9 @@ function duplicateDezyn() {
 		keywords:""
 	}	
 	idbPutItem("dezynor_designs", {design_key:new_design_id, value:object});
-	alert("Duplicated successfully!");
+	alert("Duplicated design successfully...");
+	
+	window.location.href = "design.html?key=" + new_design_id;
 }
 
 async function exportDezyn() {
@@ -2028,7 +2028,7 @@ function setStyle(style, element, value, save_state = true) {
 		selected = selected_section;
 	}
 	
-	if (selected_content_element) {
+	if (selected_content_element && selected_section.dataset.inner_styles) {
 		selected = selected_content_element;
 	}
 	
@@ -2290,7 +2290,7 @@ function setStyle(style, element, value, save_state = true) {
 
 	}
 	
-	if (selected_content_element) {
+	if (selected_content_element && selected_section.dataset.inner_styles) {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2309,7 +2309,11 @@ function setRandomStyle(style) {
 	if (!selected || !selected_section.dataset.inner_styles) {
 		selected = selected_section;
 	}
-	
+
+	if (selected_content_element && selected_section.dataset.inner_styles) {
+		selected = selected_content_element;
+	}
+		
 	let random_color, random_range;
 
 	switch (style) {
@@ -2354,7 +2358,14 @@ function setRandomStyle(style) {
 			box_shadow_color.onchange();
 			break;
 	}	
-	
+
+	if (selected_content_element && selected_section.dataset.inner_styles) {
+	    let selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(saved_range);
+		saved_range.deleteContents();
+		saved_range.insertNode(selected);
+	}	
 }
 
 
@@ -2521,10 +2532,15 @@ function setColorableWrapper(control_id, color_style) {
 }
 
 function setColorableElement(control_id, color_style) {
+	if (!selected_section) return;
+	
 	colorable_control = document.getElementById(control_id);
-	if (selected_section && selected_section.dataset.inner_styles) {
+	
+	if (selected_content_element && selected_section.dataset.inner_styles) {
+		colorable_element = selected_content_element;
+	} else if (selected_section.dataset.inner_styles) {
 		colorable_element = selected_element;
-	} else {
+	} else if (!selected_section.dataset.inner_styles) {
 		colorable_element = selected_section;
 	}
 	colorable_style = color_style;
@@ -2532,6 +2548,7 @@ function setColorableElement(control_id, color_style) {
 
 function useColorPallette(color) {
 	colorable_control.value = color;
+	console.log(colorable_element);
 	if (colorable_style == "back") {
 		if (colorable_element.id == "wrapper") colorable_element.style.backgroundImage = "";
 		colorable_element.style.backgroundColor = color;
@@ -2546,6 +2563,15 @@ function useColorPallette(color) {
 	} else if (colorable_style == "boxshadow") {
 		document.getElementById("box_shadow_color").onchange();
 	}
+	
+	if (selected_content_element && selected_section.dataset.inner_styles) {
+	    let selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(saved_range);
+		saved_range.deleteContents();
+		saved_range.insertNode(colorable_element);
+	}	
+	
 }
 
 
