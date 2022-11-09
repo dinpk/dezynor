@@ -344,7 +344,9 @@ function selectElement() {
 	}
 
 	// selected_element
-	if (!selection.anchorNode || document.activeElement.localName == "input") return;
+	if (!selection.anchorNode || document.activeElement.localName == "input" || document.activeElement.localName == "select" || document.activeElement.localName == "button") {
+		return;
+	}
 	if (!selection.anchorNode.data) {
 		selected_element = selection.anchorNode;
 	} else {
@@ -362,7 +364,9 @@ function selectElement() {
 		}
 	}
 
-	if (last_selected_element != selected_element) loadFormValues(selected_element);
+	if (last_selected_element != selected_element) {
+		loadFormValues(selected_element);
+	}
 }
 
 function duplicateSection() {
@@ -1874,52 +1878,22 @@ async function loadDezyn() {
 
 function applyStyle() {
 
-	if (!selected_section || (selected_section.dataset.inner_styles && selected_element.localName == "section")) return;
+	if (!selected_section) return;
 
-	let selected_styles = document.getElementById("select_styles").value.split(";");
+	let selected_styles = document.getElementById("select_styles").value;
 	if (selected_styles.length == 0) return;
 
 	saveCurrentState();
 
-	selectElement();
-
-	if (selected_section.dataset.inner_styles) {
-		setElementDefaultStyles();
-	} else {
+	if (!selected_section.dataset.inner_styles) {
 		setSectionDefaultStyles();
+		let existing_styles = selected_section.getAttribute("style");
+		selected_section.setAttribute("style", existing_styles + selected_styles);
+		loadFormValues(selected_section);
+	} else {
+		selected_element.setAttribute("style", selected_styles);
+		loadFormValues(selected_element);
 	}
-
-	for (i = 0; i < selected_styles.length; i++) {
-		let style = selected_styles[i].split(":");
-		let rule_name = style[0];
-		let rule_code = style[1];
-		let new_rule_name = "";
-		let rule_name_parts = rule_name.split("-");
-		for (k = 0; k < rule_name_parts.length; k++) {
-			if (k == 0) {
-				new_rule_name = rule_name_parts[k];
-			} else {
-				let temp = rule_name_parts[k];
-				let first_letter = temp.substring(0, 1).toUpperCase();
-				let rest_of_name = temp.substring(1, temp.length);
-				let full_part = first_letter + rest_of_name;
-				new_rule_name = new_rule_name + full_part;
-			}
-		}
-		new_rule_name = new_rule_name.trim();
-		
-		if (new_rule_name.length == 0) continue;
-
-		let is_short_rule = false;
-		for (s = 0; s < short_style_rules.length; s++) {
-			if (new_rule_name == short_style_rules[s]) is_short_rule = true;
-		}
-		if (!is_short_rule) rule_code = rule_code.replaceAll("px", "");
-
-		setStyle(new_rule_name, null, rule_code, false);
-	}
-	
-	loadFormValues(selected_element);
 }
 
 
@@ -2015,11 +1989,11 @@ function loadWrapperFormValues() {
 	document.getElementById("wrapper_background_color").value = rgb2hex(wrapper.style.backgroundColor);
 }
 
-function setStyle(style, element, value, save_state = true) {
+function setStyle(style, element, value) {
 	
 	if (!selected_section) return;
 	
-	if (save_state) saveCurrentState();
+	saveCurrentState();
 
 	if (element && !value) value = element.value;
 
@@ -2290,6 +2264,8 @@ function setStyle(style, element, value, save_state = true) {
 
 	}
 	
+	console.log(selected);
+	
 	if (selected_content_element && selected_section.dataset.inner_styles) {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
@@ -2548,7 +2524,6 @@ function setColorableElement(control_id, color_style) {
 
 function useColorPallette(color) {
 	colorable_control.value = color;
-	console.log(colorable_element);
 	if (colorable_style == "back") {
 		if (colorable_element.id == "wrapper") colorable_element.style.backgroundImage = "";
 		colorable_element.style.backgroundColor = color;
@@ -3048,17 +3023,6 @@ function setSelectionPlain() {
 		let range = selection.getRangeAt(0);
 		range.deleteContents();
 		range.insertNode(text_node);
-	}
-}
-
-
-function setElementDefaultStyles() {
-	if (selected_element && selected_element.localName != "section") {
-		
-		saveCurrentState();
-		
-		selected_element.removeAttribute("style");
-		selected_element.outerHTML = "<div>" + selected_element.textContent + "</div>"
 	}
 }
 
