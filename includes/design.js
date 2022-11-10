@@ -564,13 +564,15 @@ function toggleEditableSection() {
 	}
 }
 
-function toggleInnerStyles() {
+function setStylesMode() {
 	if (!selected_section) return;
 	
-	if (document.getElementById("inner_styles").value == "Inner") {
-		selected_section.dataset.inner_styles = "1";
+	if (document.getElementById("styles_mode").value == "paragraph") {
+		selected_section.dataset.styles_mode = "paragraph";
+	} else if (document.getElementById("styles_mode").value == "selection") {
+		selected_section.dataset.styles_mode = "selection";
 	} else {
-		delete selected_section.dataset.inner_styles;
+		delete selected_section.dataset.styles_mode;
 	}
 }
 
@@ -1374,7 +1376,7 @@ function setLayout(layout) {
 	selected_section.style.padding = "0";
 	selected_section.innerHTML = layout;
 	
-	selected_section.dataset.inner_styles = "1";
+	selected_section.dataset.styles_mode = "paragraph";
 	let all_tables = selected_section.querySelectorAll("table");
 	for (t = 0; t < all_tables.length; t++) {
 		let table = all_tables[t];
@@ -1885,7 +1887,7 @@ function applyStyle() {
 
 	saveCurrentState();
 
-	if (!selected_section.dataset.inner_styles) {
+	if (!selected_section.dataset.styles_mode) {
 		setSectionDefaultStyles();
 		let existing_styles = selected_section.getAttribute("style");
 		selected_section.setAttribute("style", existing_styles + selected_styles);
@@ -1998,11 +2000,11 @@ function setStyle(style, element, value) {
 	if (element && !value) value = element.value;
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 	
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 		selected = selected_content_element;
 	}
 	
@@ -2264,9 +2266,7 @@ function setStyle(style, element, value) {
 
 	}
 	
-	console.log(selected);
-	
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2282,11 +2282,11 @@ function setRandomStyle(style) {
 	saveCurrentState();
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 		selected = selected_content_element;
 	}
 		
@@ -2335,7 +2335,7 @@ function setRandomStyle(style) {
 			break;
 	}	
 
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2353,7 +2353,7 @@ function removeStyle(style) {
 	saveCurrentState();
 	
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 	
@@ -2421,7 +2421,7 @@ function setSectionClass(value) {
 	if (!selected_section) return;
 	
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 	
@@ -2445,7 +2445,7 @@ function removeSectionClass(value) {
 	if (!selected_section) return;
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 
@@ -2463,7 +2463,7 @@ function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	saveCurrentState();
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 
@@ -2481,7 +2481,7 @@ function setBorderWidthPreset(width) {
 	if (!selected_section) return;
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.inner_styles) {
+	if (!selected || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 
@@ -2512,11 +2512,11 @@ function setColorableElement(control_id, color_style) {
 	
 	colorable_control = document.getElementById(control_id);
 	
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 		colorable_element = selected_content_element;
-	} else if (selected_section.dataset.inner_styles) {
+	} else if (selected_section.dataset.styles_mode == "paragraph") {
 		colorable_element = selected_element;
-	} else if (!selected_section.dataset.inner_styles) {
+	} else if (!selected_section.dataset.styles_mode) {
 		colorable_element = selected_section;
 	}
 	colorable_style = color_style;
@@ -2539,7 +2539,7 @@ function useColorPallette(color) {
 		document.getElementById("box_shadow_color").onchange();
 	}
 	
-	if (selected_content_element && selected_section.dataset.inner_styles) {
+	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2560,7 +2560,7 @@ async function uploadImage(element) {
 	if (!(selected_section)) return;
 	
 	let selected = selected_element;
-	if (!selected || (selected && selected.localName != "td") || !selected_section.dataset.inner_styles) {
+	if (!selected || (selected && selected.localName != "td") || !selected_section.dataset.styles_mode) {
 		selected = selected_section;
 	}
 
@@ -2634,7 +2634,7 @@ function setTable() {
 		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;
 	}
 	
-	selected_section.dataset.inner_styles = "1";
+	selected_section.dataset.styles_mode = "paragraph";
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
@@ -3088,6 +3088,17 @@ function setSectionDefaultStyles() {
 	selected_section.style.overflow = "visible";
 }
 
+function setElementDefaultStyles() {
+	if (selected_element && selected_element.localName != "section") {
+		
+		saveCurrentState();
+		
+		selected_element.removeAttribute("style");
+		selected_element.outerHTML = "<div>" + selected_element.textContent + "</div>"
+	}
+}
+
+
 function loadSectionDimensions() {
 	document.getElementById("top").value = selected_section.style.top.replace("px", "");
 	document.getElementById("left").value = selected_section.style.left.replace("px", "");
@@ -3100,10 +3111,15 @@ function loadFormValues(element) {
 	loadDefaultFormValues();
 
 	if (!selected_section) return;
-	if (!selected_section.dataset.inner_styles || !element.getAttribute("style")) element = selected_section;
+	if (!selected_section.dataset.styles_mode || !element.getAttribute("style")) element = selected_section;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
-	document.getElementById("inner_styles").value = selected_section.dataset.inner_styles ? "Inner" : "Box";
+
+	if (!selected_section.dataset.styles_mode) {
+		document.getElementById("styles_mode").value = "box";
+	} else {
+		document.getElementById("styles_mode").value = selected_section.dataset.styles_mode;
+	}
 	if (selected_section.style.overflow == "visible") {
 		document.getElementById("overflow_section").checked = true;
 	} else {

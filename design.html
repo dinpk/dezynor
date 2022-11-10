@@ -38,30 +38,8 @@
 		<div id="options_bar">
 			<img src="images/icon_undo.png" onclick="revertToLastState();" title="Undo">
 			
-			<span><button onclick="togglePreview(this);">👁 Preview off</button></span>
-			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
-			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
-			<span>
-				Styles 
-				<select id="inner_styles" onchange="toggleInnerStyles();">
-					<option>Box</option>
-					<option>Inner</option>
-				</select>
-			</span>
-			<span><input id="overflow_section" type="checkbox" onchange="toggleOverflowSection();"> <label for="overflow_section">Overflow</label></span>
-			<span>
-				Defaults
-				<button onclick="setSectionDefaultStyles();">Box</button> 
-				<button onclick="setElementDefaultStyles();">Element</button> 
-				<button onclick="setSelectionPlain();">Selection</button> 
-			</span>
-			<span>
-				Align to
-				<select id="align_to">
-					<option value="page">Page</option>
-					<option value="section">Previous box</option>
-				</select>
-			</span>
+			<!-- <span><button onclick="togglePreview(this);">👁 Preview off</button></span> -->
+
 			<span>
 				Select 
 				<button onclick="selectSectionNextPrev('prev');">◄</button> 
@@ -69,6 +47,30 @@
 				Order 
 				<button onclick="orderSectionUpDown('down');">▼</button> 
 				<button onclick="orderSectionUpDown('up');">▲</button> 
+			</span>
+			<span><input id="editable_section" type="checkbox" onchange="toggleEditableSection();"> <label for="editable_section">Editable</label></span>
+			<span><input id="container_section" type="checkbox" onchange="toggleContainerSection();updateContainerSections();"> <label for="container_section">Container</label></span>
+			<span><input id="overflow_section" type="checkbox" onchange="toggleOverflowSection();"> <label for="overflow_section">Overflow</label></span>
+			<span>
+				Defaults
+				<button onclick="setSectionDefaultStyles();">Box</button> 
+				<button onclick="setElementDefaultStyles();">Paragraph</button> 
+				<button onclick="setSelectionPlain();">Selection</button> 
+			</span>
+			<span>
+				Styles mode
+				<select id="styles_mode" onchange="setStylesMode();">
+					<option value="box">Box</option>
+					<option value="paragraph">Paragraph</option>
+					<option value="selection">Selection</option>
+				</select>
+			</span>
+			<span>
+				Align to
+				<select id="align_to">
+					<option value="page">Page</option>
+					<option value="section">Previous box</option>
+				</select>
 			</span>
 			<span>
 				Paste 
