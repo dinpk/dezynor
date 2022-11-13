@@ -1397,19 +1397,6 @@ function setLayout(layout) {
 
 }
 
-
-
-function togglePreview(element) {
-	if (element.innerText == "👁 Preview off") {
-		preview("on");
-		element.innerText = "👁 Preview on";
-	} else if (element.innerText == "👁 Preview on") {
-		preview("off");
-		element.innerText = "👁 Preview off";
-	}
-}
-
-
 function preview(status) {
 
 	let all_sections = document.querySelectorAll("section");
@@ -3051,14 +3038,14 @@ function setSectionDefaultStyles() {
 	selected_section.style.fontFamily = localStorage.getItem("default_font");
 	selected_section.style.fontSize = "25px";
 	selected_section.style.color = "rgb(0,0,0)";
-	selected_section.style.lineHeight = "35px";
+	selected_section.style.lineHeight = "50px";
 	selected_section.style.textAlign = "center";
 	selected_section.style.backgroundColor = "";
 	selected_section.style.wordSpacing = "0px";
 	selected_section.style.letterSpacing = "0px";
 	selected_section.style.textIndent = "0px";
 	selected_section.style.textShadow = "0px 0px 0px #000000";
-	selected_section.style.padding = "20px 0 0 0";
+	selected_section.style.padding = "0";
 	selected_section.style.margin = "0";
 	selected_section.style.backgroundImage = "linear-gradient(to top, #FFFFFF00, #FFFFFF00, #FFFFFF00, #FFFFFF00)"; // 00 at the end for alpha
 	selected_section.style.backgroundPositionX = "center";
@@ -3353,6 +3340,17 @@ function loadDefaultFormValues() {
 	document.getElementById("clip_path").value = "";
 	document.getElementById("layout_gap").value = "10";
 	
+	document.getElementById("table_columns").value = "4";
+	document.getElementById("table_rows").value = "4";
+	document.getElementById("table_border_width").value = "1";
+	document.getElementById("table_border_style").value = "solid";
+	document.getElementById("table_border_color").value = "#999999";
+	document.getElementById("table_border_spacing").value = "0";
+	document.getElementById("table_cell_padding_top").value = "0";
+	document.getElementById("table_cell_padding_right").value = "0";
+	document.getElementById("table_cell_padding_bottom").value = "0";
+	document.getElementById("table_cell_padding_left").value = "0";
+	
 }
 
 
@@ -3466,28 +3464,22 @@ let keyCode = {
 
 document.onkeydown = function(e){
 	let key = e.which || e.keyCode;
-	
+	console.log(key);
 	if (
 			(e.ctrlKey && e.shiftKey) 
 		|| 	(e.ctrlKey && e.altKey) 
 		|| 	(e.shiftKey && e.altKey) 
-		|| 	(e.altKey && (key >= 96 && key <= 111)) // numpad and operators
 		|| 	(key >= 112 && key <= 122) // function keys
-		|| 	(e.ctrlKey && key == keyCode.HOME) 
-		|| 	(e.ctrlKey && key == keyCode.END) 
+		|| 	(e.altKey && (key >= 96 && key <= 111)) // numpad and operators
+		|| 	(e.altKey && (key >= 48 && key <= 57)) // numeric keys
 		|| 	(e.ctrlKey && key == keyCode.KEY_W) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_R) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_L) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_E) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_J) 
-		|| 	(e.ctrlKey && key == keyCode.KEY_9) 
-		|| 	(e.ctrlKey && key == keyCode.KEY_0) 
-		|| 	(e.ctrlKey && key == keyCode.KEY_Z) 
-		|| 	(e.altKey && key == keyCode.KEY_1) 
-		|| 	(e.altKey && key == keyCode.KEY_2) 
-
 	) 
 	{
+		
 		e.preventDefault();
 	}
 
@@ -3496,7 +3488,6 @@ document.onkeydown = function(e){
 
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
-	//console.log(key);
 
 	if (key == keyCode.F1) {
 		
@@ -3551,9 +3542,6 @@ document.onkeyup = function(e) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("word_spacing_change"));
 		element.onchange();
-	
-	} else if (e.ctrlKey && key == keyCode.KEY_Z) {
-		revertToLastState();
 	} else if (e.altKey && key == keyCode.KEY_4) {
 		pasteSection();
 	} else if (e.altKey && key == keyCode.KEY_3) {
