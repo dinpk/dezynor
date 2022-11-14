@@ -245,10 +245,10 @@ h4#text_shadow_heading {background-color:SlateBlue;}
 h4#box_shadow_heading {background-color:Indigo;}
 h4#transform_heading {background-color:SaddleBrown;}
 
-h5 {
+#dash_panel h5 {
 	font-size:100%;
 	text-align:center;
-	margin:2px 0 2px 0;
+	margin:5px 0 2px 0;
 	background-color:white;
 }
 
@@ -277,27 +277,46 @@ h5 {
 
 #dash_panel footer {
 	padding:5px;
+	line-height:200%;
+	overflow:auto;
+	max-height:70vh
 }
 
-#dash_panel footer.layouts article {
+#dash_panel footer article {
+	overflow:auto;
+}
+
+#dash_panel footer article address {
 	float:left;
 	margin:3px;
 	width:36px;
 	height:36px;
 	
 }
-#dash_panel footer.layouts article table {
+#dash_panel footer article address table {
 	width:100%;
 	height:100%;
 	cursor:pointer;
 }
 
-#dash_panel footer.layouts article td {
+#dash_panel footer article address td {
 	border:1px solid #0090fa;
 	padding:0;
 	line-height:0;
 	cursor:pointer;
 }
+
+#dash_panel footer article address .shape {
+	display:inline-block;
+	background-color:#0090fa;
+	width:100%;
+	height:100%;
+	cursor:pointer;
+}
+
+
+
+
 
 .utility_table {
 	width:100%;
@@ -357,23 +376,6 @@ h5 {
 }
 
 
-
-.section_table td .shape_wrapper {
-	display:inline-block;
-	cursor:pointer;
-	width:25px;
-	height:25px;
-	margin:4px 2px 4px 2px;
-}
-
-.section_table td .shape {
-	display:inline-block;
-	background-color:#0090fa;
-	width:100%;
-	height:100%;
-	cursor:pointer;
-}
-
 .section_table td .border_shape {
 	display:inline-block;
 	border:2px solid #0090fa;
@@ -390,6 +392,8 @@ h5 {
 	width:20px;
 	vertical-align:middle;
 }
+
+
 
 /*
 td .colors {
