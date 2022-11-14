@@ -364,9 +364,9 @@ function selectElement() {
 		}
 	}
 
-	if (last_selected_element != selected_element) {
+	
 		loadFormValues(selected_element);
-	}
+	
 }
 
 function duplicateSection() {
@@ -3464,7 +3464,6 @@ let keyCode = {
 
 document.onkeydown = function(e){
 	let key = e.which || e.keyCode;
-	console.log(key);
 	if (
 			(e.ctrlKey && e.shiftKey) 
 		|| 	(e.ctrlKey && e.altKey) 
