@@ -2244,6 +2244,22 @@ function setStyle(style, element, value) {
 				selected.style.filter = "none";
 			}
 			break;
+		case "filter":
+			let filter_type = document.getElementById("filter_type").value;
+			let filter_value = document.getElementById("filter_value").value;
+			
+			if (filter_type == "none") {
+				selected.style.filter = "none";
+			} else if (filter_type == "blur") {
+				selected.style.filter = filter_type + "(" + filter_value + "px)";
+			} else if (filter_type == "hue-rotate") {
+				selected.style.filter = filter_type + "(" + filter_value + "deg)";
+			} else if (filter_type == "saturate") {
+				selected.style.filter = filter_type + "(" + filter_value + ")";
+			} else {
+				selected.style.filter = filter_type + "(" + filter_value + "%)";
+			}
+			break;
 
 	}
 
@@ -3259,7 +3275,7 @@ function loadFormValues(element) {
 	let filter_drop_shadow = element.style.filter;
 	if (filter_drop_shadow) {
 		let box_shadow = element.style.boxShadow;
-		if (filter_drop_shadow.length > 5) { // none
+		if (filter_drop_shadow.indexOf("drop-shadow") == 0) {
 			filter_drop_shadow = filter_drop_shadow.split(" ");
 			document.getElementById("box_shadow_color").value = rgb2hex((filter_drop_shadow[0].replace("drop-shadow(", "") + filter_drop_shadow[1] + filter_drop_shadow[2]));
 			document.getElementById("box_shadow_h").value = filter_drop_shadow[3].replace("px", "");

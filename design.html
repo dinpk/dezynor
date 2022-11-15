@@ -648,6 +648,22 @@
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<td>Filter</td>
+							<td>
+								<select id="filter_type" onchange="setStyle('filter', this);">
+									<option value="none">None</option>
+									<option value="blur">Blur</option>
+									<option value="brightness">Brightness</option>
+									<option value="contrast">Contrast</option>
+									<option value="grayscale">Grayscale</option>
+									<option value="hue-rotate">Hue</option>
+									<option value="invert">Invert</option>
+									<option value="sepia">Sepia</option>
+								</select> 
+								<input id="filter_value" type="number" value="20" onchange="setStyle('filter', this);">
+							</td>
+						</tr>
 					</table>	
 				</nav>		
 				<nav id="art_section">
