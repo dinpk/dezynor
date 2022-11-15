@@ -40,7 +40,9 @@
 			<span>
 				Select 
 				<button onclick="selectSectionNextPrev('prev');">◄</button> 
-				<button onclick="selectSectionNextPrev('next');">►</button> 
+				<button onclick="selectSectionNextPrev('next');">►</button>
+			</span>
+			<span>
 				Order 
 				<button onclick="orderSectionUpDown('down');">▼</button> 
 				<button onclick="orderSectionUpDown('up');">▲</button> 
@@ -63,7 +65,7 @@
 				</select>
 			</span>
 			<span>
-				Align to
+				Align / Resize
 				<select id="align_to">
 					<option value="page">Page</option>
 					<option value="section">Previous box</option>
@@ -83,7 +85,7 @@
 		<div id="dash_panel_wrapper">
 			<div id="dash_panel">
 
-				<div id="box_section">
+				<nav id="box_section">
 					<h4 id="box_heading" onclick="hideSectionPanel('box_section');">Box</h4>
 					<img src="images/icon_box_add.png" onclick="addSection();" title="Add box (Alt + 1)"> 
 					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate box (Alt + 2)"> 
@@ -92,36 +94,21 @@
 					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box (Alt + Delete)"> 
 					<br>
 					<hr>
-				</div>
-
-				<div id="utility_section">
+				</nav>
+				<nav id="utility_section">
 					<h4 id="utility_heading" onclick="hideSectionPanel('utility_section');">Design File</h4>
-					<table class="utility_table">
-						<tr>
-							<td>
-								<span onclick="saveDezyn();" title="Save design (F9)"><img id="save_design" src="images/icon_save.png"> Save</span> 
-								<select id="select_folders" onchange="saveDezyn();"></select> 
-							</td>
-						</tr>
-						<tr>
-							<td><span onclick="duplicateDezyn();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</span></td>
-						</tr>
-						<tr>
-							<td><span onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_export_single.png"> Export</span></td>
-						</tr>
-						<tr>
-							<td><span onclick="deleteDezyn();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</span></td>
-						</tr>
-						<tr>
-							<td><span onclick="window.print();" title="Print design"><img src="images/icon_print.png"> Print</span></td>
-						</tr>
-					</table>
-				</div>
-
-
-				<!-- page -->
-
-				<div  id="wrapper_section">
+					<div class="icon_links">
+						<address onclick="saveDezyn();" title="Save design (F9)">
+							<img id="save_design" src="images/icon_save.png"> Save 
+							<select id="select_folders" onchange="saveDezyn();"></select> 
+						</address>
+						<address onclick="duplicateDezyn();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</address>
+						<address onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_export_single.png"> Export</address>
+						<address onclick="deleteDezyn();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</address>
+						<address onclick="window.print();" title="Print design"><img src="images/icon_print.png"> Print</address>
+					</div>
+				</nav>
+				<nav  id="wrapper_section">
 					<h4 id="wrapper_heading" onclick="hideSectionPanel('wrapper_section');">Page</h4>
 					<table class="section_table">
 						<tr>
@@ -155,11 +142,8 @@
 							<td><input id="wrapper_overflow" type="checkbox" onchange="setWrapperStyle('overflow', this);" title="Show items outside of page" checked></td>
 						</tr>
 					</table>
-				</div>
-
-
-				<!-- boxes -->
-				<div id="size_section">
+				</nav>
+				<nav id="size_section">
 					<h4 id="size_heading" onclick="hideSectionPanel('size_section');">Size and Position</h4>
 					<table class="section_table">
 						<tr>
@@ -235,9 +219,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-				<div id="layout_section">
+				</nav>
+				<nav id="layout_section">
 					<h4 id="layout_heading" onclick="hideSectionPanel('layout_section');">Layouts</h4>
 						<table class="section_table">
 						<tr>
@@ -264,8 +247,7 @@
 							</td>
 						</tr>
 					</table>
-
-					<footer class="layouts">
+					<footer>
 						<article>
 							<address onclick="setLayout(this.innerHTML);"><table><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></address>
 							<address onclick="setLayout(this.innerHTML);"><table><tr style="height:30%"><td colspan="5">&nbsp;</td></tr><tr style="height:30%"><td colspan="5">&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></table></address>
@@ -325,9 +307,8 @@
 							<address onclick="setLayout(this.innerHTML);"><table><tr><td style="width:67%">&nbsp;</td><td>&nbsp;</td></tr></table></address>
 						</article>
 					</footer>
-				</div>			
-
-				<div id="shape_section">
+				</nav>			
+				<nav id="shape_section">
 					<h4 id="shape_heading" onclick="hideSectionPanel('shape_section');">Shapes</h4>
 					<footer>
 						<p onclick="removeStyle('clipPath');" style="font-size:120%;cursor:pointer;padding:5px;">X</p> 
@@ -488,9 +469,8 @@
 							To see the shape effect, set background color of the box first.
 						</p>
 					</footer>
-				</div>
-
-				<div id="font_section">
+				</nav>
+				<nav id="font_section">
 					<h4 id="font_heading" onclick="hideSectionPanel('font_section');">Font and Spacing</h4>
 					<table class="section_table">
 						<tr>
@@ -581,9 +561,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-				<div id="color_section">
+				</nav>
+				<nav id="color_section">
 					<h4 id="color_heading" onclick="hideSectionPanel('color_section');">Color and Gradient</h4>
 					<table class="section_table">
 						<tr>
@@ -669,9 +648,8 @@
 							</td>
 						</tr>
 					</table>	
-				</div>		
-
-				<div id="art_section">
+				</nav>		
+				<nav id="art_section">
 					<h4 id="art_heading" onclick="hideSectionPanel('art_section');">Background Image</h4>
 					<table class="section_table">
 						<tr>
@@ -729,9 +707,8 @@
 						</tr>
 
 					</table>
-				</div>
-
-				<div id="border_section">
+				</nav>
+				<nav id="border_section">
 					<h4 id="border_heading" onclick="hideSectionPanel('border_section');">Border</h4>
 					<table class="section_table">
 						<tr>
@@ -799,9 +776,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-				<div id="text_shadow_section">
+				</nav>
+				<nav id="text_shadow_section">
 					<h4 id="text_shadow_heading" onclick="hideSectionPanel('text_shadow_section');">Text Shadow</h4>
 					<table class="section_table">
 						<tr>
@@ -821,9 +797,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-				<div id="box_shadow_section">
+				</nav>
+				<nav id="box_shadow_section">
 					<h4 id="box_shadow_heading" onclick="hideSectionPanel('box_shadow_section');">Box Shadow</h4>
 					<table class="section_table">
 						<tr>
@@ -843,9 +818,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-				<div id="table_section">
+				</nav>
+				<nav id="table_section">
 					<h4 id="table_heading" onclick="hideSectionPanel('table_section');">Table</h4>
 					<table class="section_table">
 						<tr>
@@ -984,10 +958,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
-
-
-				<div id="transform_section">
+				</nav>
+				<nav id="transform_section">
 					<h4 id="transform_heading" onclick="hideSectionPanel('transform_section');">Transform</h4>
 					<table class="section_table">
 						<tr>
@@ -1033,17 +1005,12 @@
 						</tr>
 
 					</table>
-				</div>
-
-			</div> <!-- dash panel -->
+				</nav>
+			</div>
 		</div>
 		
-		
-		
 		<div id="popup_panel" onfocusout="hidePopupPanel();" tabindex="1">
-			
 			<div id="hide_popup_panel" onclick="hidePopupPanel();">X</div>
-			
 			<div id="color_pallette">
 				<span style="background-color:#F0F8FF" onclick="useColorPallette('#F0F8FF');" title="AliceBlue"></span>
 				<span style="background-color:#FAEBD7" onclick="useColorPallette('#FAEBD7');" title="AntiqueWhite"></span>
@@ -1174,9 +1141,6 @@
 				<span style="background-color:#FFFF00" onclick="useColorPallette('#FFFF00');" title="Yellow"></span>
 				<span style="background-color:#9ACD32" onclick="useColorPallette('#9ACD32');" title="YellowGreen"></span>		
 			</div>
-		
-
-		</div> <!-- popup panel -->
-		
+		</div>
 	</body>
 </html>

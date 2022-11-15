@@ -1439,7 +1439,7 @@ function toggleDashPanel() {
 }
 
 function hideSectionPanels() {
-	let all_sections = document.querySelectorAll("#dash_panel div");
+	let all_sections = document.querySelectorAll("#dash_panel nav");
 	for (i = 0; i < all_sections.length; i++) {
 		all_sections[i].style.opacity = "0";
 		all_sections[i].style.maxHeight = "0";
