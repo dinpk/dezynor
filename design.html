@@ -128,7 +128,7 @@
 							<td>Background</td>
 							<td>
 								<input id="wrapper_background_color" type="color" onchange="setWrapperStyle('backgroundColor', this);" title="Choose color"> 
-								<button onclick="setColorableWrapper('wrapper_background_color', 'back');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
+								<button onclick="setColorControl('wrapper_background_color');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
 								<select id="wrapper_random_range" title="Random color type">
 									<option>any</option>
 									<option selected>light</option>
@@ -551,7 +551,7 @@
 									<option>groove</option>
 								</select> 
 								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);"> 
-								<button onclick="setColorableElement('column_rule_color', 'column');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorControl('column_rule_color');showPopupPanel('color_pallette');">🚥</button> 
 							</td>
 						</tr>
 						<tr>
@@ -581,7 +581,7 @@
 							<td>Text</td>
 							<td>
 								<input id="color" type="color" onchange="setStyle('color',this);"> 
-								<button onclick="setColorableElement('color', 'color');showPopupPanel('color_pallette');">🚥</button>
+								<button onclick="setColorControl('color');showPopupPanel('color_pallette');">🚥</button>
 								<button onclick="setRandomStyle('color');" title="Random color">↻</button> 
 								<button onclick="switchTextBackgroundColors();" title="Switch colors">s</button> 
 							</td>
@@ -590,7 +590,7 @@
 							<td>Background color</td>
 							<td>
 								<input id="background_color" type="color" onchange="setStyle('backgroundColor',this);"> 
-								<button onclick="setColorableElement('background_color', 'back');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorControl('background_color');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomStyle('backgroundColor');" title="Random color">↻</button> 
 								<button id="remove_background_color" onclick="removeStyle('backgroundColor');">x</button> 
 							</td>
@@ -745,7 +745,7 @@
 								<button id="remove_border" onclick="removeStyle('border');">x</button>
 								<br>
 								<input id="border_color" type="color" onchange="setStyle('borderCombined',this);">
-								<button onclick="setColorableElement('border_color', 'border');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorControl('border_color');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomStyle('borderColor');" title="Random color">↻</button> 
 							</td>
 						</tr>
@@ -801,7 +801,7 @@
 							<td>Text shadow</td>
 							<td>
 								<input id="text_shadow_color" type="color" onchange="setStyle('textShadow',this);"> 
-								<button onclick="setColorableElement('text_shadow_color', 'textshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorControl('text_shadow_color');showPopupPanel('color_pallette');">🚥</button> 
 								<button onclick="setRandomStyle('textShadow');" title="Random color">↻</button> 
 								<button onclick="removeStyle('textShadow');">x</button>
 								<br>
@@ -827,7 +827,7 @@
 								<button id="remove_box_shadow" onclick="removeStyle('boxShadow');">x</button>
 								<br>
 								<input id="box_shadow_color" type="color" onchange="setStyle('boxShadow',this);">
-								<button onclick="setColorableElement('box_shadow_color', 'boxshadow');showPopupPanel('color_pallette');">🚥</button> 
+								<button onclick="setColorControl('box_shadow_color');showPopupPanel('color_pallette');">🚥</button> 
 								<input id="box_shadow_inset" type="checkbox" onclick="setStyle('boxShadow',this);"> Inset
 								<br>
 								Blur <input id="box_shadow_blur" type="number" onchange="setStyle('boxShadow',this);" min="0" step="1"> 

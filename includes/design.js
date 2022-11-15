@@ -2317,15 +2317,15 @@ function setRandomStyle(style) {
 	
 	saveCurrentState();
 
+	let styles_mode = selected_section.dataset.styles_mode;
+	
 	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
+	if (!selected || styles_mode == "box" || styles_mode == "container") {
 		selected = selected_section;
-	}
-
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
+	} else if (selected_content_element && styles_mode == "selection") {
 		selected = selected_content_element;
 	}
-		
+
 	let random_color, random_range;
 
 	switch (style) {
@@ -2377,6 +2377,10 @@ function setRandomStyle(style) {
 		selection.addRange(saved_range);
 		saved_range.deleteContents();
 		saved_range.insertNode(selected);
+	}
+
+	if (selected.dataset.styles_mode == "container") {
+		styleContainedSections(style, null, random_color);
 	}	
 }
 
@@ -2495,35 +2499,19 @@ function removeSectionClass(value) {
 
 
 function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
-	if (!selected_section) return;
-	saveCurrentState();
-
-	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
-		selected = selected_section;
-	}
-
 	document.getElementById("border_radius1").value = top_left;
 	document.getElementById("border_radius2").value = top_right;
 	document.getElementById("border_radius3").value = bottom_left;
 	document.getElementById("border_radius4").value = bottom_right;
-	selected.style.borderTopLeftRadius = top_left + "px";
-	selected.style.borderTopRightRadius = top_right + "px";
-	selected.style.borderBottomLeftRadius = bottom_left + "px";
-	selected.style.borderBottomRightRadius = bottom_right + "px";
+	setStyle("borderTopLeftRadius", null, top_left);
+	setStyle("borderTopRightRadius", null, top_right);
+	setStyle("borderBottomLeftRadius", null, bottom_left);
+	setStyle("borderBottomRightRadius", null, bottom_right);
 }
 
 function setBorderWidthPreset(width) {
-	if (!selected_section) return;
-
-	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
-		selected = selected_section;
-	}
-
-	saveCurrentState();
 	document.getElementById("border_width").value = width;
-	selected.style.borderWidth = width + "px";
+	setStyle("borderWidth", null, width);
 }
 
 
@@ -2543,51 +2531,14 @@ function setColorableWrapper(control_id, color_style) {
 	colorable_style = color_style;
 }
 
-function setColorableElement(control_id, color_style) {
-	if (!selected_section) return;
-	
+function setColorControl(control_id, color_style) {
 	colorable_control = document.getElementById(control_id);
-	
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
-		colorable_element = selected_content_element;
-	} else if (selected_section.dataset.styles_mode == "paragraph") {
-		colorable_element = selected_element;
-	} else if (selected_section.dataset.styles_mode == "box") {
-		colorable_element = selected_section;
-	}
-	colorable_style = color_style;
 }
 
 function useColorPallette(color) {
 	colorable_control.value = color;
-	if (colorable_style == "back") {
-		if (colorable_element.id == "wrapper") colorable_element.style.backgroundImage = "";
-		colorable_element.style.backgroundColor = color;
-	} else if (colorable_style == "border") {
-		colorable_element.style.borderColor = color;
-	} else if (colorable_style == "column") {
-		colorable_element.style.columnRuleColor = color;
-	} else if (colorable_style == "color") {
-		colorable_element.style.color = color;
-	} else if (colorable_style == "textshadow") {
-		document.getElementById("text_shadow_color").onchange();
-	} else if (colorable_style == "boxshadow") {
-		document.getElementById("box_shadow_color").onchange();
-	}
-	
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
-	    let selection = window.getSelection();
-		selection.removeAllRanges();
-		selection.addRange(saved_range);
-		saved_range.deleteContents();
-		saved_range.insertNode(colorable_element);
-	}	
-	
+	colorable_control.onchange();
 }
-
-
-
-
 
 
 
