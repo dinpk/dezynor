@@ -214,6 +214,7 @@ function addSection() {
 	selectSection(section_number);
 	setSectionDefaultStyles();
 	section.innerHTML = "<div>&nbsp;</div>";
+	section.dataset.styles_mode = "box";
 	document.getElementById(section_id).focus();
 	loadFormValues(section)
 	alignSection('pageTopLeft');
@@ -566,14 +567,7 @@ function toggleEditableSection() {
 
 function setStylesMode() {
 	if (!selected_section) return;
-	
-	if (document.getElementById("styles_mode").value == "paragraph") {
-		selected_section.dataset.styles_mode = "paragraph";
-	} else if (document.getElementById("styles_mode").value == "selection") {
-		selected_section.dataset.styles_mode = "selection";
-	} else {
-		delete selected_section.dataset.styles_mode;
-	}
+	selected_section.dataset.styles_mode = document.getElementById("styles_mode").value;
 }
 
 function toggleOverflowSection() {
@@ -1874,7 +1868,7 @@ function applyStyle() {
 
 	saveCurrentState();
 
-	if (!selected_section.dataset.styles_mode) {
+	if (selected_section.dataset.styles_mode == "box") {
 		setSectionDefaultStyles();
 		let existing_styles = selected_section.getAttribute("style");
 		selected_section.setAttribute("style", existing_styles + selected_styles);
@@ -1986,12 +1980,12 @@ function setStyle(style, element, value) {
 
 	if (element && !value) value = element.value;
 
+	let styles_mode = selected_section.dataset.styles_mode;
+
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || styles_mode == "box" || styles_mode == "container") {
 		selected = selected_section;
-	}
-	
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
+	} else if (selected_content_element && styles_mode == "selection") {
 		selected = selected_content_element;
 	}
 	
@@ -2252,7 +2246,7 @@ function setStyle(style, element, value) {
 			break;
 
 	}
-	
+
 	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
@@ -2260,7 +2254,46 @@ function setStyle(style, element, value) {
 		saved_range.deleteContents();
 		saved_range.insertNode(selected);
 	}
+
+	if (selected_section.dataset.styles_mode == "container") {
+		styleContainedSections(style, element, value);
+	}
 }
+
+function styleContainedSections(style, element, value) {
+	if (!(selected_section)) return;
+	
+	saveCurrentState();
+	
+	let container_section = selected_section;
+
+	let dimensions = getSectionDimensions(selected_section);
+	let top = dimensions.top
+	let bottom = dimensions.bottom
+	let left = dimensions.left
+	let right = dimensions.right
+	
+	let sections_list = "";
+	let all_sections = document.querySelectorAll("section");
+	for (i = 0; i < all_sections.length; i++) {
+		let this_section = all_sections[i];
+			let section_width = parseInt(this_section.style.width.replace("px", ""));
+			let section_height = parseInt(this_section.style.height.replace("px", ""));
+			let section_top = parseInt(this_section.style.top.replace("px", ""));
+			let section_left = parseInt(this_section.style.left.replace("px", ""));
+			let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
+			let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
+			if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
+				selected_section = this_section;
+				setStyle(style, element, value);
+			}
+
+	}
+	
+	selected_section = container_section;
+
+}
+
 
 function setRandomStyle(style) {
 	
@@ -2269,7 +2302,7 @@ function setRandomStyle(style) {
 	saveCurrentState();
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -2340,7 +2373,7 @@ function removeStyle(style) {
 	saveCurrentState();
 	
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 	
@@ -2408,7 +2441,7 @@ function setSectionClass(value) {
 	if (!selected_section) return;
 	
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 	
@@ -2432,7 +2465,7 @@ function removeSectionClass(value) {
 	if (!selected_section) return;
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -2450,7 +2483,7 @@ function setBorderRadiusPreset(top_left, top_right, bottom_left, bottom_right) {
 	saveCurrentState();
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -2468,7 +2501,7 @@ function setBorderWidthPreset(width) {
 	if (!selected_section) return;
 
 	let selected = selected_element;
-	if (!selected || !selected_section.dataset.styles_mode) {
+	if (!selected || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -2503,7 +2536,7 @@ function setColorableElement(control_id, color_style) {
 		colorable_element = selected_content_element;
 	} else if (selected_section.dataset.styles_mode == "paragraph") {
 		colorable_element = selected_element;
-	} else if (!selected_section.dataset.styles_mode) {
+	} else if (selected_section.dataset.styles_mode == "box") {
 		colorable_element = selected_section;
 	}
 	colorable_style = color_style;
@@ -2547,7 +2580,7 @@ async function uploadImage(element) {
 	if (!(selected_section)) return;
 	
 	let selected = selected_element;
-	if (!selected || (selected && selected.localName != "td") || !selected_section.dataset.styles_mode) {
+	if (!selected || (selected && selected.localName != "td") || selected_section.dataset.styles_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -3098,15 +3131,10 @@ function loadFormValues(element) {
 	loadDefaultFormValues();
 
 	if (!selected_section) return;
-	if (!selected_section.dataset.styles_mode || !element.getAttribute("style")) element = selected_section;
+	if (selected_section.dataset.styles_mode == "box" || !element.getAttribute("style")) element = selected_section;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
-
-	if (!selected_section.dataset.styles_mode) {
-		document.getElementById("styles_mode").value = "box";
-	} else {
-		document.getElementById("styles_mode").value = selected_section.dataset.styles_mode;
-	}
+	document.getElementById("styles_mode").value = selected_section.dataset.styles_mode;
 	if (selected_section.style.overflow == "visible") {
 		document.getElementById("overflow_section").checked = true;
 	} else {
