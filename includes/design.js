@@ -539,7 +539,7 @@ async function pasteSection() {
 	updateContainerSections();
 	selectSection(first_section_number);
 	reAlignSectionHandles();
-
+	selected_section.scrollIntoView();
 }
 
 
@@ -1364,6 +1364,7 @@ function setLayout(layout) {
 	
 	let border_width = document.getElementById("layout_border_width").value;
 	let border_style = document.getElementById("layout_border_style").value;
+	let border_radius = document.getElementById("layout_border_radius").value;
 	let border_color = document.getElementById("layout_border_color").value;
 	let gap = document.getElementById("layout_gap").value;
 	
@@ -1387,6 +1388,7 @@ function setLayout(layout) {
 	let all_tds = selected_section.querySelectorAll("table td");
 	for (i = 0; i < all_tds.length; i++) {
 		all_tds[i].style.border = border_width + "px " + border_style + " " + border_color;
+		all_tds[i].style.borderRadius = border_radius + "px ";
 	}
 
 }
@@ -3333,7 +3335,9 @@ function loadDefaultFormValues() {
 	document.getElementById("transform_degree2").value = "0";
 	document.getElementById("transform_degree2").style.visibility = "visible";
 	document.getElementById("clip_path").value = "";
-	document.getElementById("layout_gap").value = "10";
+	document.getElementById("layout_gap").value = "5";
+	document.getElementById("layout_border_width").value = "1";
+	document.getElementById("layout_border_radius").value = "0";
 	
 	document.getElementById("table_columns").value = "4";
 	document.getElementById("table_rows").value = "4";
@@ -3460,12 +3464,13 @@ let keyCode = {
 document.onkeydown = function(e){
 	let key = e.which || e.keyCode;
 	if (
-			(e.ctrlKey && e.shiftKey) 
+			(e.ctrlKey && e.shiftKey && !keyCode.KEY_I) 
 		|| 	(e.ctrlKey && e.altKey) 
 		|| 	(e.shiftKey && e.altKey) 
-		|| 	(key >= 112 && key <= 122) // function keys
+		|| 	(key >= 112 && key <= 123) // function keys
 		|| 	(e.altKey && (key >= 96 && key <= 111)) // numpad and operators
 		|| 	(e.altKey && (key >= 48 && key <= 57)) // numeric keys
+		|| 	(key == keyCode.ESCAPE || key == keyCode.INSERT) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_W) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_R) 
 		|| 	(e.ctrlKey && key == keyCode.KEY_L) 
@@ -3483,69 +3488,68 @@ document.onkeydown = function(e){
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 
-	if (key == keyCode.F1) {
-		
-	} else if (key == keyCode.F2) {
+	console.log(key);
+
+	if (key == keyCode.ESCAPE) {
 		toggleDashPanel();
+	} else if (key == keyCode.INSERT) {
+		saveDezyn();
+	} else if (key == keyCode.F1) {
+		addSection();
+	} else if (key == keyCode.F2) {
+		duplicateSection();
 	} else if (key == keyCode.F3) {
+		copySection();
+		showMessage("Copied box", "black");
+	} else if (key == keyCode.F4) {
+		pasteSection();
+		showMessage("Pasted box", "black");
+	} else if (key == keyCode.F5) {
 		let z_index_element = document.getElementById("z_index");
 		let new_z_index = parseInt(z_index_element.value) - 1;
 		if (new_z_index >= 0) {
 			z_index_element.value = new_z_index;
 			z_index_element.onchange();
+			showMessage("Layer order: " + new_z_index, "black");
 		}
-	} else if (key == keyCode.F4) {
+	} else if (key == keyCode.F6) {
 		let z_index_element = document.getElementById("z_index");
-		z_index_element.value = parseInt(z_index_element.value) + 1;
-		z_index_element.onchange();
-	} else if (key == keyCode.F9) {
-		saveDezyn();
-	} else if (e.ctrlKey && key == keyCode.COMMA) {
-		setStyle('direction', null, 'rtl');
-	} else if (e.ctrlKey && key == keyCode.PERIOD) {
+		let new_z_index = parseInt(z_index_element.value) + 1;
+		if (new_z_index >= 0) {
+			z_index_element.value = new_z_index;
+			z_index_element.onchange();
+			showMessage("Layer order: " + new_z_index, "black");
+		}
+	} else if (key == keyCode.F7) {
 		setStyle('direction', null, 'ltr');
-	} else if (e.ctrlKey && key == keyCode.KEY_R) {
-		//styleTextAlign('right');
-	} else if (e.ctrlKey && key == keyCode.KEY_L) {
-		//styleTextAlign('left');
-	} else if (e.ctrlKey && key == keyCode.KEY_E) {
-		//styleTextAlign('center');
-	} else if (e.ctrlKey && key == keyCode.KEY_J) {
-		//styleTextAlign('justify');
-	} else if (e.ctrlKey && e.shiftKey && key == keyCode.CLOSE_BRACKET) {
-		element = document.getElementById("line_height");
-		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));
-		element.onchange();
-	} else if (e.ctrlKey && e.shiftKey && key == keyCode.OPEN_BRACKET) {
+		showMessage("Writing direction: Left-to-Right", "black");
+	} else if (key == keyCode.F8) {
+		setStyle('direction', null, 'rtl');
+		showMessage("Writing direction: Right-to-Left", "black");
+	} else if (key == keyCode.F9) {
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) - parseInt(localStorage.getItem("line_height_change"));
 		element.onchange();
-	} else if (e.ctrlKey && key == keyCode.OPEN_BRACKET) {
+	} else if (key == keyCode.F10) {
+		element = document.getElementById("line_height");
+		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));
+		element.onchange();
+	} else if (key == keyCode.F11) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) - parseInt(localStorage.getItem("font_size_change"));
 		element.onchange();
-	} else if (e.ctrlKey && key == keyCode.CLOSE_BRACKET) {
+	} else if (key == keyCode.F12) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("font_size_change"));
 		element.onchange();
-	} else if (e.ctrlKey && key == keyCode.KEY_9) {
+	} else if (e.ctrlKey && key == keyCode.COMMA) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) - parseInt(localStorage.getItem("word_spacing_change"));
 		element.onchange();
-	} else if (e.ctrlKey && key == keyCode.KEY_0) {
+	} else if (e.ctrlKey && key == keyCode.PERIOD) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("word_spacing_change"));
 		element.onchange();
-	} else if (e.altKey && key == keyCode.KEY_4) {
-		pasteSection();
-	} else if (e.altKey && key == keyCode.KEY_3) {
-		copySection();
-	} else if (e.altKey && key == keyCode.KEY_2) {
-		duplicateSection();
-	} else if (e.altKey && key == keyCode.KEY_1) {
-		addSection();
-	} else if (e.shiftKey && e.altKey && key == keyCode.DELETE) {
-		removeContainerSection();
 	} else if (e.altKey && key == keyCode.DELETE) {
 		removeSection();
 	} else if (e.altKey && key == keyCode.SUBTRACT) {
@@ -3554,20 +3558,14 @@ document.onkeyup = function(e) {
 		resizeSection('fullHeight');
 	} else if (e.altKey && key == keyCode.ENTER) {
 		alignSection('hCenter');
-	} else if (e.altKey && key == keyCode.DIVIDE) {
-	} else if (e.altKey && key == keyCode.MULTIPLY) {
 	} else if (e.altKey && key == keyCode.DECIMAL) {
 		styleAddImageURL();
 	} else if (e.altKey && key == keyCode.NUMPAD_0) {
-		if (!(selected_section)) return;
 		document.getElementById('upload_image').click();
-	} else if (e.altKey && key == keyCode.NUMPAD_1) {
 	} else if (e.altKey && key == keyCode.NUMPAD_2) {
 		shiftSection('down');
-	} else if (e.altKey && key == keyCode.NUMPAD_3) {
 	} else if (e.altKey && key == keyCode.NUMPAD_4) {
 		shiftSection('left');
-	} else if (e.altKey && key == keyCode.NUMPAD_5) {
 	} else if (e.altKey && key == keyCode.NUMPAD_6) {
 		shiftSection('right');
 	} else if (e.altKey && key == keyCode.NUMPAD_7) {

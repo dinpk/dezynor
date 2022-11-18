@@ -16,7 +16,7 @@
 			<div id="wrapper"></div>
 		</div>
 		
-		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="F2">►</div>
+		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="ESC">►</div>
 
 		<div id="icons_bar">
 			<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design File"> 
@@ -88,25 +88,26 @@
 
 				<nav id="box_section">
 					<h4 id="box_heading" onclick="hideSectionPanel('box_section');">Box</h4>
-					<img src="images/icon_box_add.png" onclick="addSection();" title="Add box (Alt + 1)"> 
-					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate box (Alt + 2)"> 
-					<img src="images/icon_box_copy.png" onclick="copySection();" title="Copy box"> 
-					<img src="images/icon_box_paste.png" onclick="pasteSection();" title="Paste box"> 
-					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete box (Alt + Delete)"> 
+					<img src="images/icon_box_add.png" onclick="addSection();" title="Add Box (F1)"> 
+					<img src="images/icon_box_duplicate.png" onclick="duplicateSection();" title="Duplicate Box (F2)"> 
+					<img src="images/icon_box_copy.png" onclick="copySection();" title="Copy Box (F3)"> 
+					<img src="images/icon_box_paste.png" onclick="pasteSection();" title="Paste Box (F4)"> 
+					<img src="images/icon_box_delete.png" onclick="removeSection();" title="Delete Box (Alt + Delete)"> 
+					<img src="images/icon_box_container_delete.png" onclick="removeContainerSection();" title="Delete Container Box"> 
 					<br>
 					<hr>
 				</nav>
 				<nav id="utility_section">
 					<h4 id="utility_heading" onclick="hideSectionPanel('utility_section');">Design File</h4>
 					<div class="icon_links">
-						<address onclick="saveDezyn();" title="Save design (F9)">
+						<address onclick="saveDezyn();" title="Save Design">
 							<img id="save_design" src="images/icon_save.png"> Save 
 							<select id="select_folders" onchange="saveDezyn();"></select> 
 						</address>
-						<address onclick="duplicateDezyn();" title="Duplicate design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</address>
-						<address onclick="exportDezyn();" title="Export design"><img id="export_design" src="images/icon_export_single.png"> Export</address>
-						<address onclick="deleteDezyn();" title="Delete design"><img id="delete_design" src="images/icon_delete.png"> Delete</address>
-						<address onclick="window.print();" title="Print design"><img src="images/icon_print.png"> Print</address>
+						<address onclick="duplicateDezyn();" title="Duplicate Design"><img id="duplicate_design" src="images/icon_duplicate.png"> Duplicate</address>
+						<address onclick="exportDezyn();" title="Export Design"><img id="export_design" src="images/icon_export_single.png"> Export</address>
+						<address onclick="deleteDezyn();" title="Delete Design"><img id="delete_design" src="images/icon_delete.png"> Delete</address>
+						<address onclick="window.print();" title="Print Design"><img src="images/icon_print.png"> Print</address>
 					</div>
 				</nav>
 				<nav  id="wrapper_section">
@@ -127,20 +128,20 @@
 						<tr>
 							<td>Background</td>
 							<td>
-								<input id="wrapper_background_color" type="color" onchange="setWrapperStyle('backgroundColor', this);" title="Choose color"> 
-								<button onclick="setColorControl('wrapper_background_color');showPopupPanel('color_pallette');" title="Color palette">🚥</button> 
-								<select id="wrapper_random_range" title="Random color type">
+								<input id="wrapper_background_color" type="color" onchange="setWrapperStyle('backgroundColor', this);" title="Choose Color"> 
+								<button onclick="setColorControl('wrapper_background_color');showPopupPanel('color_pallette');" title="Color Palette">🚥</button> 
+								<select id="wrapper_random_range" title="Random Color Type">
 									<option>any</option>
 									<option selected>light</option>
 									<option>medium</option>
 									<option>dark</option>
 								</select>
-								<button onclick="setRandomWrapperBackgroundColor();" title="Random color">↻</button>
+								<button onclick="setRandomWrapperBackgroundColor();" title="Random Color">↻</button>
 							</td>
 						</tr>
 						<tr>
 							<td>Overflow</td>
-							<td><input id="wrapper_overflow" type="checkbox" onchange="setWrapperStyle('overflow', this);" title="Show items outside of page" checked></td>
+							<td><input id="wrapper_overflow" type="checkbox" onchange="setWrapperStyle('overflow', this);" title="Show Items Outside of Page" checked></td>
 						</tr>
 					</table>
 				</nav>
@@ -182,41 +183,41 @@
 						<tr>
 							<td>Resize</td>
 							<td>
-								<img src="images/resize_full_width.png" id="resize_full_width" onclick="resizeSection('fullWidth');" title="Full width (Alt + Numpad Subtract)"> 
-								<img src="images/resize_full_height.png" id="resize_full_height" onclick="resizeSection('fullHeight');" title="Full height (Alt + Numpad Add)"> 
-								<img src="images/resize_half_width.png" id="resize_half_width" onclick="resizeSection('halfWidth');" title="Half width"> 
-								<img src="images/resize_half_height.png" id="resize_half_height" onclick="resizeSection('halfHeight');" title="Half height"> 
+								<img src="images/resize_full_width.png" id="resize_full_width" onclick="resizeSection('fullWidth');" title="Full Width (Alt + Numpad Subtract)"> 
+								<img src="images/resize_full_height.png" id="resize_full_height" onclick="resizeSection('fullHeight');" title="Full Height (Alt + Numpad Add)"> 
+								<img src="images/resize_half_width.png" id="resize_half_width" onclick="resizeSection('halfWidth');" title="Half Width"> 
+								<img src="images/resize_half_height.png" id="resize_half_height" onclick="resizeSection('halfHeight');" title="Half Height"> 
 								<img src="images/resize_quarter.png" id="resize_quarter" onclick="resizeSection('quarter');" title="Quarter"> 
 							</td>
 						</tr>
 						<tr>
 							<td>Align</td>
 							<td>
-								<img src="images/align_top_left.png" id="align_top_left" onclick="alignSection('topLeft');" title="Align top left">
-								<img src="images/align_top_right.png" id="align_top_right" onclick="alignSection('topRight');" title="Align top right"> 
-								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="alignSection('bottomLeft');" title="Align bottom left">
-								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="alignSection('bottomRight');" title="Align bottom right">
+								<img src="images/align_top_left.png" id="align_top_left" onclick="alignSection('topLeft');" title="Align Top Left">
+								<img src="images/align_top_right.png" id="align_top_right" onclick="alignSection('topRight');" title="Align Top Right"> 
+								<img src="images/align_bottom_left.png" id="align_bottom_left" onclick="alignSection('bottomLeft');" title="Align Bottom Left">
+								<img src="images/align_bottom_right.png" id="align_bottom_right" onclick="alignSection('bottomRight');" title="Align Bottom Right">
 
-								<img src="images/align_top_center.png" id="align_top_center" onclick="alignSection('topCenter');" title="Align top center">
-								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="alignSection('bottomCenter');" title="Align bottom center">
-								<img src="images/align_left_center.png" id="align_left_center" onclick="alignSection('leftCenter');" title="Align left center">
-								<img src="images/align_right_center.png" id="align_right_center" onclick="alignSection('rightCenter');" title="Align right center">
+								<img src="images/align_top_center.png" id="align_top_center" onclick="alignSection('topCenter');" title="Align Top Center">
+								<img src="images/align_bottom_center.png" id="align_bottom_center" onclick="alignSection('bottomCenter');" title="Align Bottom Center">
+								<img src="images/align_left_center.png" id="align_left_center" onclick="alignSection('leftCenter');" title="Align Left Center">
+								<img src="images/align_right_center.png" id="align_right_center" onclick="alignSection('rightCenter');" title="Align Right Center">
 
-								<img src="images/align_center_center.png" id="align_center_center" onclick="alignSection('centerCenter');" title="Align center center">
+								<img src="images/align_center_center.png" id="align_center_center" onclick="alignSection('centerCenter');" title="Align Center Center">
 								<br>
 
-								<img src="images/align_h_left.png" id="align_h_left" onclick="alignSection('hLeft');" title="Align left horizontally (Ctrl + Alt + LeftArrow)"> 
-								<img src="images/align_h_center.png" id="align_h_center" onclick="alignSection('hCenter');" title="Align center horizontally (Ctrl + Alt + RightArrow/LeftArrow)"> 
-								<img src="images/align_h_right.png" id="align_h_right" onclick="alignSection('hRight');" title="Align right horizontally (Ctrl + Alt + RightArrow)"> 
-								<img src="images/align_v_top.png" id="align_v_top" onclick="alignSection('vTop');" title="Align top vertically (Ctrl + Alt + UpArrow)"> 
-								<img src="images/align_v_center.png" id="align_v_center" onclick="alignSection('vCenter');" title="Align center vertically (Ctrl + Alt + UpArrow/DownArrow"> 
-								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="alignSection('vBottom');" title="Align bottom vertically (Ctrl + Alt + DownArrow)">
+								<img src="images/align_h_left.png" id="align_h_left" onclick="alignSection('hLeft');" title="Align Left Horizontally (Ctrl + Alt + LeftArrow)"> 
+								<img src="images/align_h_center.png" id="align_h_center" onclick="alignSection('hCenter');" title="Align Center Horizontally (Ctrl + Alt + RightArrow/LeftArrow)"> 
+								<img src="images/align_h_right.png" id="align_h_right" onclick="alignSection('hRight');" title="Align Right Horizontally (Ctrl + Alt + RightArrow)"> 
+								<img src="images/align_v_top.png" id="align_v_top" onclick="alignSection('vTop');" title="Align Top Vertically (Ctrl + Alt + UpArrow)"> 
+								<img src="images/align_v_center.png" id="align_v_center" onclick="alignSection('vCenter');" title="Align Center Vertically (Ctrl + Alt + UpArrow/DownArrow"> 
+								<img src="images/align_v_bottom.png" id="align_v_bottom" onclick="alignSection('vBottom');" title="Align Bottom Vertically (Ctrl + Alt + DownArrow)">
 							</td>
 						</tr>
 						<tr>
 							<td>Layer</td>
 							<td>
-								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F3 / F4"> 
+								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F5 / F6"> 
 							</td>
 						</tr>
 					</table>
@@ -244,7 +245,13 @@
 									<option>ridge</option>
 									<option>groove</option>
 								</select>
-								<input id="layout_border_color" type="color" value="#999999" onchange="setTableStyle('borderCombined', this);">
+								<input id="layout_border_color" type="color" value="#999999" onchange="setTableStyle('borderCombined', this);" title="Choose Color">
+							</td>
+						</tr>
+						<tr>
+							<td>Radius</td>
+							<td>
+								<input id="layout_border_radius" type="number" min="0" value="0">
 							</td>
 						</tr>
 					</table>
@@ -312,8 +319,8 @@
 				<nav id="shape_section">
 					<h4 id="shape_heading" onclick="hideSectionPanel('shape_section');">Shapes</h4>
 					<footer>
-						<p onclick="removeStyle('clipPath');" style="font-size:120%;cursor:pointer;padding:5px;">X</p> 
-						<textarea id="clip_path" type="text" onchange="setStyle('clipPath', this, value)" placeholder="Clip path" style="width:100%;max-width:100%;padding:2px 4px 2px 4px;" title="Clip path"></textarea>
+						<p onclick="removeStyle('clipPath');" style="font-size:120%;cursor:pointer;padding:5px;" titlte="Remove Shape">X</p> 
+						<textarea id="clip_path" type="text" onchange="setStyle('clipPath', this, value)" placeholder="Clip path" style="width:100%;max-width:100%;padding:2px 4px 2px 4px;" title="Clip Path"></textarea>
 						<h5>Lines</h5>
 						<article>
 							<address onclick="setStyle('clipPathStyle',this);"><span class="shape" style="clip-path:polygon(0 60%, 0 40%, 100% 40%, 100% 60%)">&nbsp;</span></address>
@@ -477,14 +484,14 @@
 						<tr>
 							<td>Alignment</td>
 							<td>
-								<img src="images/icon_align_left.png" onclick="setStyle('textAlign', this, 'left');"> 
-								<img src="images/icon_align_center.png" onclick="setStyle('textAlign', this, 'center');"> 
-								<img src="images/icon_align_right.png" onclick="setStyle('textAlign', this, 'right');"> 
-								<img src="images/icon_align_justify.png" onclick="setStyle('textAlign', this, 'justify');"> 
-								<img src="images/icon_direction_ltr.png" onclick="setStyle('direction', this, 'ltr');" title="Direction (Left to right)"> 
-								<img src="images/icon_direction_rtl.png" onclick="setStyle('direction', this, 'rtl');" title="Direction (Right to left)"> 
-								<img src="images/icon_list_unordered.png" onclick="setStyle('ul', this);" title="Unordered list"> 
-								<img src="images/icon_list_ordered.png" onclick="setStyle('ol', this);" title="Ordered list"> 
+								<img src="images/icon_align_left.png" onclick="setStyle('textAlign', this, 'left');" title="Left Align"> 
+								<img src="images/icon_align_center.png" onclick="setStyle('textAlign', this, 'center');" title="Center Align"> 
+								<img src="images/icon_align_right.png" onclick="setStyle('textAlign', this, 'right');" title="Right Align"> 
+								<img src="images/icon_align_justify.png" onclick="setStyle('textAlign', this, 'justify');" title="Justify"> 
+								<img src="images/icon_direction_ltr.png" onclick="setStyle('direction', this, 'ltr');" title="Direction (Left to Right)"> 
+								<img src="images/icon_direction_rtl.png" onclick="setStyle('direction', this, 'rtl');" title="Direction (Right to Left)"> 
+								<img src="images/icon_list_unordered.png" onclick="setStyle('ul', this);" title="Unordered List"> 
+								<img src="images/icon_list_ordered.png" onclick="setStyle('ol', this);" title="Ordered List"> 
 							</td>
 						</tr>
 						<tr>
@@ -550,8 +557,8 @@
 									<option>ridge</option>
 									<option>groove</option>
 								</select> 
-								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);"> 
-								<button onclick="setColorControl('column_rule_color');showPopupPanel('color_pallette');">🚥</button> 
+								<input id="column_rule_color" type="color" onchange="setStyle('columnCombined', this);" title="Choose Color"> 
+								<button onclick="setColorControl('column_rule_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
 							</td>
 						</tr>
 						<tr>
@@ -569,7 +576,7 @@
 						<tr>
 							<td>Random color</td>
 							<td>
-								<select id="random_color_range" title="Random color type">
+								<select id="random_color_range" title="Random Color Type">
 									<option>any</option>
 									<option>light</option>
 									<option>medium</option>
@@ -580,19 +587,19 @@
 						<tr>
 							<td>Text</td>
 							<td>
-								<input id="color" type="color" onchange="setStyle('color',this);"> 
-								<button onclick="setColorControl('color');showPopupPanel('color_pallette');">🚥</button>
-								<button onclick="setRandomStyle('color');" title="Random color">↻</button> 
-								<button onclick="switchTextBackgroundColors();" title="Switch colors">s</button> 
+								<input id="color" type="color" onchange="setStyle('color',this);" title="Choose Color"> 
+								<button onclick="setColorControl('color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button>
+								<button onclick="setRandomStyle('color');" title="Random Color">↻</button> 
+								<button onclick="switchTextBackgroundColors();" title="Switch Colors">s</button> 
 							</td>
 						</tr>
 						<tr>
 							<td>Background color</td>
 							<td>
-								<input id="background_color" type="color" onchange="setStyle('backgroundColor',this);"> 
-								<button onclick="setColorControl('background_color');showPopupPanel('color_pallette');">🚥</button> 
-								<button onclick="setRandomStyle('backgroundColor');" title="Random color">↻</button> 
-								<button id="remove_background_color" onclick="removeStyle('backgroundColor');">x</button> 
+								<input id="background_color" type="color" onchange="setStyle('backgroundColor',this);" title="Choose Color"> 
+								<button onclick="setColorControl('background_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
+								<button onclick="setRandomStyle('backgroundColor');" title="Random Color">↻</button> 
+								<button id="remove_background_color" onclick="removeStyle('backgroundColor');" title="Remove Color">x</button> 
 							</td>
 						</tr>
 						<tr>
@@ -602,7 +609,7 @@
 								<input id="gradient_color2" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
 								<input id="gradient_color3" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
 								<input id="gradient_color4" type="color" onchange="setStyle('backgroundGradientCombined',this);"> 
-								<button onclick="setRandomStyle('randomGradientColors');setStyle('backgroundGradientCombined',this);" title="Random gradient colors">↻</button><br>
+								<button onclick="setRandomStyle('randomGradientColors');setStyle('backgroundGradientCombined',this);" title="Random Gradient Colors">↻</button><br>
 								 
 								<input id="gradient_alpha1" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);"> &nbsp; 
 								<input id="gradient_alpha2" type="checkbox" onchange="setStyle('backgroundGradientCombined',this);"> &nbsp;  
@@ -675,7 +682,7 @@
 								<input id="upload_image" type="file" accept="image/*" onchange="uploadImage(this);" style="display:none;">
 								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> or 
 								<button onclick="setStyle('backgroundImageURL',this);" title="Alt + Numpad .">URL</button> 
-								<button id="remove_image" onclick="removeStyle('backgroundImage');">x</button>
+								<button id="remove_image" onclick="removeStyle('backgroundImage');" title="Remove Image">x</button>
 							</td>
 						</tr>
 						<tr>
@@ -742,22 +749,22 @@
 									<option>ridge</option>
 									<option>groove</option>
 								</select>
-								<button id="remove_border" onclick="removeStyle('border');">x</button>
+								<button id="remove_border" onclick="removeStyle('border');" title="Remove Border">x</button>
 								<br>
-								<input id="border_color" type="color" onchange="setStyle('borderCombined',this);">
-								<button onclick="setColorControl('border_color');showPopupPanel('color_pallette');">🚥</button> 
-								<button onclick="setRandomStyle('borderColor');" title="Random color">↻</button> 
+								<input id="border_color" type="color" onchange="setStyle('borderCombined',this);" title="Choose Color">
+								<button onclick="setColorControl('border_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
+								<button onclick="setRandomStyle('borderColor');" title="Random Color">↻</button> 
 							</td>
 						</tr>
 						<tr>
 							<td>Radius</td>
 							<td>
-								<input id="border_radius1" type="number" onchange="setStyle('borderTopLeftRadius',this);" title="Top left radius" min="0"> 
-								<input id="border_radius2" type="number" onchange="setStyle('borderTopRightRadius',this);" title="Top right radius" min="0">
-								<button id="remove_border" onclick="removeStyle('borderRadius');">x</button>
+								<input id="border_radius1" type="number" onchange="setStyle('borderTopLeftRadius',this);" title="Top Left Radius" min="0"> 
+								<input id="border_radius2" type="number" onchange="setStyle('borderTopRightRadius',this);" title="Top Right Radius" min="0">
+								<button id="remove_border" onclick="removeStyle('borderRadius');" title="Remove Border Radius">x</button>
 								<br>
-								<input id="border_radius3" type="number" onchange="setStyle('borderBottomLeftRadius',this);" title="Bottom left radius" min="0">
-								<input id="border_radius4" type="number" onchange="setStyle('borderBottomRightRadius',this);" title="Bottom right radius" min="0">
+								<input id="border_radius3" type="number" onchange="setStyle('borderBottomLeftRadius',this);" title="Bottom Left Radius" min="0">
+								<input id="border_radius4" type="number" onchange="setStyle('borderBottomRightRadius',this);" title="Bottom Right Radius" min="0">
 							</td>
 						</tr>
 						<tr>
@@ -800,16 +807,16 @@
 						<tr>
 							<td>Text shadow</td>
 							<td>
-								<input id="text_shadow_color" type="color" onchange="setStyle('textShadow',this);"> 
-								<button onclick="setColorControl('text_shadow_color');showPopupPanel('color_pallette');">🚥</button> 
-								<button onclick="setRandomStyle('textShadow');" title="Random color">↻</button> 
-								<button onclick="removeStyle('textShadow');">x</button>
+								<input id="text_shadow_color" type="color" onchange="setStyle('textShadow',this);" title="Choose Color"> 
+								<button onclick="setColorControl('text_shadow_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
+								<button onclick="setRandomStyle('textShadow');" title="Random Color">↻</button> 
+								<button onclick="removeStyle('textShadow');" title="Remove Text Shadow">x</button>
 								<br>
-								H <input id="text_shadow_h" type="number" onchange="setStyle('textShadow',this);" step="1">
-								V <input id="text_shadow_y" type="number" onchange="setStyle('textShadow',this);" step="1">
+								H <input id="text_shadow_h" type="number" onchange="setStyle('textShadow',this);" step="1" title="Horizontal Distance">
+								V <input id="text_shadow_y" type="number" onchange="setStyle('textShadow',this);" step="1" title="Vertical Distance">
 								<br>
 								Blur <input id="text_shadow_blur" type="number" onchange="setStyle('textShadow',this);" min="0" step="1"> 
-								Count <input id="text_shadow_count" type="number" onchange="setStyle('textShadow',this);" step="1" min="0" value="0"> 
+								Count <input id="text_shadow_count" type="number" onchange="setStyle('textShadow',this);" step="1" min="0" value="1"> 
 								
 							</td>
 						</tr>
@@ -821,13 +828,13 @@
 						<tr>
 							<td>Box shadow</td>
 							<td>
-								H <input id="box_shadow_h" type="number" onchange="setStyle('boxShadow',this);" step="1">
-								V <input id="box_shadow_y" type="number" onchange="setStyle('boxShadow',this);" step="1"> 
-								<button onclick="setRandomStyle('boxShadow');" title="Random color">↻</button> 
-								<button id="remove_box_shadow" onclick="removeStyle('boxShadow');">x</button>
+								H <input id="box_shadow_h" type="number" onchange="setStyle('boxShadow',this);" step="1" title="Horizontal Distance">
+								V <input id="box_shadow_y" type="number" onchange="setStyle('boxShadow',this);" step="1" title="Vertical Distance"> 
+								<button onclick="setRandomStyle('boxShadow');" title="Random Color">↻</button> 
+								<button id="remove_box_shadow" onclick="removeStyle('boxShadow');" title="Remove Box Shadow">x</button>
 								<br>
-								<input id="box_shadow_color" type="color" onchange="setStyle('boxShadow',this);">
-								<button onclick="setColorControl('box_shadow_color');showPopupPanel('color_pallette');">🚥</button> 
+								<input id="box_shadow_color" type="color" onchange="setStyle('boxShadow',this);" title="Choose Color">
+								<button onclick="setColorControl('box_shadow_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
 								<input id="box_shadow_inset" type="checkbox" onclick="setStyle('boxShadow',this);"> Inset
 								<br>
 								Blur <input id="box_shadow_blur" type="number" onchange="setStyle('boxShadow',this);" min="0" step="1"> 
@@ -994,7 +1001,7 @@
 						<tr>
 							<td>Split</td>
 							<td>
-								<button onclick="splitSectionOnSpaces();" title="Split on spaces">ooo</button> 
+								<button onclick="splitSectionOnSpaces();" title="Split on Spaces">ooo</button> 
 							</td>
 						</tr>
 						<tr>
