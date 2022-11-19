@@ -2977,21 +2977,33 @@ function mergeTableCells() {
 	
 	if (merge_direction == "to right") {
 		let all_td = tr.querySelectorAll("td");
+		let spanned_cell;
 		for (i = 0; i < all_td.length; i++) {
 			if (i == column_position && column_position != all_td.length-1) {
+				spanned_cell = all_td[i];
 				all_td[i].setAttribute("colspan", merge_cells);
 			} else if (i > column_position && i < (column_position + merge_cells)) {
+				let content = all_td[i].innerHTML;
 				all_td[i].remove();
+				if (!spanned_cell.style.direction || spanned_cell.style.direction == "ltr") {
+					spanned_cell.innerHTML = spanned_cell.innerHTML + " " + content;
+				} else {
+					spanned_cell.innerHTML = content + " " + spanned_cell.innerHTML;
+				}
 			}
 		}
 	} else if (merge_direction == "to bottom") {
+		let spanned_cell;
 		for (k = 0; k < all_tr.length; k++){
 			all_tr_td = all_tr[k].querySelectorAll("td");
 			for (s = 0; s < all_tr_td.length; s++) {
 				if (s == column_position && k == row_position && row_position != all_tr.length-1) {
+					spanned_cell = all_tr_td[s];
 					all_tr_td[s].setAttribute("rowspan", merge_cells);
 				} else if (s == column_position && k > row_position && k < (row_position + merge_cells)) {
+					let content = all_tr_td[s].innerHTML
 					all_tr_td[s].remove();
+					spanned_cell.innerHTML = spanned_cell.innerHTML + content;
 				}
 			}
 		}
