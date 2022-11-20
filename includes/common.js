@@ -102,8 +102,10 @@ async function loadSelectFonts() {
 	style.appendChild(fonts_node);
 	document.getElementsByTagName("head")[0].appendChild(style);
 	
-	document.getElementById("google_fonts").innerHTML = google_fonts_options;
-	document.getElementById("uploaded_fonts").innerHTML = uploaded_fonts_options;
+	let google_fonts_select = document.getElementById("google_fonts");
+	if (google_fonts_select) google_fonts_select.innerHTML = google_fonts_options;
+	let uploaded_fonts_select = document.getElementById("uploaded_fonts");
+	if (uploaded_fonts_select) uploaded_fonts_select.innerHTML = uploaded_fonts_options;
 }
 
 function valueInArray(value, values_array) {

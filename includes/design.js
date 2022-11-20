@@ -3500,8 +3500,6 @@ document.onkeydown = function(e){
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 
-	console.log(key);
-
 	if (key == keyCode.ESCAPE) {
 		toggleDashPanel();
 	} else if (key == keyCode.INSERT) {
