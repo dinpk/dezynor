@@ -2734,22 +2734,34 @@ function modifyTable(location) {
 			}
 		}
 	} else if (table_modify == "Delete row") {
+		if (all_tr.length == 1) return;
 		let previous_tr = tr.previousElementSibling;
+		let next_tr = tr.nextElementSibling;
 		tr.remove();
 		if (previous_tr) {
 			setCaret(previous_tr.querySelector("td"));
-			selectElement();
+		} else if (next_tr) {
+			setCaret(next_tr.querySelector("td"));
 		}
 	} else if (table_modify == "Delete column") {
 		for (k = 0; k < all_tr.length; k++){
 			all_tr_td = all_tr[k].querySelectorAll("td");
 			for (s = 0; s < all_tr_td.length; s++) {
-				if (s == position) {
-					all_tr_td[s].remove();
-				}
+				if (all_tr_td.length == 1) return;
+				if (s == position) 	all_tr_td[s].remove();
+			}
+			let current_selectable_td = all_tr[k].querySelectorAll("td")[position];
+			let previous_selectable_td = all_tr[k].querySelectorAll("td")[position-1];
+			if (current_selectable_td) {
+				setCaret(current_selectable_td);
+			} else if (previous_selectable_td) {
+				setCaret(previous_selectable_td);
 			}
 		}
+		
 	}
+	
+	selectElement();	
 }
 
 function setTableStyle(style, element, value) {
