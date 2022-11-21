@@ -2734,7 +2734,12 @@ function modifyTable(location) {
 			}
 		}
 	} else if (table_modify == "Delete row") {
+		let previous_tr = tr.previousElementSibling;
 		tr.remove();
+		if (previous_tr) {
+			setCaret(previous_tr.querySelector("td"));
+			selectElement();
+		}
 	} else if (table_modify == "Delete column") {
 		for (k = 0; k < all_tr.length; k++){
 			all_tr_td = all_tr[k].querySelectorAll("td");
@@ -3658,4 +3663,17 @@ function getRandomRGBColor(random_range) {
 	let g = Math.floor(Math.random() * (max - min) + min);
 	let b = Math.floor(Math.random() * (max - min) + min);
 	return "rgb(" + r + ", " + g + ", " + b + ")";
+}
+
+
+function setCaret(element) {
+
+    var range = document.createRange()
+    var selection = window.getSelection()
+    
+    range.setStart(element, 0)
+    range.collapse(true)
+    
+    selection.removeAllRanges()
+    selection.addRange(range)
 }
