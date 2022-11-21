@@ -666,6 +666,7 @@
 									<option value="grayscale">Grayscale</option>
 									<option value="hue-rotate">Hue</option>
 									<option value="invert">Invert</option>
+									<option value="saturate">Saturate</option>
 									<option value="sepia">Sepia</option>
 								</select> 
 								<input id="filter_value" type="number" value="20" onchange="setStyle('filter', this);">
@@ -830,11 +831,13 @@
 							<td>
 								H <input id="box_shadow_h" type="number" onchange="setStyle('boxShadow',this);" step="1" title="Horizontal Distance">
 								V <input id="box_shadow_y" type="number" onchange="setStyle('boxShadow',this);" step="1" title="Vertical Distance"> 
-								<button onclick="setRandomStyle('boxShadow');" title="Random Color">↻</button> 
+								
 								<button id="remove_box_shadow" onclick="removeStyle('boxShadow');" title="Remove Box Shadow">x</button>
 								<br>
 								<input id="box_shadow_color" type="color" onchange="setStyle('boxShadow',this);" title="Choose Color">
 								<button onclick="setColorControl('box_shadow_color');showPopupPanel('color_pallette');" title="Color Pallette">🚥</button> 
+								<button onclick="setRandomStyle('boxShadow');" title="Random Color">↻</button>
+								<br>
 								<input id="box_shadow_inset" type="checkbox" onclick="setStyle('boxShadow',this);"> Inset
 								<br>
 								Blur <input id="box_shadow_blur" type="number" onchange="setStyle('boxShadow',this);" min="0" step="1"> 

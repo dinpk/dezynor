@@ -2240,10 +2240,10 @@ function setStyle(style, element, value) {
 			
 			if (selected.dataset.image_key && inset.length == 0) {
 				selected.style.filter = "drop-shadow(" + h + "px " + y + "px " + blur + "px " + color + ")";
-				selected.style.boxShadow = "none";
+				selected.style.boxShadow = "";
 			} else {
 				selected.style.boxShadow = inset + h + "px " + y + "px " + blur + "px " + spread + "px " + color;
-				selected.style.filter = "none";
+				selected.style.filter = "";
 			}
 			break;
 		case "filter":
@@ -2251,7 +2251,7 @@ function setStyle(style, element, value) {
 			let filter_value = document.getElementById("filter_value").value;
 			
 			if (filter_type == "none") {
-				selected.style.filter = "none";
+				selected.style.filter = "";
 			} else if (filter_type == "blur") {
 				selected.style.filter = filter_type + "(" + filter_value + "px)";
 			} else if (filter_type == "hue-rotate") {
@@ -2438,8 +2438,8 @@ function removeStyle(style) {
 			document.getElementById("text_shadow_color").value = "#000000";
 			break;
 		case "boxShadow":
-			selected.style.filter = "none";
-			selected.style.boxShadow = "0px 0px 0px 0px #000000";
+			selected.style.filter = "";
+			selected.style.boxShadow = "";
 			document.getElementById("box_shadow_h").value = "0";
 			document.getElementById("box_shadow_y").value = "0";
 			document.getElementById("box_shadow_blur").value = "0";
@@ -3091,8 +3091,8 @@ function setSectionDefaultStyles() {
 	selected_section.style.borderTopRightRadius = "0px";
 	selected_section.style.borderBottomLeftRadius = "0px";
 	selected_section.style.borderBottomRightRadius = "0px";
-	selected_section.style.boxShadow = "0px 0px 0px 0px #000000";
-	selected_section.style.filter = "none";
+	selected_section.style.boxShadow = "";
+	selected_section.style.filter = "";
 	selected_section.style.columnCount = "1";
 	selected_section.style.columnGap = "10px";
 	selected_section.style.columnFill = "auto";
@@ -3254,25 +3254,41 @@ function loadFormValues(element) {
 	if (element.style.borderTopRightRadius) document.getElementById("border_radius2").value = element.style.borderTopRightRadius.replace("px", "");
 	if (element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = element.style.borderBottomLeftRadius.replace("px", "");
 	if (element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = element.style.borderBottomRightRadius.replace("px", "");
-	let filter_drop_shadow = element.style.filter;
-	if (filter_drop_shadow) {
-		let box_shadow = element.style.boxShadow;
-		if (filter_drop_shadow.indexOf("drop-shadow") == 0) {
-			filter_drop_shadow = filter_drop_shadow.split(" ");
-			document.getElementById("box_shadow_color").value = rgb2hex((filter_drop_shadow[0].replace("drop-shadow(", "") + filter_drop_shadow[1] + filter_drop_shadow[2]));
-			document.getElementById("box_shadow_h").value = filter_drop_shadow[3].replace("px", "");
-			document.getElementById("box_shadow_y").value = filter_drop_shadow[4].replace("px", "");
-			document.getElementById("box_shadow_blur").value = filter_drop_shadow[5].replace("px)", "");
+	let filter = element.style.filter;
+	document.getElementById("filter_type").value = "none";
+	document.getElementById("filter_value").value = "20";
+	if (filter.length > 0) {
+		if (filter.indexOf("drop-shadow") == 0) {
+			filter = filter.split(" ");
+			document.getElementById("box_shadow_color").value = rgb2hex((filter[0].replace("drop-shadow(", "") + filter[1] + filter[2]));
+			document.getElementById("box_shadow_h").value = filter[3].replace("px", "");
+			document.getElementById("box_shadow_y").value = filter[4].replace("px", "");
+			document.getElementById("box_shadow_blur").value = filter[5].replace("px)", "");
 			document.getElementById("box_shadow_spread").value = "0";
-		} 	else if (box_shadow != "none") {
-			box_shadow = box_shadow.split(" ");
-			document.getElementById("box_shadow_color").value = rgb2hex((box_shadow[0] + box_shadow[1] + box_shadow[2]));
-			document.getElementById("box_shadow_h").value = box_shadow[3].replace("px", "");
-			document.getElementById("box_shadow_y").value = box_shadow[4].replace("px", "");
-			document.getElementById("box_shadow_blur").value = box_shadow[5].replace("px", "");
-			document.getElementById("box_shadow_spread").value = box_shadow[6].replace("px", "");
-			document.getElementById("box_shadow_inset").checked = box_shadow.indexOf("inset") > -1 ? true : false;
+		} else if (filter.indexOf("blur") == 0) {
+			document.getElementById("filter_type").value = "blur";
+			document.getElementById("filter_value").value = filter.replace("blur(", "").replace("px)", "");
+		} else if (filter.indexOf("hue-rotate") == 0) {
+			document.getElementById("filter_type").value = "hue-rotate";
+			document.getElementById("filter_value").value = filter.replace("hue-rotate(", "").replace("deg)", "");
+		} else if (filter.indexOf("saturate") == 0) {
+			document.getElementById("filter_type").value = "saturate";
+			document.getElementById("filter_value").value = filter.replace("saturate(", "").replace(")", "");
+		} else {
+			let filter_type = filter.substring(0, filter.indexOf("("));
+			document.getElementById("filter_type").value = filter_type;
+			document.getElementById("filter_value").value = filter.replace(filter_type + "(", "").replace("%)", "");
 		}
+	}
+	let box_shadow = element.style.boxShadow;
+	if (box_shadow.length > 0) {
+		box_shadow = box_shadow.split(" ");
+		document.getElementById("box_shadow_color").value = rgb2hex((box_shadow[0] + box_shadow[1] + box_shadow[2]));
+		document.getElementById("box_shadow_h").value = box_shadow[3].replace("px", "");
+		document.getElementById("box_shadow_y").value = box_shadow[4].replace("px", "");
+		document.getElementById("box_shadow_blur").value = box_shadow[5].replace("px", "");
+		document.getElementById("box_shadow_spread").value = box_shadow[6].replace("px", "");
+		document.getElementById("box_shadow_inset").checked = box_shadow.indexOf("inset") > -1 ? true : false;
 	}
 	if (element.style.columnCount) document.getElementById("column_count").value = element.style.columnCount;
 	if (element.style.columnGap) document.getElementById("column_gap").value = element.style.columnGap.replace("px", "");
