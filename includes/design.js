@@ -11,7 +11,6 @@ window.onload = function() {
 			saveDezyn("no");
 		}, parseInt(localStorage.getItem("automatically_save_after")) * 1000);
 	}
-	
 }
 
 let design_id = generateDeisgnId();
@@ -364,9 +363,15 @@ function selectElement() {
 			selected_element = selected_element.parentNode;
 		}
 	}
-
 	
+	if (!selected_element.getAttribute("style") && selected_element.parentNode.localName == "td") {
+		loadFormValues(selected_element.parentNode);
+	} else if (selected_element.getAttribute("style") && selected_element.parentNode.localName == "td") {
+		loadFormValues(selected_element.parentNode);
 		loadFormValues(selected_element);
+	} else {
+		loadFormValues(selected_element);
+	}
 	
 }
 
@@ -1984,13 +1989,17 @@ function setStyle(style, element, value) {
 
 	let styles_mode = selected_section.dataset.styles_mode;
 
-	let selected = selected_element;
-	if (!selected || styles_mode == "box" || styles_mode == "container") {
+	let selected;
+	if (styles_mode == "box" || styles_mode == "container") {
 		selected = selected_section;
-	} else if (selected_content_element && styles_mode == "selection") {
+	} else if (styles_mode == "selection" && selected_content_element) {
 		selected = selected_content_element;
+	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
+		selected = selected_element.parentNode;
+	} else {
+		selected = selected_element;
 	}
-	
+
 	switch (style) {
 		case "top":
 			selected_section.style.top = value + "px";
@@ -2265,7 +2274,7 @@ function setStyle(style, element, value) {
 
 	}
 
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
+	if (styles_mode == "selection" && selected_content_element) {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2273,7 +2282,7 @@ function setStyle(style, element, value) {
 		saved_range.insertNode(selected);
 	}
 
-	if (selected_section.dataset.styles_mode == "container") {
+	if (styles_mode == "container") {
 		styleContainedSections(style, element, value);
 	}
 }
@@ -2321,11 +2330,15 @@ function setRandomStyle(style) {
 
 	let styles_mode = selected_section.dataset.styles_mode;
 	
-	let selected = selected_element;
-	if (!selected || styles_mode == "box" || styles_mode == "container") {
+	let selected;
+	if (styles_mode == "box" || styles_mode == "container") {
 		selected = selected_section;
-	} else if (selected_content_element && styles_mode == "selection") {
+	} else if (styles_mode == "selection" && selected_content_element) {
 		selected = selected_content_element;
+	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
+		selected = selected_element.parentNode;
+	} else {
+		selected = selected_element;
 	}
 
 	let random_color, random_range;
@@ -2623,7 +2636,7 @@ function setTable() {
 		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;
 	}
 	
-	selected_section.dataset.styles_mode = "paragraph";
+	selected_section.dataset.styles_mode = "cell";
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
@@ -2652,7 +2665,7 @@ function setTable() {
 	for (row = 0;row < table_rows; row++) {
 		table = table + "<tr>";
 		for (col = 0; col < table_columns; col++) {
-			table = table + "<td style='" + cell_style + "'>&nbsp;</td>";
+			table = table + "<td style='" + cell_style + "'><div>&nbsp;</div></td>";
 		}
 		table = table + "</tr>";
 	}
@@ -3143,7 +3156,6 @@ function loadFormValues(element) {
 	} else {
 		document.getElementById("editable_section").checked = false;
 	}
-	
 	
 	if (element.style.fontFamily) document.getElementById("font_family").value = element.style.fontFamily.toString().replace('"', "").replace('"', "");
 	if (element.style.fontSize) document.getElementById("font_size").value = element.style.fontSize.replace("px", "");
