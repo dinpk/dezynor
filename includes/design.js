@@ -1999,6 +1999,7 @@ function setStyle(style, element, value) {
 	} else {
 		selected = selected_element;
 	}
+	
 
 	switch (style) {
 		case "top":
@@ -2255,23 +2256,35 @@ function setStyle(style, element, value) {
 				selected.style.filter = "";
 			}
 			break;
-		case "filter":
-			let filter_type = document.getElementById("filter_type").value;
-			let filter_value = document.getElementById("filter_value").value;
-			
-			if (filter_type == "none") {
-				selected.style.filter = "";
-			} else if (filter_type == "blur") {
-				selected.style.filter = filter_type + "(" + filter_value + "px)";
-			} else if (filter_type == "hue-rotate") {
-				selected.style.filter = filter_type + "(" + filter_value + "deg)";
-			} else if (filter_type == "saturate") {
-				selected.style.filter = filter_type + "(" + filter_value + ")";
-			} else {
-				selected.style.filter = filter_type + "(" + filter_value + "%)";
+		case "filterCombined":
+			selected.style.filter = "";
+			let all_filters = "";
+			if (document.getElementById("filter_blur").checked) {
+				all_filters = all_filters + "blur(" + document.getElementById("filter_blur_value").value + "px) ";
 			}
+			if (document.getElementById("filter_brightness").checked) {
+				all_filters = all_filters + "brightness(" + document.getElementById("filter_brightness_value").value + "%) ";
+			}
+			if (document.getElementById("filter_contrast").checked) {
+				all_filters = all_filters + "contrast(" + document.getElementById("filter_contrast_value").value + "%) ";
+			}
+			if (document.getElementById("filter_grayscale").checked) {
+				all_filters = all_filters + "grayscale(" + document.getElementById("filter_grayscale_value").value + "%) ";
+			}
+			if (document.getElementById("filter_hue_rotate").checked) {
+				all_filters = all_filters + "hue-rotate(" + document.getElementById("filter_hue_rotate_value").value + "deg) ";
+			}
+			if (document.getElementById("filter_invert").checked) {
+				all_filters = all_filters + "invert(" + document.getElementById("filter_invert_value").value + "%) ";
+			}
+			if (document.getElementById("filter_saturate").checked) {
+				all_filters = all_filters + "saturate(" + document.getElementById("filter_saturate_value").value + ") ";
+			}
+			if (document.getElementById("filter_sepia").checked) {
+				all_filters = all_filters + "sepia(" + document.getElementById("filter_sepia_value").value + "%) ";
+			}
+			selected.style.filter = all_filters;
 			break;
-
 	}
 
 	if (styles_mode == "selection" && selected_content_element) {
@@ -3267,31 +3280,49 @@ function loadFormValues(element) {
 	if (element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = element.style.borderBottomLeftRadius.replace("px", "");
 	if (element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = element.style.borderBottomRightRadius.replace("px", "");
 	let filter = element.style.filter;
-	document.getElementById("filter_type").value = "none";
-	document.getElementById("filter_value").value = "20";
 	if (filter.length > 0) {
-		if (filter.indexOf("drop-shadow") == 0) {
-			filter = filter.split(" ");
-			document.getElementById("box_shadow_color").value = rgb2hex((filter[0].replace("drop-shadow(", "") + filter[1] + filter[2]));
-			document.getElementById("box_shadow_h").value = filter[3].replace("px", "");
-			document.getElementById("box_shadow_y").value = filter[4].replace("px", "");
-			document.getElementById("box_shadow_blur").value = filter[5].replace("px)", "");
-			document.getElementById("box_shadow_spread").value = "0";
-		} else if (filter.indexOf("blur") == 0) {
-			document.getElementById("filter_type").value = "blur";
-			document.getElementById("filter_value").value = filter.replace("blur(", "").replace("px)", "");
-		} else if (filter.indexOf("hue-rotate") == 0) {
-			document.getElementById("filter_type").value = "hue-rotate";
-			document.getElementById("filter_value").value = filter.replace("hue-rotate(", "").replace("deg)", "");
-		} else if (filter.indexOf("saturate") == 0) {
-			document.getElementById("filter_type").value = "saturate";
-			document.getElementById("filter_value").value = filter.replace("saturate(", "").replace(")", "");
-		} else {
-			let filter_type = filter.substring(0, filter.indexOf("("));
-			document.getElementById("filter_type").value = filter_type;
-			document.getElementById("filter_value").value = filter.replace(filter_type + "(", "").replace("%)", "");
+		filter = filter.split(" ");
+		for (i = 0; i < filter.length; i++) {
+			let current_filter = filter[i];
+			if (current_filter.indexOf("drop-shadow") == 0) {
+				current_filter = current_filter.split(" ");
+				document.getElementById("box_shadow_color").value = rgb2hex((current_filter[0].replace("drop-shadow(", "") + current_filter[1] + current_filter[2]));
+				document.getElementById("box_shadow_h").value = current_filter[3].replace("px", "");
+				document.getElementById("box_shadow_y").value = current_filter[4].replace("px", "");
+				document.getElementById("box_shadow_blur").value = current_filter[5].replace("px)", "");
+				document.getElementById("box_shadow_spread").value = "0";
+			} else if (current_filter.indexOf("blur") == 0) {
+				document.getElementById("filter_blur").checked = true;
+				document.getElementById("filter_blur_value").value = current_filter.replace("blur(", "").replace("px)", "");
+			} else if (current_filter.indexOf("brightness") == 0) {
+				document.getElementById("filter_brightness").checked = true;
+				document.getElementById("filter_brightness_value").value = current_filter.replace("brightness(", "").replace("%)", "");
+			} else if (current_filter.indexOf("contrast") == 0) {
+				document.getElementById("filter_contrast").checked = true;
+				document.getElementById("filter_contrast_value").value = current_filter.replace("contrast(", "").replace("%)", "");
+			} else if (current_filter.indexOf("grayscale") == 0) {
+				document.getElementById("filter_grayscale").checked = true;
+				document.getElementById("filter_grayscale_value").value = current_filter.replace("grayscale(", "").replace("%)", "");
+			} else if (current_filter.indexOf("invert") == 0) {
+				document.getElementById("filter_invert").checked = true;
+				document.getElementById("filter_invert_value").value = current_filter.replace("invert(", "").replace("%)", "");
+			} else if (current_filter.indexOf("sepia") == 0) {
+				document.getElementById("filter_sepia").checked = true;
+				document.getElementById("filter_sepia_value").value = current_filter.replace("sepia(", "").replace("%)", "");
+			} else if (current_filter.indexOf("hue-rotate") == 0) {
+				document.getElementById("filter_hue_rotate").checked = true;
+				document.getElementById("filter_hue_rotate_value").value = current_filter.replace("hue-rotate(", "").replace("deg)", "");
+			} else if (current_filter.indexOf("saturate") == 0) {
+				document.getElementById("filter_saturate").checked = true;
+				document.getElementById("filter_saturate_value").value = current_filter.replace("saturate(", "").replace(")", "");
+			} else {
+				let filter_type = current_filter.substring(0, current_filter.indexOf("("));
+				document.getElementById("filter_type").value = filter_type;
+				document.getElementById("filter_value").value = current_filter.replace(filter_type + "(", "").replace("%)", "");
+			}
 		}
 	}
+
 	let box_shadow = element.style.boxShadow;
 	if (box_shadow.length > 0) {
 		box_shadow = box_shadow.split(" ");

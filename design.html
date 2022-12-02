@@ -642,7 +642,7 @@
 						</tr>
 						<tr>
 							<td>Transparency</td>
-							<td><input id="opacity" type="range" onchange="setStyle('opacity',this);" min="0.1" max="1" step="0.01" value="1"></td>
+							<td><input id="opacity" class="full_width" type="range" onchange="setStyle('opacity',this);" min="0.1" max="1" step="0.01" value="1"></td>
 						</tr>
 						<tr>
 							<td>Show side</td>
@@ -661,16 +661,38 @@
 							<td>
 								<select id="filter_type" onchange="setStyle('filter', this);">
 									<option value="none">None</option>
-									<option value="blur">Blur</option>
-									<option value="brightness">Brightness</option>
 									<option value="contrast">Contrast</option>
 									<option value="grayscale">Grayscale</option>
 									<option value="hue-rotate">Hue</option>
 									<option value="invert">Invert</option>
 									<option value="saturate">Saturate</option>
 									<option value="sepia">Sepia</option>
-								</select> 
-								<input id="filter_value" type="number" value="20" onchange="setStyle('filter', this);">
+								</select><br>
+								
+								Blur<br>
+								<input id="filter_blur" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_blur_value" type="range" min="1" max="100" value="20" onchange="setStyle('filterCombined', this);"><br>
+								Brightness<br>
+								<input id="filter_brightness" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_brightness_value" type="range" min="1" max="400" value="120" onchange="setStyle('filterCombined', this);"><br>
+								Contrast<br>
+								<input id="filter_contrast" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_contrast_value" type="range" min="1" max="400" value="120" onchange="setStyle('filterCombined', this);"><br>
+								Grayscale<br>
+								<input id="filter_grayscale" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_grayscale_value" type="range" min="1" max="100" value="20" onchange="setStyle('filterCombined', this);"><br>
+								Hue-rotate<br>
+								<input id="filter_hue_rotate" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_hue_rotate_value" type="range" min="1" max="360" value="120" onchange="setStyle('filterCombined', this);"><br>
+								Invert<br>
+								<input id="filter_invert" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_invert_value" type="range" min="1" max="100" value="20" onchange="setStyle('filterCombined', this);"><br>
+								Saturate<br>
+								<input id="filter_saturate" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_saturate_value" type="range" min="1" max="100" value="20" onchange="setStyle('filterCombined', this);"><br>
+								Sepia<br>
+								<input id="filter_sepia" type="checkbox" onchange="setStyle('filterCombined', this);"> 
+									<input id="filter_sepia_value" type="range" min="1" max="100" value="20" onchange="setStyle('filterCombined', this);"><br>
 							</td>
 						</tr>
 					</table>	

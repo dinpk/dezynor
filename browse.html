@@ -9,12 +9,7 @@
 		<script src="includes/common.js"></script>
 		<script>
 
-			document.addEventListener('visibilitychange', function(ev) { 
-				let current_folder = localStorage.getItem("current_folder");
-				if (current_folder != "" && document.visibilityState == "visible") {
-					showFolderDezyns(current_folder);
-				}
-			});
+			//document.addEventListener('visibilitychange', function(ev) {});
 
 			window.onload = async function() {
 				loadFolders();
