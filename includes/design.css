@@ -354,6 +354,13 @@ input.width3 {
 	width:75%;
 }
 
+input.filter_range {
+	display:inline;
+	float:right;
+	margin-top:4px;
+	width:180px;
+}
+
 .center {
 	text-align:center;
 }
