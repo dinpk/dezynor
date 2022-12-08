@@ -375,6 +375,23 @@ function selectElement() {
 	
 }
 
+function getSelected() {
+	if (!selected_section) return;
+	
+	let styles_mode = selected_section.dataset.styles_mode;
+	let selected;
+	if (styles_mode == "box" || styles_mode == "container") {
+		selected = selected_section;
+	} else if (styles_mode == "selection" && selected_content_element) {
+		selected = selected_content_element;
+	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
+		selected = selected_element.parentNode;
+	} else {
+		selected = selected_element;
+	}
+	return selected;
+}
+
 function duplicateSection() {
 	
 	if (!(selected_section)) return;
@@ -1989,17 +2006,7 @@ function setStyle(style, element, value) {
 
 	let styles_mode = selected_section.dataset.styles_mode;
 
-	let selected;
-	if (styles_mode == "box" || styles_mode == "container") {
-		selected = selected_section;
-	} else if (styles_mode == "selection" && selected_content_element) {
-		selected = selected_content_element;
-	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
-		selected = selected_element.parentNode;
-	} else {
-		selected = selected_element;
-	}
-	
+	let selected = getSelected();
 
 	switch (style) {
 		case "top":
@@ -2240,6 +2247,10 @@ function setStyle(style, element, value) {
 			}
 			selected.style.textShadow = text_shadow;
 			break;
+		case "textStrokeWidth":
+			selected.style.textStrokeWidth = value + "px";
+		case "textStrokeColor":
+			selected.style.textStrokeColor = value;
 		case "boxShadow":
 			let h = document.getElementById("box_shadow_h").value;
 			let y = document.getElementById("box_shadow_y").value;
@@ -2343,16 +2354,7 @@ function setRandomStyle(style) {
 
 	let styles_mode = selected_section.dataset.styles_mode;
 	
-	let selected;
-	if (styles_mode == "box" || styles_mode == "container") {
-		selected = selected_section;
-	} else if (styles_mode == "selection" && selected_content_element) {
-		selected = selected_content_element;
-	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
-		selected = selected_element.parentNode;
-	} else {
-		selected = selected_element;
-	}
+	let selected = getSelected();
 
 	let random_color, random_range;
 
@@ -2420,10 +2422,7 @@ function removeStyle(style) {
 	
 	saveCurrentState();
 	
-	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
-		selected = selected_section;
-	}
+	let selected = getSelected();
 	
 	switch (style) {
 		case "backgroundColor":
@@ -2463,6 +2462,11 @@ function removeStyle(style) {
 			document.getElementById("text_shadow_blur").value = "0";
 			document.getElementById("text_shadow_color").value = "#000000";
 			break;
+		case "textStroke":
+			document.getElementById("text_stroke_width").value = "0";
+			document.getElementById("text_stroke_color").value = "#000000";
+			selected.style.textStroke = "0px #000000";
+			break;
 		case "boxShadow":
 			selected.style.filter = "";
 			selected.style.boxShadow = "";
@@ -2488,10 +2492,7 @@ function removeStyle(style) {
 function setSectionClass(value) {
 	if (!selected_section) return;
 	
-	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
-		selected = selected_section;
-	}
+	let selected = getSelected();
 	
 	switch (value) {
 		case "clipText":
@@ -2512,10 +2513,7 @@ function setSectionClass(value) {
 function removeSectionClass(value) {
 	if (!selected_section) return;
 
-	let selected = selected_element;
-	if (!selected || selected_section.dataset.styles_mode == "box") {
-		selected = selected_section;
-	}
+	let selected = getSelected();
 
 	switch (value) {
 		case "clipText":
@@ -3202,7 +3200,12 @@ function loadFormValues(element) {
 			document.getElementById("text_shadow_count").value = text_shadow_count;
 		}
 	}
-
+	let text_stroke = element.style.textStroke;
+	if (text_stroke == "") {
+		document.getElementById("text_stroke_width").value = element.textStrokeWidth.replace("px", "");
+		document.getElementById("text_stroke_color").value = rgb2hex(element.style.textStrokeColor);
+	}
+	
 	if (element.style.top) document.getElementById("top").value = element.style.top.replace("px", "");
 	if (element.style.left) document.getElementById("left").value = element.style.left.replace("px", "");
 	if (element.style.width) document.getElementById("width").value = element.style.width.replace("px", "").replace("%", "");
@@ -3315,10 +3318,6 @@ function loadFormValues(element) {
 			} else if (current_filter.indexOf("saturate") == 0) {
 				document.getElementById("filter_saturate").checked = true;
 				document.getElementById("filter_saturate_value").value = current_filter.replace("saturate(", "").replace(")", "");
-			} else {
-				let filter_type = current_filter.substring(0, current_filter.indexOf("("));
-				document.getElementById("filter_type").value = filter_type;
-				document.getElementById("filter_value").value = current_filter.replace(filter_type + "(", "").replace("%)", "");
 			}
 		}
 	}
@@ -3375,7 +3374,9 @@ function loadDefaultFormValues() {
 	document.getElementById("text_shadow_h").value = "0";
 	document.getElementById("text_shadow_y").value = "0";
 	document.getElementById("text_shadow_blur").value = "0";
-	document.getElementById("text_shadow_color").value = "#000000";;
+	document.getElementById("text_shadow_color").value = "#000000";
+	document.getElementById("text_stroke_width").value = "0";
+	document.getElementById("text_stroke_color").value = "#000000";
 
 	document.getElementById("padding_top").value = "0";
 	document.getElementById("padding_right").value = "0";

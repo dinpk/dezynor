@@ -231,6 +231,7 @@ h4#transform_heading {background-color:SaddleBrown;}
 	background-color:#0090fa;
 	width:100%;
 	height:100%;
+	cursor:pointer;
 }
 
 #dash_panel .icon_links address {
@@ -242,12 +243,13 @@ h4#transform_heading {background-color:SaddleBrown;}
 	cursor:pointer;
 }
 
+/*
 #dash_panel .icon_links address img {
 	vertical-align:middle;
 	margin-right:7px;
 	cursor:pointer;
 }
-
+*/
 .section_table {
 	font-family:arial;
 	font-size:12px;
@@ -494,7 +496,6 @@ input.filter_range {
     -webkit-background-clip:text !important;
     background-clip:text !important;
 }
-
 
 
 
