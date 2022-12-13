@@ -213,7 +213,9 @@ function addSection() {
 	selectSection(section_number);
 	setSectionDefaultStyles();
 	section.innerHTML = "<div>&nbsp;</div>";
-	section.dataset.styles_mode = "box";
+	section.dataset.style_mode = "box";
+	section.dataset.align_resize_to = "page";
+	section.dataset.paste_result = "plain";
 	document.getElementById(section_id).focus();
 	loadFormValues(section)
 	alignSection('pageTopLeft');
@@ -378,13 +380,13 @@ function selectElement() {
 function getSelected() {
 	if (!selected_section) return;
 	
-	let styles_mode = selected_section.dataset.styles_mode;
+	let style_mode = selected_section.dataset.style_mode;
 	let selected;
-	if (styles_mode == "box" || styles_mode == "container") {
+	if (style_mode == "box" || style_mode == "container") {
 		selected = selected_section;
-	} else if (styles_mode == "selection" && selected_content_element) {
+	} else if (style_mode == "selection" && selected_content_element) {
 		selected = selected_content_element;
-	} else if (styles_mode == "cell" && selected_element.parentNode.localName == "td") {
+	} else if (style_mode == "cell" && selected_element.parentNode.localName == "td") {
 		selected = selected_element.parentNode;
 	} else {
 		selected = selected_element;
@@ -587,9 +589,19 @@ function toggleEditableSection() {
 	}
 }
 
-function setStylesMode() {
+function setStyleMode() {
 	if (!selected_section) return;
-	selected_section.dataset.styles_mode = document.getElementById("styles_mode").value;
+	selected_section.dataset.style_mode = document.getElementById("style_mode").value;
+}
+
+function setAlignResizeTo() {
+	if (!selected_section) return;
+	selected_section.dataset.align_resize_to = document.getElementById("align_resize_to").value;
+}
+
+function setPasteResult() {
+	if (!selected_section) return;
+	selected_section.dataset.paste_result = document.getElementById("paste_result").value;
 }
 
 function toggleOverflowSection() {
@@ -1020,12 +1032,12 @@ function resizeSection(type) {
 
 	saveCurrentState();
 
-	let align_to = document.getElementById("align_to").value;
+	let align_resize_to = document.getElementById("align_resize_to").value;
 	let element;
 
 	switch (type) {
 		case "fullWidth":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.width = document.getElementById("wrapper").style.width;
 				selected_section.style.left = document.getElementById("wrapper").style.left;
 			} else {
@@ -1033,7 +1045,7 @@ function resizeSection(type) {
 			}
 			break;
 		case "fullHeight":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.height = document.getElementById("wrapper").style.height;
 				selected_section.style.top = document.getElementById("wrapper").style.top;
 			} else {
@@ -1041,7 +1053,7 @@ function resizeSection(type) {
 			}
 			break;
 		case "halfWidth":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
 				selected_section.style.height = document.getElementById("wrapper").style.height;
 				selected_section.style.top = document.getElementById("wrapper").style.top;
@@ -1052,7 +1064,7 @@ function resizeSection(type) {
 			}
 			break;
 		case "halfHeight":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
 				selected_section.style.width = document.getElementById("wrapper").style.width;
 				selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -1063,7 +1075,7 @@ function resizeSection(type) {
 			}
 			break;
 		case "quarter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.width = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2) + "px";
 				selected_section.style.height = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2) + "px";
 				selected_section.style.left = document.getElementById("wrapper").style.left;
@@ -1110,12 +1122,12 @@ function alignSection(type) {
 	saveCurrentState();
 
 	let dimensions = getSectionDimensions(selected_section);
-	let align_to = document.getElementById("align_to").value;
+	let align_resize_to = document.getElementById("align_resize_to").value;
 	let element;
 
 	switch (type) {
 		case "topLeft":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.top = document.getElementById("wrapper").style.top;
 				selected_section.style.left = document.getElementById("wrapper").style.left;
 			} else {
@@ -1124,7 +1136,7 @@ function alignSection(type) {
 			}
 			break;
 		case "topRight":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.top = document.getElementById("wrapper").style.top;
 				let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
 				selected_section.style.left = parseInt(new_left) + "px";
@@ -1137,7 +1149,7 @@ function alignSection(type) {
 			}
 			break;
 		case "bottomLeft":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.left = document.getElementById("wrapper").style.left;
 				let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
 				selected_section.style.top = parseInt(new_top) + "px";
@@ -1151,7 +1163,7 @@ function alignSection(type) {
 		
 			break;
 		case "bottomRight":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
 				selected_section.style.left = parseInt(new_left) + "px";
 				let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", "")) - parseInt(selected_section.style.height.replace("px", ""));
@@ -1168,7 +1180,7 @@ function alignSection(type) {
 			}
 			break;
 		case "topCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.top = document.getElementById("wrapper").style.top;
 				let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 				selected_section.style.left = parseInt(new_left) + "px";
@@ -1180,7 +1192,7 @@ function alignSection(type) {
 			}
 			break;
 		case "rightCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", "")) - parseInt(selected_section.style.width.replace("px", ""));
 				selected_section.style.left = parseInt(new_left) + "px";
 				let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
@@ -1196,7 +1208,7 @@ function alignSection(type) {
 			}
 			break;
 		case "leftCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.left = document.getElementById("wrapper").style.left;
 				let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
 				selected_section.style.top = parseInt(new_top) + "px";
@@ -1208,7 +1220,7 @@ function alignSection(type) {
 			}
 			break;
 		case "bottomCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 				selected_section.style.left = parseInt(new_left) + "px";
 				let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
@@ -1224,7 +1236,7 @@ function alignSection(type) {
 			}
 			break;
 		case "centerCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 				selected_section.style.left = parseInt(new_left) + "px";
 				let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
@@ -1240,7 +1252,7 @@ function alignSection(type) {
 			}
 			break;
 		case "hCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = (parseInt(document.getElementById("wrapper").style.width.replace("px", "")) / 2)   -   (parseInt(selected_section.style.width.replace("px", "")) / 2);
 				selected_section.style.left = parseInt(new_left) + "px";
 			} else {
@@ -1250,14 +1262,14 @@ function alignSection(type) {
 			}
 			break;
 		case "hLeft":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.left = document.getElementById("wrapper").style.left;
 			} else {
 				selected_section.style.left = last_selected_section.style.left;
 			}
 			break;
 		case "hRight":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_left = parseInt(document.getElementById("wrapper").style.width.replace("px", ""))  -   parseInt(selected_section.style.width.replace("px", ""));
 				selected_section.style.left = parseInt(new_left) + "px";
 			} else {
@@ -1268,7 +1280,7 @@ function alignSection(type) {
 			}
 			break;
 		case "vCenter":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_top = (parseInt(document.getElementById("wrapper").style.height.replace("px", "")) / 2)   -   (parseInt(selected_section.style.height.replace("px", "")) / 2);
 				selected_section.style.top = parseInt(new_top) + "px";
 			} else {
@@ -1278,14 +1290,14 @@ function alignSection(type) {
 			}
 			break;
 		case "vTop":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				selected_section.style.top = document.getElementById("wrapper").style.top;
 			} else {
 				selected_section.style.top = last_selected_section.style.top;
 			}
 			break;
 		case "vBottom":
-			if (align_to == "page" || !last_selected_section) {
+			if (align_resize_to == "page" || !last_selected_section) {
 				let new_top = parseInt(document.getElementById("wrapper").style.height.replace("px", ""))   -  parseInt(selected_section.style.height.replace("px", ""));
 				selected_section.style.top = parseInt(new_top) + "px";
 			} else {
@@ -1393,7 +1405,7 @@ function setLayout(layout) {
 	selected_section.style.padding = "0";
 	selected_section.innerHTML = layout;
 	
-	selected_section.dataset.styles_mode = "paragraph";
+	selected_section.dataset.style_mode = "cell";
 	let all_tables = selected_section.querySelectorAll("table");
 	for (t = 0; t < all_tables.length; t++) {
 		let table = all_tables[t];
@@ -1892,7 +1904,7 @@ function applyStyle() {
 
 	saveCurrentState();
 
-	if (selected_section.dataset.styles_mode == "box") {
+	if (selected_section.dataset.style_mode == "box") {
 		setSectionDefaultStyles();
 		let existing_styles = selected_section.getAttribute("style");
 		selected_section.setAttribute("style", existing_styles + selected_styles);
@@ -2004,7 +2016,7 @@ function setStyle(style, element, value) {
 
 	if (element && !value) value = element.value;
 
-	let styles_mode = selected_section.dataset.styles_mode;
+	let style_mode = selected_section.dataset.style_mode;
 
 	let selected = getSelected();
 
@@ -2298,7 +2310,7 @@ function setStyle(style, element, value) {
 			break;
 	}
 
-	if (styles_mode == "selection" && selected_content_element) {
+	if (style_mode == "selection" && selected_content_element) {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2306,7 +2318,7 @@ function setStyle(style, element, value) {
 		saved_range.insertNode(selected);
 	}
 
-	if (styles_mode == "container") {
+	if (style_mode == "container") {
 		styleContainedSections(style, element, value);
 	}
 }
@@ -2352,7 +2364,7 @@ function setRandomStyle(style) {
 	
 	saveCurrentState();
 
-	let styles_mode = selected_section.dataset.styles_mode;
+	let style_mode = selected_section.dataset.style_mode;
 	
 	let selected = getSelected();
 
@@ -2401,7 +2413,7 @@ function setRandomStyle(style) {
 			break;
 	}	
 
-	if (selected_content_element && selected_section.dataset.styles_mode == "selection") {
+	if (selected_content_element && selected_section.dataset.style_mode == "selection") {
 	    let selection = window.getSelection();
 		selection.removeAllRanges();
 		selection.addRange(saved_range);
@@ -2409,7 +2421,7 @@ function setRandomStyle(style) {
 		saved_range.insertNode(selected);
 	}
 
-	if (selected.dataset.styles_mode == "container") {
+	if (selected.dataset.style_mode == "container") {
 		styleContainedSections(style, null, random_color);
 	}	
 }
@@ -2573,7 +2585,7 @@ async function uploadImage(element) {
 	if (!(selected_section)) return;
 	
 	let selected = selected_element;
-	if (!selected || (selected && selected.localName != "td") || selected_section.dataset.styles_mode == "box") {
+	if (!selected || (selected && selected.localName != "td") || selected_section.dataset.style_mode == "box") {
 		selected = selected_section;
 	}
 
@@ -2647,7 +2659,7 @@ function setTable() {
 		if (!confirm("The selected box already contains a table,\ndo you want to regenerate the table?")) return;
 	}
 	
-	selected_section.dataset.styles_mode = "cell";
+	selected_section.dataset.style_mode = "cell";
 	
 	let table_columns = parseInt(document.getElementById("table_columns").value);
 	let table_rows = parseInt(document.getElementById("table_rows").value);
@@ -3153,10 +3165,12 @@ function loadFormValues(element) {
 	loadDefaultFormValues();
 
 	if (!selected_section) return;
-	if (selected_section.dataset.styles_mode == "box" || !element.getAttribute("style")) element = selected_section;
+	if (selected_section.dataset.style_mode == "box" || !element.getAttribute("style")) element = selected_section;
 
 	document.getElementById("container_section").checked = selected_section.dataset.contained_sections ? true : false;
-	document.getElementById("styles_mode").value = selected_section.dataset.styles_mode;
+	document.getElementById("style_mode").value = selected_section.dataset.style_mode;
+	document.getElementById("align_resize_to").value = selected_section.dataset.align_resize_to;
+	document.getElementById("paste_result").value = selected_section.dataset.paste_result;
 	if (selected_section.style.overflow == "visible") {
 		document.getElementById("overflow_section").checked = true;
 	} else {
