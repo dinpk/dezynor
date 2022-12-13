@@ -1,17 +1,17 @@
-# graphic-designer
+# Dezynor
 
-### To run graphic-designer locally:
+#### To run Dezynor locally:
 
 1. Download and install [Lighttpd](https://www.lighttpd.net/download/)
 
-2. Download graphic-designer and put under the following folder:
+2. Download Dezynor and put under 'htdocs' folder:
 
-![htdocs folder](https://i.ibb.co/fFhwrrJ/htdocs.png)
+![htdocs folder](https://i.ibb.co/HVVSgwy/htdocs.png)
 
 3. Run the server:
 
-![Lighttpd](https://i.ibb.co/HVzV2Pc/lighttpd.png)
+![Lighttpd](https://i.ibb.co/P1S8WQm/lighttpd.png)
 
-4. Run graphic-designer:
+4. Run Dezynor:
 
-![graphic-designer](https://i.ibb.co/SdXwBVb/graphic-designer.png)
+![Dezynor](https://i.ibb.co/P4XjkkW/dezynor.png)
