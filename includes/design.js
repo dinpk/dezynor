@@ -1510,6 +1510,11 @@ function hidePopupPanel() {
 	}
 }
 
+
+function insertSymbol(symbol) {
+	document.execCommand("insertHTML", false, symbol);	
+}
+
 function splitSectionOnSpaces() {
 	if (!(selected_section)) return;
 	
@@ -3651,6 +3656,8 @@ document.onkeyup = function(e) {
 		let element = document.getElementById("word_spacing");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("word_spacing_change"));
 		element.onchange();
+	} else if (e.ctrlKey && key == keyCode.SPACE) {
+		insertSymbol(' ');
 	} else if (e.altKey && key == keyCode.DELETE) {
 		removeSection();
 	} else if (e.altKey && key == keyCode.SUBTRACT) {
