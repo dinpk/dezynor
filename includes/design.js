@@ -1,4 +1,5 @@
 window.onload = function() {
+	delay(500);
 	loadSelectFolders();
 	loadSelectFonts();
 	loadSelectStyles();
@@ -166,21 +167,6 @@ function hideHandles() {
 }
 
 function showHandles() {
-	
-	/*
-	let transform1 = parseInt(document.getElementById("transform_degree1").value);
-	let transform2 = parseInt(document.getElementById("transform_degree2").value);
-	if (transform1 > 0 || transform2 > 0) {
-		selected_section.style.resize = "both";
-		selected_section.style.overflow = "auto";
-		hideHandles();
-		move.style.visibility = "visible";
-		return;
-	} else {
-		selected_section.style.resize = "none";
-		selected_section.style.overflow = "visible";
-	}
-	*/
 	
 	assignHandles();
 		
@@ -993,36 +979,6 @@ function reAlignSectionHandles() {
 
 	resize_center_bottom.style.top =  section_top + section_height - 5 + "px";
 	resize_center_bottom.style.left = section_left + (section_width / 2) - 5 + "px";
-
-	/*
-	if (selected_section.style.transform.indexOf("rotate") > -1) {
-		let center_x = section_left + (section_width/2);
-		let center_y = section_top + (section_height/2);
-		let angle = parseInt(selected_section.style.transform.replace("rotate(", "").replace("deg)", ""));
-		//angle = -(angle);
-		
-		//resize_top_left_x =    center_x    -     (((section_width/2) * Math.cos(7))     -     ((section_height/2) * Math.sin(7)));
-		//resize_top_left_y =    center_y    -     (((section_width/2) * Math.sin(7))     +     ((section_height/2) * Math.cos(7)));
-		//console.log("center_x:" + center_x + " center_y:" + center_y + " Angle:" + angle);
-		//console.log("resize_top_left_y:" + resize_top_left_y + " resize_top_left_x:" + resize_top_left_x);
-	
-		
-		let x = parseInt(resize_bottom_left.style.left);
-		let y = parseInt(resize_bottom_left.style.top);
-	
-		let rotated_x = (x * Math.cos(angle))  - (y * Math.sin(angle));
-		let rotated_y = (x * Math.sin(angle)) + (y * Math.cos(angle));
-		console.log(x, y, rotated_x, rotated_y, angle);
-		resize_top_left.style.top = rotated_x + "px";
-		resize_top_left.style.left = rotated_y + "px";
-		
-		console.log(`SectionTop:${section_top} SectionLeft:${section_left}`);
-		console.log(`CenterX:${center_x} CenterY:${center_y} Angle:${angle} Width:${section_width} Height:${section_height}`);
-	}
-	*/
-	
-	
-		
 
 }
 
@@ -3302,6 +3258,14 @@ function loadFormValues(element) {
 	if (element.style.borderBottomLeftRadius) document.getElementById("border_radius3").value = element.style.borderBottomLeftRadius.replace("px", "");
 	if (element.style.borderBottomRightRadius) document.getElementById("border_radius4").value = element.style.borderBottomRightRadius.replace("px", "");
 	let filter = element.style.filter;
+	document.getElementById("filter_blur").checked = false;
+	document.getElementById("filter_brightness").checked = false;
+	document.getElementById("filter_contrast").checked = false;
+	document.getElementById("filter_grayscale").checked = false;
+	document.getElementById("filter_invert").checked = false;
+	document.getElementById("filter_sepia").checked = false;
+	document.getElementById("filter_hue_rotate").checked = false;
+	document.getElementById("filter_saturate").checked = false;
 	if (filter.length > 0) {
 		filter = filter.split(" ");
 		for (i = 0; i < filter.length; i++) {
