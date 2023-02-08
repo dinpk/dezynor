@@ -211,19 +211,20 @@ h4#transform_heading {background-color:SaddleBrown;}
 #dash_panel footer article address {
 	float:left;
 	margin:3px;
-	width:36px;
+	min-width:36px;
 	height:36px;
-	cursor:pointer;
 }
 #dash_panel footer article address table {
 	width:100%;
 	height:100%;
+	cursor:pointer;
 }
 
 #dash_panel footer article address td {
 	border:1px solid #0090fa;
 	padding:0;
 	line-height:0;
+		cursor:pointer;
 }
 
 #dash_panel footer article address .shape {
