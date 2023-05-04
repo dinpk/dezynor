@@ -392,13 +392,11 @@
 						<tr>
 							<td>Show side</td>
 							<td>
-								<select id="show_section_side" onchange="setSectionClass('showSectionSide');">
-									<option value="show_all">all</option>
-									<option value="show_top">top</option>
-									<option value="show_bottom">bottom</option>
-									<option value="show_left">left</option>
-									<option value="show_right">right</option>
-								</select>
+								<button onclick="setSectionClass('showSectionSide', 'show_all');" title="Show All Sides">✣</button> 
+								<button onclick="setSectionClass('showSectionSide', 'show_top');" title="Show Top Side">⮟</button> 
+								<button onclick="setSectionClass('showSectionSide', 'show_bottom');" title="Show Bottom Side">⮝</button> 
+								<button onclick="setSectionClass('showSectionSide', 'show_left');" title="Show Left Side">⮞</button> 
+								<button onclick="setSectionClass('showSectionSide', 'show_right');" title="Show Right Side">⮜</button> 
 							</td>
 						</tr>
 					</table>	
@@ -412,6 +410,8 @@
 								<input id="upload_image" type="file" accept="image/*" onchange="uploadImage(this);" style="display:none;">
 								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> or 
 								<button onclick="setStyle('backgroundImageURL',this);" title="Alt + Numpad .">URL</button> 
+								<button onclick="writeToClipBoard('imageURL');" title="Copy Image URL">cc</button>
+								&nbsp; 
 								<button id="remove_image" onclick="removeStyle('backgroundImage');" title="Remove Image">x</button>
 							</td>
 						</tr>

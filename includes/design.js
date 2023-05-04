@@ -1,5 +1,5 @@
 window.onload = function() {
-	delay(500);
+	delay(1000);
 	loadSelectFolders();
 	loadSelectFonts();
 	loadSelectStyles();
@@ -250,6 +250,10 @@ function selectSection(counter) {
 	resize_center_left.setAttribute("onmousedown", "onMouseDown4ResizeCenterLeft('" + counter + "');");
 	resize_center_top.setAttribute("onmousedown", "onMouseDown4ResizeCenterTop('" + counter + "');");
 	resize_center_bottom.setAttribute("onmousedown", "onMouseDown4ResizeCenterBottom('" + counter + "');");
+
+	if (!selected_section.dataset.style_mode) selected_section.dataset.style_mode = "box";
+	if (!selected_section.dataset.align_resize_to) selected_section.dataset.align_resize_to = "page";
+	if (!selected_section.dataset.paste_result) selected_section.dataset.paste_result = "plain";
 
 	selected_section.style.outline = "4px dashed yellow"
 	colorable_element = selected_section;
@@ -631,7 +635,7 @@ function setContainerSection(section) {
 			let section_left = parseInt(this_section.style.left.replace("px", ""));
 			let section_bottom = parseInt(this_section.style.top.replace("px", "")) + section_height;
 			let section_right = parseInt(this_section.style.left.replace("px", "")) + section_width;
-			if ((section_top > top && section_bottom < bottom)    &&   (section_left > left && section_right < right)) {
+			if (section_top >= top    &&    section_bottom <= bottom     &&   section_left >= left     &&    section_right <= right) {
 				sections_list = sections_list + this_section.id + " ";
 			}
 		}
@@ -690,6 +694,21 @@ function pasteText(e) {
 	selection.deleteFromDocument();
 	selection.getRangeAt(0).insertNode(data_element);
 }
+
+
+function writeToClipBoard(class_case) {
+	if (!selected_section) return;
+	
+	let selected = getSelected();
+	
+	switch (class_case) {
+		case "imageURL":
+			let image_url = selected.style.backgroundImage.replace('url("', '').replace('")', '');
+			navigator.clipboard.writeText(image_url);
+			break;
+	}
+}
+
 
 function onMouseDown4Move(counter) {
 
@@ -2181,6 +2200,7 @@ function setStyle(style, element, value) {
 			selected.style.backgroundImage = gradient_type + "(" + gradient_direction + ", " + color1 + ", " + color2 + ", " + color3 + ", " + color4 + ")";
 			break;
 		case "backgroundImageURL":
+			selected.dataset.image_key = "";
 			let image_url = prompt("Provide an image URL");
 			if (!image_url || image_url.trim().length == 0) break;
 			selected.style.backgroundImage = "url(" + image_url + ")";
@@ -2462,12 +2482,15 @@ function removeStyle(style) {
 	
 }
 
-function setSectionClass(value) {
+
+
+
+function setSectionClass(class_case, option) {
 	if (!selected_section) return;
 	
 	let selected = getSelected();
 	
-	switch (value) {
+	switch (class_case) {
 		case "clipText":
 			selected.classList.add("clip_text");
 			break;
@@ -2476,8 +2499,8 @@ function setSectionClass(value) {
 			selected.classList.remove("show_right");
 			selected.classList.remove("show_top");
 			selected.classList.remove("show_bottom");
-			let show_side = document.getElementById("show_section_side").value;
-			if (show_side != "show_all") selected.classList.add(show_side);
+			selected.classList.remove("show_all");
+			selected.classList.add(option);
 			break;
 	}
 }
