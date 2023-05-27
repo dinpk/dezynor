@@ -675,8 +675,9 @@ function pasteText(e) {
 	let paste_result = document.getElementById("paste_result").value;
 	if (paste_result == "plain") {
 		let text = (e.originalEvent || e).clipboardData.getData('text/plain');
-		document.execCommand("insertHTML", false, text); 
+		document.execCommand("insertText", false, text); 
 		return;
+/*
 	} else if (paste_result == "plain_with_lines") {
 		data = data.replaceAll("\n","");
 		data = data.replaceAll("</p>","\n");	
@@ -686,7 +687,8 @@ function pasteText(e) {
 		data = data.replace(/(<([^>]+)>)/gi, "");
 		data = data.replaceAll("\n", "</div><div>");
 		data = "<div>" + data + "</div>";
-	} else if (paste_result == "html_without_styles") {
+*/
+	} else if (paste_result == "html") {
 		data = data.replace(/<\s*(\w+).*?>/ig, '<$1>');
 	}
 	let data_element = document.createElement("div");
