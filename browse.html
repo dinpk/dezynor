@@ -86,19 +86,17 @@
 					alert("'default' folder can not be deleted.");
 					return;
 				}
+
+				if (confirm("WARNING!\n\nThe folder '" + folder_name + "' and all the designs in it will be deleted\n\nDo you want to delete it?")) {
 				
-				let all_designs = await idbGetAllItems("dezynor_designs");
-				for (i = 0; i < all_designs.length; i++) {
-					let design_key = all_designs[i].design_key;
-					let design_folder = all_designs[i].value.folder;
-					
-					if (design_folder == folder_name) {
-						alert("Folder '" + folder_name + "' is not empty");
-						return;
+					let all_designs = await idbGetAllItems("dezynor_designs");
+					for (i = 0; i < all_designs.length; i++) {
+						let design_key = all_designs[i].design_key;
+						let design_folder = all_designs[i].value.folder;
+						if (design_folder == folder_name) {
+							await idbRemoveItem("dezynor_designs", design_key);
+						}
 					}
-				}
-						
-				if (confirm("Do you really want to delete folder '" + folder_name + "'?")) {
 					
 					let folders = await idbGetItem("dezynor_settings", "folders");
 					let index = folders.indexOf(folder_name);
@@ -108,6 +106,7 @@
 						loadFolders();
 						showMessage("Folder '" + folder_name + "' deleted successfully", "Red");
 						document.getElementById("folder_heading").innerHTML = "";
+						document.getElementById("designs").innerHTML = "";
 					}
 				}
 

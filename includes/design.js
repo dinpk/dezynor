@@ -3586,6 +3586,11 @@ document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
 
 	if (key == keyCode.ESCAPE) {
+		if (document.getElementById("dash_panel_toggle").innerText == "►") {
+			document.getElementById("dash_panel_toggle").style.visibility = "hidden";
+		} else {
+			document.getElementById("dash_panel_toggle").style.visibility = "visible";
+		}
 		toggleDashPanel();
 	} else if (key == keyCode.INSERT) {
 		saveDezyn();
