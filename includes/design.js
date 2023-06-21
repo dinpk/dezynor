@@ -693,8 +693,13 @@ function writeToClipBoard(class_case) {
 	switch (class_case) {
 		case "imageURL":
 			let image_url = selected.style.backgroundImage.replace('url("', '').replace('")', '');
-			navigator.clipboard.writeText(image_url);
+			if (image_url.indexOf("blob") > -1) {
+				showMessage("Only external image links can be copied.", "Chocolate");
+			} else {
+				navigator.clipboard.writeText(image_url);
+			}
 			break;
+			
 	}
 }
 

@@ -62,8 +62,9 @@
 
 				
 				let new_folder = prompt("Enter new folder name");
+				new_folder = new_folder.replace(/[^a-zA-Z ]/g, "");
+
 				if (!new_folder || new_folder.trim().length == 0) return;
-				
 				
 				new_folder = new_folder.replaceAll(" ", "-");
 				
@@ -122,6 +123,7 @@
 				// rename folder
 				
 				let new_folder_name = prompt("Enter new folder name");
+				new_folder_name = new_folder_name.replace(/[^a-zA-Z ]/g, "");
 				if (!new_folder_name || new_folder_name.trim().length == 0) return;
 				
 				new_folder_name = new_folder_name.replaceAll(" ", "-");
