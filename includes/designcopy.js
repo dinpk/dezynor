@@ -201,7 +201,7 @@ function addSection() {
 	section.innerHTML = "<div>&nbsp;</div>";
 	section.dataset.style_mode = "box";
 	section.dataset.align_resize_to = "page";
-	section.dataset.paste_result = localStorage.getItem("paste_result");
+	section.dataset.paste_result = "plain";
 	document.getElementById(section_id).focus();
 	loadFormValues(section)
 	alignSection('pageTopLeft');
@@ -670,11 +670,24 @@ function pasteText(e) {
 		return;
 	}
 	data = data.replace(/\s/g, " "); // hard space
+
+	//let paste_result = localStorage.getItem("paste_result");
 	let paste_result = document.getElementById("paste_result").value;
 	if (paste_result == "plain") {
 		let text = (e.originalEvent || e).clipboardData.getData('text/plain');
 		document.execCommand("insertText", false, text); 
 		return;
+/*
+	} else if (paste_result == "plain_with_lines") {
+		data = data.replaceAll("\n","");
+		data = data.replaceAll("</p>","\n");	
+		data = data.replaceAll("</div>","\n");	
+		data = data.replaceAll("</td>","\n");	
+		data = data.replaceAll("<br>","\n");	
+		data = data.replace(/(<([^>]+)>)/gi, "");
+		data = data.replaceAll("\n", "</div><div>");
+		data = "<div>" + data + "</div>";
+*/
 	} else if (paste_result == "html") {
 		data = data.replace(/<\s*(\w+).*?>/ig, '<$1>');
 	}
@@ -1862,7 +1875,6 @@ async function loadDezyn() {
 		addHandles();
 		addSection();
 	}
-	
 }
 
 function applyStyle() {
@@ -3280,18 +3292,16 @@ function loadFormValues(element) {
 	document.getElementById("filter_hue_rotate").checked = false;
 	document.getElementById("filter_saturate").checked = false;
 	if (filter.length > 0) {
-		filter = filter.split(" "); // * Find a way to split when there is a drop-shadow filter in the list
+		filter = filter.split(" ");
 		for (i = 0; i < filter.length; i++) {
 			let current_filter = filter[i];
 			if (current_filter.indexOf("drop-shadow") == 0) {
-				/*
 				current_filter = current_filter.split(" ");
 				document.getElementById("box_shadow_color").value = rgb2hex((current_filter[0].replace("drop-shadow(", "") + current_filter[1] + current_filter[2]));
 				document.getElementById("box_shadow_h").value = current_filter[3].replace("px", "");
 				document.getElementById("box_shadow_y").value = current_filter[4].replace("px", "");
 				document.getElementById("box_shadow_blur").value = current_filter[5].replace("px)", "");
 				document.getElementById("box_shadow_spread").value = "0";
-				*/
 			} else if (current_filter.indexOf("blur") == 0) {
 				document.getElementById("filter_blur").checked = true;
 				document.getElementById("filter_blur_value").value = current_filter.replace("blur(", "").replace("px)", "");
