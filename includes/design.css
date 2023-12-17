@@ -19,6 +19,8 @@ a {
 body {
 	margin:20px;
 	position:relative;
+	border-right:400px solid white;
+	width:max-content;
 }
 
 
@@ -421,7 +423,7 @@ input.filter_range {
 
 #wrapper {
 	position:relative;
-	margin-bottom:50px;
+	margin-bottom:80px;
 	z-index:0;
 }
 

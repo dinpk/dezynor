@@ -9,48 +9,69 @@
 		<script src="includes/filesaver_min_2_0_0.js"></script>
 		<script>
 
-
 			let total_files = 0;
 			let total_processed = 0;
 
-
 			async function exportData() {
+			
+				let all_designs = [];
+				let all_images = [];
+				let all_fonts = [];
+				let all_styles = [];
+				let all_settings = [];
 
+				let file_name_part = "";
+				let zip_items = new JSZip();
+
+				if (document.getElementById("chk_designs").checked) {
+					all_designs = await idbGetAllItems("dezynor_designs");
+					for (i = 0; i < all_designs.length; i++) {
+						zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
+					}
+					file_name_part = file_name_part + "designs-";
+				}
+				
+				if (document.getElementById("chk_styles").checked) {
+					all_styles = await idbGetAllItems("dezynor_styles");
+					for (i = 0; i < all_styles.length; i++) {
+						zip_items.file(all_styles[i].style_key + ".backup", JSON.stringify(all_styles[i].value));
+					}
+					file_name_part = file_name_part + "styles-";
+				}
+				
+				if (document.getElementById("chk_images").checked) {
+					all_images = await idbGetAllItems("dezynor_images");					
+					for (i = 0; i < all_images.length; i++) {
+						zip_items.file(all_images[i].image_key + ".backup", all_images[i].value);
+					}
+					file_name_part = file_name_part + "images-";
+				}
+				
+				if (document.getElementById("chk_fonts").checked) {
+					all_fonts = await idbGetAllItems("dezynor_fonts");
+					for (i = 0; i < all_fonts.length; i++) {
+						zip_items.file("font-" + all_fonts[i].font_key + ".backup", all_fonts[i].value);
+					}
+					file_name_part = file_name_part + "fonts-";
+				}
+
+				if (document.getElementById("chk_settings").checked) {
+					all_settings = await idbGetAllItems("dezynor_settings");
+					zip_items.file("settings.backup", JSON.stringify(all_settings));
+					zip_items.file("localstorage.backup", JSON.stringify(localStorage));
+					file_name_part = file_name_part + "settings-";
+				}
+
+				
+				if (Object.keys(zip_items.files).length == 0) return;
+				
 				let progress_bar = document.getElementById("progress_bar");
 				progress_bar.style.visibility = "visible";
 				
-				let all_images = await idbGetAllItems("dezynor_images");
-				let all_settings = await idbGetAllItems("dezynor_settings");
-				let all_designs = await idbGetAllItems("dezynor_designs");
-				let all_styles = await idbGetAllItems("dezynor_styles");
-				let all_fonts = await idbGetAllItems("dezynor_fonts");
 				total_files = all_images.length + all_designs.length + all_styles.length + all_fonts.length + all_settings.length;
+				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items, please wait...</div>";
 				
-				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items (designs, styles, images, fonts, settings etc.), please wait...</div>";
-
-				let zip_items = new JSZip();
-
-				zip_items.file("settings.backup", JSON.stringify(all_settings));
-
-				zip_items.file("localstorage.backup", JSON.stringify(localStorage));
-			
-				for (i = 0; i < all_designs.length; i++) {
-					zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
-				}
-
-				for (i = 0; i < all_styles.length; i++) {
-					zip_items.file(all_styles[i].style_key + ".backup", JSON.stringify(all_styles[i].value));
-				}
-
-				for (i = 0; i < all_images.length; i++) {
-					zip_items.file(all_images[i].image_key + ".backup", all_images[i].value);
-				}
-
-				for (i = 0; i < all_fonts.length; i++) {
-					zip_items.file("font-" + all_fonts[i].font_key + ".backup", all_fonts[i].value);
-				}
-				
-				let file_name = "dezynor-backup-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+				let file_name = "dezynor-backup-" + file_name_part + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 				zip_items.generateAsync({type:"blob",
 					compression: "DEFLATE",
 					compressionOptions: {
@@ -206,12 +227,23 @@
 		<div id="message"></div>
 		<div id="progress_bar" class="padleft20" style="visibility:hidden"><progress></progress></div>				
 		<div class="pad20">
-			<input type="button" value="Export data" onclick="exportData();"> designs, images, fonts, styles, and settings
-			<br><br>
-			<br><br>
-			<input type="button" value="Clear database" onclick="deleteDatabase();"> erase everything, start from scratch
-			<br><br>
-			<br><br>
+
+			<input type="checkbox" id="chk_designs" checked> Designs<br>
+			<input type="checkbox" id="chk_images" checked> Images<br>
+			<input type="checkbox" id="chk_fonts" checked> Fonts<br>
+			<input type="checkbox" id="chk_styles" checked> Styles<br>
+			<input type="checkbox" id="chk_settings" checked> Settings<br>
+			
+			<br>
+			
+			<input type="button" value="Export data" onclick="exportData();">
+			
+			<br><br><hr><br><br>
+			
+			<input type="button" value="Clear database" onclick="deleteDatabase();"> erase everything, start from scratch<br>
+			
+			<br><br><hr><br><br>
+			
 			<input type="file" name="import_files" id="import_files" accept=".backup,.png" onchange="importData();" multiple style="display:none;">
 			<input type="button" value="Import data" onclick="document.getElementById('import_files').click();"> upload unzipped .backup files
 			

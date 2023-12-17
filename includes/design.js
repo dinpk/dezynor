@@ -3114,7 +3114,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.columnRuleColor = "rgb(100,100,100)";
 	selected_section.style.columnRuleWidth = "1px";
 	selected_section.style.columnRuleStyle = "solid";
-	selected_section.style.orphans = "1";
+	selected_section.style.orphans = "0";
 	selected_section.style.transform = "skew(0deg, 0deg)";
 	selected_section.style.transformOrigin = "center center";
 	selected_section.style.clipPath = "";
@@ -3579,6 +3579,7 @@ document.onkeydown = function(e){
 
 document.onkeyup = function(e) {
 	let key = e.which || e.keyCode;
+	//console.log(key);
 
 	if (key == keyCode.ESCAPE) {
 		if (document.getElementById("dash_panel_toggle").innerText == "►") {
@@ -3629,11 +3630,11 @@ document.onkeyup = function(e) {
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("line_height_change"));
 		element.onchange();
-	} else if (key == keyCode.F11) {
+	} else if (e.ctrlKey && key == keyCode.OPEN_BRACKET) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) - parseInt(localStorage.getItem("font_size_change"));
 		element.onchange();
-	} else if (key == keyCode.F12) {
+	} else if (e.ctrlKey && key == keyCode.CLOSE_BRACKET) {
 		let element = document.getElementById("font_size");
 		element.value = parseInt(element.value) + parseInt(localStorage.getItem("font_size_change"));
 		element.onchange();
