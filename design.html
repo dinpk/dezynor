@@ -13,7 +13,7 @@
 	<body>
 
 		<div id="cover">
-			<div id="wrapper"></div>
+			<div id="wrapper" class="wrapper"></div>
 		</div>
 		
 		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="ESC">►</div>
@@ -37,6 +37,10 @@
 		</div>
 
 		<div id="options_bar">
+			
+			<input id="wrapper_number" type="number" onchange="changeWrapper()" value="1" min="1" max="10" size="2"> / 
+			<label id="total_wrappers" value="1"></label>
+			
 			<img src="images/icon_undo.png" onclick="revertToLastState();" title="Last State">
 			<span>
 				Select 

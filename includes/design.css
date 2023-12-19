@@ -427,6 +427,10 @@ input.filter_range {
 	z-index:0;
 }
 
+.wrapper {
+	display:none;
+}
+
 #wrapper_bg1,
 #wrapper_bg2 {
 	position: absolute;
