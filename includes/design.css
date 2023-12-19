@@ -509,11 +509,22 @@ input.filter_range {
 @media print {
 
 	#dash_panel_toggle,
-	#dash_panel,
-	span {
+	#dash_panel_wrapper,
+	#icons_bar,
+	#options_bar,
+	#popup_panel,
+	#move,
+	#resize_bottom_right,
+	#resize_top_right,
+	#resize_bottom_left,
+	#resize_top_left,
+	#resize_center_right,
+	#resize_center_left,
+	#resize_center_top,
+	#resize_center_bottom {
 		display:none;
 	}
-	
+
 	section {
 		outline:none !important;
 	}
