@@ -2738,7 +2738,7 @@ function setTable() {
 	for (row = 0;row < table_rows; row++) {
 		table = table + "<tr>";
 		for (col = 0; col < table_columns; col++) {
-			table = table + "<td style='" + cell_style + "'><div>&nbsp;</div></td>";
+			table = table + "<td style='" + cell_style + "'>&nbsp;</td>";
 		}
 		table = table + "</tr>";
 	}

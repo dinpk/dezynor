@@ -19,8 +19,8 @@
 		<div id="dash_panel_toggle" onclick="toggleDashPanel();" title="ESC">►</div>
 
 		<div id="icons_bar">
-			<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
 			<img src="images/menu_icon_files.png" onclick="showSectionPanel('utility_section');" title="Design File"> 
+			<img src="images/menu_icon_box.png" onclick="showSectionPanel('box_section');" title="Box"> 
 			<img src="images/menu_icon_page.png" onclick="showSectionPanel('wrapper_section');" title="Page">
 			<img src="images/menu_icon_size_position.png" onclick="showSectionPanel('size_section');" title="Size and Position">
 			<img src="images/menu_icon_font_spacing.png" onclick="showSectionPanel('font_section');" title="Font and Spacing">
@@ -38,12 +38,16 @@
 
 		<div id="options_bar">
 			
-			<input id="wrapper_number" type="number" onchange="changeWrapper()" value="1" min="1" max="10" size="2"> / 
-			<label id="total_wrappers" value="1"></label>
-			
-			<img src="images/icon_undo.png" onclick="revertToLastState();" title="Last State">
 			<span>
-				Select 
+				Page 
+				<input id="wrapper_number" type="number" onchange="changeWrapper()" value="1" min="1" max="10" size="2"> / 
+				<label id="total_wrappers" value="1"></label>
+			</span>
+			<span>
+				<img src="images/icon_undo.png" onclick="revertToLastState();" title="Last State">
+			</span>
+			<span>
+				Select box
 				<button onclick="selectSectionNextPrev('prev');">◄</button> 
 				<button onclick="selectSectionNextPrev('next');">►</button>
 			</span>
@@ -62,7 +66,7 @@
 				<button onclick="setSelectionPlain();">Selection</button> 
 			</span>
 			<span>
-				Styles mode
+				Style 
 				<select id="style_mode" onchange="setStyleMode();">
 					<option value="box">Box</option>
 					<option value="cell">Cell</option>
@@ -72,7 +76,7 @@
 				</select>
 			</span>
 			<span>
-				Align / Resize
+				Align / Resize to
 				<select id="align_resize_to" onchange="setAlignResizeTo();">
 					<option value="page">Page</option>
 					<option value="section">Previous box</option>
