@@ -694,7 +694,7 @@ function setContainerSection(section) {
 	let right = dimensions.right
 	
 	let sections_list = "";
-	let all_sections = document.querySelectorAll("section");
+	let all_sections = document.querySelectorAll("#wrapper section");
 	for (i = 0; i < all_sections.length; i++) {
 		let this_section = all_sections[i];
 		if (this_section !== section) {
