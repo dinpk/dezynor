@@ -1961,6 +1961,7 @@ function applyStyle() {
 	}
 }
 
+/*
 
 async function loadSelectFolders() {
 	let select_folders = document.getElementById("select_folders");
@@ -1977,7 +1978,7 @@ async function loadSelectFolders() {
 		select_folders.add(option);
 	}
 }
-
+*/
 
 async function loadSelectStyles() {
 	let styles = await idbGetAllItems("dezynor_styles");

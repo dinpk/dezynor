@@ -7,6 +7,8 @@
 		<link rel="stylesheet" href="includes/styles.css">
 		<script src="includes/indexeddb.js"></script>
 		<script src="includes/common.js"></script>
+		<script src="includes/jszip_min_3_7_1.js"></script>
+		<script src="includes/filesaver_min_2_0_0.js"></script>
 		<script>
 
 			//document.addEventListener('visibilitychange', function(ev) {});
@@ -219,8 +221,11 @@
 					
 					let folder_icons = " <img src='images/icon_delete_folder.png' onclick=\"deleteFolder('" + folder + "');\" title='Delete this folder'>";
 					folder_icons = folder_icons + " <img src='images/icon_rename_folder.png' onclick=\"renameFolder('" + folder + "');\" title='Rename this folder'>";	
-					folder_icons = folder_icons + " <input type='file' name='import_files' id='import_files' accept='.backup' onchange='importDezyn();' multiple style='display:none;'>";	
-					folder_icons = folder_icons + " <img src='images/icon_import_single.png' onclick=\"document.getElementById('import_files').click();\" title='Import design'>";	
+					folder_icons = folder_icons + " <input type='file' name='import_files' id='import_files' accept='.backup' onchange='importDezyns();' multiple style='display:none;'>";	
+					folder_icons = folder_icons + " <img src='images/icon_import_folder_designs.png' onclick=\"document.getElementById('import_files').click();\" title='Import designs'>";	
+					
+					folder_icons = folder_icons + " <img src='images/icon_export_folder_designs.png' onclick=\"exportFolderDezyns();\" title='Export folder'>";	
+					
 					document.getElementById("folder_heading").innerHTML = "<div id='folder_label'>" + folder_label + "</div><div id='folder_icons'>" + folder_icons + "</div>";
 					
 					
@@ -251,20 +256,28 @@
 			}
 
 
-			function importDezyn() {
+			function importDezyns() {
+				
 				let import_files = document.getElementById("import_files").files;
 				if (import_files.length == 0) return;
+				let last_file_name = import_files[import_files.length-1].name;
+
 				Array.from(import_files).forEach(file => {
 					let reader = new FileReader();
 					reader.onload = async function(e) {
+						
 						let file_name = file.name;
 						let file_type = file.type;
 						if (file_name.indexOf("dezyn-") == 0) {
 							let file_data = e.target.result;
 							let key = "dezyn-" + new Date().getTime();
 							let object = JSON.parse(file_data);
-							object.folder = localStorage.getItem("current_folder");							
+							object.folder = localStorage.getItem("current_folder");
 							await idbPutItem("dezynor_designs", {design_key:key, value:object});
+							showMessage("Importing " + file_name, "darkgreen");
+							if (file_name == 	last_file_name) {
+								showFolderDezyns(object.folder);
+							}
 						} else if (file_name.indexOf("image-") == 0) {
 							let image_key = file_name.replace(".backup", "");
 							let blob = new Blob([file],{type: file_type});
@@ -275,12 +288,81 @@
 							let blob = new Blob([file],{type: file_type});
 							await idbPutItem("dezynor_fonts", {font_key:font_key, value:blob});
 						}
-						showFolderDezyns(localStorage.getItem("current_folder"));
 					}
 					reader.readAsText(file);
-				});						
+				});
+			
 			}
 		
+
+
+			async function exportFolderDezyns() {
+
+
+				idbGetAllItems("dezynor_designs").then(async function(result) {
+
+					showMessage("Preparing backup, please wait ...", "darkgreen");
+					document.getElementById("loader").style.display ="inline";
+					let zip_items = new JSZip();
+					let current_folder = localStorage.getItem("current_folder").trim();
+
+					let all_designs = result;
+					for (i = 0; i < all_designs.length; i++) {
+						
+						let design_key = all_designs[i].design_key;
+						let object = all_designs[i].value;
+						let folder = object.folder;
+
+						if (folder == current_folder) {
+							
+							zip_items.file(design_key + ".backup", JSON.stringify(object));
+							
+							let html = new DOMParser().parseFromString(object.data, "text/html");
+							let all_sections = html.body.querySelectorAll("section");
+							let font_keys = [];
+							for (s = 0; s < all_sections.length; s++) {
+								let section = all_sections[s];
+								let image_key = section.dataset.image_key;
+								if (image_key && image_key != "") {
+									let image_blob = await idbGetItem("dezynor_images", image_key);
+									if (image_blob && section) {
+										zip_items.file(image_key + ".backup", image_blob);		
+									}
+								}
+								
+								let font_key = section.style.fontFamily;
+								if (await idbKeyExists("dezynor_fonts", font_key)) {
+									font_keys.push(font_key);
+								}
+							}
+
+							for (f = 0; f < font_keys.length; f++) {
+								let font_key = font_keys[f];
+								let font_blob = await idbGetItem("dezynor_fonts", font_key);
+								zip_items.file("font-" + font_key + ".backup", font_blob);
+							}
+						
+						} // folder matched
+						
+					} // all designs
+
+					showMessage("Exporting... please wait for the file to be downloaded", "darkgreen");
+					
+					let file_name = "dezynor-folder-" +  current_folder + "-backup-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+					zip_items.generateAsync({type:"blob",
+						compression: "DEFLATE",
+						compressionOptions: {
+							level: 9 /* 1 (best speed) to 9 (best compression) */
+						}}).then(function(content) {
+							saveAs(content, file_name + ".zip");
+						}).then(function(content) {
+							document.getElementById("loader").style.display ="none";
+						});
+
+				});
+
+
+			}
 
 		</script>
 		

@@ -1,3 +1,4 @@
+
 function writeHeader() {
 	document.write(
 		"<header> " + 
@@ -69,6 +70,21 @@ function rgba2hex(orig) {
       return "#" + hex;
 }
 
+async function loadSelectFolders() {
+	let select_folders = document.getElementById("select_folders");
+	let option = document.createElement("option");
+	option.text = "default";
+	select_folders.add(option);	
+	let folders = await idbGetItem("dezynor_settings", "folders");
+	folders.sort();
+	for (i = 0; i < folders.length; i++) {
+		let folder_name = folders[i].trim();
+		if (folder_name == "default") continue;
+		let option = document.createElement("option");
+		option.text = folder_name;
+		select_folders.add(option);
+	}
+}
 
 async function loadSelectFonts() {
 

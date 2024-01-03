@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Import / Export - Dezynor</title>
+		<link rel="stylesheet" href="includes/styles.css">
+		<script src="includes/indexeddb.js"></script>
+		<script src="includes/common.js"></script>
+		<script src="includes/jszip_min_3_7_1.js"></script>
+		<script src="includes/filesaver_min_2_0_0.js"></script>
+		<script>
+
+			window.onload = function() {
+				loadSelectFolders();
+			}
+
+			let total_files = 0;
+			let total_processed = 0;
+
+			async function exportData() {
+			
+				let all_designs = [];
+				let all_images = [];
+				let all_fonts = [];
+				let all_styles = [];
+				let all_settings = [];
+
+				let file_name_part = "";
+				let zip_items = new JSZip();
+
+				if (document.getElementById("chk_designs").checked) {
+					all_designs = await idbGetAllItems("dezynor_designs");
+					for (i = 0; i < all_designs.length; i++) {
+						zip_items.file(all_designs[i].design_key + ".backup", JSON.stringify(all_designs[i].value));
+					}
+					file_name_part = file_name_part + "designs-";
+				}
+				
+				if (document.getElementById("chk_styles").checked) {
+					all_styles = await idbGetAllItems("dezynor_styles");
+					for (i = 0; i < all_styles.length; i++) {
+						zip_items.file(all_styles[i].style_key + ".backup", JSON.stringify(all_styles[i].value));
+					}
+					file_name_part = file_name_part + "styles-";
+				}
+				
+				if (document.getElementById("chk_images").checked) {
+					all_images = await idbGetAllItems("dezynor_images");					
+					for (i = 0; i < all_images.length; i++) {
+						zip_items.file(all_images[i].image_key + ".backup", all_images[i].value);
+					}
+					file_name_part = file_name_part + "images-";
+				}
+				
+				if (document.getElementById("chk_fonts").checked) {
+					all_fonts = await idbGetAllItems("dezynor_fonts");
+					for (i = 0; i < all_fonts.length; i++) {
+						zip_items.file("font-" + all_fonts[i].font_key + ".backup", all_fonts[i].value);
+					}
+					file_name_part = file_name_part + "fonts-";
+				}
+
+				if (document.getElementById("chk_settings").checked) {
+					all_settings = await idbGetAllItems("dezynor_settings");
+					zip_items.file("settings.backup", JSON.stringify(all_settings));
+					zip_items.file("localstorage.backup", JSON.stringify(localStorage));
+					file_name_part = file_name_part + "settings-";
+				}
+
+				
+				if (Object.keys(zip_items.files).length == 0) return;
+				
+				let progress_bar = document.getElementById("progress_bar");
+				progress_bar.style.visibility = "visible";
+				
+				total_files = all_images.length + all_designs.length + all_styles.length + all_fonts.length + all_settings.length;
+				document.getElementById("message").innerHTML = "<div class='pad20'>Exporting " + total_files + " items, please wait...</div>";
+				
+				let file_name = "dezynor-backup-" + file_name_part + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
+				zip_items.generateAsync({type:"blob",
+					compression: "DEFLATE",
+					compressionOptions: {
+						level: 9 /* 1 (best speed) to 9 (best compression) */
+					}}).then(function(content) {
+						saveAs(content, file_name + ".zip");
+						progress_bar.style.visibility = "hidden";
+						document.getElementById("message").innerHTML = "<div class='pad20'>Exported " + total_files + " items successfully, please wait for the zip file to be downloaded.</div>";
+					});
+				
+			}
+
+			
+			function importData() {
+			
+				let import_files = document.getElementById("import_files").files;
+				if (import_files.length == 0) return;
+				
+				total_files = import_files.length; // exclude setting file
+
+				document.getElementById("progress_bar").style.visibility = "visible";
+				
+				Array.from(import_files).forEach(file => {
+					
+					let reader = new FileReader();
+					reader.onload = async function(e) {
+						let file_name = file.name;
+						let file_type = file.type;
+						let file_data = e.target.result;
+						
+						if (file_name.indexOf("dezyn-") == 0) {
+							let key = file_name.replace(".backup", "");
+							let object = JSON.parse(file_data);
+							if (await idbPutItem("dezynor_designs", {design_key:key, value:object})) {
+								total_processed++;
+								showProgress();
+							}
+
+						} else if (file_name.indexOf("style-") == 0) {
+							let key = file_name.replace(".backup", "");
+							let object = JSON.parse(file_data);
+							if (await idbPutItem("dezynor_styles", {style_key:key, value:object})) {
+								total_processed++;
+								showProgress();
+							}
+						
+						} else if (file_name.indexOf("font-") == 0) {
+							let font_key = file_name.replace(".backup", "");
+							font_key = font_key.replace("font-", "");
+							let blob = new Blob([file],{type: file_type}); // pass original file, not file reader's result
+							if (await idbPutItem("dezynor_fonts", {font_key:font_key, value:blob})) {
+								total_processed++;
+								showProgress();
+							}
+						} else if (file_name.indexOf("image-") == 0) {
+
+							let image_key = file_name.replace(".backup", "");
+							let blob = new Blob([file],{type: file_type}); // pass original file, not file reader's result
+							if (await idbPutItem("dezynor_images", {image_key:image_key, value:blob})) {
+								total_processed++;
+								showProgress();
+							}
+		
+						} else if (file_name == "localstorage.backup") {
+							let storage_items = JSON.parse(file_data);
+							total_processed++;
+							for (key in storage_items) {
+								localStorage.setItem(key, storage_items[key]);
+							}
+							
+						} else if (file_name == "settings.backup") {
+							let settings = JSON.parse(file_data);
+							total_files = total_files + settings.length - 1;
+							for (i = 0; i < settings.length; i++) {
+								let key_of_setting = settings[i].setting_key;
+								let value_of_setting = settings[i].value;
+								if (await idbPutItem("dezynor_settings", {setting_key:key_of_setting, value: value_of_setting})) {
+									total_processed++;
+									showProgress();
+								}
+							}
+						}
+						
+					}
+					reader.readAsText(file);
+				});
+
+				let timer = setInterval(function() {
+					if (total_files == total_processed) {
+						document.getElementById("message").innerHTML = "<div class='pad20'>Imported data successfully.</div>";
+						total_files = 0;
+						total_processed = 0;
+						document.getElementById("progress_bar").style.visibility = "hidden";
+						document.getElementById("import_files").value = "";
+						clearInterval(timer);
+					}
+				}, 1000);
+			}
+			
+			function showProgress() {
+				document.getElementById("message").innerHTML = "<div class='pad20'>Processing " + total_processed + " of " + total_files + "</div>";
+			}
+
+			function blobToDataURL(blob, callback) {
+				var a = new FileReader();
+				a.onload = function(e) {callback(e.target.result);}
+				a.readAsDataURL(blob);
+			}
+			
+			function dataURLtoBlob(dataurl) {
+				var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+				while(n--){
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				return new Blob([u8arr], {type:mime});
+			}			
+
+			function deleteDatabase() {
+				
+				if (!confirm("This will delete all the data of this application.\nDo you want to continue?")) return;
+				
+				let request = window.indexedDB.deleteDatabase("dezynordb");
+				request.onblocked = function(event) {
+					alert("Error message: Database is in blocked state. ");
+				};
+				request.onerror = function(event) {
+				  console.log("Error deleting database.");
+				};
+
+				request.onsuccess = function(event) {
+				  showMessage("Database deleted successfully", "Red");
+				};			
+			}
+
+
+		</script>
+
+		<style>
+
+			#message {
+				padding:5px;
+				min-height:30px;
+				color:green;
+				font-weight:bold;
+			}		
+
+		</style>
+
+	</head>
+	<body>
+		<script>writeHeader();</script>
+		<div id="message"></div>
+		<div id="progress_bar" class="padleft20" style="visibility:hidden"><progress></progress></div>				
+		<div class="pad20">
+
+			<select id="select_folders">
+				<option>All</option>
+			</select><br>
+			<br>
+			
+			<input type="checkbox" id="chk_designs" checked> Designs<br>
+			<input type="checkbox" id="chk_images" checked> Images<br>
+			<input type="checkbox" id="chk_fonts" checked> Fonts<br>
+			<input type="checkbox" id="chk_styles" checked> Styles<br>
+			<input type="checkbox" id="chk_settings" checked> Settings<br>
+			
+			<br>
+			
+			<input type="button" value="Export data" onclick="exportData();">
+			
+			<br><br><hr><br><br>
+			
+			<input type="button" value="Clear database" onclick="deleteDatabase();"> erase everything, start from scratch<br>
+			
+			<br><br><hr><br><br>
+			
+			<input type="file" name="import_files" id="import_files" accept=".backup,.png" onchange="importData();" multiple style="display:none;">
+			<input type="button" value="Import data" onclick="document.getElementById('import_files').click();"> upload unzipped .backup files
+			
+			
+		</div>
+
+	</body>
+</html>
