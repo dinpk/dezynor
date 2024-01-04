@@ -2,7 +2,7 @@
 
 #### To run Dezynor locally:
 
-1. Download and install [Lighttpd](https://www.lighttpd.net/download/)
+1. Download and install [Lighttpd](https://www.lighttpd.net/)
 
 2. Download Dezynor and put under 'htdocs' folder:
 

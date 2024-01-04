@@ -1768,6 +1768,14 @@ function setZIndex(element) {
 
 async function saveDezyn(show_message = "yes") {
 
+
+	let last_designs_saved = JSON.parse(localStorage.getItem("last_designs_saved"));
+	if (last_designs_saved[last_designs_saved.length-1] != design_id) {
+		last_designs_saved.push(design_id);
+		last_designs_saved = last_designs_saved.slice(-10);
+		localStorage.setItem("last_designs_saved", JSON.stringify(last_designs_saved));
+	}
+
 	let modified = new Date().getTime();
 	let folder = document.getElementById("select_folders").value;
 	localStorage.setItem("current_folder", folder);
@@ -1890,7 +1898,7 @@ async function loadDezyn() {
 	
 		idbGetItem("dezynor_designs", current_design_key).then(function(result) {
 
-			let object = result
+			let object = result;
 			design_object = object;
 			
 			let data = object.data;
@@ -3823,8 +3831,8 @@ function getRandomRGBColor(random_range) {
 
 function setCaret(element) {
 
-    var range = document.createRange()
-    var selection = window.getSelection()
+    let range = document.createRange()
+    let selection = window.getSelection()
     
     range.setStart(element, 0)
     range.collapse(true)

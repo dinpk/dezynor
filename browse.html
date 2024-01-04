@@ -14,9 +14,11 @@
 			//document.addEventListener('visibilitychange', function(ev) {});
 
 			window.onload = async function() {
-				loadFolders();
+				await loadFolders();
 				loadSelectFonts();
+				showLastSavedDezyns();
 			}
+
 
 			function selectSection(num) {}
 
@@ -182,6 +184,32 @@
 				document.getElementById("folders").innerHTML = folders_html;		
 			}
 
+
+			async function showLastSavedDezyns() {
+				
+				document.getElementById("loader").style.display = "inline";
+				
+				let last_designs_saved = JSON.parse(localStorage.getItem("last_designs_saved")).reverse();
+				last_designs_saved = [...new Set(last_designs_saved)];
+				
+				let designs_data = "";
+				for (let i = 0; i < last_designs_saved.length; i++) {
+					let design_key = last_designs_saved[i];
+					let object = await idbGetItem("dezynor_designs", design_key);
+					let item = object.data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
+					item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
+					if (localStorage.getItem("show_background_images") == "false") item = item.replace(/((background-image: url\(.*?\);))/g, '');
+					designs_data += item;
+				}
+				document.getElementById("designs").innerHTML = designs_data;
+				document.getElementById("loader").style.display = "none";
+				
+				if (localStorage.getItem("show_background_images") == "true") {
+					showBackgroundImages();
+				}
+
+			}
+
 			async function showFolderDezyns(folder) {
 				
 				localStorage.setItem("current_folder", folder);
@@ -206,8 +234,7 @@
 						let design_folder = object.folder;
 						if (folder == design_folder) {
 							let design_key = all_designs[i].design_key;
-							let data = object.data;
-							let item = data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
+							let item = object.data.replace("id=\"wrapper\"", "class='wrapper' id='" + design_key + "' onclick=\"window.open('design.html?key=" + design_key + "');\"");
 							item = item.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls
 							if (localStorage.getItem("show_background_images") == "false") item = item.replace(/((background-image: url\(.*?\);))/g, '');
 							folder_designs += item;

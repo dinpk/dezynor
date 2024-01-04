@@ -36,6 +36,8 @@ connection.onupgradeneeded = function(e) {
 			localStorage.setItem("show_multiple_dash_panels", "false");
 			localStorage.setItem("automatically_save", "false");
 			localStorage.setItem("automatically_save_after", "30");
+			localStorage.setItem("last_designs_saved", [""]);
+			
 		case 1:
 	}
 
