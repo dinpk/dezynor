@@ -1,4 +1,5 @@
 
+
 function writeHeader() {
 	document.write(
 		"<header> " + 

@@ -17,26 +17,7 @@ connection.onupgradeneeded = function(e) {
 			let dezynor_settings = db.createObjectStore("dezynor_settings", {keyPath: "setting_key"});
 			dezynor_settings.add({setting_key: "folders", value: ["default"]});
 			dezynor_settings.add({setting_key: "fonts", value: ["Anton|Google", "Smooch|Google","Noto Kufi Arabic|Google","Noto Naskh Arabic|Google","Noto Nastaliq Urdu|Google","Nabla|Google","Bungee Spice|Google","Lobster|Google","Great Vibes|Google","Kaushan Script|Google","Creepster|Google","DynaPuff|Google"]});
-			localStorage.setItem("page_width", "1000");
-			localStorage.setItem("page_height", "500");
-			localStorage.setItem("copied_section", "");
-			localStorage.setItem("show_background_images", "true");
-			localStorage.setItem("duplicate_offset_x", "10");
-			localStorage.setItem("duplicate_offset_y", "0");
-			localStorage.setItem("resize_offset", "10");
-			localStorage.setItem("move_offset", "2");
-			localStorage.setItem("rotate_offset", "1");
-			localStorage.setItem("font_size_change", "3");
-			localStorage.setItem("line_height_change", "3");
-			localStorage.setItem("word_spacing_change", "1");
-			localStorage.setItem("max_upload_width", "1280");
-			localStorage.setItem("max_upload_height", "1280");
-			localStorage.setItem("current_folder", "default");
-			localStorage.setItem("paste_result", "plain");
-			localStorage.setItem("show_multiple_dash_panels", "false");
-			localStorage.setItem("automatically_save", "false");
-			localStorage.setItem("automatically_save_after", "30");
-			localStorage.setItem("last_designs_saved", [""]);
+			// localstorage values are set in index.js
 			
 		case 1:
 	}
