@@ -80,5 +80,23 @@ header #menu_items a:hover {
 	vertical-align:middle;
 }
 
+#count_stats {
+	display:flex;
+	justify-content:left;
+	flex-wrap:wrap;
+	gap:1em;
+	padding:1em;
+}
+
+#count_stats > div {
+	border:6px solid #ccc;
+	border-radius:10px;
+	padding:10px 20px 10px 20px;
+}
+
+#count_stats > div > span {
+	font-size:250%;
+	font-family:Arial;
+}
 
 @media only screen and (max-width: 970px) {}

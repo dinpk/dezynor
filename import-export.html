@@ -40,7 +40,7 @@
 				}
 				
 				if (document.getElementById("chk_images").checked) {
-					all_images = await idbGetAllItems("dezynor_images");					
+					all_images = await idbGetAllItems("dezynor_images");
 					for (i = 0; i < all_images.length; i++) {
 						zip_items.file(all_images[i].image_key + ".backup", all_images[i].value);
 					}
