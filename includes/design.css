@@ -518,11 +518,18 @@ input.filter_range {
 	#resize_center_left,
 	#resize_center_top,
 	#resize_center_bottom {
-		display:none;
+		display:none !important;
 	}
 
 	section {
 		outline:none !important;
+	}
+
+	section.as_document {
+		width:auto !important;
+		height:auto !important;
+		position:static;
+		padding:10px;
 	}
 
 }

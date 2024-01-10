@@ -34,7 +34,7 @@
 				
 
 				let searched_designs = "";
-				for (i = 0; i < all_designs.length; i++) {
+				for (let i = 0; i < all_designs.length; i++) {
 					let key = all_designs[i].design_key;
 					let data = all_designs[i].value.data;
 					for (s = 0; s < search.length; s++) {
@@ -95,7 +95,7 @@
 				if (confirm("WARNING!\n\nThe folder '" + folder_name + "' and all the designs in it will be deleted\n\nDo you want to delete it?")) {
 				
 					let all_designs = await idbGetAllItems("dezynor_designs");
-					for (i = 0; i < all_designs.length; i++) {
+					for (let i = 0; i < all_designs.length; i++) {
 						let design_key = all_designs[i].design_key;
 						let design_folder = all_designs[i].value.folder;
 						if (design_folder == folder_name) {
@@ -152,7 +152,7 @@
 
 				// update design keys
 				let all_designs = await idbGetAllItems("dezynor_designs");
-				for (i = 0; i < all_designs.length; i++) {
+				for (let i = 0; i < all_designs.length; i++) {
 					let design_key = all_designs[i].design_key;
 					let object = all_designs[i].value;
 					let design_folder = object.folder;
@@ -190,7 +190,6 @@
 				document.getElementById("loader").style.display = "inline";
 				
 				let last_designs_saved = JSON.parse(localStorage.getItem("last_designs_saved")).reverse();
-				last_designs_saved = [...new Set(last_designs_saved)];
 				
 				let designs_data = "";
 				for (let i = 0; i < last_designs_saved.length; i++) {
@@ -231,7 +230,7 @@
 					});
 					
 					let folder_designs = "";
-					for (i = 0; i < all_designs.length; i++) {
+					for (let i = 0; i < all_designs.length; i++) {
 						let object = all_designs[i].value;
 						let design_folder = object.folder;
 						if (folder == design_folder) {
@@ -270,7 +269,7 @@
 			
 			async function showBackgroundImages() {
 				let all_sections = document.querySelectorAll("section");
-				for (i = 0; i < all_sections.length; i++) { // add new object URLs
+				for (let i = 0; i < all_sections.length; i++) { // add new object URLs
 					let section = all_sections[i];
 					let image_key = section.dataset.image_key;
 					if (image_key && image_key != "") {

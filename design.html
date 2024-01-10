@@ -52,7 +52,7 @@
 				<button onclick="selectSectionNextPrev('next');">►</button>
 			</span>
 			<span>
-				Order 
+				Layer 
 				<button onclick="orderSectionUpDown('down');">▼</button> 
 				<button onclick="orderSectionUpDown('up');">▲</button> 
 			</span>
@@ -229,6 +229,13 @@
 								<input id="z_index" type="number" min="0" onchange="setZIndex(this);" title="F5 / F6"> 
 							</td>
 						</tr>
+						<tr>
+							<td>Document</td>
+							<td>
+								<input id="as_document" type="checkbox" onchange="setAsDocument(this);">
+							</td>
+						</tr>
+
 					</table>
 				</nav>
 				<nav id="font_section">
@@ -292,7 +299,7 @@
 						<tr>
 							<td>Columns</td>
 							<td>
-								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" min="1" step="1"> 
+								<input id="column_count" type="number" onchange="setStyle('columnCombined', this);" min="0" step="1"> 
 								Gap <input id="column_gap" type="number" onchange="setStyle('columnCombined', this);" min="0" step="10"> 
 							</td>
 						</tr>
@@ -399,11 +406,11 @@
 						<tr>
 							<td>Show side</td>
 							<td>
-								<button onclick="setSectionClass('showSectionSide', 'show_all');" title="Show All Sides">✣</button> 
-								<button onclick="setSectionClass('showSectionSide', 'show_top');" title="Show Top Side">⮟</button> 
-								<button onclick="setSectionClass('showSectionSide', 'show_bottom');" title="Show Bottom Side">⮝</button> 
-								<button onclick="setSectionClass('showSectionSide', 'show_left');" title="Show Left Side">⮞</button> 
-								<button onclick="setSectionClass('showSectionSide', 'show_right');" title="Show Right Side">⮜</button> 
+								<button onclick="setGradientSide('show_all');" title="Show All Sides">✣</button> 
+								<button onclick="setGradientSide('show_top');" title="Show Top Side">⮟</button> 
+								<button onclick="setGradientSide('show_bottom');" title="Show Bottom Side">⮝</button> 
+								<button onclick="setGradientSide('show_left');" title="Show Left Side">⮞</button> 
+								<button onclick="setGradientSide('show_right');" title="Show Right Side">⮜</button> 
 							</td>
 						</tr>
 					</table>	
@@ -462,8 +469,7 @@
 						<tr>
 							<td>Clip text</td>
 							<td>
-								<button onclick="setSectionClass('clipText');">Set</button> 
-								<button onclick="removeSectionClass('clipText');">Remove</button> 
+								<input id="clip_text" type="checkbox" onchange="clipText(this);">
 							</td>
 						</tr>
 

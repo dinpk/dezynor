@@ -28,17 +28,25 @@ if (localStorage.getItem("stats_total_folders") === null) localStorage.setItem("
 
 
 window.onload = async function() {
-	let all_designs = await idbGetAllItems("dezynor_designs");
-	let all_styles = await idbGetAllItems("dezynor_styles");
-	let all_images = await idbGetAllItems("dezynor_images");
-	let all_fonts = await idbGetItem("dezynor_settings", "fonts");
-	let all_folders = await idbGetItem("dezynor_settings", "folders");
 
-	document.querySelector("#count_stats #total_designs").innerHTML = "Designs <span>" + all_designs.length + "</span>";
-	document.querySelector("#count_stats #total_styles").innerHTML = "Styles <span>" + all_styles.length + "</span>";
-	document.querySelector("#count_stats #total_images").innerHTML = "Images <span>" + all_images.length + "</span>";
+	await delay(500);
+
+	let all_fonts = await idbGetItem("dezynor_settings", "fonts");
 	document.querySelector("#count_stats #total_fonts").innerHTML = "Fonts <span>" + all_fonts.length + "</span>";
+
+	let all_folders = await idbGetItem("dezynor_settings", "folders");
 	document.querySelector("#count_stats #total_folders").innerHTML = "Folders <span>" + all_folders.length + "</span>";
+
+	let all_styles = await idbGetAllItems("dezynor_styles");
+	document.querySelector("#count_stats #total_styles").innerHTML = "Styles <span>" + all_styles.length + "</span>";
+	
+	await delay(200);
+	let all_designs = await idbGetAllItems("dezynor_designs");
+	document.querySelector("#count_stats #total_designs").innerHTML = "Designs <span>" + all_designs.length + "</span>";
+
+	await delay(200);
+	let all_images = await idbGetAllItems("dezynor_images");
+	document.querySelector("#count_stats #total_images").innerHTML = "Images <span>" + all_images.length + "</span>";
 }
 
 

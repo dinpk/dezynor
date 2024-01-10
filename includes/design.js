@@ -1,5 +1,4 @@
 window.onload = function() {
-	delay(1000);
 	loadSelectFolders();
 	loadSelectFonts();
 	loadSelectStyles();
@@ -346,7 +345,7 @@ function selectSectionNextPrev(direction) {
 
 	if (direction == "next") {
 		
-		for (i = 0; i < all_sections.length; i++) {
+		for (let i = 0; i < all_sections.length; i++) {
 			if (all_sections[i] == selected_section) {
 				next_focused_section = all_sections[i+1];
 				break;
@@ -361,7 +360,7 @@ function selectSectionNextPrev(direction) {
 		
 	} else if (direction == "prev") {
 		
-		for (i = 0; i < all_sections.length; i++) {
+		for (let i = 0; i < all_sections.length; i++) {
 			if (all_sections[i] == selected_section) {
 				prev_focused_section = all_sections[i-1];
 				break;
@@ -399,7 +398,7 @@ function selectElement() {
 	if (selection.toString().length > 0) {
 		saved_range = selection.getRangeAt(0);
 		selected_content_element = document.createElement("span");
-		for (i = 0; i < selection.rangeCount; i++) {
+		for (let i = 0; i < selection.rangeCount; i++) {
 			selected_content_element.appendChild(selection.getRangeAt(i).cloneContents());
 		}
 	}
@@ -492,7 +491,7 @@ function moveDuplicatedContainedSections(original_section) {
 		let top = parseInt(original_section.style.top.replace("px", ""));
 		let left = parseInt(original_section.style.left.replace("px", ""));
 		let sections_list = ""
-		for (i = 0; i < contained_sections.length; i++) {
+		for (let i = 0; i < contained_sections.length; i++) {
 			let original_contained_section = document.getElementById(contained_sections[i]);
 			let this_section = original_contained_section.cloneNode(true);
 			let this_section_number = getNewSectionNumber();
@@ -517,7 +516,7 @@ function moveDuplicatedContainedSections(original_section) {
 function updateContainerSections() {
 	let section_ids = [];
 	let all_sections = document.querySelectorAll("section");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		section_ids.push(all_sections[i].id);
 	}
 	
@@ -557,7 +556,7 @@ function removeContainerSection() {
 		
 		let sections_list = "";
 		let all_sections = document.querySelectorAll("section");
-		for (i = 0; i < all_sections.length; i++) {
+		for (let i = 0; i < all_sections.length; i++) {
 			let this_section = all_sections[i];
 			if (this_section !== selected_section) {
 				let section_width = parseInt(this_section.style.width.replace("px", ""));
@@ -585,7 +584,7 @@ function copySection() {
 	let copied_section = selected_section.outerHTML;
 	if (selected_section.dataset.contained_sections) {
 		let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
-		for (i = 0; i < contained_sections.length; i++) {
+		for (let i = 0; i < contained_sections.length; i++) {
 			let section_id = contained_sections[i];
 			copied_section = copied_section + "|" + document.getElementById(section_id).outerHTML;
 		}
@@ -599,7 +598,7 @@ async function pasteSection() {
 
 	let copied_sections = localStorage.getItem("copied_section").split("|");
 	let first_section_number;
-	for (i = 0; i < copied_sections.length; i++) {
+	for (let i = 0; i < copied_sections.length; i++) {
 		let copied_section_string = copied_sections[i];
 		let html = new DOMParser().parseFromString(copied_section_string, "text/html");
 		let sections = html.body.querySelectorAll("section");
@@ -628,7 +627,7 @@ async function pasteSection() {
 
 function unselectSections() {
 	let all_sections = document.querySelectorAll("section");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		all_sections[i].style.outline = "1px dashed gray";
 	}
 
@@ -695,7 +694,7 @@ function setContainerSection(section) {
 	
 	let sections_list = "";
 	let all_sections = document.querySelectorAll("#wrapper section");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		let this_section = all_sections[i];
 		if (this_section !== section) {
 			let section_width = parseInt(this_section.style.width.replace("px", ""));
@@ -763,7 +762,7 @@ function writeToClipBoard(class_case) {
 		case "imageURL":
 			let image_url = selected.style.backgroundImage.replace('url("', '').replace('")', '');
 			if (image_url.indexOf("blob") > -1) {
-				showMessage("Only external image links can be copied.", "Chocolate");
+				showMessage("Only external image links can be copied.", "darkgreen");
 			} else {
 				navigator.clipboard.writeText(image_url);
 			}
@@ -810,7 +809,7 @@ function onMouseDown4Move(counter) {
 function moveContainedSections(top, left) {
 	if (!selected_section.dataset.contained_sections) return;
 	let contained_sections = selected_section.dataset.contained_sections.trim().split(" ");
-	for (i = 0; i < contained_sections.length; i++) {
+	for (let i = 0; i < contained_sections.length; i++) {
 		let this_section = document.getElementById(contained_sections[i]);
 		if (!this_section || this_section === selected_section) continue;
 		let left_diff = parseInt(this_section.style.left.replace("px", "")) - left;
@@ -1458,7 +1457,7 @@ function setLayout(layout) {
 	}
 	
 	let all_tds = selected_section.querySelectorAll("table td");
-	for (i = 0; i < all_tds.length; i++) {
+	for (let i = 0; i < all_tds.length; i++) {
 		all_tds[i].style.border = border_width + "px " + border_style + " " + border_color;
 		all_tds[i].style.borderRadius = border_radius + "px ";
 	}
@@ -1471,12 +1470,12 @@ function preview(status) {
 
 	if (status == "on") {
 		hideHandles();
-		for (i = 0; i < all_sections.length; i++) {
+		for (let i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "none";
 		}
 		document.getElementById("wrapper").style.outline = "";
 	} else {
-		for (i = 0; i < all_sections.length; i++) {
+		for (let i = 0; i < all_sections.length; i++) {
 			all_sections[i].style.outline = "1px dashed gray";
 		}
 		if (selected_section) {
@@ -1508,7 +1507,7 @@ function toggleDashPanel() {
 
 function hideSectionPanels() {
 	let all_sections = document.querySelectorAll("#dash_panel nav");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		all_sections[i].style.opacity = "0";
 		all_sections[i].style.maxHeight = "0";
 	}
@@ -1566,7 +1565,7 @@ function splitSectionOnSpaces() {
 	let section_left = parseInt(document.getElementById("left").value) + section_width;
 	let each_width = parseInt(section_width / text_array.length);
 	
-	for (i = 0; i < text_array.length; i++) {
+	for (let i = 0; i < text_array.length; i++) {
 		section_number = getNewSectionNumber();
 		let section_id = "section" + section_number;
 		let section = selected_section.cloneNode(true);
@@ -1648,7 +1647,7 @@ function duplicateCircular() {
 	let copies = parseInt(document.getElementById("duplicate_x_copies").value);
 	let radius = parseInt(document.getElementById("duplicate_circular_radius").value) / 2;
     let slice = 2 * Math.PI / copies;
-    for (i = 0; i < copies; i++) {
+    for (let i = 0; i < copies; i++) {
 		section_number = getNewSectionNumber();
 		let section_id = "section" + section_number;
 		let section = selected_section.cloneNode(true);
@@ -1673,7 +1672,7 @@ function duplicateLinearOneSided() {
 
 	let new_left = left;
 	let new_top = top;
-    for (i = 0; i < copies; i++) {
+    for (let i = 0; i < copies; i++) {
 		section_number = getNewSectionNumber();
 		let section_id = "section" + section_number;
 		let section = selected_section.cloneNode(true);
@@ -1698,7 +1697,7 @@ function duplicateLinearTwoSided() {
 
 	let new_left = left;
 	let new_top = top;
-    for (i = 0; i < copies/2; i++) {
+    for (let i = 0; i < copies/2; i++) {
 		section_number = getNewSectionNumber();
 		let section_id = "section" + section_number;
 		let section = selected_section.cloneNode(true);
@@ -1713,7 +1712,7 @@ function duplicateLinearTwoSided() {
 
 	new_left = left;
 	new_top = top;
-    for (i = 0; i < copies/2; i++) {
+    for (let i = 0; i < copies/2; i++) {
 		section_number = getNewSectionNumber();
 		let section_id = "section" + section_number;
 		let section = selected_section.cloneNode(true);
@@ -1742,7 +1741,7 @@ function duplicateLinearRowsColumns() {
 
 	let new_left = left;
 	let new_top = top - y_distance;
-    for (i = 0; i < y_copies; i++) {
+    for (let i = 0; i < y_copies; i++) {
 		new_left = left - x_distance;
 		new_top = new_top + y_distance;
 		for (k = 0; k < x_copies; k++) {
@@ -1766,14 +1765,35 @@ function setZIndex(element) {
 }
 
 
-async function saveDezyn(show_message = "yes") {
+function setAsDocument(element) {
+	if (element.checked) {
+		selected_section.classList.add("as_document");
+		selected_section.style.columns = "auto auto";
+		selected_section.style.overflow = "auto";
+	} else {
+		selected_section.classList.remove("as_document");
+		selected_section.style.overflow = "visible";
+	}
+}
 
+function clipText(element) {
+	if (element.checked) {
+		selected_section.classList.add("clip_text");
+	} else {
+		selected_section.classList.remove("clip_text");
+	}
+}
+
+async function saveDezyn(show_message = "yes") {
 
 	let last_designs_saved = JSON.parse(localStorage.getItem("last_designs_saved"));
 	if (last_designs_saved[last_designs_saved.length-1] != design_id) {
 		last_designs_saved.push(design_id);
-		last_designs_saved = last_designs_saved.slice(-10);
-		localStorage.setItem("last_designs_saved", JSON.stringify(last_designs_saved));
+		if (last_designs_saved.length > 10) {
+			last_designs_saved = last_designs_saved.slice(-10);
+		}
+		last_designs_saved = [...new Set(last_designs_saved.reverse())]; // reverse() removes duplicates from other side
+		localStorage.setItem("last_designs_saved", JSON.stringify(last_designs_saved.reverse())); // reverse() again to set original order
 	}
 
 	let modified = new Date().getTime();
@@ -1793,7 +1813,7 @@ async function saveDezyn(show_message = "yes") {
 		}
 		await idbPutItem("dezynor_designs", {design_key:design_id, value:updated_object});
 		design_object = updated_object;
-		if (show_message == "yes") showMessage("Updated design", "Green");
+		if (show_message == "yes") showMessage("Updated design", "darkgreen");
 
 	} else {
 
@@ -1807,11 +1827,11 @@ async function saveDezyn(show_message = "yes") {
 		}
 		await idbPutItem("dezynor_designs", {design_key:design_id, value:new_object});
 		design_object = new_object;
-		if (show_message == "yes") showMessage("Saved design", "Green");
+		if (show_message == "yes") showMessage("Saved design", "darkgreen");
 	}
 }
 
-function duplicateDezyn() {
+async function duplicateDezyn() {
 	let folder = document.getElementById("select_folders").value;
 	let new_design_id = generateDeisgnId();
 	let data = document.getElementById("cover").innerHTML;
@@ -1824,13 +1844,12 @@ function duplicateDezyn() {
 	}	
 	idbPutItem("dezynor_designs", {design_key:new_design_id, value:object});
 	alert("Duplicated design successfully...");
-	
 	window.location.href = "design.html?key=" + new_design_id;
 }
 
 async function exportDezyn() {
 
-	showMessage("Exporting... please wait for the file to be downloaded", "Chocolate");
+	showMessage("Exporting... please wait for the file to be downloaded", "darkgreen");
 
 	let zip_items = new JSZip();
 	// design
@@ -1849,7 +1868,7 @@ async function exportDezyn() {
 
 	let font_keys = [];
 	let all_sections = document.querySelectorAll("section");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		let section = all_sections[i];
 		let image_key = section.dataset.image_key;
 		if (image_key && image_key != "") {
@@ -1918,7 +1937,7 @@ async function loadDezyn() {
 		}).then(function() { // add fresh object URLs of images
 
 			let all_sections = document.querySelectorAll("section");
-			for (i = 0; i < all_sections.length; i++) {
+			for (let i = 0; i < all_sections.length; i++) {
 				let section = all_sections[i];
 				let image_key = section.dataset.image_key;
 				if (image_key && image_key != "") {
@@ -1928,7 +1947,7 @@ async function loadDezyn() {
 				}
 			}
 			let all_tds = document.querySelectorAll("section td");
-			for (i = 0; i < all_tds.length; i++) {
+			for (let i = 0; i < all_tds.length; i++) {
 				let td = all_tds[i];
 				let image_key = td.dataset.image_key;
 				if (image_key && image_key != "") {
@@ -1969,29 +1988,11 @@ function applyStyle() {
 	}
 }
 
-/*
-
-async function loadSelectFolders() {
-	let select_folders = document.getElementById("select_folders");
-	let option = document.createElement("option");
-	option.text = "default";
-	select_folders.add(option);	
-	let folders = await idbGetItem("dezynor_settings", "folders");
-	folders.sort();
-	for (i = 0; i < folders.length; i++) {
-		let folder_name = folders[i].trim();
-		if (folder_name == "default") continue;
-		let option = document.createElement("option");
-		option.text = folder_name;
-		select_folders.add(option);
-	}
-}
-*/
 
 async function loadSelectStyles() {
 	let styles = await idbGetAllItems("dezynor_styles");
 	let styles_options = "";
-	for (i = 0; i < styles.length; i++) {
+	for (let i = 0; i < styles.length; i++) {
 		let record_object = styles[i];
 		let style_key = record_object.style_key;
 		let style_object = record_object.value;
@@ -2394,7 +2395,7 @@ function styleContainedSections(style, element, value) {
 	
 	let sections_list = "";
 	let all_sections = document.querySelectorAll("section");
-	for (i = 0; i < all_sections.length; i++) {
+	for (let i = 0; i < all_sections.length; i++) {
 		let this_section = all_sections[i];
 			let section_width = parseInt(this_section.style.width.replace("px", ""));
 			let section_height = parseInt(this_section.style.height.replace("px", ""));
@@ -2560,24 +2561,15 @@ function removeStyle(style) {
 
 
 
-function setSectionClass(class_case, option) {
+function setGradientSide(option) {
 	if (!selected_section) return;
-	
 	let selected = getSelected();
-	
-	switch (class_case) {
-		case "clipText":
-			selected.classList.add("clip_text");
-			break;
-		case "showSectionSide":
-			selected.classList.remove("show_left");
-			selected.classList.remove("show_right");
-			selected.classList.remove("show_top");
-			selected.classList.remove("show_bottom");
-			selected.classList.remove("show_all");
-			selected.classList.add(option);
-			break;
-	}
+	selected.classList.remove("show_left");
+	selected.classList.remove("show_right");
+	selected.classList.remove("show_top");
+	selected.classList.remove("show_bottom");
+	selected.classList.remove("show_all");
+	selected.classList.add(option);
 }
 
 
@@ -2768,7 +2760,7 @@ function getTableColumnPosition() {
 	if (!selected_element || selected_element.localName != "td") return;
 	let tr = selected_element.parentNode;
 	let all_td = tr.querySelectorAll("td");
-	for (i = 0; i < all_td.length; i++) {
+	for (let i = 0; i < all_td.length; i++) {
 		if (all_td[i] == selected_element) {
 			return i
 		}
@@ -2805,7 +2797,7 @@ function modifyTable(location) {
 	if (table_modify.indexOf("Insert row") > -1) {
 		let cloned_tr = tr.cloneNode(true);
 		let all_td = cloned_tr.querySelectorAll("td");
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			all_td[i].innerHTML = "&nbsp;";
 		}
 		if (table_modify == "Insert row before") {
@@ -2876,7 +2868,7 @@ function setTableStyle(style, element, value) {
 			let table_border_width = document.getElementById("table_border_width").value;
 			let table_border_style = document.getElementById("table_border_style").value;
 			let table_border_color = document.getElementById("table_border_color").value;
-			for (i = 0; i < all_table_td.length; i++) {
+			for (let i = 0; i < all_table_td.length; i++) {
 				all_table_td[i].style.border = table_border_width + "px " + table_border_style + " " + table_border_color;
 			}
 			break;
@@ -2885,7 +2877,7 @@ function setTableStyle(style, element, value) {
 			let padding_bottom = document.getElementById("table_cell_padding_bottom").value;
 			let padding_left = document.getElementById("table_cell_padding_left").value;
 			let padding_right = document.getElementById("table_cell_padding_right").value;
-			for (i = 0; i < all_table_td.length; i++) {
+			for (let i = 0; i < all_table_td.length; i++) {
 				all_table_td[i].style.padding = padding_top + "px " + padding_right + "px " + padding_bottom + "px " + padding_left + "px";
 			}
 			break;
@@ -2920,7 +2912,7 @@ function repeatTableStyle() {
 
 	if (repeat_table_style == "To row") {
 		let all_td = tr.querySelectorAll("td");
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			all_td[i].setAttribute("style", style);
 		}
 	} else if (repeat_table_style == "To column") {
@@ -2964,7 +2956,7 @@ function setTableVerticalAlignment() {
 		selected_element.style.verticalAlign = align_type;
 	} else if (align_element == "row") {
 		all_td = tr.querySelectorAll("td");
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			all_td[i].style.verticalAlign = align_type;
 		}
 	} else if (align_element == "column") {
@@ -3005,7 +2997,7 @@ function setTableHorizontalAlignment() {
 		selected_element.style.textAlign = align_type;
 	} else if (align_element == "row") {
 		all_td = tr.querySelectorAll("td");
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			all_td[i].style.textAlign = align_type;
 		}
 	} else if (align_element == "column") {
@@ -3048,7 +3040,7 @@ function setTableDirection() {
 		selected_element.style.direction = direction_type;
 	} else if (direction_element == "row") {
 		all_td = tr.querySelectorAll("td");
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			all_td[i].style.direction = direction_type;
 		}
 	} else if (direction_element == "column") {
@@ -3090,7 +3082,7 @@ function mergeTableCells() {
 	if (merge_direction == "to right") {
 		let all_td = tr.querySelectorAll("td");
 		let spanned_cell;
-		for (i = 0; i < all_td.length; i++) {
+		for (let i = 0; i < all_td.length; i++) {
 			if (i == column_position && column_position != all_td.length-1) {
 				spanned_cell = all_td[i];
 				all_td[i].setAttribute("colspan", merge_cells);
@@ -3194,7 +3186,7 @@ function setSectionDefaultStyles() {
 	selected_section.style.columnRuleColor = "rgb(100,100,100)";
 	selected_section.style.columnRuleWidth = "1px";
 	selected_section.style.columnRuleStyle = "solid";
-	selected_section.style.orphans = "0";
+	selected_section.style.orphans = "1";
 	selected_section.style.transform = "skew(0deg, 0deg)";
 	selected_section.style.transformOrigin = "center center";
 	selected_section.style.clipPath = "";
@@ -3366,7 +3358,7 @@ function loadFormValues(element) {
 	document.getElementById("filter_saturate").checked = false;
 	if (filter.length > 0) {
 		filter = filter.split(" "); // * Find a way to split when there is a drop-shadow filter in the list
-		for (i = 0; i < filter.length; i++) {
+		for (let i = 0; i < filter.length; i++) {
 			let current_filter = filter[i];
 			if (current_filter.indexOf("drop-shadow") == 0) {
 				/*
@@ -3439,6 +3431,10 @@ function loadFormValues(element) {
 	}
 
 	if (element.style.clipPath) document.getElementById("clip_path").value = element.style.clipPath;
+	
+	document.getElementById("as_document").checked = selected_section.classList.contains("as_document");
+	document.getElementById("clip_text").checked = selected_section.classList.contains("clip_text");
+	
 }
 
 
@@ -3676,17 +3672,17 @@ document.onkeyup = function(e) {
 		duplicateSection();
 	} else if (key == keyCode.F3) {
 		copySection();
-		showMessage("Copied box", "black");
+		showMessage("Copied box", "darkgreen");
 	} else if (key == keyCode.F4) {
 		pasteSection();
-		showMessage("Pasted box", "black");
+		showMessage("Pasted box", "darkgreen");
 	} else if (key == keyCode.F5) {
 		let z_index_element = document.getElementById("z_index");
 		let new_z_index = parseInt(z_index_element.value) - 1;
 		if (new_z_index >= 0) {
 			z_index_element.value = new_z_index;
 			z_index_element.onchange();
-			showMessage("Layer order: " + new_z_index, "black");
+			showMessage("Layer order: " + new_z_index, "darkgreen");
 		}
 	} else if (key == keyCode.F6) {
 		let z_index_element = document.getElementById("z_index");
@@ -3694,14 +3690,14 @@ document.onkeyup = function(e) {
 		if (new_z_index >= 0) {
 			z_index_element.value = new_z_index;
 			z_index_element.onchange();
-			showMessage("Layer order: " + new_z_index, "black");
+			showMessage("Layer order: " + new_z_index, "darkgreen");
 		}
 	} else if (key == keyCode.F7) {
 		setStyle('direction', null, 'ltr');
-		showMessage("Writing direction: Left-to-Right", "black");
+		showMessage("Writing direction: Left-to-Right", "darkgreen");
 	} else if (key == keyCode.F8) {
 		setStyle('direction', null, 'rtl');
-		showMessage("Writing direction: Right-to-Left", "black");
+		showMessage("Writing direction: Right-to-Left", "darkgreen");
 	} else if (key == keyCode.F9) {
 		element = document.getElementById("line_height");
 		element.value = parseInt(element.value) - parseInt(localStorage.getItem("line_height_change"));
