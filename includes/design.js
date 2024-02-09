@@ -194,7 +194,33 @@ function deleteHandles() {
 	document.getElementById("resize_center_bottom").remove();
 }
 
+function duplicateWrapper() {
+
+	let existing_wrapper_style = document.getElementById("wrapper").style.cssText;
+	let existing_wrapper_sections = document.querySelectorAll("#wrapper section");
+	let last_section_number = getNewSectionNumber();
+	document.getElementById("wrapper_number").value = document.getElementById("wrapper_number").value  + 1;
+	
+	if (changeWrapper()) {
+		document.getElementById("wrapper").style.cssText = existing_wrapper_style;
+		
+		for (i = 0; i < existing_wrapper_sections.length; i++) {
+			let existing_section = existing_wrapper_sections[i];
+			last_section_number++;
+			let new_section = document.createElement("section");
+			new_section = existing_section.cloneNode(true);
+			new_section.setAttribute("id", "section" + last_section_number);
+			new_section.setAttribute("onclick", "selectSection('" + last_section_number  + "');");
+			document.getElementById("wrapper").appendChild(new_section);
+		}
+		
+	}
+	
+}
+
 function changeWrapper() {
+	
+	let wrapper_created = false;
 	
 	deleteHandles();
 	
@@ -225,6 +251,7 @@ function changeWrapper() {
 			document.getElementById("wrapper_number").value = i + 1;
 			setWrapperDefaultStyles();
 			loadWrapperFormValues();
+			wrapper_created = true;
 		} else {
 			document.getElementById("wrapper_number").value = i;
 			let last_wrapper = all_wrappers[all_wrappers.length-1];
@@ -245,6 +272,8 @@ function changeWrapper() {
 	
 	
 	addHandles();
+	
+	return wrapper_created;
 
 }
 
@@ -280,23 +309,12 @@ function addSection() {
 
 function getNewSectionNumber() {
 	let new_section_number = 1;
-	if (document.getElementById("wrapper").dataset.last_section) { // new way
-		new_section_number = parseInt(document.getElementById("wrapper").dataset.last_section);
+	let all_sections = document.querySelectorAll("section");
+	if (all_sections.length > 0) {
+		let last_section = all_sections[all_sections.length-1];
+		new_section_number = last_section.id.replace("section", "");
 		new_section_number++;
-	} else { // old way
-		let section_ids = [];
-		let all_sections = document.querySelectorAll("section");
-		for (let i = 0; i < all_sections.length; i++) {
-			section_ids.push(all_sections[i].id);
-		}
-
-		if (section_ids.length > 0) {
-			section_ids.reverse();
-			new_section_number = section_ids[0].replace("section", "");
-			new_section_number++;
-		}
 	}
-	document.getElementById("wrapper").dataset.last_section = new_section_number;
 	return new_section_number;
 }
 
@@ -1959,7 +1977,6 @@ async function loadDezyn() {
 		});
 
 	} else {
-		document.getElementById("wrapper").dataset.last_section = "1";
 		setWrapperDefaultStyles();
 		addHandles();
 		addSection();

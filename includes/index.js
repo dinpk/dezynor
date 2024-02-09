@@ -29,7 +29,7 @@ if (localStorage.getItem("stats_total_folders") === null) localStorage.setItem("
 
 window.onload = async function() {
 
-	await delay(500);
+	await delay(1000);
 
 	let all_fonts = await idbGetItem("dezynor_settings", "fonts");
 	document.querySelector("#count_stats #total_fonts").innerHTML = "Fonts <span>" + all_fonts.length + "</span>";
@@ -40,11 +40,9 @@ window.onload = async function() {
 	let all_styles = await idbGetAllItems("dezynor_styles");
 	document.querySelector("#count_stats #total_styles").innerHTML = "Styles <span>" + all_styles.length + "</span>";
 	
-	await delay(200);
 	let all_designs = await idbGetAllItems("dezynor_designs");
 	document.querySelector("#count_stats #total_designs").innerHTML = "Designs <span>" + all_designs.length + "</span>";
 
-	await delay(200);
 	let all_images = await idbGetAllItems("dezynor_images");
 	document.querySelector("#count_stats #total_images").innerHTML = "Images <span>" + all_images.length + "</span>";
 }
