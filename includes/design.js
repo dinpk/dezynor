@@ -1818,7 +1818,7 @@ async function saveDezyn(show_message = "yes") {
 	let folder = document.getElementById("select_folders").value;
 	localStorage.setItem("current_folder", folder);
 	let data = document.getElementById("cover").innerHTML;
-	let keywords = document.getElementById("design_label").value;
+	let keywords = document.getElementById("design_keywords").value;
 
 	if (design_object) { // set in loadDezyn()
 		design_object = await idbGetItem("dezynor_designs", design_id);
@@ -1874,7 +1874,7 @@ async function exportDezyn() {
 	// design
 	let data = document.getElementById("cover").innerHTML;
 	let folder = document.getElementById("select_folders").value;
-	let keywords = document.getElementById("design_label").value;
+	let keywords = document.getElementById("design_keywords").value;
 	let created = new Date().getTime();
 	let modified = created;
 	let new_object = {
@@ -1909,7 +1909,7 @@ async function exportDezyn() {
 		let font_blob = await idbGetItem("dezynor_fonts", font_key);
 		zip_items.file("font-" + font_key + ".backup", font_blob);
 	}
-	let file_label = keywords.replace(",", "-").replace(" ", "-");
+	let file_label = keywords.replace(",", " ");
 	if (file_label.length == 0) file_label = "dezynor-single";
 	let file_name = file_label + "-" + new Date().toISOString().replace("T", "-").replaceAll(":", "-").slice(0,19);
 	zip_items.generateAsync({type:"blob",
@@ -1944,7 +1944,7 @@ async function loadDezyn() {
 			let data = object.data;
 			data = data.replace(/((background-image: url\(&quot;blob:.*?\);))/g, ''); // remove expired object urls of sections
 			document.getElementById("cover").innerHTML = data;
-			document.getElementById("design_label").value = object.keywords;
+			document.getElementById("design_keywords").value = object.keywords ?? "";
 			design_id = current_design_key;
 			
 			changeWrapper();
