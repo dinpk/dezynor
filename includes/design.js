@@ -1981,7 +1981,11 @@ async function loadDezyn() {
 					});
 				}
 			}
+
+			document.getElementsByTagName("title")[0].innerText = document.getElementById("design_keywords").value;
+			
 		});
+
 
 	} else {
 		setWrapperDefaultStyles();
