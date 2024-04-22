@@ -424,11 +424,12 @@
 							<td>Image</td>
 							<td>
 								<input id="upload_image" type="file" accept="image/*" onchange="uploadImage(this);" style="display:none;">
-								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> or 
+								<button onclick="document.getElementById('upload_image').click();" title="Alt + Numpad 0">Upload</button> 
+								<input id="max_image_width" type="number" min="300" max="10000" step="50" size="90" title="Max Image Width"> 
+								<input id="max_image_height" type="number" min="300" max="10000" step="50" size="90" title="Max Image Height"><br>
 								<button onclick="setStyle('backgroundImageURL',this);" title="Alt + Numpad .">URL</button> 
-								<button onclick="writeToClipBoard('imageURL');" title="Copy Image URL">⎘</button>
-								&nbsp; 
-								<button id="remove_image" onclick="removeStyle('backgroundImage');" title="Remove Image">x</button>
+								<button onclick="writeToClipBoard('imageURL');" title="Copy Image URL">⎘</button><br>
+								<button id="remove_image" onclick="removeStyle('backgroundImage');" title="Remove Image">Remove image</button>
 							</td>
 						</tr>
 						<tr>

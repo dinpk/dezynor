@@ -6,6 +6,9 @@ window.onload = function() {
 	setRandomWrapperBackgroundColor();
 	showSectionPanel('box_section');
 
+	document.getElementById("max_image_width").value = localStorage.getItem("max_upload_width");
+	document.getElementById("max_image_height").value = localStorage.getItem("max_upload_height");
+	
 	if (localStorage.getItem("automatically_save") == "true") {
 		setInterval(function () {
 			saveDezyn("no");
@@ -2671,8 +2674,10 @@ async function uploadImage(element) {
 		let image = document.createElement("img");
 		image.src = reader.result // file reader result;
 		image.onload = async function (e) {
-			let max_resize_width = localStorage.getItem("max_upload_width");
-			let max_resize_height = localStorage.getItem("max_upload_height");
+
+			let max_resize_width = document.getElementById("max_image_width").value;
+			let max_resize_height = document.getElementById("max_image_height").value;
+			
 			let width = image.width;
 			let height = image.height;
 			let canvas = document.createElement("canvas");
